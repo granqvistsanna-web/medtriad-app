@@ -30,11 +30,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Each triad has condition name, three findings, and category
   3. Question generator produces 4 answer options with same-category distractors preferred
   4. No duplicate distractors appear in a single question's options
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: Triads data model and JSON content
-- [ ] 01-02: Question generation algorithm
+- [ ] 01-01-PLAN.md - TypeScript types, triads JSON data (35-45 triads), shuffle utility
+- [ ] 01-02-PLAN.md - Question generator with same-category distractor preference
 
 ### Phase 2: Quiz Core
 **Goal**: User can play through a complete 10-question quiz round
@@ -135,7 +135,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data Foundation | 0/2 | Not started | - |
+| 1. Data Foundation | 0/2 | Planned | - |
 | 2. Quiz Core | 0/3 | Not started | - |
 | 3. Screen Flow | 0/3 | Not started | - |
 | 4. Game Mechanics | 0/2 | Not started | - |
