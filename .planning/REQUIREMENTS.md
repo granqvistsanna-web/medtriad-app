@@ -148,9 +148,9 @@
 | RESU-04 | Phase 3 | Pending |
 | RESU-05 | Phase 3 | Pending |
 | RESU-06 | Phase 3 | Pending |
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
+| DATA-03 | Phase 1 | Complete |
 | DATA-04 | Phase 5 | Pending |
 | DATA-05 | Phase 5 | Pending |
 | DATA-06 | Phase 5 | Pending |
@@ -162,4 +162,4 @@
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-17 after roadmap creation*
+*Last updated: 2026-01-17 after Phase 1 completion*
