@@ -25,14 +25,14 @@
 ### Timer
 
 - [ ] **TIME-01**: User sees 12-second countdown timer as circular ring
-- [ ] **TIME-02**: Timer ring changes color: blue → yellow (< 5s) → red (< 3s)
+- [ ] **TIME-02**: Timer ring changes color: blue -> yellow (< 5s) -> red (< 3s)
 - [ ] **TIME-03**: If timer expires, question counts as incorrect and auto-advances
 
 ### Scoring
 
 - [ ] **SCOR-01**: User earns 100 base points for correct answers
 - [ ] **SCOR-02**: User earns 0-50 speed bonus points (faster = more)
-- [ ] **SCOR-03**: User earns combo multiplier (1x → 2x → 3x) every 3 correct in a row
+- [ ] **SCOR-03**: User earns combo multiplier (1x -> 2x -> 3x) every 3 correct in a row
 - [ ] **SCOR-04**: User earns +500 bonus for perfect round (10/10)
 
 ### Feedback
@@ -84,8 +84,8 @@
 
 ### Additional Quiz Modes
 
-- **MODE-01**: Reverse mode (condition → select findings)
-- **MODE-02**: Complete the triad (two findings → select third)
+- **MODE-01**: Reverse mode (condition -> select findings)
+- **MODE-02**: Complete the triad (two findings -> select third)
 
 ### Social & Engagement
 
@@ -114,52 +114,52 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| HOME-01 | TBD | Pending |
-| HOME-02 | TBD | Pending |
-| HOME-03 | TBD | Pending |
-| HOME-04 | TBD | Pending |
-| HOME-05 | TBD | Pending |
-| QUIZ-01 | TBD | Pending |
-| QUIZ-02 | TBD | Pending |
-| QUIZ-03 | TBD | Pending |
-| QUIZ-04 | TBD | Pending |
-| QUIZ-05 | TBD | Pending |
-| QUIZ-06 | TBD | Pending |
-| TIME-01 | TBD | Pending |
-| TIME-02 | TBD | Pending |
-| TIME-03 | TBD | Pending |
-| SCOR-01 | TBD | Pending |
-| SCOR-02 | TBD | Pending |
-| SCOR-03 | TBD | Pending |
-| SCOR-04 | TBD | Pending |
-| FEED-01 | TBD | Pending |
-| FEED-02 | TBD | Pending |
-| FEED-03 | TBD | Pending |
-| FEED-04 | TBD | Pending |
-| FEED-05 | TBD | Pending |
-| ANIM-01 | TBD | Pending |
-| ANIM-02 | TBD | Pending |
-| ANIM-03 | TBD | Pending |
-| ANIM-04 | TBD | Pending |
-| ANIM-05 | TBD | Pending |
-| RESU-01 | TBD | Pending |
-| RESU-02 | TBD | Pending |
-| RESU-03 | TBD | Pending |
-| RESU-04 | TBD | Pending |
-| RESU-05 | TBD | Pending |
-| RESU-06 | TBD | Pending |
-| DATA-01 | TBD | Pending |
-| DATA-02 | TBD | Pending |
-| DATA-03 | TBD | Pending |
-| DATA-04 | TBD | Pending |
-| DATA-05 | TBD | Pending |
-| DATA-06 | TBD | Pending |
+| HOME-01 | Phase 3 | Pending |
+| HOME-02 | Phase 3 | Pending |
+| HOME-03 | Phase 3 | Pending |
+| HOME-04 | Phase 3 | Pending |
+| HOME-05 | Phase 3 | Pending |
+| QUIZ-01 | Phase 2 | Pending |
+| QUIZ-02 | Phase 2 | Pending |
+| QUIZ-03 | Phase 2 | Pending |
+| QUIZ-04 | Phase 2 | Pending |
+| QUIZ-05 | Phase 2 | Pending |
+| QUIZ-06 | Phase 2 | Pending |
+| TIME-01 | Phase 2 | Pending |
+| TIME-02 | Phase 4 | Pending |
+| TIME-03 | Phase 4 | Pending |
+| SCOR-01 | Phase 4 | Pending |
+| SCOR-02 | Phase 4 | Pending |
+| SCOR-03 | Phase 4 | Pending |
+| SCOR-04 | Phase 4 | Pending |
+| FEED-01 | Phase 5 | Pending |
+| FEED-02 | Phase 5 | Pending |
+| FEED-03 | Phase 5 | Pending |
+| FEED-04 | Phase 5 | Pending |
+| FEED-05 | Phase 6 | Pending |
+| ANIM-01 | Phase 6 | Pending |
+| ANIM-02 | Phase 6 | Pending |
+| ANIM-03 | Phase 6 | Pending |
+| ANIM-04 | Phase 6 | Pending |
+| ANIM-05 | Phase 6 | Pending |
+| RESU-01 | Phase 3 | Pending |
+| RESU-02 | Phase 3 | Pending |
+| RESU-03 | Phase 3 | Pending |
+| RESU-04 | Phase 3 | Pending |
+| RESU-05 | Phase 3 | Pending |
+| RESU-06 | Phase 3 | Pending |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 1 | Pending |
+| DATA-04 | Phase 5 | Pending |
+| DATA-05 | Phase 5 | Pending |
+| DATA-06 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 32 total
-- Mapped to phases: 0
-- Unmapped: 32
+- Mapped to phases: 32
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-17 after initial definition*
+*Last updated: 2026-01-17 after roadmap creation*
