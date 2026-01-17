@@ -1,0 +1,274 @@
+{
+  "triads": [
+    {
+      "id": "becks-triad",
+      "condition": "Cardiac Tamponade",
+      "findings": ["Hypotension", "Muffled heart sounds", "Jugular venous distention"],
+      "category": "cardiology"
+    },
+    {
+      "id": "virchows-triad",
+      "condition": "Deep Vein Thrombosis",
+      "findings": ["Venous stasis", "Endothelial injury", "Hypercoagulability"],
+      "category": "cardiology"
+    },
+    {
+      "id": "atrial-myxoma-triad",
+      "condition": "Atrial Myxoma",
+      "findings": ["Mitral valve obstruction", "Embolic phenomena", "Constitutional symptoms"],
+      "category": "cardiology"
+    },
+    {
+      "id": "acute-aortic-dissection-triad",
+      "condition": "Acute Aortic Dissection",
+      "findings": ["Tearing chest pain", "Blood pressure differential", "Widened mediastinum"],
+      "category": "cardiology"
+    },
+    {
+      "id": "infective-endocarditis-triad",
+      "condition": "Infective Endocarditis",
+      "findings": ["Fever", "New heart murmur", "Embolic phenomena"],
+      "category": "cardiology"
+    },
+    {
+      "id": "cushing-triad",
+      "condition": "Increased Intracranial Pressure",
+      "findings": ["Hypertension", "Bradycardia", "Irregular respirations"],
+      "category": "neurology"
+    },
+    {
+      "id": "charcot-neurologic-triad",
+      "condition": "Multiple Sclerosis",
+      "findings": ["Nystagmus", "Intention tremor", "Scanning speech"],
+      "category": "neurology"
+    },
+    {
+      "id": "horner-syndrome-triad",
+      "condition": "Horner Syndrome",
+      "findings": ["Ptosis", "Miosis", "Anhidrosis"],
+      "category": "neurology"
+    },
+    {
+      "id": "normal-pressure-hydrocephalus-triad",
+      "condition": "Normal Pressure Hydrocephalus",
+      "findings": ["Gait disturbance", "Urinary incontinence", "Dementia"],
+      "category": "neurology"
+    },
+    {
+      "id": "wernicke-encephalopathy-triad",
+      "condition": "Wernicke Encephalopathy",
+      "findings": ["Confusion", "Ataxia", "Ophthalmoplegia"],
+      "category": "neurology"
+    },
+    {
+      "id": "gradenigo-syndrome-triad",
+      "condition": "Gradenigo Syndrome",
+      "findings": ["Otitis media", "Sixth nerve palsy", "Facial pain"],
+      "category": "neurology"
+    },
+    {
+      "id": "whipple-triad",
+      "condition": "Insulinoma",
+      "findings": ["Hypoglycemic symptoms", "Low blood glucose", "Relief with glucose"],
+      "category": "endocrine"
+    },
+    {
+      "id": "dka-triad",
+      "condition": "Diabetic Ketoacidosis",
+      "findings": ["Hyperglycemia", "Ketosis", "Acidosis"],
+      "category": "endocrine"
+    },
+    {
+      "id": "multiple-endocrine-neoplasia-1-triad",
+      "condition": "MEN Type 1",
+      "findings": ["Pituitary tumors", "Parathyroid tumors", "Pancreatic tumors"],
+      "category": "endocrine"
+    },
+    {
+      "id": "multiple-endocrine-neoplasia-2a-triad",
+      "condition": "MEN Type 2A",
+      "findings": ["Medullary thyroid carcinoma", "Pheochromocytoma", "Parathyroid hyperplasia"],
+      "category": "endocrine"
+    },
+    {
+      "id": "hyperthyroidism-triad",
+      "condition": "Graves Disease",
+      "findings": ["Hyperthyroidism", "Exophthalmos", "Pretibial myxedema"],
+      "category": "endocrine"
+    },
+    {
+      "id": "samters-triad",
+      "condition": "Aspirin-Exacerbated Respiratory Disease",
+      "findings": ["Asthma", "Nasal polyps", "Aspirin sensitivity"],
+      "category": "pulmonary"
+    },
+    {
+      "id": "pulmonary-embolism-triad",
+      "condition": "Pulmonary Embolism",
+      "findings": ["Dyspnea", "Pleuritic chest pain", "Hemoptysis"],
+      "category": "pulmonary"
+    },
+    {
+      "id": "kartagener-syndrome-triad",
+      "condition": "Kartagener Syndrome",
+      "findings": ["Situs inversus", "Chronic sinusitis", "Bronchiectasis"],
+      "category": "pulmonary"
+    },
+    {
+      "id": "pott-disease-triad",
+      "condition": "Spinal Tuberculosis",
+      "findings": ["Kyphosis", "Paraplegia", "Cold abscess"],
+      "category": "pulmonary"
+    },
+    {
+      "id": "charcot-cholangitis-triad",
+      "condition": "Ascending Cholangitis",
+      "findings": ["Fever", "Jaundice", "Right upper quadrant pain"],
+      "category": "gastroenterology"
+    },
+    {
+      "id": "reynolds-pentad",
+      "condition": "Suppurative Cholangitis",
+      "findings": ["Charcot triad", "Altered mental status", "Hypotension"],
+      "category": "gastroenterology"
+    },
+    {
+      "id": "macklers-triad",
+      "condition": "Esophageal Rupture",
+      "findings": ["Vomiting", "Chest pain", "Subcutaneous emphysema"],
+      "category": "gastroenterology"
+    },
+    {
+      "id": "saint-triad",
+      "condition": "Saint Syndrome",
+      "findings": ["Gallstones", "Diverticulosis", "Hiatal hernia"],
+      "category": "gastroenterology"
+    },
+    {
+      "id": "whipple-disease-triad",
+      "condition": "Whipple Disease",
+      "findings": ["Diarrhea", "Weight loss", "Arthralgias"],
+      "category": "gastroenterology"
+    },
+    {
+      "id": "meningitis-triad",
+      "condition": "Bacterial Meningitis",
+      "findings": ["Fever", "Neck stiffness", "Altered mental status"],
+      "category": "infectious"
+    },
+    {
+      "id": "infectious-mononucleosis-triad",
+      "condition": "Infectious Mononucleosis",
+      "findings": ["Fever", "Pharyngitis", "Lymphadenopathy"],
+      "category": "infectious"
+    },
+    {
+      "id": "dengue-hemorrhagic-fever-triad",
+      "condition": "Dengue Hemorrhagic Fever",
+      "findings": ["Hemorrhage", "Thrombocytopenia", "Plasma leakage"],
+      "category": "infectious"
+    },
+    {
+      "id": "tertiary-syphilis-triad",
+      "condition": "Tertiary Syphilis",
+      "findings": ["Tabes dorsalis", "General paresis", "Cardiovascular syphilis"],
+      "category": "infectious"
+    },
+    {
+      "id": "hemolytic-uremic-syndrome-triad",
+      "condition": "Hemolytic Uremic Syndrome",
+      "findings": ["Microangiopathic hemolytic anemia", "Thrombocytopenia", "Acute kidney injury"],
+      "category": "hematology"
+    },
+    {
+      "id": "ttp-pentad",
+      "condition": "Thrombotic Thrombocytopenic Purpura",
+      "findings": ["Microangiopathic hemolytic anemia", "Thrombocytopenia", "Neurologic symptoms"],
+      "category": "hematology"
+    },
+    {
+      "id": "dic-triad",
+      "condition": "Disseminated Intravascular Coagulation",
+      "findings": ["Thrombocytopenia", "Prolonged PT/PTT", "Elevated D-dimer"],
+      "category": "hematology"
+    },
+    {
+      "id": "iron-deficiency-anemia-triad",
+      "condition": "Plummer-Vinson Syndrome",
+      "findings": ["Iron deficiency anemia", "Dysphagia", "Esophageal webs"],
+      "category": "hematology"
+    },
+    {
+      "id": "reiters-syndrome-triad",
+      "condition": "Reactive Arthritis",
+      "findings": ["Urethritis", "Conjunctivitis", "Arthritis"],
+      "category": "rheumatology"
+    },
+    {
+      "id": "felty-syndrome-triad",
+      "condition": "Felty Syndrome",
+      "findings": ["Rheumatoid arthritis", "Splenomegaly", "Neutropenia"],
+      "category": "rheumatology"
+    },
+    {
+      "id": "behcet-disease-triad",
+      "condition": "Behcet Disease",
+      "findings": ["Oral ulcers", "Genital ulcers", "Uveitis"],
+      "category": "rheumatology"
+    },
+    {
+      "id": "sjogren-syndrome-triad",
+      "condition": "Sjogren Syndrome",
+      "findings": ["Dry eyes", "Dry mouth", "Parotid enlargement"],
+      "category": "rheumatology"
+    },
+    {
+      "id": "nephrotic-syndrome-triad",
+      "condition": "Nephrotic Syndrome",
+      "findings": ["Proteinuria", "Hypoalbuminemia", "Edema"],
+      "category": "renal"
+    },
+    {
+      "id": "nephritic-syndrome-triad",
+      "condition": "Nephritic Syndrome",
+      "findings": ["Hematuria", "Hypertension", "Oliguria"],
+      "category": "renal"
+    },
+    {
+      "id": "renal-cell-carcinoma-triad",
+      "condition": "Renal Cell Carcinoma",
+      "findings": ["Hematuria", "Flank pain", "Palpable mass"],
+      "category": "renal"
+    },
+    {
+      "id": "fanconi-syndrome-triad",
+      "condition": "Fanconi Syndrome",
+      "findings": ["Glucosuria", "Aminoaciduria", "Phosphaturia"],
+      "category": "renal"
+    },
+    {
+      "id": "preeclampsia-triad",
+      "condition": "Preeclampsia",
+      "findings": ["Hypertension", "Proteinuria", "Edema"],
+      "category": "obstetrics"
+    },
+    {
+      "id": "hellp-syndrome-triad",
+      "condition": "HELLP Syndrome",
+      "findings": ["Hemolysis", "Elevated liver enzymes", "Low platelets"],
+      "category": "obstetrics"
+    },
+    {
+      "id": "ectopic-pregnancy-triad",
+      "condition": "Ruptured Ectopic Pregnancy",
+      "findings": ["Amenorrhea", "Vaginal bleeding", "Abdominal pain"],
+      "category": "obstetrics"
+    },
+    {
+      "id": "placental-abruption-triad",
+      "condition": "Placental Abruption",
+      "findings": ["Vaginal bleeding", "Uterine tenderness", "Fetal distress"],
+      "category": "obstetrics"
+    }
+  ]
+}
