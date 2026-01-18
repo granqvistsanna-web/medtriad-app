@@ -48,12 +48,11 @@ Plans:
   5. Tapping an answer advances to the next question
   6. After question 10, quiz ends (navigation to results can be placeholder)
   7. Timer ring displays counting down from 12 seconds
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: Quiz screen layout and findings display
-- [ ] 02-02: Answer options and tap handling
-- [ ] 02-03: Progress tracking and round completion
+- [ ] 02-01-PLAN.md - Quiz state types, useQuizReducer hook, useCountdownTimer hook
+- [ ] 02-02-PLAN.md - Quiz navigation routes, complete quiz screen, temporary start button
 
 ### Phase 3: Screen Flow
 **Goal**: Complete navigation flow between Home, Quiz, and Results screens
@@ -136,7 +135,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Data Foundation | 2/2 | Complete | 2026-01-17 |
-| 2. Quiz Core | 0/3 | Not started | - |
+| 2. Quiz Core | 0/2 | Planned | - |
 | 3. Screen Flow | 0/3 | Not started | - |
 | 4. Game Mechanics | 0/2 | Not started | - |
 | 5. Feedback & Persistence | 0/3 | Not started | - |
@@ -144,4 +143,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-17 (Phase 1 complete)*
+*Last updated: 2026-01-18 (Phase 2 planned)*
