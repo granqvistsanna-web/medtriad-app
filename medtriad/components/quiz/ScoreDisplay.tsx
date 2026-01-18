@@ -4,9 +4,9 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSequence,
-  withTiming,
+  withSpring,
 } from 'react-native-reanimated';
-import { Colors, Typography, Spacing, Radius } from '@/constants/theme';
+import { Colors, Typography, Spacing, Radius, Easings } from '@/constants/theme';
 
 type ScoreDisplayProps = {
   score: number;
@@ -20,20 +20,32 @@ export function ScoreDisplay({ score, combo = 1 }: ScoreDisplayProps) {
   // Track previous combo for pulse animation
   const previousCombo = useRef(combo);
   const scale = useSharedValue(1);
+  const bgOpacity = useSharedValue(0);
 
-  // Pulse animation when combo increases
+  // Pop animation when combo increases
   useEffect(() => {
     if (combo > previousCombo.current) {
+      // Pop animation: dramatic overshoot then gentle settle
       scale.value = withSequence(
-        withTiming(1.15, { duration: 100 }),
-        withTiming(1.0, { duration: 100 })
+        withSpring(1.35, Easings.pop),
+        withSpring(1, Easings.gentle)
+      );
+
+      // Brief background flash for glow effect
+      bgOpacity.value = withSequence(
+        withSpring(1, Easings.pop),
+        withSpring(0, { damping: 20, stiffness: 100 })
       );
     }
     previousCombo.current = combo;
-  }, [combo, scale]);
+  }, [combo, scale, bgOpacity]);
 
   const comboBadgeAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
+  }));
+
+  const bgAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: bgOpacity.value * 0.3,
   }));
 
   return (
@@ -42,18 +54,29 @@ export function ScoreDisplay({ score, combo = 1 }: ScoreDisplayProps) {
         {score.toLocaleString()}
       </Text>
       {combo > 1 && (
-        <Animated.View
-          style={[
-            styles.comboBadge,
-            {
-              backgroundColor: colors.backgroundSecondary,
-              borderColor: colors.border,
-            },
-            comboBadgeAnimatedStyle,
-          ]}
-        >
-          <Text style={[styles.comboText, { color: colors.text }]}>×{combo}</Text>
-        </Animated.View>
+        <View style={styles.comboWrapper}>
+          {/* Glow layer */}
+          <Animated.View
+            style={[
+              styles.comboGlow,
+              { backgroundColor: colors.primary },
+              bgAnimatedStyle,
+            ]}
+          />
+          {/* Badge */}
+          <Animated.View
+            style={[
+              styles.comboBadge,
+              {
+                backgroundColor: colors.backgroundSecondary,
+                borderColor: colors.border,
+              },
+              comboBadgeAnimatedStyle,
+            ]}
+          >
+            <Text style={[styles.comboText, { color: colors.text }]}>×{combo}</Text>
+          </Animated.View>
+        </View>
       )}
     </View>
   );
@@ -68,6 +91,17 @@ const styles = StyleSheet.create({
   score: {
     ...Typography.heading,
     fontVariant: ['tabular-nums'],
+  },
+  comboWrapper: {
+    position: 'relative',
+  },
+  comboGlow: {
+    position: 'absolute',
+    top: -4,
+    left: -4,
+    right: -4,
+    bottom: -4,
+    borderRadius: Radius.full,
   },
   comboBadge: {
     paddingHorizontal: Spacing.md,
