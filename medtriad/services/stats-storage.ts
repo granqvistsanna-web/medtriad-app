@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const STATS_KEY = '@medtriad_stats';
+const HISTORY_KEY = '@medtriad_quiz_history';
+const MAX_HISTORY_ENTRIES = 50;
 
 export interface StoredStats {
   totalAnswered: number;
@@ -12,6 +14,13 @@ export interface StoredStats {
   highScore: number;
   dailyStreak: number;
   lastPlayedDate: string | null;
+}
+
+export interface QuizHistoryEntry {
+  date: string;          // ISO date string
+  score: number;         // Final score
+  correct: number;       // Questions answered correctly
+  total: number;         // Total questions (always 10)
 }
 
 const DEFAULT_STATS: StoredStats = {
@@ -154,7 +163,36 @@ export function getAccuracy(stats: StoredStats): number {
 export async function clearStats(): Promise<void> {
   try {
     await AsyncStorage.removeItem(STATS_KEY);
+    await AsyncStorage.removeItem(HISTORY_KEY);
   } catch (error) {
     console.error('Failed to clear stats:', error);
+  }
+}
+
+/**
+ * Load quiz history from AsyncStorage
+ */
+export async function loadQuizHistory(): Promise<QuizHistoryEntry[]> {
+  try {
+    const json = await AsyncStorage.getItem(HISTORY_KEY);
+    if (json) return JSON.parse(json);
+    return [];
+  } catch (error) {
+    console.error('Failed to load quiz history:', error);
+    return [];
+  }
+}
+
+/**
+ * Save a quiz round to history
+ * Prepends new entry (most recent first) and limits to MAX_HISTORY_ENTRIES
+ */
+export async function saveQuizHistory(entry: QuizHistoryEntry): Promise<void> {
+  try {
+    const history = await loadQuizHistory();
+    const updated = [entry, ...history].slice(0, MAX_HISTORY_ENTRIES);
+    await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
+  } catch (error) {
+    console.error('Failed to save quiz history:', error);
   }
 }
