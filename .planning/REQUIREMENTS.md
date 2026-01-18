@@ -7,11 +7,11 @@
 
 ### Home Screen
 
-- [ ] **HOME-01**: User sees app logo and title
-- [ ] **HOME-02**: User can tap "Start Quiz" button to begin a round
-- [ ] **HOME-03**: User sees current daily streak with flame icon
-- [ ] **HOME-04**: User sees their high score
-- [ ] **HOME-05**: User sees total quizzes completed
+- [x] **HOME-01**: User sees app logo and title
+- [x] **HOME-02**: User can tap "Start Quiz" button to begin a round
+- [x] **HOME-03**: User sees current daily streak with flame icon
+- [x] **HOME-04**: User sees their high score
+- [x] **HOME-05**: User sees total quizzes completed
 
 ### Quiz Flow
 
@@ -53,12 +53,12 @@
 
 ### Results Screen
 
-- [ ] **RESU-01**: User sees final score with animated count-up
-- [ ] **RESU-02**: User sees questions correct (X/10)
-- [ ] **RESU-03**: User sees best streak achieved this round
-- [ ] **RESU-04**: User sees "New High Score" badge if applicable
-- [ ] **RESU-05**: User can tap "Play Again" to start new round
-- [ ] **RESU-06**: User can tap "Home" to return to home screen
+- [x] **RESU-01**: User sees final score with animated count-up
+- [x] **RESU-02**: User sees questions correct (X/10)
+- [x] **RESU-03**: User sees best streak achieved this round
+- [x] **RESU-04**: User sees "New High Score" badge if applicable
+- [x] **RESU-05**: User can tap "Play Again" to start new round
+- [x] **RESU-06**: User can tap "Home" to return to home screen
 
 ### Data & Persistence
 
@@ -114,11 +114,11 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| HOME-01 | Phase 3 | Pending |
-| HOME-02 | Phase 3 | Pending |
-| HOME-03 | Phase 3 | Pending |
-| HOME-04 | Phase 3 | Pending |
-| HOME-05 | Phase 3 | Pending |
+| HOME-01 | Phase 3 | Complete |
+| HOME-02 | Phase 3 | Complete |
+| HOME-03 | Phase 3 | Complete |
+| HOME-04 | Phase 3 | Complete |
+| HOME-05 | Phase 3 | Complete |
 | QUIZ-01 | Phase 2 | Complete |
 | QUIZ-02 | Phase 2 | Complete |
 | QUIZ-03 | Phase 2 | Complete |
@@ -142,12 +142,12 @@
 | ANIM-03 | Phase 6 | Pending |
 | ANIM-04 | Phase 6 | Pending |
 | ANIM-05 | Phase 6 | Pending |
-| RESU-01 | Phase 3 | Pending |
-| RESU-02 | Phase 3 | Pending |
-| RESU-03 | Phase 3 | Pending |
-| RESU-04 | Phase 3 | Pending |
-| RESU-05 | Phase 3 | Pending |
-| RESU-06 | Phase 3 | Pending |
+| RESU-01 | Phase 3 | Complete |
+| RESU-02 | Phase 3 | Complete |
+| RESU-03 | Phase 3 | Complete |
+| RESU-04 | Phase 3 | Complete |
+| RESU-05 | Phase 3 | Complete |
+| RESU-06 | Phase 3 | Complete |
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Complete |
@@ -162,4 +162,4 @@
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-18 after Phase 2 completion*
+*Last updated: 2026-01-18 after Phase 3 completion*
