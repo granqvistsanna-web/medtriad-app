@@ -141,11 +141,11 @@ Plans:
   2. Answer buttons scale slightly on press
   3. Results screen score counts up from zero with animation
   4. Sound effects play for correct, incorrect, combo increase, and perfect round
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 07-01: Timer and button animations
-- [ ] 07-02: Results animations and sound effects
+- [ ] 07-01-PLAN.md — Timer pulse urgency animation and enhanced button press scale
+- [ ] 07-02-PLAN.md — Sound effects hook, score count-up, confetti for perfect rounds
 
 ## Progress
 
@@ -164,4 +164,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 6 complete)*
+*Last updated: 2026-01-18 (Phase 7 planned)*
