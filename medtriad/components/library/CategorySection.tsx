@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, LayoutChangeEvent } from 'react-native';
 import Animated, {
+  FadeInUp,
   useSharedValue,
   useDerivedValue,
   useAnimatedStyle,
@@ -14,9 +15,10 @@ import { TriadItem } from './TriadItem';
 interface CategorySectionProps {
   category: TriadCategory;
   triads: Triad[];
+  delay?: number;
 }
 
-export function CategorySection({ category, triads }: CategorySectionProps) {
+export function CategorySection({ category, triads, delay }: CategorySectionProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const colors = Colors.light;
 
@@ -51,7 +53,10 @@ export function CategorySection({ category, triads }: CategorySectionProps) {
   const displayName = category.charAt(0).toUpperCase() + category.slice(1);
 
   return (
-    <View style={styles.container}>
+    <Animated.View
+      entering={FadeInUp.delay(delay ?? 0).duration(Durations.normal).springify()}
+      style={styles.container}
+    >
       <Pressable
         onPress={() => setIsExpanded(!isExpanded)}
         style={({ pressed }) => [
@@ -91,7 +96,7 @@ export function CategorySection({ category, triads }: CategorySectionProps) {
           </View>
         </View>
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 }
 
