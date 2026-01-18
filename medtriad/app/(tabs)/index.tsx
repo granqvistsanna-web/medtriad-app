@@ -1,76 +1,128 @@
-import { SafeAreaView, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { StatsCard } from '@/components/home/StatsCard';
+import { TriMascot } from '@/components/home/TriMascot';
+import { ProgressRing } from '@/components/home/ProgressRing';
+import { NewUserStatRow, ReturningUserStatRow } from '@/components/home/StatRow';
+import { MasteryBar } from '@/components/home/MasteryBar';
 import { Button } from '@/components/ui/Button';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors, Typography, Spacing } from '@/constants/theme';
+import { useStats } from '@/hooks/useStats';
+import { Colors, Typography, Spacing, Durations } from '@/constants/theme';
+
+/**
+ * Get motivational message based on user performance
+ */
+function getMotivationalMessage(isNewUser: boolean, accuracy: number): string {
+  if (isNewUser) return 'Ready to test your knowledge?';
+  if (accuracy >= 90) return "You're crushing it!";
+  if (accuracy >= 70) return 'Great progress! Keep going';
+  if (accuracy >= 50) return "You're learning fast!";
+  return 'Practice makes perfect!';
+}
+
+/**
+ * Determine mascot mood based on accuracy
+ */
+function getMascotMood(isNewUser: boolean, accuracy: number): 'neutral' | 'happy' {
+  if (isNewUser) return 'neutral';
+  return accuracy >= 70 ? 'happy' : 'neutral';
+}
 
 export default function HomeScreen() {
   const router = useRouter();
-  const scheme = useColorScheme() ?? 'light';
-  const colors = Colors[scheme];
+  const colors = Colors.light;
 
-  // Placeholder stats - Phase 5 will load from AsyncStorage
-  const stats = {
-    streak: 0,
-    highScore: 0,
-    totalQuizzes: 0,
-  };
+  const {
+    stats,
+    loading,
+    isNewUser,
+    accuracy,
+    masteryLevel,
+    dailyStreak,
+    highScore,
+  } = useStats();
+
+  // Show loading state
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const message = getMotivationalMessage(isNewUser, accuracy);
+  const mascotMood = getMascotMood(isNewUser, accuracy);
+  const ringSize = isNewUser ? 0 : 180; // No ring for new users
+  const mascotSize = isNewUser ? 'xl' : 'lg';
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        {/* Header/Branding */}
-        <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>Med Triads</Text>
-          <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-            Master medical triads
-          </Text>
-        </View>
+        {/* Mascot Section */}
+        <Animated.View
+          entering={FadeInUp.delay(0).duration(Durations.normal).springify()}
+          style={styles.mascotSection}
+        >
+          {isNewUser ? (
+            // New user: Large mascot without ring
+            <TriMascot mood={mascotMood} size={mascotSize} />
+          ) : (
+            // Returning user: Mascot inside progress ring
+            <ProgressRing size={ringSize} progress={accuracy / 100} strokeWidth={8}>
+              <TriMascot mood={mascotMood} size={mascotSize} />
+            </ProgressRing>
+          )}
+        </Animated.View>
+
+        {/* Title */}
+        <Animated.View
+          entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}
+          style={styles.titleSection}
+        >
+          <Text style={[styles.title, { color: colors.text }]}>MedTriads</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{message}</Text>
+        </Animated.View>
 
         {/* Stats Row */}
-        <View style={styles.statsRow}>
-          <StatsCard
-            value={stats.streak}
-            label="Streak"
-            icon={
-              <IconSymbol
-                name="flame.fill"
-                size={24}
-                color={colors.timerWarning}
-              />
-            }
+        {isNewUser ? (
+          <NewUserStatRow delay={Durations.stagger * 2} />
+        ) : (
+          <ReturningUserStatRow
+            accuracy={accuracy}
+            bestStreak={stats?.bestStreak ?? 0}
+            totalAnswered={stats?.totalAnswered ?? 0}
+            dailyStreak={dailyStreak}
+            highScore={highScore}
+            delay={Durations.stagger * 2}
           />
-          <StatsCard
-            value={stats.highScore}
-            label="Best"
-            icon={
-              <IconSymbol
-                name="trophy.fill"
-                size={24}
-                color={colors.timerWarning}
-              />
-            }
+        )}
+
+        {/* Mastery Bar (returning users only) */}
+        {!isNewUser && (
+          <MasteryBar
+            totalAnswered={stats?.totalAnswered ?? 0}
+            delay={Durations.stagger * 3}
           />
-          <StatsCard
-            value={stats.totalQuizzes}
-            label="Played"
-            icon={
-              <IconSymbol
-                name="checkmark.circle.fill"
-                size={24}
-                color={colors.success}
-              />
-            }
-          />
-        </View>
+        )}
       </View>
 
-      {/* Footer with Start Button */}
-      <View style={styles.footer}>
-        <Button label="Start Quiz" onPress={() => router.push('/quiz')} />
-      </View>
+      {/* Footer */}
+      <Animated.View
+        entering={FadeInUp.delay(Durations.stagger * 4).duration(Durations.normal).springify()}
+        style={styles.footer}
+      >
+        <Button
+          label={isNewUser ? 'Start Quiz' : 'Continue'}
+          onPress={() => router.push('/quiz')}
+        />
+        <Text style={[styles.hint, { color: colors.textMuted }]}>
+          Three findings → One diagnosis → Beat the clock
+        </Text>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -79,29 +131,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   content: {
     flex: 1,
     paddingHorizontal: Spacing.lg,
     justifyContent: 'center',
-    gap: Spacing.xxl,
-  },
-  header: {
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: Spacing.lg,
+    maxWidth: 400,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  mascotSection: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleSection: {
+    alignItems: 'center',
+    gap: Spacing.xs,
   },
   title: {
-    ...Typography.title,
-    fontSize: 40,
+    ...Typography.titleLarge,
   },
   subtitle: {
     ...Typography.caption,
   },
-  statsRow: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-  },
   footer: {
     padding: Spacing.lg,
     paddingBottom: Spacing.xl,
+    gap: Spacing.md,
+    maxWidth: 400,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  hint: {
+    ...Typography.footnote,
+    textAlign: 'center',
   },
 });
