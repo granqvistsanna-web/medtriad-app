@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Data Foundation** - Triads data model, JSON content, question generation
 - [x] **Phase 2: Quiz Core** - Basic quiz flow with questions, answers, and progression
 - [x] **Phase 3: Screen Flow** - Home screen with stats, results screen with summary
-- [ ] **Phase 4: Game Mechanics** - Scoring system, timer with color transitions
+- [x] **Phase 4: Game Mechanics** - Scoring system, timer with color transitions
 - [ ] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
 - [ ] **Phase 6: Polish** - Animations, sound effects, final refinements
 
@@ -86,8 +86,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md - Scoring service, reducer extension, speed bonus and combo tier logic
-- [ ] 04-02-PLAN.md - Timer color transitions, floating points, combo pulse, cancel button
+- [x] 04-01-PLAN.md - Scoring service, reducer extension, speed bonus and combo tier logic
+- [x] 04-02-PLAN.md - Timer color transitions, floating points, combo pulse, cancel button
 
 ### Phase 5: Feedback & Persistence
 **Goal**: User receives clear feedback on answers and progress persists across sessions
@@ -136,10 +136,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Data Foundation | 2/2 | Complete | 2026-01-17 |
 | 2. Quiz Core | 2/2 | Complete | 2026-01-18 |
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
-| 4. Game Mechanics | 0/2 | Planned | - |
+| 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
 | 5. Feedback & Persistence | 0/3 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 4 planned)*
+*Last updated: 2026-01-18 (Phase 4 complete)*

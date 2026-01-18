@@ -25,15 +25,15 @@
 ### Timer
 
 - [x] **TIME-01**: User sees 12-second countdown timer as circular ring
-- [ ] **TIME-02**: Timer ring changes color: blue -> yellow (< 5s) -> red (< 3s)
-- [ ] **TIME-03**: If timer expires, question counts as incorrect and auto-advances
+- [x] **TIME-02**: Timer ring changes color: blue -> yellow (< 5s) -> red (< 3s)
+- [x] **TIME-03**: If timer expires, question counts as incorrect and auto-advances
 
 ### Scoring
 
-- [ ] **SCOR-01**: User earns 100 base points for correct answers
-- [ ] **SCOR-02**: User earns 0-50 speed bonus points (faster = more)
-- [ ] **SCOR-03**: User earns combo multiplier (1x -> 2x -> 3x) every 3 correct in a row
-- [ ] **SCOR-04**: User earns +500 bonus for perfect round (10/10)
+- [x] **SCOR-01**: User earns 100 base points for correct answers
+- [x] **SCOR-02**: User earns 0-50 speed bonus points (faster = more)
+- [x] **SCOR-03**: User earns combo multiplier (1x -> 2x -> 3x) every 3 correct in a row
+- [x] **SCOR-04**: User earns +500 bonus for perfect round (10/10)
 
 ### Feedback
 
@@ -45,8 +45,8 @@
 
 ### Animations
 
-- [ ] **ANIM-01**: Points float upward and fade when earned
-- [ ] **ANIM-02**: Combo multiplier pulses when it increases
+- [x] **ANIM-01**: Points float upward and fade when earned
+- [x] **ANIM-02**: Combo multiplier pulses when it increases
 - [ ] **ANIM-03**: Timer ring accelerates visually in final 3 seconds
 - [ ] **ANIM-04**: Answer buttons scale slightly on press
 - [ ] **ANIM-05**: Results score counts up from zero
@@ -126,19 +126,19 @@
 | QUIZ-05 | Phase 2 | Complete |
 | QUIZ-06 | Phase 2 | Complete |
 | TIME-01 | Phase 2 | Complete |
-| TIME-02 | Phase 4 | Pending |
-| TIME-03 | Phase 4 | Pending |
-| SCOR-01 | Phase 4 | Pending |
-| SCOR-02 | Phase 4 | Pending |
-| SCOR-03 | Phase 4 | Pending |
-| SCOR-04 | Phase 4 | Pending |
+| TIME-02 | Phase 4 | Complete |
+| TIME-03 | Phase 4 | Complete |
+| SCOR-01 | Phase 4 | Complete |
+| SCOR-02 | Phase 4 | Complete |
+| SCOR-03 | Phase 4 | Complete |
+| SCOR-04 | Phase 4 | Complete |
 | FEED-01 | Phase 5 | Pending |
 | FEED-02 | Phase 5 | Pending |
 | FEED-03 | Phase 5 | Pending |
 | FEED-04 | Phase 5 | Pending |
 | FEED-05 | Phase 6 | Pending |
-| ANIM-01 | Phase 6 | Pending |
-| ANIM-02 | Phase 6 | Pending |
+| ANIM-01 | Phase 4 | Complete |
+| ANIM-02 | Phase 4 | Complete |
 | ANIM-03 | Phase 6 | Pending |
 | ANIM-04 | Phase 6 | Pending |
 | ANIM-05 | Phase 6 | Pending |
@@ -162,4 +162,4 @@
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-18 after Phase 3 completion*
+*Last updated: 2026-01-18 after Phase 4 completion*
