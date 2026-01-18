@@ -35,8 +35,14 @@ export interface QuizState {
   /** Cumulative score for the current round */
   score: number;
 
-  /** Current combo multiplier (resets on incorrect/timeout) */
+  /** Number of consecutive correct answers (0-based counter) */
+  consecutiveCorrect: number;
+
+  /** Current combo multiplier tier (1, 2, or 3) for display */
   combo: number;
+
+  /** Points earned on the last answer (for floating points display) */
+  lastPointsEarned: number;
 
   /** Seconds remaining for current question */
   timeRemaining: number;
@@ -50,7 +56,7 @@ export interface QuizState {
  */
 export type QuizAction =
   | { type: 'START_QUIZ'; questions: QuizQuestion[] }
-  | { type: 'SELECT_ANSWER'; optionId: string; isCorrect: boolean }
+  | { type: 'SELECT_ANSWER'; optionId: string; isCorrect: boolean; timeRemaining: number }
   | { type: 'TICK_TIMER' }
   | { type: 'NEXT_QUESTION' }
   | { type: 'RESET' };

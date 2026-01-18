@@ -4,6 +4,11 @@ import {
   QuizAction,
   QUESTION_TIME,
 } from '@/types/quiz-state';
+import {
+  calculateAnswerPoints,
+  getComboTier,
+  SCORING,
+} from '@/services/scoring';
 
 /**
  * Initial state for a new quiz round
@@ -13,7 +18,9 @@ const initialState: QuizState = {
   questions: [],
   currentIndex: 0,
   score: 0,
+  consecutiveCorrect: 0,
   combo: 1,
+  lastPointsEarned: 0,
   timeRemaining: QUESTION_TIME,
   selectedOptionId: null,
 };
@@ -38,20 +45,43 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         timeRemaining: QUESTION_TIME,
       };
 
-    case 'SELECT_ANSWER':
+    case 'SELECT_ANSWER': {
       // Only allow selection when playing
       if (state.status !== 'playing') return state;
-      return {
-        ...state,
-        status: 'answered',
-        selectedOptionId: action.optionId,
-        score: action.isCorrect
-          ? state.score + 100 * state.combo
-          : state.score,
-        combo: action.isCorrect ? state.combo + 1 : 1,
-      };
 
-    case 'TICK_TIMER':
+      if (action.isCorrect) {
+        // Calculate points with current combo tier
+        const comboTier = getComboTier(state.consecutiveCorrect);
+        const points = calculateAnswerPoints(
+          action.timeRemaining,
+          SCORING.TOTAL_TIME,
+          comboTier
+        );
+        const newConsecutiveCorrect = state.consecutiveCorrect + 1;
+
+        return {
+          ...state,
+          status: 'answered',
+          selectedOptionId: action.optionId,
+          score: state.score + points.total,
+          consecutiveCorrect: newConsecutiveCorrect,
+          combo: getComboTier(newConsecutiveCorrect),
+          lastPointsEarned: points.total,
+        };
+      } else {
+        // Incorrect answer: no points, reset combo
+        return {
+          ...state,
+          status: 'answered',
+          selectedOptionId: action.optionId,
+          consecutiveCorrect: 0,
+          combo: 1,
+          lastPointsEarned: 0,
+        };
+      }
+    }
+
+    case 'TICK_TIMER': {
       // Only tick when playing
       if (state.status !== 'playing') return state;
 
@@ -62,15 +92,18 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
           ...state,
           status: 'answered',
           timeRemaining: 0,
-          combo: 1, // Reset combo on timeout
+          consecutiveCorrect: 0,
+          combo: 1,
+          lastPointsEarned: 0,
         };
       }
       return {
         ...state,
         timeRemaining: newTime,
       };
+    }
 
-    case 'NEXT_QUESTION':
+    case 'NEXT_QUESTION': {
       const nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.questions.length) {
         // No more questions - quiz complete
@@ -86,7 +119,9 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         currentIndex: nextIndex,
         timeRemaining: QUESTION_TIME,
         selectedOptionId: null,
+        lastPointsEarned: 0,
       };
+    }
 
     case 'RESET':
       return initialState;
@@ -109,8 +144,8 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
  * // Start quiz
  * dispatch({ type: 'START_QUIZ', questions });
  *
- * // Select answer
- * dispatch({ type: 'SELECT_ANSWER', optionId: 'abc', isCorrect: true });
+ * // Select answer (include timeRemaining for scoring)
+ * dispatch({ type: 'SELECT_ANSWER', optionId: 'abc', isCorrect: true, timeRemaining: 10 });
  *
  * // Timer tick
  * dispatch({ type: 'TICK_TIMER' });
