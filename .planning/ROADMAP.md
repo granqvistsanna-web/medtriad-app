@@ -19,6 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
 - [x] **Phase 6: Navigation & Study Mode** - Bottom tab bar, Library screen, Progress screen
 - [x] **Phase 7: Polish** - Animations, sound effects, final refinements
+- [ ] **Phase 8: Cleanup** - Tech debt closure from milestone audit
 
 ## Phase Details
 
@@ -147,10 +148,25 @@ Plans:
 - [x] 07-01-PLAN.md — Timer pulse urgency animation and enhanced button press scale
 - [x] 07-02-PLAN.md — Sound effects hook, score count-up, confetti for perfect rounds
 
+### Phase 8: Cleanup
+**Goal**: Close tech debt identified in milestone audit for clean v1 release
+**Depends on**: Phase 7
+**Requirements**: None (debt closure, not new requirements)
+**Gap Closure**: Closes integration gap from v1-MILESTONE-AUDIT.md
+**Success Criteria** (what must be TRUE):
+  1. Haptics setting is respected - quiz and tab bar check `hapticsEnabled` before triggering
+  2. Orphaned `getRandomTriads` function removed from triads.ts
+  3. Orphaned `isNewUser` function removed from stats-storage.ts
+  4. Settings flow E2E works: toggle haptics off → play quiz → no haptics fire
+**Plans**: 1 plan
+
+Plans:
+- [ ] 08-01-PLAN.md — useHaptics hook, wire to quiz and tabs, remove orphaned exports
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -161,7 +177,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
 | 6. Navigation & Study Mode | 4/4 | Complete | 2026-01-18 |
 | 7. Polish | 2/2 | Complete | 2026-01-18 |
+| 8. Cleanup | 0/1 | Pending | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 7 complete - Milestone v1 complete)*
+*Last updated: 2026-01-18 (Phase 8 added for tech debt closure)*
