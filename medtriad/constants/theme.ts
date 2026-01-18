@@ -1,6 +1,8 @@
 /**
  * MedTriads Design System
  * Duolingo-inspired: Friendly, teal-centric, light mode only
+ *
+ * For full documentation, see DESIGN-SYSTEM.md in this folder.
  */
 
 import { Platform } from 'react-native';
