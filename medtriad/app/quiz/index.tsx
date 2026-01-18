@@ -1,40 +1,43 @@
-import { SafeAreaView, StyleSheet, View, useColorScheme } from 'react-native';
+import { StyleSheet, View, Text, Pressable, useWindowDimensions } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import * as Haptics from 'expo-haptics';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
 import { FindingsCard } from '@/components/quiz/FindingsCard';
 import { AnswerCard } from '@/components/quiz/AnswerCard';
-import { TimerRing } from '@/components/quiz/TimerRing';
-import { ScoreDisplay } from '@/components/quiz/ScoreDisplay';
-import { ProgressIndicator } from '@/components/quiz/ProgressIndicator';
-import { FloatingPoints } from '@/components/quiz/FloatingPoints';
-import { CancelButton } from '@/components/quiz/CancelButton';
+import { TimerBar } from '@/components/quiz/TimerBar';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 
 import { useQuizReducer } from '@/hooks/use-quiz-reducer';
 import { useCountdownTimer } from '@/hooks/use-countdown-timer';
 import { generateQuestionSet } from '@/services/question-generator';
 import { isPerfectRound, getComboTier } from '@/services/scoring';
+import { useStats } from '@/hooks/useStats';
 
 import { QuizOption } from '@/types';
 import { QUESTION_COUNT, QUESTION_TIME } from '@/types/quiz-state';
-import { Colors, Spacing } from '@/constants/theme';
+import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
+import { MascotMood } from '@/components/home/TriMascot';
 
 /** Delay in ms before advancing to next question after answer */
-const ANSWER_DELAY = 1500;
+const ANSWER_DELAY = 1400;
 
 export default function QuizScreen() {
   const [state, dispatch] = useQuizReducer();
   const router = useRouter();
-  const scheme = useColorScheme() ?? 'light';
-  const colors = Colors[scheme];
+  const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
+  const colors = Colors.light;
+  const { recordQuizResult } = useStats();
 
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
   const maxComboRef = useRef(1);
 
-  // Floating points animation state
-  const [showFloatingPoints, setShowFloatingPoints] = useState(false);
+  // Feedback text state
+  const [feedbackText, setFeedbackText] = useState<string | null>(null);
 
   const {
     status,
@@ -64,20 +67,33 @@ export default function QuizScreen() {
   // Run countdown timer when playing
   useCountdownTimer(status === 'playing', handleTick);
 
-  // Trigger floating points animation when points are earned
+  // Handle timeout - no haptic, visual feedback only
   useEffect(() => {
-    if (lastPointsEarned > 0) {
-      setShowFloatingPoints(true);
+    if (status === 'playing' && timeRemaining === 0) {
+      setFeedbackText("Time's up!");
+      dispatch({
+        type: 'SELECT_ANSWER',
+        optionId: '',
+        isCorrect: false,
+        timeRemaining: 0,
+      });
     }
-  }, [lastPointsEarned]);
+  }, [status, timeRemaining, dispatch]);
 
   // Auto-advance after answer
   useEffect(() => {
     if (status !== 'answered') return;
 
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(async () => {
       if (currentIndex >= questions.length - 1) {
-        // Check for perfect round (all questions correct)
+        // Save stats
+        await recordQuizResult(
+          correctCountRef.current,
+          QUESTION_COUNT,
+          maxComboRef.current
+        );
+
+        // Navigate to results
         const perfect = isPerfectRound(correctCountRef.current, QUESTION_COUNT);
         router.replace({
           pathname: '/quiz/results',
@@ -85,24 +101,23 @@ export default function QuizScreen() {
             score: score.toString(),
             correctCount: correctCountRef.current.toString(),
             bestStreak: maxComboRef.current.toString(),
-            isNewHighScore: 'false', // Phase 5 will implement actual check
+            isNewHighScore: 'false',
             isPerfect: perfect ? 'true' : 'false',
           },
         });
       } else {
+        setFeedbackText(null);
         dispatch({ type: 'NEXT_QUESTION' });
       }
     }, ANSWER_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [status, currentIndex, questions.length, dispatch, router, score]);
+  }, [status, currentIndex, questions.length, dispatch, router, score, recordQuizResult]);
 
-  // Handle answer selection
+  // Handle answer selection - single Light haptic on tap (consistent, understated)
   const handleAnswerSelect = async (option: QuizOption) => {
-    // Immediate haptic on tap
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-    // Update state with timeRemaining for scoring calculation
     dispatch({
       type: 'SELECT_ANSWER',
       optionId: option.id,
@@ -110,21 +125,17 @@ export default function QuizScreen() {
       timeRemaining: state.timeRemaining,
     });
 
-    // Track correct answers and max combo tier
     if (option.isCorrect) {
       correctCountRef.current += 1;
-      // Calculate what the new combo tier will be after dispatch
       const newComboTier = getComboTier(consecutiveCorrect + 1);
       if (newComboTier > maxComboRef.current) {
         maxComboRef.current = newComboTier;
       }
-    }
-
-    // Result haptic feedback
-    if (option.isCorrect) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setFeedbackText('Correct!');
     } else {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      // Find correct answer
+      const correctOption = currentQuestion.options.find((o) => o.isCorrect);
+      setFeedbackText(`Correct: ${correctOption?.condition}`);
     }
   };
 
@@ -141,43 +152,124 @@ export default function QuizScreen() {
     return 'default';
   };
 
+  // Get mascot mood based on game state
+  const getMascotMood = (): MascotMood => {
+    if (status === 'answered') {
+      const wasCorrect = currentQuestion.options.find(
+        (o) => o.id === selectedOptionId
+      )?.isCorrect;
+      return wasCorrect ? 'happy' : 'reassuring';
+    }
+    if (consecutiveCorrect >= 3) return 'streak';
+    return 'neutral';
+  };
+
+  // Handle cancel
+  const handleCancel = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.back();
+  };
+
   // Loading state
   if (!currentQuestion) {
     return null;
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.header}>
-        <CancelButton />
-        <ProgressIndicator current={currentIndex + 1} total={QUESTION_COUNT} />
-        <TimerRing seconds={timeRemaining} totalSeconds={QUESTION_TIME} />
-        <ScoreDisplay score={score} combo={combo} />
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          height: windowHeight,
+        },
+      ]}
+    >
+      {/* Header */}
+      <View style={[styles.header, { borderBottomColor: colors.border }]}>
+        <Pressable onPress={handleCancel} style={styles.cancelButton}>
+          <IconSymbol name="xmark" size={20} color={colors.textSecondary} />
+        </Pressable>
+
+        {/* Question progress - center */}
+        <View style={styles.progressContainer}>
+          <Text style={[styles.progressText, { color: colors.textMuted }]}>
+            {currentIndex + 1} of {QUESTION_COUNT}
+          </Text>
+        </View>
+
+        <View style={styles.headerRight}>
+          {/* Streak badge */}
+          {combo > 1 && (
+            <Animated.View
+              entering={FadeIn.duration(Durations.fast)}
+              style={[styles.streakBadge, { backgroundColor: colors.primaryLight }]}
+            >
+              <IconSymbol name="flame.fill" size={14} color={colors.primary} />
+              <Text style={[styles.streakText, { color: colors.primary }]}>{combo}x</Text>
+            </Animated.View>
+          )}
+
+          {/* Score display */}
+          <Text style={[styles.scoreText, { color: colors.text }]}>
+            {correctCountRef.current}/{currentIndex + (status === 'answered' ? 1 : 0)}
+          </Text>
+        </View>
       </View>
 
-      <View style={styles.content}>
-        <FindingsCard findings={currentQuestion.triad.findings} />
+      {/* Main content */}
+      <View style={styles.main}>
+        {/* Timer row with mascot */}
+        <TimerBar
+          seconds={timeRemaining}
+          totalSeconds={QUESTION_TIME}
+          mascotMood={getMascotMood()}
+        />
 
-        <View style={styles.answers}>
-          {currentQuestion.options.map((option) => (
+        {/* Question card */}
+        <View style={styles.questionSection}>
+          <FindingsCard
+            findings={currentQuestion.triad.findings}
+            category={currentQuestion.triad.category}
+          />
+        </View>
+
+        {/* Answer buttons */}
+        <View style={styles.answersSection}>
+          {currentQuestion.options.map((option, index) => (
             <AnswerCard
               key={option.id}
               condition={option.condition}
               onPress={() => handleAnswerSelect(option)}
               state={getAnswerState(option)}
               disabled={status === 'answered'}
+              delay={index * Durations.stagger}
             />
           ))}
         </View>
 
-        {showFloatingPoints && lastPointsEarned > 0 && (
-          <FloatingPoints
-            points={lastPointsEarned}
-            onComplete={() => setShowFloatingPoints(false)}
-          />
+        {/* Feedback text */}
+        {feedbackText && (
+          <Animated.View
+            entering={FadeInUp.duration(Durations.normal).springify()}
+            style={styles.feedbackContainer}
+          >
+            <Text
+              style={[
+                styles.feedbackText,
+                {
+                  color: feedbackText === 'Correct!' ? colors.success : colors.textSecondary,
+                },
+              ]}
+            >
+              {feedbackText === 'Correct!' ? 'Correct! ✨' : feedbackText}
+            </Text>
+          </Animated.View>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -190,14 +282,65 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.base,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: 1,
   },
-  content: {
+  cancelButton: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: Radius.full,
+  },
+  progressContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  progressText: {
+    ...Typography.footnote,
+    fontWeight: '500',
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  streakBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    borderRadius: Radius.full,
+  },
+  streakText: {
+    ...Typography.footnote,
+    fontWeight: '700',
+  },
+  scoreText: {
+    ...Typography.label,
+  },
+  main: {
     flex: 1,
     paddingHorizontal: Spacing.base,
-    gap: Spacing.lg,
-  },
-  answers: {
+    paddingVertical: Spacing.sm,
     gap: Spacing.md,
+  },
+  questionSection: {
+    // Takes natural height
+  },
+  answersSection: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: Spacing.sm,
+  },
+  feedbackContainer: {
+    alignItems: 'center',
+    paddingVertical: Spacing.sm,
+  },
+  feedbackText: {
+    ...Typography.label,
   },
 });
