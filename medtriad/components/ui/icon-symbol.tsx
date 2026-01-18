@@ -30,6 +30,8 @@ const MAPPING = {
   'gearshape': 'settings',
   'square.and.arrow.up': 'share',
   'trash': 'delete',
+  'percent': 'percent',
+  'gamecontroller.fill': 'sports-esports',
 } as IconMapping;
 
 /**
