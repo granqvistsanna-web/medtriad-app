@@ -12,6 +12,7 @@ import { ProgressIndicator } from '@/components/quiz/ProgressIndicator';
 import { useQuizReducer } from '@/hooks/use-quiz-reducer';
 import { useCountdownTimer } from '@/hooks/use-countdown-timer';
 import { generateQuestionSet } from '@/services/question-generator';
+import { isPerfectRound, getComboTier } from '@/services/scoring';
 
 import { QuizOption } from '@/types';
 import { QUESTION_COUNT, QUESTION_TIME } from '@/types/quiz-state';
@@ -36,6 +37,8 @@ export default function QuizScreen() {
     currentIndex,
     score,
     combo,
+    consecutiveCorrect,
+    lastPointsEarned,
     timeRemaining,
     selectedOptionId,
   } = state;
@@ -62,6 +65,8 @@ export default function QuizScreen() {
 
     const timeout = setTimeout(() => {
       if (currentIndex >= questions.length - 1) {
+        // Check for perfect round (all questions correct)
+        const perfect = isPerfectRound(correctCountRef.current, QUESTION_COUNT);
         router.replace({
           pathname: '/quiz/results',
           params: {
@@ -69,6 +74,7 @@ export default function QuizScreen() {
             correctCount: correctCountRef.current.toString(),
             bestStreak: maxComboRef.current.toString(),
             isNewHighScore: 'false', // Phase 5 will implement actual check
+            isPerfect: perfect ? 'true' : 'false',
           },
         });
       } else {
@@ -84,20 +90,21 @@ export default function QuizScreen() {
     // Immediate haptic on tap
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-    // Update state
+    // Update state with timeRemaining for scoring calculation
     dispatch({
       type: 'SELECT_ANSWER',
       optionId: option.id,
       isCorrect: option.isCorrect,
+      timeRemaining: state.timeRemaining,
     });
 
-    // Track correct answers and max combo
+    // Track correct answers and max combo tier
     if (option.isCorrect) {
       correctCountRef.current += 1;
-      // Track max combo achieved (combo will increment to this value)
-      const newCombo = state.combo + 1;
-      if (newCombo > maxComboRef.current) {
-        maxComboRef.current = newCombo;
+      // Calculate what the new combo tier will be after dispatch
+      const newComboTier = getComboTier(consecutiveCorrect + 1);
+      if (newComboTier > maxComboRef.current) {
+        maxComboRef.current = newComboTier;
       }
     }
 
