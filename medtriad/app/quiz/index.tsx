@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, View, useColorScheme } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import * as Haptics from 'expo-haptics';
 
 import { FindingsCard } from '@/components/quiz/FindingsCard';
@@ -8,6 +8,8 @@ import { AnswerCard } from '@/components/quiz/AnswerCard';
 import { TimerRing } from '@/components/quiz/TimerRing';
 import { ScoreDisplay } from '@/components/quiz/ScoreDisplay';
 import { ProgressIndicator } from '@/components/quiz/ProgressIndicator';
+import { FloatingPoints } from '@/components/quiz/FloatingPoints';
+import { CancelButton } from '@/components/quiz/CancelButton';
 
 import { useQuizReducer } from '@/hooks/use-quiz-reducer';
 import { useCountdownTimer } from '@/hooks/use-countdown-timer';
@@ -30,6 +32,9 @@ export default function QuizScreen() {
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
   const maxComboRef = useRef(1);
+
+  // Floating points animation state
+  const [showFloatingPoints, setShowFloatingPoints] = useState(false);
 
   const {
     status,
@@ -58,6 +63,13 @@ export default function QuizScreen() {
 
   // Run countdown timer when playing
   useCountdownTimer(status === 'playing', handleTick);
+
+  // Trigger floating points animation when points are earned
+  useEffect(() => {
+    if (lastPointsEarned > 0) {
+      setShowFloatingPoints(true);
+    }
+  }, [lastPointsEarned]);
 
   // Auto-advance after answer
   useEffect(() => {
@@ -137,6 +149,7 @@ export default function QuizScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.header}>
+        <CancelButton />
         <ProgressIndicator current={currentIndex + 1} total={QUESTION_COUNT} />
         <TimerRing seconds={timeRemaining} totalSeconds={QUESTION_TIME} />
         <ScoreDisplay score={score} combo={combo} />
@@ -156,6 +169,13 @@ export default function QuizScreen() {
             />
           ))}
         </View>
+
+        {showFloatingPoints && lastPointsEarned > 0 && (
+          <FloatingPoints
+            points={lastPointsEarned}
+            onComplete={() => setShowFloatingPoints(false)}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
