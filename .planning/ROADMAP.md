@@ -83,11 +83,11 @@ Plans:
   4. User earns +500 bonus for perfect 10/10 round
   5. Timer ring changes color: blue normally, yellow under 5 seconds, red under 3 seconds
   6. Timer expiration counts as incorrect answer and auto-advances
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: Scoring system implementation
-- [ ] 04-02: Timer with color transitions and timeout handling
+- [ ] 04-01-PLAN.md - Scoring service, reducer extension, speed bonus and combo tier logic
+- [ ] 04-02-PLAN.md - Timer color transitions, floating points, combo pulse, cancel button
 
 ### Phase 5: Feedback & Persistence
 **Goal**: User receives clear feedback on answers and progress persists across sessions
@@ -136,10 +136,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 1. Data Foundation | 2/2 | Complete | 2026-01-17 |
 | 2. Quiz Core | 2/2 | Complete | 2026-01-18 |
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
-| 4. Game Mechanics | 0/2 | Ready | - |
+| 4. Game Mechanics | 0/2 | Planned | - |
 | 5. Feedback & Persistence | 0/3 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 3 complete)*
+*Last updated: 2026-01-18 (Phase 4 planned)*
