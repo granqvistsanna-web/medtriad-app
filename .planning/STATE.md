@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** Phase 6 - Polish
+**Current focus:** Phase 6 - Navigation & Study Mode
 
 ## Current Position
 
-Phase: 6 of 6 (Polish)
+Phase: 6 of 7 (Navigation & Study Mode)
 Plan: 0 of 3 in current phase
 Status: Ready to plan
 Last activity: 2026-01-18 - Phase 5 verified and complete
 
-Progress: [█████████.] 83%
+Progress: [████████..] 71%
 
 ## Performance Metrics
 

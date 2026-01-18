@@ -69,6 +69,23 @@
 - [x] **DATA-05**: Daily streak persists and calculates correctly
 - [x] **DATA-06**: Total quizzes completed persists
 
+### Navigation
+
+- [ ] **NAV-01**: Bottom tab bar shows Home, Library, Progress icons
+- [ ] **NAV-02**: Tab bar uses minimal iOS-style design (monochrome icons)
+- [ ] **NAV-03**: Active tab is visually highlighted
+- [ ] **NAV-04**: Navigation between tabs feels instant
+
+### Library (Study Mode)
+
+- [ ] **LIB-01**: User can browse all triads grouped by medical category
+- [ ] **LIB-02**: User can tap a triad to view condition and all three findings
+
+### Progress Screen
+
+- [ ] **PROG-01**: User sees detailed stats (accuracy, total correct, category breakdown)
+- [ ] **PROG-02**: User sees quiz history with recent rounds
+
 ## v2 Requirements
 
 ### Category Selection
@@ -136,12 +153,20 @@
 | FEED-02 | Phase 5 | Complete |
 | FEED-03 | Phase 5 | Complete |
 | FEED-04 | Phase 5 | Complete |
-| FEED-05 | Phase 6 | Pending |
+| FEED-05 | Phase 7 | Pending |
 | ANIM-01 | Phase 4 | Complete |
 | ANIM-02 | Phase 4 | Complete |
-| ANIM-03 | Phase 6 | Pending |
-| ANIM-04 | Phase 6 | Pending |
-| ANIM-05 | Phase 6 | Pending |
+| ANIM-03 | Phase 7 | Pending |
+| ANIM-04 | Phase 7 | Pending |
+| ANIM-05 | Phase 7 | Pending |
+| NAV-01 | Phase 6 | Pending |
+| NAV-02 | Phase 6 | Pending |
+| NAV-03 | Phase 6 | Pending |
+| NAV-04 | Phase 6 | Pending |
+| LIB-01 | Phase 6 | Pending |
+| LIB-02 | Phase 6 | Pending |
+| PROG-01 | Phase 6 | Pending |
+| PROG-02 | Phase 6 | Pending |
 | RESU-01 | Phase 3 | Complete |
 | RESU-02 | Phase 3 | Complete |
 | RESU-03 | Phase 3 | Complete |
@@ -156,10 +181,10 @@
 | DATA-06 | Phase 5 | Complete |
 
 **Coverage:**
-- v1 requirements: 32 total
-- Mapped to phases: 32
+- v1 requirements: 40 total
+- Mapped to phases: 40
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-18 after Phase 5 completion*
+*Last updated: 2026-01-18 (Navigation & Study Mode requirements added)*

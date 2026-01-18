@@ -2,7 +2,7 @@
 
 ## Overview
 
-MedTriads is built in six phases that mirror the natural development order of a quiz app: data models first, then core quiz mechanics, followed by complete screen flow, game mechanics (scoring and timer), feedback systems, and finally polish (animations and sounds). Each phase delivers a testable capability, building toward the complete game-like quiz experience.
+MedTriads is built in seven phases that mirror the natural development order of a quiz app: data models first, then core quiz mechanics, followed by complete screen flow, game mechanics (scoring and timer), feedback systems, navigation with study mode, and finally polish (animations and sounds). Each phase delivers a testable capability, building toward the complete game-like quiz experience.
 
 ## Phases
 
@@ -17,7 +17,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Screen Flow** - Home screen with stats, results screen with summary
 - [x] **Phase 4: Game Mechanics** - Scoring system, timer with color transitions
 - [x] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
-- [ ] **Phase 6: Polish** - Animations, sound effects, final refinements
+- [ ] **Phase 6: Navigation & Study Mode** - Bottom tab bar, Library screen, Progress screen
+- [ ] **Phase 7: Polish** - Animations, sound effects, final refinements
 
 ## Phase Details
 
@@ -108,28 +109,44 @@ Plans:
 - [x] 05-02-PLAN.md — Haptic feedback refinement (consistent Light style)
 - [x] 05-03-PLAN.md — Data persistence (high score, daily streak, total quizzes)
 
-### Phase 6: Polish
-**Goal**: Animations and sounds create satisfying, game-like experience
+### Phase 6: Navigation & Study Mode
+**Goal**: Users can navigate between app sections and study triads without timer pressure
 **Depends on**: Phase 5
-**Requirements**: ANIM-01, ANIM-02, ANIM-03, ANIM-04, ANIM-05, FEED-05
+**Requirements**: NAV-01, NAV-02, NAV-03, NAV-04, LIB-01, LIB-02, PROG-01, PROG-02
 **Success Criteria** (what must be TRUE):
-  1. Points float upward and fade when earned
-  2. Combo multiplier pulses visually when it increases
-  3. Timer ring accelerates visually in final 3 seconds
-  4. Answer buttons scale slightly on press
-  5. Results screen score counts up from zero with animation
-  6. Sound effects play for correct, incorrect, combo increase, and perfect round
+  1. Bottom tab bar shows 3-4 icons (Home, Library, Progress, optionally Settings)
+  2. Tab bar uses minimal iOS-style design matching app aesthetic
+  3. Library screen displays all triads grouped by category
+  4. User can tap a triad to view condition name and all three findings
+  5. Progress screen shows detailed stats (accuracy, category breakdown)
+  6. Progress screen shows quiz history with recent rounds
+  7. Navigation feels instant with no loading states between tabs
 **Plans**: TBD
 
 Plans:
-- [ ] 06-01: Points and combo animations
-- [ ] 06-02: Timer and button animations
-- [ ] 06-03: Sound effects integration
+- [ ] 06-01: Bottom tab bar navigation structure
+- [ ] 06-02: Library screen with triad browsing
+- [ ] 06-03: Progress screen with detailed stats
+
+### Phase 7: Polish
+**Goal**: Animations and sounds create satisfying, game-like experience
+**Depends on**: Phase 6
+**Requirements**: ANIM-03, ANIM-04, ANIM-05, FEED-05
+**Success Criteria** (what must be TRUE):
+  1. Timer ring accelerates visually in final 3 seconds
+  2. Answer buttons scale slightly on press
+  3. Results screen score counts up from zero with animation
+  4. Sound effects play for correct, incorrect, combo increase, and perfect round
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: Timer and button animations
+- [ ] 07-02: Results animations and sound effects
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -138,8 +155,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
 | 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
 | 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
-| 6. Polish | 0/3 | Not started | - |
+| 6. Navigation & Study Mode | 0/3 | Not started | - |
+| 7. Polish | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 5 complete)*
+*Last updated: 2026-01-18 (Navigation added as Phase 6, Polish moved to Phase 7)*
