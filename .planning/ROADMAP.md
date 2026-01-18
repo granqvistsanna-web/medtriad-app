@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Game Mechanics** - Scoring system, timer with color transitions
 - [x] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
 - [x] **Phase 6: Navigation & Study Mode** - Bottom tab bar, Library screen, Progress screen
-- [ ] **Phase 7: Polish** - Animations, sound effects, final refinements
+- [x] **Phase 7: Polish** - Animations, sound effects, final refinements
 
 ## Phase Details
 
@@ -144,8 +144,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Timer pulse urgency animation and enhanced button press scale
-- [ ] 07-02-PLAN.md — Sound effects hook, score count-up, confetti for perfect rounds
+- [x] 07-01-PLAN.md — Timer pulse urgency animation and enhanced button press scale
+- [x] 07-02-PLAN.md — Sound effects hook, score count-up, confetti for perfect rounds
 
 ## Progress
 
@@ -160,8 +160,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
 | 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
 | 6. Navigation & Study Mode | 4/4 | Complete | 2026-01-18 |
-| 7. Polish | 0/2 | Not started | - |
+| 7. Polish | 2/2 | Complete | 2026-01-18 |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 7 planned)*
+*Last updated: 2026-01-18 (Phase 7 complete - Milestone v1 complete)*
