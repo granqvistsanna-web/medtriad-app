@@ -5,7 +5,11 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  withSequence,
+  withRepeat,
+  cancelAnimation,
   interpolateColor,
+  Easing,
 } from 'react-native-reanimated';
 import { Colors } from '@/constants/theme';
 
@@ -28,9 +32,35 @@ export function TimerRing({ seconds, totalSeconds }: TimerRingProps) {
   // Shared value for smooth text color interpolation
   const secondsValue = useSharedValue(seconds);
 
+  // Shared value for pulse animation in danger zone
+  const pulseScale = useSharedValue(1);
+
   useEffect(() => {
     secondsValue.value = withTiming(seconds, { duration: 200 });
   }, [seconds, secondsValue]);
+
+  // Pulse animation when in danger zone (seconds <= 3 and > 0)
+  useEffect(() => {
+    if (seconds <= 3 && seconds > 0) {
+      // Start continuous pulse: 1 -> 1.08 -> 1, 120ms each direction
+      pulseScale.value = withRepeat(
+        withSequence(
+          withTiming(1.08, { duration: 120, easing: Easing.inOut(Easing.ease) }),
+          withTiming(1, { duration: 120, easing: Easing.inOut(Easing.ease) })
+        ),
+        -1, // Infinite repeat
+        false // Don't reverse (already handled in sequence)
+      );
+    } else {
+      // Cancel animation and reset to 1 when out of danger zone
+      cancelAnimation(pulseScale);
+      pulseScale.value = withTiming(1, { duration: 100 });
+    }
+
+    return () => {
+      cancelAnimation(pulseScale);
+    };
+  }, [seconds, pulseScale]);
 
   // Animated text color that smoothly transitions
   const textAnimatedStyle = useAnimatedStyle(() => {
@@ -42,6 +72,11 @@ export function TimerRing({ seconds, totalSeconds }: TimerRingProps) {
     return { color };
   });
 
+  // Pulse style for the container
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseScale.value }],
+  }));
+
   // Ring color uses threshold-based approach (SVG Circle doesn't easily animate)
   const getRingColor = () => {
     if (seconds <= 3) return colors.timerDanger;
@@ -52,7 +87,7 @@ export function TimerRing({ seconds, totalSeconds }: TimerRingProps) {
   const strokeDashoffset = CIRCUMFERENCE * (1 - progress);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, pulseStyle]}>
       <Svg width={SIZE} height={SIZE} style={styles.svg}>
         {/* Background track */}
         <Circle
@@ -83,7 +118,7 @@ export function TimerRing({ seconds, totalSeconds }: TimerRingProps) {
           {seconds}
         </Animated.Text>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
