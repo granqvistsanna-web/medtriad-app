@@ -1,21 +1,39 @@
-import { SafeAreaView, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Button } from '@/components/ui/Button';
+import { TriMascot } from '@/components/home/TriMascot';
 import { HighScoreBadge } from '@/components/results/HighScoreBadge';
-import { Colors, Typography, Spacing } from '@/constants/theme';
+import { useStats } from '@/hooks/useStats';
+import { calculateLevel, getQuestionsToNextLevel } from '@/services/mastery';
+import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
+import { QUESTION_COUNT } from '@/types/quiz-state';
 
 type ResultsParams = {
   score: string;
   correctCount: string;
   bestStreak: string;
   isNewHighScore: string;
+  isPerfect: string;
 };
+
+/**
+ * Get result message based on accuracy
+ */
+function getResultMessage(correctCount: number, isPerfect: boolean): string {
+  if (isPerfect) return 'Perfect round!';
+  const accuracy = (correctCount / QUESTION_COUNT) * 100;
+  if (accuracy >= 90) return 'Incredible!';
+  if (accuracy >= 70) return 'Great job!';
+  if (accuracy >= 50) return 'Good effort!';
+  return 'Keep practicing!';
+}
 
 export default function ResultsScreen() {
   const router = useRouter();
-  const scheme = useColorScheme() ?? 'light';
-  const colors = Colors[scheme];
+  const colors = Colors.light;
+  const { stats } = useStats();
 
   const params = useLocalSearchParams<ResultsParams>();
 
@@ -23,33 +41,66 @@ export default function ResultsScreen() {
   const score = parseInt(params.score ?? '0', 10);
   const correctCount = parseInt(params.correctCount ?? '0', 10);
   const bestStreak = parseInt(params.bestStreak ?? '1', 10);
+  const isPerfect = params.isPerfect === 'true';
   const isNewHighScore = params.isNewHighScore === 'true';
+
+  const resultMessage = getResultMessage(correctCount, isPerfect);
+  const accuracy = (correctCount / QUESTION_COUNT) * 100;
+  const mascotMood = accuracy >= 70 || isPerfect ? 'happy' : 'neutral';
+
+  // Mastery progress info
+  const totalAnswered = stats?.totalAnswered ?? 0;
+  const level = calculateLevel(totalAnswered);
+  const questionsToNext = getQuestionsToNextLevel(totalAnswered);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        {/* New High Score Badge */}
-        {isNewHighScore && (
-          <View style={styles.badgeContainer}>
-            <HighScoreBadge />
-          </View>
-        )}
+        {/* Mascot */}
+        <Animated.View
+          entering={FadeInUp.delay(0).duration(Durations.normal).springify()}
+        >
+          <TriMascot mood={mascotMood} size="md" />
+        </Animated.View>
+
+        {/* Result Message */}
+        <Animated.Text
+          entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}
+          style={[styles.message, { color: colors.text }]}
+        >
+          {resultMessage}
+        </Animated.Text>
 
         {/* Score Display */}
-        <View style={styles.scoreSection}>
-          <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>
-            Final Score
-          </Text>
-          <Text style={[styles.score, { color: colors.text }]}>
+        <Animated.View
+          entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
+          style={styles.scoreSection}
+        >
+          <Text style={[styles.score, { color: colors.primary }]}>
             {score.toLocaleString()}
           </Text>
-        </View>
+          <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>
+            points
+          </Text>
+        </Animated.View>
+
+        {/* New High Score Badge */}
+        {isNewHighScore && (
+          <Animated.View
+            entering={FadeInUp.delay(Durations.stagger * 2.5).duration(Durations.normal).springify()}
+          >
+            <HighScoreBadge />
+          </Animated.View>
+        )}
 
         {/* Stats Row */}
-        <View style={styles.statsRow}>
+        <Animated.View
+          entering={FadeInUp.delay(Durations.stagger * 3).duration(Durations.normal).springify()}
+          style={styles.statsRow}
+        >
           <View style={styles.stat}>
             <Text style={[styles.statValue, { color: colors.text }]}>
-              {correctCount}/10
+              {correctCount}/{QUESTION_COUNT}
             </Text>
             <Text style={[styles.statLabel, { color: colors.textMuted }]}>
               Correct
@@ -64,21 +115,33 @@ export default function ResultsScreen() {
               Best Streak
             </Text>
           </View>
-        </View>
+        </Animated.View>
+
+        {/* Mastery Progress */}
+        <Animated.View
+          entering={FadeInUp.delay(Durations.stagger * 4).duration(Durations.normal).springify()}
+          style={[styles.masteryBadge, { backgroundColor: colors.primaryLight }]}
+        >
+          <Text style={[styles.masteryText, { color: colors.primary }]}>
+            {questionsToNext > 0
+              ? `+${QUESTION_COUNT} questions toward Level ${level + 1}`
+              : `Level ${level} Master!`}
+          </Text>
+        </Animated.View>
       </View>
 
       {/* Buttons */}
-      <View style={styles.buttons}>
-        <Button
-          label="Play Again"
-          onPress={() => router.replace('/quiz')}
-        />
+      <Animated.View
+        entering={FadeInUp.delay(Durations.stagger * 5).duration(Durations.normal).springify()}
+        style={styles.buttons}
+      >
+        <Button label="Play Again" onPress={() => router.replace('/quiz')} />
         <Button
           label="Home"
           variant="secondary"
           onPress={() => router.replace('/(tabs)')}
         />
-      </View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -92,22 +155,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.lg,
-    gap: Spacing.xl,
+    gap: Spacing.lg,
   },
-  badgeContainer: {
-    marginBottom: Spacing.md,
+  message: {
+    ...Typography.titleLarge,
+    textAlign: 'center',
   },
   scoreSection: {
     alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  scoreLabel: {
-    ...Typography.caption,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
   },
   score: {
     ...Typography.display,
+    fontSize: 56,
+  },
+  scoreLabel: {
+    ...Typography.caption,
+    marginTop: -Spacing.xs,
   },
   statsRow: {
     flexDirection: 'row',
@@ -128,9 +191,21 @@ const styles = StyleSheet.create({
     width: 1,
     height: 40,
   },
+  masteryBadge: {
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.full,
+  },
+  masteryText: {
+    ...Typography.footnote,
+    fontWeight: '600',
+  },
   buttons: {
     padding: Spacing.lg,
     paddingBottom: Spacing.xl,
     gap: Spacing.md,
+    maxWidth: 400,
+    alignSelf: 'center',
+    width: '100%',
   },
 });
