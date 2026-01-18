@@ -22,7 +22,7 @@ import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/them
 import { MascotMood } from '@/components/home/TriMascot';
 
 /** Delay in ms before advancing to next question after answer */
-const ANSWER_DELAY = 1400;
+const ANSWER_DELAY = 1500;
 
 export default function QuizScreen() {
   const [state, dispatch] = useQuizReducer();
@@ -144,7 +144,7 @@ export default function QuizScreen() {
   };
 
   // Determine answer card state
-  const getAnswerState = (option: QuizOption): 'default' | 'correct' | 'incorrect' | 'revealed' => {
+  const getAnswerState = (option: QuizOption): 'default' | 'correct' | 'incorrect' | 'revealed' | 'faded' => {
     if (status !== 'answered') return 'default';
 
     if (option.id === selectedOptionId) {
@@ -153,7 +153,7 @@ export default function QuizScreen() {
     if (option.isCorrect) {
       return 'revealed';
     }
-    return 'default';
+    return 'faded'; // Non-selected, non-correct answers fade
   };
 
   // Get mascot mood based on game state
