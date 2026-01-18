@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Screen Flow** - Home screen with stats, results screen with summary
 - [x] **Phase 4: Game Mechanics** - Scoring system, timer with color transitions
 - [x] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
-- [ ] **Phase 6: Navigation & Study Mode** - Bottom tab bar, Library screen, Progress screen
+- [x] **Phase 6: Navigation & Study Mode** - Bottom tab bar, Library screen, Progress screen
 - [ ] **Phase 7: Polish** - Animations, sound effects, final refinements
 
 ## Phase Details
@@ -127,10 +127,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Tab bar navigation structure (4 tabs with icons)
-- [ ] 06-02-PLAN.md — Library screen with triad browsing (accordion categories)
-- [ ] 06-03-PLAN.md — Progress screen with stats and history
-- [ ] 06-04-PLAN.md — Settings screen with toggles and share
+- [x] 06-01-PLAN.md — Tab bar navigation structure (4 tabs with icons)
+- [x] 06-02-PLAN.md — Library screen with triad browsing (accordion categories)
+- [x] 06-03-PLAN.md — Progress screen with stats and history
+- [x] 06-04-PLAN.md — Settings screen with toggles and share
 
 ### Phase 7: Polish
 **Goal**: Animations and sounds create satisfying, game-like experience
@@ -159,9 +159,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
 | 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
 | 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
-| 6. Navigation & Study Mode | 0/4 | Not started | - |
+| 6. Navigation & Study Mode | 4/4 | Complete | 2026-01-18 |
 | 7. Polish | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 6 plans created)*
+*Last updated: 2026-01-18 (Phase 6 complete)*

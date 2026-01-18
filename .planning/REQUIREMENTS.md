@@ -71,30 +71,30 @@
 
 ### Navigation
 
-- [ ] **NAV-01**: Bottom tab bar shows Home, Library, Progress icons
-- [ ] **NAV-02**: Tab bar uses minimal iOS-style design (monochrome icons)
-- [ ] **NAV-03**: Active tab is visually highlighted
-- [ ] **NAV-04**: Navigation between tabs feels instant
+- [x] **NAV-01**: Bottom tab bar shows Home, Library, Progress icons
+- [x] **NAV-02**: Tab bar uses minimal iOS-style design (monochrome icons)
+- [x] **NAV-03**: Active tab is visually highlighted
+- [x] **NAV-04**: Navigation between tabs feels instant
 
 ### Library (Study Mode)
 
-- [ ] **LIB-01**: User can browse all triads grouped by medical category
-- [ ] **LIB-02**: User can tap a triad to view condition and all three findings
+- [x] **LIB-01**: User can browse all triads grouped by medical category
+- [x] **LIB-02**: User can tap a triad to view condition and all three findings
 
 ### Progress Screen
 
-- [ ] **PROG-01**: User sees detailed stats (accuracy, total correct, category breakdown)
-- [ ] **PROG-02**: User sees quiz history with recent rounds
+- [x] **PROG-01**: User sees detailed stats (accuracy, total correct, category breakdown)
+- [x] **PROG-02**: User sees quiz history with recent rounds
 
 ### Settings
 
-- [ ] **SETT-01**: User can toggle sound effects on/off
-- [ ] **SETT-02**: User can toggle haptic feedback on/off
-- [ ] **SETT-03**: Settings persist across app sessions
+- [x] **SETT-01**: User can toggle sound effects on/off
+- [x] **SETT-02**: User can toggle haptic feedback on/off
+- [x] **SETT-03**: Settings persist across app sessions
 
 ### Share
 
-- [ ] **SHAR-01**: User can share app via iOS share sheet
+- [x] **SHAR-01**: User can share app via iOS share sheet
 
 ## v2 Requirements
 
@@ -169,18 +169,18 @@
 | ANIM-03 | Phase 7 | Pending |
 | ANIM-04 | Phase 7 | Pending |
 | ANIM-05 | Phase 7 | Pending |
-| NAV-01 | Phase 6 | Pending |
-| NAV-02 | Phase 6 | Pending |
-| NAV-03 | Phase 6 | Pending |
-| NAV-04 | Phase 6 | Pending |
-| LIB-01 | Phase 6 | Pending |
-| LIB-02 | Phase 6 | Pending |
-| PROG-01 | Phase 6 | Pending |
-| PROG-02 | Phase 6 | Pending |
-| SETT-01 | Phase 6 | Pending |
-| SETT-02 | Phase 6 | Pending |
-| SETT-03 | Phase 6 | Pending |
-| SHAR-01 | Phase 6 | Pending |
+| NAV-01 | Phase 6 | Complete |
+| NAV-02 | Phase 6 | Complete |
+| NAV-03 | Phase 6 | Complete |
+| NAV-04 | Phase 6 | Complete |
+| LIB-01 | Phase 6 | Complete |
+| LIB-02 | Phase 6 | Complete |
+| PROG-01 | Phase 6 | Complete |
+| PROG-02 | Phase 6 | Complete |
+| SETT-01 | Phase 6 | Complete |
+| SETT-02 | Phase 6 | Complete |
+| SETT-03 | Phase 6 | Complete |
+| SHAR-01 | Phase 6 | Complete |
 | RESU-01 | Phase 3 | Complete |
 | RESU-02 | Phase 3 | Complete |
 | RESU-03 | Phase 3 | Complete |
@@ -201,4 +201,4 @@
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-18 (Settings and Share requirements added)*
+*Last updated: 2026-01-18 (Phase 6 requirements complete)*
