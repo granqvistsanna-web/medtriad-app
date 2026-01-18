@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Quiz Core** - Basic quiz flow with questions, answers, and progression
 - [x] **Phase 3: Screen Flow** - Home screen with stats, results screen with summary
 - [x] **Phase 4: Game Mechanics** - Scoring system, timer with color transitions
-- [ ] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
+- [x] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
 - [ ] **Phase 6: Polish** - Animations, sound effects, final refinements
 
 ## Phase Details
@@ -104,9 +104,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Visual answer feedback (faded state, thick borders, 1.5s delay)
-- [ ] 05-02-PLAN.md — Haptic feedback refinement (consistent Light style)
-- [ ] 05-03-PLAN.md — Data persistence (high score, daily streak, total quizzes)
+- [x] 05-01-PLAN.md — Visual answer feedback (faded state, thick borders, 1.5s delay)
+- [x] 05-02-PLAN.md — Haptic feedback refinement (consistent Light style)
+- [x] 05-03-PLAN.md — Data persistence (high score, daily streak, total quizzes)
 
 ### Phase 6: Polish
 **Goal**: Animations and sounds create satisfying, game-like experience
@@ -137,9 +137,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. Quiz Core | 2/2 | Complete | 2026-01-18 |
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
 | 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
-| 5. Feedback & Persistence | 0/3 | Planned | - |
+| 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
 | 6. Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 5 planned)*
+*Last updated: 2026-01-18 (Phase 5 complete)*

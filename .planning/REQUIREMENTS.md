@@ -37,10 +37,10 @@
 
 ### Feedback
 
-- [ ] **FEED-01**: Correct answer shows green highlight immediately
-- [ ] **FEED-02**: Incorrect answer shows red highlight and reveals correct answer
-- [ ] **FEED-03**: Brief pause (1.5s) after answer, then auto-advance
-- [ ] **FEED-04**: Haptic feedback on correct (light) and incorrect (medium)
+- [x] **FEED-01**: Correct answer shows green highlight immediately
+- [x] **FEED-02**: Incorrect answer shows red highlight and reveals correct answer
+- [x] **FEED-03**: Brief pause (1.5s) after answer, then auto-advance
+- [x] **FEED-04**: Haptic feedback on correct (light) and incorrect (medium)
 - [ ] **FEED-05**: Sound effects for correct, incorrect, combo, and perfect round
 
 ### Animations
@@ -62,12 +62,12 @@
 
 ### Data & Persistence
 
-- [ ] **DATA-01**: App loads triads from local JSON file (30-50 triads)
-- [ ] **DATA-02**: Distractors prefer same-category conditions
-- [ ] **DATA-03**: No duplicate distractors within a round
-- [ ] **DATA-04**: High score persists across sessions
-- [ ] **DATA-05**: Daily streak persists and calculates correctly
-- [ ] **DATA-06**: Total quizzes completed persists
+- [x] **DATA-01**: App loads triads from local JSON file (30-50 triads)
+- [x] **DATA-02**: Distractors prefer same-category conditions
+- [x] **DATA-03**: No duplicate distractors within a round
+- [x] **DATA-04**: High score persists across sessions
+- [x] **DATA-05**: Daily streak persists and calculates correctly
+- [x] **DATA-06**: Total quizzes completed persists
 
 ## v2 Requirements
 
@@ -132,10 +132,10 @@
 | SCOR-02 | Phase 4 | Complete |
 | SCOR-03 | Phase 4 | Complete |
 | SCOR-04 | Phase 4 | Complete |
-| FEED-01 | Phase 5 | Pending |
-| FEED-02 | Phase 5 | Pending |
-| FEED-03 | Phase 5 | Pending |
-| FEED-04 | Phase 5 | Pending |
+| FEED-01 | Phase 5 | Complete |
+| FEED-02 | Phase 5 | Complete |
+| FEED-03 | Phase 5 | Complete |
+| FEED-04 | Phase 5 | Complete |
 | FEED-05 | Phase 6 | Pending |
 | ANIM-01 | Phase 4 | Complete |
 | ANIM-02 | Phase 4 | Complete |
@@ -151,9 +151,9 @@
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Complete |
-| DATA-04 | Phase 5 | Pending |
-| DATA-05 | Phase 5 | Pending |
-| DATA-06 | Phase 5 | Pending |
+| DATA-04 | Phase 5 | Complete |
+| DATA-05 | Phase 5 | Complete |
+| DATA-06 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 32 total
@@ -162,4 +162,4 @@
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-18 after Phase 4 completion*
+*Last updated: 2026-01-18 after Phase 5 completion*
