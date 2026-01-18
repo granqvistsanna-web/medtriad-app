@@ -28,6 +28,8 @@ const MAPPING = {
   'chart.bar': 'bar-chart',
   'gearshape.fill': 'settings',
   'gearshape': 'settings',
+  'square.and.arrow.up': 'share',
+  'trash': 'delete',
 } as IconMapping;
 
 /**
