@@ -37,7 +37,7 @@ Deferred to future release.
 
 ### Gameplay
 - **GAME-01**: Category filtering / selection for quizzes
-- **GAME-02**: Reverse quiz mode (condition → findings)
+- **GAME-02**: Reverse quiz mode (condition -> findings)
 - **GAME-03**: Daily challenges
 
 ### Social
@@ -62,24 +62,24 @@ Deferred to future release.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ONBD-01 | TBD | Pending |
-| ONBD-02 | TBD | Pending |
-| ONBD-03 | TBD | Pending |
-| LEVL-01 | TBD | Pending |
-| LEVL-02 | TBD | Pending |
-| LEVL-03 | TBD | Pending |
-| MASC-01 | TBD | Pending |
-| MASC-02 | TBD | Pending |
-| UIPOL-01 | TBD | Pending |
-| UIPOL-02 | TBD | Pending |
-| UIPOL-03 | TBD | Pending |
-| UIPOL-04 | TBD | Pending |
+| UIPOL-01 | Phase 9 | Pending |
+| UIPOL-02 | Phase 9 | Pending |
+| UIPOL-03 | Phase 9 | Pending |
+| UIPOL-04 | Phase 9 | Pending |
+| LEVL-01 | Phase 10 | Pending |
+| LEVL-02 | Phase 10 | Pending |
+| LEVL-03 | Phase 10 | Pending |
+| MASC-01 | Phase 11 | Pending |
+| MASC-02 | Phase 11 | Pending |
+| ONBD-01 | Phase 12 | Pending |
+| ONBD-02 | Phase 12 | Pending |
+| ONBD-03 | Phase 12 | Pending |
 
 **Coverage:**
 - v2.0 requirements: 12 total
-- Mapped to phases: 0
-- Unmapped: 12 (pending roadmap)
+- Mapped to phases: 12
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-18 after initial definition*
+*Last updated: 2026-01-18 after roadmap creation*
