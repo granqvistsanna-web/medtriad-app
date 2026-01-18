@@ -10,7 +10,7 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 6 of 7 (Navigation & Study Mode)
-Plan: 0 of 3 in current phase
+Plan: 0 of 5 in current phase
 Status: Ready to plan
 Last activity: 2026-01-18 - Phase 5 verified and complete
 

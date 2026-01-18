@@ -110,23 +110,28 @@ Plans:
 - [x] 05-03-PLAN.md — Data persistence (high score, daily streak, total quizzes)
 
 ### Phase 6: Navigation & Study Mode
-**Goal**: Users can navigate between app sections and study triads without timer pressure
+**Goal**: Users can navigate between app sections, study triads, customize settings, and share the app
 **Depends on**: Phase 5
-**Requirements**: NAV-01, NAV-02, NAV-03, NAV-04, LIB-01, LIB-02, PROG-01, PROG-02
+**Requirements**: NAV-01, NAV-02, NAV-03, NAV-04, LIB-01, LIB-02, PROG-01, PROG-02, SETT-01, SETT-02, SETT-03, SHAR-01
 **Success Criteria** (what must be TRUE):
-  1. Bottom tab bar shows 3-4 icons (Home, Library, Progress, optionally Settings)
+  1. Bottom tab bar shows 4 icons (Home, Library, Progress, Settings)
   2. Tab bar uses minimal iOS-style design matching app aesthetic
   3. Library screen displays all triads grouped by category
   4. User can tap a triad to view condition name and all three findings
   5. Progress screen shows detailed stats (accuracy, category breakdown)
   6. Progress screen shows quiz history with recent rounds
-  7. Navigation feels instant with no loading states between tabs
+  7. Settings screen allows toggling sounds on/off
+  8. Settings screen allows toggling haptics on/off
+  9. User can share app via iOS share sheet from Settings or Home
+  10. Navigation feels instant with no loading states between tabs
 **Plans**: TBD
 
 Plans:
 - [ ] 06-01: Bottom tab bar navigation structure
 - [ ] 06-02: Library screen with triad browsing
 - [ ] 06-03: Progress screen with detailed stats
+- [ ] 06-04: Settings screen with sound/haptic toggles
+- [ ] 06-05: Share app feature
 
 ### Phase 7: Polish
 **Goal**: Animations and sounds create satisfying, game-like experience
@@ -155,9 +160,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
 | 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
 | 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
-| 6. Navigation & Study Mode | 0/3 | Not started | - |
+| 6. Navigation & Study Mode | 0/5 | Not started | - |
 | 7. Polish | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Navigation added as Phase 6, Polish moved to Phase 7)*
+*Last updated: 2026-01-18 (Settings and Share added to Phase 6)*

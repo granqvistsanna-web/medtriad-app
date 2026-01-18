@@ -86,6 +86,16 @@
 - [ ] **PROG-01**: User sees detailed stats (accuracy, total correct, category breakdown)
 - [ ] **PROG-02**: User sees quiz history with recent rounds
 
+### Settings
+
+- [ ] **SETT-01**: User can toggle sound effects on/off
+- [ ] **SETT-02**: User can toggle haptic feedback on/off
+- [ ] **SETT-03**: Settings persist across app sessions
+
+### Share
+
+- [ ] **SHAR-01**: User can share app via iOS share sheet
+
 ## v2 Requirements
 
 ### Category Selection
@@ -167,6 +177,10 @@
 | LIB-02 | Phase 6 | Pending |
 | PROG-01 | Phase 6 | Pending |
 | PROG-02 | Phase 6 | Pending |
+| SETT-01 | Phase 6 | Pending |
+| SETT-02 | Phase 6 | Pending |
+| SETT-03 | Phase 6 | Pending |
+| SHAR-01 | Phase 6 | Pending |
 | RESU-01 | Phase 3 | Complete |
 | RESU-02 | Phase 3 | Complete |
 | RESU-03 | Phase 3 | Complete |
@@ -181,10 +195,10 @@
 | DATA-06 | Phase 5 | Complete |
 
 **Coverage:**
-- v1 requirements: 40 total
-- Mapped to phases: 40
+- v1 requirements: 44 total
+- Mapped to phases: 44
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-18 (Navigation & Study Mode requirements added)*
+*Last updated: 2026-01-18 (Settings and Share requirements added)*
