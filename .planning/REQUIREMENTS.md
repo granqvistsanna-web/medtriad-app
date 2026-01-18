@@ -15,16 +15,16 @@
 
 ### Quiz Flow
 
-- [ ] **QUIZ-01**: User sees three clinical findings displayed prominently
-- [ ] **QUIZ-02**: User sees four multiple-choice answer options
-- [ ] **QUIZ-03**: User sees progress indicator (question X of 10)
-- [ ] **QUIZ-04**: User sees current score and combo multiplier
-- [ ] **QUIZ-05**: User can tap an answer to submit their choice
-- [ ] **QUIZ-06**: After 10 questions, user is taken to results screen
+- [x] **QUIZ-01**: User sees three clinical findings displayed prominently
+- [x] **QUIZ-02**: User sees four multiple-choice answer options
+- [x] **QUIZ-03**: User sees progress indicator (question X of 10)
+- [x] **QUIZ-04**: User sees current score and combo multiplier
+- [x] **QUIZ-05**: User can tap an answer to submit their choice
+- [x] **QUIZ-06**: After 10 questions, user is taken to results screen
 
 ### Timer
 
-- [ ] **TIME-01**: User sees 12-second countdown timer as circular ring
+- [x] **TIME-01**: User sees 12-second countdown timer as circular ring
 - [ ] **TIME-02**: Timer ring changes color: blue -> yellow (< 5s) -> red (< 3s)
 - [ ] **TIME-03**: If timer expires, question counts as incorrect and auto-advances
 
@@ -119,13 +119,13 @@
 | HOME-03 | Phase 3 | Pending |
 | HOME-04 | Phase 3 | Pending |
 | HOME-05 | Phase 3 | Pending |
-| QUIZ-01 | Phase 2 | Pending |
-| QUIZ-02 | Phase 2 | Pending |
-| QUIZ-03 | Phase 2 | Pending |
-| QUIZ-04 | Phase 2 | Pending |
-| QUIZ-05 | Phase 2 | Pending |
-| QUIZ-06 | Phase 2 | Pending |
-| TIME-01 | Phase 2 | Pending |
+| QUIZ-01 | Phase 2 | Complete |
+| QUIZ-02 | Phase 2 | Complete |
+| QUIZ-03 | Phase 2 | Complete |
+| QUIZ-04 | Phase 2 | Complete |
+| QUIZ-05 | Phase 2 | Complete |
+| QUIZ-06 | Phase 2 | Complete |
+| TIME-01 | Phase 2 | Complete |
 | TIME-02 | Phase 4 | Pending |
 | TIME-03 | Phase 4 | Pending |
 | SCOR-01 | Phase 4 | Pending |
@@ -162,4 +162,4 @@
 
 ---
 *Requirements defined: 2026-01-17*
-*Last updated: 2026-01-17 after Phase 1 completion*
+*Last updated: 2026-01-18 after Phase 2 completion*

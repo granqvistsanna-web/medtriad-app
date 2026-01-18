@@ -13,7 +13,7 @@ MedTriads is built in six phases that mirror the natural development order of a 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Data Foundation** - Triads data model, JSON content, question generation
-- [ ] **Phase 2: Quiz Core** - Basic quiz flow with questions, answers, and progression
+- [x] **Phase 2: Quiz Core** - Basic quiz flow with questions, answers, and progression
 - [ ] **Phase 3: Screen Flow** - Home screen with stats, results screen with summary
 - [ ] **Phase 4: Game Mechanics** - Scoring system, timer with color transitions
 - [ ] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
@@ -51,8 +51,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md - Quiz state types, useQuizReducer hook, useCountdownTimer hook
-- [ ] 02-02-PLAN.md - Quiz navigation routes, complete quiz screen, temporary start button
+- [x] 02-01-PLAN.md - Quiz state types, useQuizReducer hook, useCountdownTimer hook
+- [x] 02-02-PLAN.md - Quiz navigation routes, complete quiz screen, temporary start button
 
 ### Phase 3: Screen Flow
 **Goal**: Complete navigation flow between Home, Quiz, and Results screens
@@ -135,7 +135,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Data Foundation | 2/2 | Complete | 2026-01-17 |
-| 2. Quiz Core | 0/2 | Planned | - |
+| 2. Quiz Core | 2/2 | Complete | 2026-01-18 |
 | 3. Screen Flow | 0/3 | Not started | - |
 | 4. Game Mechanics | 0/2 | Not started | - |
 | 5. Feedback & Persistence | 0/3 | Not started | - |
@@ -143,4 +143,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 2 planned)*
+*Last updated: 2026-01-18 (Phase 2 complete)*
