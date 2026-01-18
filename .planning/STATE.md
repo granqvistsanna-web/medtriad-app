@@ -56,6 +56,8 @@ Phase 10 decisions:
 - Easings.pop for fast initial + slow settle (damping: 8, stiffness: 400)
 - Celebratory pop pattern: withSequence(withSpring(1.35, Easings.pop), withSpring(1, Easings.gentle))
 - Glow effect: Absolute positioned layer behind badge with animated opacity at 30% max
+- Timer color interpolation: teal (100%) -> yellow (33%) -> red (20%) for urgency
+- Timer pulse intensity: Critical (1.25 scale + pop), Warning (1.15 scale + bouncy)
 
 ### Pending Todos
 
@@ -73,7 +75,7 @@ Resume file: None
 
 ## Next Steps
 
-Phase 10 in progress. Continue with remaining plans (10-02, 10-03, 10-05, 10-06).
+Phase 10 in progress. Continue with remaining plans (10-02, 10-05, 10-06).
 
 ---
-*Updated: 2026-01-18 after 10-04 completion*
+*Updated: 2026-01-18 after 10-03 and 10-04 completion*
