@@ -142,14 +142,6 @@ export async function updateAfterQuiz(
 }
 
 /**
- * Check if user is new (no games played)
- */
-export async function isNewUser(): Promise<boolean> {
-  const stats = await loadStats();
-  return stats.gamesPlayed === 0;
-}
-
-/**
  * Calculate accuracy percentage
  */
 export function getAccuracy(stats: StoredStats): number {
