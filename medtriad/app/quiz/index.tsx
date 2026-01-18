@@ -2,7 +2,6 @@ import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import * as Haptics from 'expo-haptics';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
 import { FindingsCard } from '@/components/quiz/FindingsCard';
@@ -14,6 +13,7 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useQuizReducer } from '@/hooks/use-quiz-reducer';
 import { useCountdownTimer } from '@/hooks/use-countdown-timer';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
+import { useHaptics } from '@/hooks/useHaptics';
 import { generateQuestionSet } from '@/services/question-generator';
 import { isPerfectRound, getComboTier } from '@/services/scoring';
 import { useStats } from '@/hooks/useStats';
@@ -34,6 +34,7 @@ export default function QuizScreen() {
   const colors = Colors.light;
   const { recordQuizResult, checkHighScore } = useStats();
   const { playSound } = useSoundEffects();
+  const { triggerHaptic } = useHaptics();
 
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
@@ -123,7 +124,7 @@ export default function QuizScreen() {
 
   // Handle answer selection - single Light haptic on tap (consistent, understated)
   const handleAnswerSelect = async (option: QuizOption) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    triggerHaptic();
 
     dispatch({
       type: 'SELECT_ANSWER',
