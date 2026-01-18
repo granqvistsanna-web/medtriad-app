@@ -1,6 +1,6 @@
 import { ScrollView, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors, Typography, Spacing } from '@/constants/theme';
+import { Colors, Typography, Spacing, Durations } from '@/constants/theme';
 import { getTriadsByCategory } from '@/services/triads';
 import { TriadCategory } from '@/types';
 import { CategorySection } from '@/components/library/CategorySection';
@@ -30,11 +30,12 @@ export default function LibraryScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={[styles.title, { color: colors.text }]}>Library</Text>
-        {CATEGORIES.map((category) => (
+        {CATEGORIES.map((category, index) => (
           <CategorySection
             key={category}
             category={category}
             triads={getTriadsByCategory(category)}
+            delay={index * Durations.stagger}
           />
         ))}
       </ScrollView>
@@ -50,12 +51,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.md,
     paddingBottom: Spacing.xxl,
+    gap: Spacing.lg,
   },
   title: {
     ...Typography.title,
-    marginTop: Spacing.md,
-    marginBottom: Spacing.lg,
   },
 });
