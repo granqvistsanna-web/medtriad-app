@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
   FadeInUp,
 } from 'react-native-reanimated';
-import { Colors, Typography, Radius, Spacing, Durations } from '@/constants/theme';
+import { Colors, Typography, Radius, Spacing, Durations, Easings } from '@/constants/theme';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 
 type AnswerState = 'default' | 'correct' | 'incorrect' | 'revealed' | 'faded';
@@ -37,9 +37,16 @@ export function AnswerCard({
   const scale = useSharedValue(1);
   const shakeX = useSharedValue(0);
 
-  // Shake animation when incorrect
+  // State-based animations
   useEffect(() => {
-    if (state === 'incorrect') {
+    if (state === 'correct') {
+      // Pop animation when correct
+      scale.value = withSequence(
+        withSpring(1.05, Easings.pop),   // Quick overshoot
+        withSpring(1, Easings.gentle)    // Settle back
+      );
+    } else if (state === 'incorrect') {
+      // Shake animation when incorrect
       shakeX.value = withSequence(
         withTiming(-8, { duration: 50 }),
         withTiming(8, { duration: 50 }),
@@ -56,12 +63,12 @@ export function AnswerCard({
 
   const handlePressIn = () => {
     if (!disabled && state === 'default') {
-      scale.value = withSpring(0.95, { damping: 12, stiffness: 300 });
+      scale.value = withSpring(0.95, Easings.press);
     }
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 10, stiffness: 300 });
+    scale.value = withSpring(1, Easings.press);
   };
 
   const getBorderWidth = () => {
