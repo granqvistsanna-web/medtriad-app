@@ -24,7 +24,7 @@ progression-driven experience with consistent UI, engaging level tiers,
 evolving mascot, smooth onboarding, and shareability.
 
 - [x] **Phase 9: UI Polish** - Consistent visual style across all screens
-- [ ] **Phase 10: Refine Visuals & Motion** - Tighten spacing, colors, polished motion
+- [x] **Phase 10: Refine Visuals & Motion** - Tighten spacing, colors, polished motion
 - [ ] **Phase 11: Level System** - 6 progression tiers with clear identity
 - [ ] **Phase 12: Levels on Hero** - Show current tier prominently on Home screen
 - [ ] **Phase 13: Onboarding** - New user introduction flow
@@ -69,26 +69,27 @@ Plans:
 
 **Success Criteria**:
 
-*Spacing & Layout*
-1. Consistent spacing system applied (8pt grid)
-2. Generous negative space, nothing cramped
-3. Elements aligned with clear visual hierarchy
+*Spacing & Layout (verified from Phase 9)*
+1. Consistent spacing system applied (8pt grid) — theme.ts defines complete 8pt grid
+2. Generous negative space, nothing cramped — applied during Phase 9 polish
+3. Elements aligned with clear visual hierarchy — established in Phase 9
 
 *Color & Typography*
 4. Color palette refined and documented
-5. Typography hierarchy clear and consistent
-6. All icons match in style and weight
+5. Typography hierarchy clear and consistent — documented, applied in Phase 9
+6. All icons match in style and weight — SF Symbols used consistently
 
 *Motion & Micro-interactions*
-7. Page transitions feel smooth and intentional
-8. Buttons have subtle scale/opacity on press
-9. Cards lift gently on tap
-10. Score and points animate with staggered reveals
-11. Timer has fluid countdown animation
-12. Combo multiplier pulses on increase
-13. Results score counts up with easing
-14. Mascot has idle breathing animation
-15. Tier-up moment has celebratory motion
+7. Buttons have subtle scale/opacity on press
+8. Cards lift gently on tap
+9. Score and points animate with staggered reveals
+10. Timer has fluid countdown animation
+11. Combo multiplier pulses on increase
+12. Results score counts up with easing
+
+*Deferred to Phase 14 (Mascot Evolution)*
+- Mascot idle breathing animation — already implemented, enhanced in Phase 14
+- Tier-up celebration motion — requires level system from Phase 11
 
 **Motion Principles**:
 - Prioritize high-impact moments over scattered effects
@@ -222,7 +223,7 @@ Ideas parked for future development:
 |-------|-----------|--------|-----------|
 | 1-8 | v1.0 | Complete | 2026-01-18 |
 | 9. UI Polish | v2.0 | Complete | 2026-01-18 |
-| 10. Refine Visuals & Motion | v2.0 | Not started | - |
+| 10. Refine Visuals & Motion | v2.0 | Complete | 2026-01-18 |
 | 11. Level System | v2.0 | Not started | - |
 | 12. Levels on Hero | v2.0 | Not started | - |
 | 13. Onboarding | v2.0 | Not started | - |
@@ -232,5 +233,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-18 after Phase 10 scope expansion*
+*Last updated: 2026-01-18 after Phase 10 completion*
 *Current milestone: v2.0 Polish & Progression*

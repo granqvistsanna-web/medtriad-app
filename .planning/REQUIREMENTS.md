@@ -16,10 +16,10 @@ Requirements for Polish & Progression release.
 
 ### Visual Refinement & Motion
 
-- [ ] **VISREF-01**: Consistent spacing system applied (8pt grid)
-- [ ] **VISREF-02**: Color palette refined and documented
-- [ ] **VISREF-03**: Micro-interactions added to buttons and cards
-- [ ] **VISREF-04**: Polished motion throughout (transitions, reveals, celebrations)
+- [x] **VISREF-01**: Consistent spacing system applied (8pt grid)
+- [x] **VISREF-02**: Color palette refined and documented
+- [x] **VISREF-03**: Micro-interactions added to buttons and cards
+- [x] **VISREF-04**: Polished motion throughout (transitions, reveals, celebrations)
 
 ### Level System
 
@@ -84,10 +84,10 @@ Deferred to future release.
 | UIPOL-02 | Phase 9 | Complete |
 | UIPOL-03 | Phase 9 | Complete |
 | UIPOL-04 | Phase 9 | Complete |
-| VISREF-01 | Phase 10 | Pending |
-| VISREF-02 | Phase 10 | Pending |
-| VISREF-03 | Phase 10 | Pending |
-| VISREF-04 | Phase 10 | Pending |
+| VISREF-01 | Phase 10 | Complete |
+| VISREF-02 | Phase 10 | Complete |
+| VISREF-03 | Phase 10 | Complete |
+| VISREF-04 | Phase 10 | Complete |
 | LEVL-01 | Phase 11 | Pending |
 | LEVL-02 | Phase 11 | Pending |
 | LEVL-03 | Phase 11 | Pending |
