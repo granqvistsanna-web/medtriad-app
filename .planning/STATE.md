@@ -9,7 +9,7 @@ See: .planning/PROJECT.md (updated 2026-01-18)
 
 ## Current Position
 
-Phase: 10 of 15 (Refine Visuals)
+Phase: 10 of 15 (Refine Visuals & Motion)
 Plan: 0 of ? in current phase
 Status: Ready to plan
 Last activity: 2026-01-18 - Phase 9 verified complete
@@ -64,7 +64,7 @@ Resume file: None
 
 ## Next Steps
 
-Phase 9 (UI Polish) complete. Ready for Phase 10 (Refine Visuals).
+Phase 9 (UI Polish) complete. Ready for Phase 10 (Refine Visuals & Motion).
 
 Run `/gsd:discuss-phase 10` to gather context, or `/gsd:plan-phase 10` to plan directly.
 

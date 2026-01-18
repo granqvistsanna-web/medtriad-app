@@ -14,11 +14,12 @@ Requirements for Polish & Progression release.
 - [x] **UIPOL-03**: Settings screen matches Home screen style
 - [x] **UIPOL-04**: Quiz screen matches Home screen style
 
-### Visual Refinement
+### Visual Refinement & Motion
 
 - [ ] **VISREF-01**: Consistent spacing system applied (8pt grid)
 - [ ] **VISREF-02**: Color palette refined and documented
 - [ ] **VISREF-03**: Micro-interactions added to buttons and cards
+- [ ] **VISREF-04**: Polished motion throughout (transitions, reveals, celebrations)
 
 ### Level System
 
@@ -86,6 +87,7 @@ Deferred to future release.
 | VISREF-01 | Phase 10 | Pending |
 | VISREF-02 | Phase 10 | Pending |
 | VISREF-03 | Phase 10 | Pending |
+| VISREF-04 | Phase 10 | Pending |
 | LEVL-01 | Phase 11 | Pending |
 | LEVL-02 | Phase 11 | Pending |
 | LEVL-03 | Phase 11 | Pending |
@@ -101,10 +103,10 @@ Deferred to future release.
 | SHARE-03 | Phase 15 | Pending |
 
 **Coverage:**
-- v2.0 requirements: 20 total
-- Mapped to phases: 20
+- v2.0 requirements: 21 total
+- Mapped to phases: 21
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-18 after Phase 9 completion*
+*Last updated: 2026-01-18 after Phase 10 scope expansion*

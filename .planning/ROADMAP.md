@@ -24,7 +24,7 @@ progression-driven experience with consistent UI, engaging level tiers,
 evolving mascot, smooth onboarding, and shareability.
 
 - [x] **Phase 9: UI Polish** - Consistent visual style across all screens
-- [ ] **Phase 10: Refine Visuals** - Tighten spacing, colors, micro-interactions
+- [ ] **Phase 10: Refine Visuals & Motion** - Tighten spacing, colors, polished motion
 - [ ] **Phase 11: Level System** - 6 progression tiers with clear identity
 - [ ] **Phase 12: Levels on Hero** - Show current tier prominently on Home screen
 - [ ] **Phase 13: Onboarding** - New user introduction flow
@@ -59,20 +59,43 @@ Plans:
 
 ---
 
-### Phase 10: Refine Visuals
+### Phase 10: Refine Visuals & Motion
 
-**Goal**: Elevate overall visual quality with tighter details
+**Goal**: Elevate overall visual quality with tighter details and polished motion
 
 **Depends on**: Phase 9
 
-**Requirements**: VISREF-01, VISREF-02, VISREF-03
+**Requirements**: VISREF-01, VISREF-02, VISREF-03, VISREF-04
 
 **Success Criteria**:
+
+*Spacing & Layout*
 1. Consistent spacing system applied (8pt grid)
-2. Color palette refined and documented
-3. Micro-interactions added to buttons and cards
-4. Typography hierarchy clear and consistent
-5. All icons match in style and weight
+2. Generous negative space, nothing cramped
+3. Elements aligned with clear visual hierarchy
+
+*Color & Typography*
+4. Color palette refined and documented
+5. Typography hierarchy clear and consistent
+6. All icons match in style and weight
+
+*Motion & Micro-interactions*
+7. Page transitions feel smooth and intentional
+8. Buttons have subtle scale/opacity on press
+9. Cards lift gently on tap
+10. Score and points animate with staggered reveals
+11. Timer has fluid countdown animation
+12. Combo multiplier pulses on increase
+13. Results score counts up with easing
+14. Mascot has idle breathing animation
+15. Tier-up moment has celebratory motion
+
+**Motion Principles**:
+- Prioritize high-impact moments over scattered effects
+- Easing on everything — no linear motion
+- Staggered delays for grouped elements
+- Motion should feel soft, weighted, physical
+- Nothing snaps — everything settles
 
 ---
 
@@ -199,7 +222,7 @@ Ideas parked for future development:
 |-------|-----------|--------|-----------|
 | 1-8 | v1.0 | Complete | 2026-01-18 |
 | 9. UI Polish | v2.0 | Complete | 2026-01-18 |
-| 10. Refine Visuals | v2.0 | Not started | - |
+| 10. Refine Visuals & Motion | v2.0 | Not started | - |
 | 11. Level System | v2.0 | Not started | - |
 | 12. Levels on Hero | v2.0 | Not started | - |
 | 13. Onboarding | v2.0 | Not started | - |
@@ -209,5 +232,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-18 after Phase 9 completion*
+*Last updated: 2026-01-18 after Phase 10 scope expansion*
 *Current milestone: v2.0 Polish & Progression*
