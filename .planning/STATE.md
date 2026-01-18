@@ -60,6 +60,8 @@ Phase 10 decisions:
 - Timer pulse intensity: Critical (1.25 scale + pop), Warning (1.15 scale + bouncy)
 - Button depth compression: 3px -> 1px on press via animated borderBottomWidth
 - Correct answer pop: withSequence(pop, gentle) for overshoot + settle
+- Results score settle: 1.08 overshoot with pop, settle with gentle after 1.1s count-up
+- Results stagger timing: Durations.staggerMedium (80ms) for dramatic reveal pacing
 - Design system documentation: DESIGN-SYSTEM.md as single-source reference
 
 ### Pending Todos
