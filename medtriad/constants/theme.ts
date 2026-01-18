@@ -198,7 +198,9 @@ export const Durations = {
   fast: 150,
   normal: 300,
   slow: 500,
+  slower: 800,      // Score count-ups, tier celebrations
   stagger: 50,
+  staggerMedium: 80, // Celebratory reveals
 } as const;
 
 // Spring presets for react-native-reanimated
