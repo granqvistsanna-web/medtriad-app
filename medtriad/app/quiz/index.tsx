@@ -30,7 +30,7 @@ export default function QuizScreen() {
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
   const colors = Colors.light;
-  const { recordQuizResult } = useStats();
+  const { recordQuizResult, checkHighScore } = useStats();
 
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
@@ -86,11 +86,15 @@ export default function QuizScreen() {
 
     const timeout = setTimeout(async () => {
       if (currentIndex >= questions.length - 1) {
+        // Check for new high score BEFORE saving stats
+        const isNewHighScore = await checkHighScore(score);
+
         // Save stats
         await recordQuizResult(
           correctCountRef.current,
           QUESTION_COUNT,
-          maxComboRef.current
+          maxComboRef.current,
+          score
         );
 
         // Navigate to results
@@ -101,7 +105,7 @@ export default function QuizScreen() {
             score: score.toString(),
             correctCount: correctCountRef.current.toString(),
             bestStreak: maxComboRef.current.toString(),
-            isNewHighScore: 'false',
+            isNewHighScore: isNewHighScore ? 'true' : 'false',
             isPerfect: perfect ? 'true' : 'false',
           },
         });
@@ -112,7 +116,7 @@ export default function QuizScreen() {
     }, ANSWER_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [status, currentIndex, questions.length, dispatch, router, score, recordQuizResult]);
+  }, [status, currentIndex, questions.length, dispatch, router, score, recordQuizResult, checkHighScore]);
 
   // Handle answer selection - single Light haptic on tap (consistent, understated)
   const handleAnswerSelect = async (option: QuizOption) => {
