@@ -124,14 +124,13 @@ Plans:
   8. Settings screen allows toggling haptics on/off
   9. User can share app via iOS share sheet from Settings or Home
   10. Navigation feels instant with no loading states between tabs
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 06-01: Bottom tab bar navigation structure
-- [ ] 06-02: Library screen with triad browsing
-- [ ] 06-03: Progress screen with detailed stats
-- [ ] 06-04: Settings screen with sound/haptic toggles
-- [ ] 06-05: Share app feature
+- [ ] 06-01-PLAN.md — Tab bar navigation structure (4 tabs with icons)
+- [ ] 06-02-PLAN.md — Library screen with triad browsing (accordion categories)
+- [ ] 06-03-PLAN.md — Progress screen with stats and history
+- [ ] 06-04-PLAN.md — Settings screen with toggles and share
 
 ### Phase 7: Polish
 **Goal**: Animations and sounds create satisfying, game-like experience
@@ -160,9 +159,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
 | 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
 | 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
-| 6. Navigation & Study Mode | 0/5 | Not started | - |
+| 6. Navigation & Study Mode | 0/4 | Not started | - |
 | 7. Polish | 0/2 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Settings and Share added to Phase 6)*
+*Last updated: 2026-01-18 (Phase 6 plans created)*
