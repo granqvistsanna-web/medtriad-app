@@ -43,6 +43,14 @@ evolving mascot, smooth onboarding, and shareability.
 
 **Requirements**: UIPOL-01, UIPOL-02, UIPOL-03, UIPOL-04
 
+**Plans:** 4 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Library screen polish (padding, animations)
+- [ ] 09-02-PLAN.md — Progress screen polish (cards, section headers, animations)
+- [ ] 09-03-PLAN.md — Settings screen polish (section headers, animations)
+- [ ] 09-04-PLAN.md — Quiz screen polish (main area padding)
+
 **Success Criteria**:
 1. Library screen uses same spacing, colors, and typography as Home
 2. Progress screen uses same card styles and layout patterns as Home
@@ -190,7 +198,7 @@ Ideas parked for future development:
 | Phase | Milestone | Status | Completed |
 |-------|-----------|--------|-----------|
 | 1-8 | v1.0 | Complete | 2026-01-18 |
-| 9. UI Polish | v2.0 | Not started | - |
+| 9. UI Polish | v2.0 | Planned | - |
 | 10. Refine Visuals | v2.0 | Not started | - |
 | 11. Level System | v2.0 | Not started | - |
 | 12. Levels on Hero | v2.0 | Not started | - |
