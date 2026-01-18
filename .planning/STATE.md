@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 4 of 6 (Game Mechanics)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-01-18 - Phase 3 verified and complete
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-01-18 - Completed 04-01-PLAN.md (Scoring System)
 
-Progress: [█████.....] 50%
+Progress: [██████....] 58%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 2.3 min
-- Total execution time: 14 min
+- Total plans completed: 7
+- Average duration: 2.4 min
+- Total execution time: 17 min
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [█████.....] 50%
 | 1. Data Foundation | 2/2 | 7 min | 3.5 min |
 | 2. Quiz Core | 2/2 | 3 min | 1.5 min |
 | 3. Screen Flow | 2/2 | 4 min | 2.0 min |
+| 4. Game Mechanics | 1/2 | 3 min | 3.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (1 min), 02-02 (2 min), 03-01 (2 min), 03-02 (2 min)
+- Last 5 plans: 02-02 (2 min), 03-01 (2 min), 03-02 (2 min), 04-01 (3 min)
 - Trend: Consistent fast velocity
 
 *Updated after each plan completion*
@@ -63,6 +64,10 @@ Recent decisions affecting current work:
 - URL params for quiz results passing - simpler than Context for one-way data (03-02)
 - useRef for correctCount/maxCombo - avoids re-renders during quiz (03-02)
 - isNewHighScore='false' placeholder - Phase 5 enables actual check (03-02)
+- Quadratic speed bonus curve: 50 * (timeRemaining/totalTime)^2 rewards fast answers (04-01)
+- Combo tier at 3/6 consecutive correct: tier 1 (1x) -> tier 2 (2x) -> tier 3 (3x max) (04-01)
+- State tracks both consecutiveCorrect (raw count) and combo (display tier) (04-01)
+- lastPointsEarned field added for future floating points animation (04-01)
 
 ### Pending Todos
 
@@ -75,5 +80,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Phase 3 verified, ready for Phase 4
+Stopped at: Completed 04-01-PLAN.md (Scoring System)
 Resume file: None
