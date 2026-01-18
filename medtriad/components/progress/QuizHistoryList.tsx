@@ -17,7 +17,10 @@ export function QuizHistoryList({ history }: QuizHistoryListProps) {
   if (history.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={[styles.title, { color: colors.text }]}>Recent Quizzes</Text>
+        <View style={styles.headerRow}>
+          <Text style={[styles.headerText, { color: colors.textMuted }]}>RECENT QUIZZES</Text>
+          <View style={[styles.headerLine, { backgroundColor: colors.border }]} />
+        </View>
         <Text style={[styles.emptyText, { color: colors.textMuted }]}>
           No quizzes yet
         </Text>
@@ -27,7 +30,10 @@ export function QuizHistoryList({ history }: QuizHistoryListProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { color: colors.text }]}>Recent Quizzes</Text>
+      <View style={styles.headerRow}>
+        <Text style={[styles.headerText, { color: colors.textMuted }]}>RECENT QUIZZES</Text>
+        <View style={[styles.headerLine, { backgroundColor: colors.border }]} />
+      </View>
       <FlatList
         data={history}
         keyExtractor={(item, index) => `${item.date}-${index}`}
@@ -57,9 +63,19 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
-  title: {
-    ...Typography.heading,
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
     marginBottom: Spacing.md,
+  },
+  headerText: {
+    ...Typography.tiny,
+    letterSpacing: 1,
+  },
+  headerLine: {
+    flex: 1,
+    height: 1,
   },
   emptyText: {
     ...Typography.caption,
