@@ -101,12 +101,12 @@ Plans:
   5. High score persists and displays correctly after app restart
   6. Daily streak persists and increments correctly on consecutive days
   7. Total quizzes completed persists and increments after each round
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: Visual answer feedback
-- [ ] 05-02: Haptic feedback integration
-- [ ] 05-03: AsyncStorage persistence layer
+- [ ] 05-01-PLAN.md — Visual answer feedback (faded state, thick borders, 1.5s delay)
+- [ ] 05-02-PLAN.md — Haptic feedback refinement (consistent Light style)
+- [ ] 05-03-PLAN.md — Data persistence (high score, daily streak, total quizzes)
 
 ### Phase 6: Polish
 **Goal**: Animations and sounds create satisfying, game-like experience
@@ -137,9 +137,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 | 2. Quiz Core | 2/2 | Complete | 2026-01-18 |
 | 3. Screen Flow | 2/2 | Complete | 2026-01-18 |
 | 4. Game Mechanics | 2/2 | Complete | 2026-01-18 |
-| 5. Feedback & Persistence | 0/3 | Not started | - |
+| 5. Feedback & Persistence | 0/3 | Planned | - |
 | 6. Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 4 complete)*
+*Last updated: 2026-01-18 (Phase 5 planned)*
