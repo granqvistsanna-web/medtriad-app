@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -7,6 +8,7 @@ import { TriMascot } from '@/components/home/TriMascot';
 import { HighScoreBadge } from '@/components/results/HighScoreBadge';
 import { useStats } from '@/hooks/useStats';
 import { calculateLevel, getQuestionsToNextLevel } from '@/services/mastery';
+import { saveQuizHistory } from '@/services/stats-storage';
 import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
 import { QUESTION_COUNT } from '@/types/quiz-state';
 
@@ -43,6 +45,20 @@ export default function ResultsScreen() {
   const bestStreak = parseInt(params.bestStreak ?? '1', 10);
   const isPerfect = params.isPerfect === 'true';
   const isNewHighScore = params.isNewHighScore === 'true';
+
+  // Save quiz history when results are displayed (once per mount)
+  const historySaved = useRef(false);
+  useEffect(() => {
+    if (!historySaved.current && score > 0) {
+      historySaved.current = true;
+      saveQuizHistory({
+        date: new Date().toISOString(),
+        score,
+        correct: correctCount,
+        total: QUESTION_COUNT,
+      });
+    }
+  }, [score, correctCount]);
 
   const resultMessage = getResultMessage(correctCount, isPerfect);
   const accuracy = (correctCount / QUESTION_COUNT) * 100;
