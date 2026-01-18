@@ -31,11 +31,17 @@ Scoring system and timer behavior that create engaging gameplay pressure. User e
 - Combo multiplier caps at 3x maximum
 - Perfect round bonus (+500): Shown after last question with special celebration moment before results screen
 
+### Cancel/quit button
+- Add cancel button to quiz screen (during gameplay)
+- Shows confirmation dialog before exiting ("Are you sure?")
+- Exits to home screen if confirmed
+
 ### Claude's Discretion
 - Exact combo multiplier visual style (badge, text, etc.)
 - Speed bonus curve formula (as long as front-loaded)
 - Floating points animation duration and style
 - Perfect round celebration design
+- Cancel button position and styling
 
 </decisions>
 
@@ -51,7 +57,7 @@ Scoring system and timer behavior that create engaging gameplay pressure. User e
 <deferred>
 ## Deferred Ideas
 
-None — discussion stayed within phase scope
+- More engaging home screen — explore ways to make home screen more inviting/gamified (future phase or backlog)
 
 </deferred>
 

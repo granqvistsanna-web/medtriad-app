@@ -23,7 +23,7 @@ export default function HomeScreen() {
       <View style={styles.content}>
         {/* Header/Branding */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>MedTriads</Text>
+          <Text style={[styles.title, { color: colors.text }]}>Med Triads</Text>
           <Text style={[styles.subtitle, { color: colors.textMuted }]}>
             Master medical triads
           </Text>
