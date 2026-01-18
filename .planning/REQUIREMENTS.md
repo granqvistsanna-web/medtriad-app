@@ -9,10 +9,10 @@ Requirements for Polish & Progression release.
 
 ### UI Polish
 
-- [ ] **UIPOL-01**: Library screen matches Home screen style (spacing, colors, typography)
-- [ ] **UIPOL-02**: Progress screen matches Home screen style
-- [ ] **UIPOL-03**: Settings screen matches Home screen style
-- [ ] **UIPOL-04**: Quiz screen matches Home screen style
+- [x] **UIPOL-01**: Library screen matches Home screen style (spacing, colors, typography)
+- [x] **UIPOL-02**: Progress screen matches Home screen style
+- [x] **UIPOL-03**: Settings screen matches Home screen style
+- [x] **UIPOL-04**: Quiz screen matches Home screen style
 
 ### Visual Refinement
 
@@ -79,10 +79,10 @@ Deferred to future release.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| UIPOL-01 | Phase 9 | Pending |
-| UIPOL-02 | Phase 9 | Pending |
-| UIPOL-03 | Phase 9 | Pending |
-| UIPOL-04 | Phase 9 | Pending |
+| UIPOL-01 | Phase 9 | Complete |
+| UIPOL-02 | Phase 9 | Complete |
+| UIPOL-03 | Phase 9 | Complete |
+| UIPOL-04 | Phase 9 | Complete |
 | VISREF-01 | Phase 10 | Pending |
 | VISREF-02 | Phase 10 | Pending |
 | VISREF-03 | Phase 10 | Pending |
@@ -107,4 +107,4 @@ Deferred to future release.
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-18 after roadmap expansion*
+*Last updated: 2026-01-18 after Phase 9 completion*

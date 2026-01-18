@@ -23,7 +23,7 @@ library browsing, progress tracking, settings, and all core animations/sounds.
 progression-driven experience with consistent UI, engaging level tiers,
 evolving mascot, smooth onboarding, and shareability.
 
-- [ ] **Phase 9: UI Polish** - Consistent visual style across all screens
+- [x] **Phase 9: UI Polish** - Consistent visual style across all screens
 - [ ] **Phase 10: Refine Visuals** - Tighten spacing, colors, micro-interactions
 - [ ] **Phase 11: Level System** - 6 progression tiers with clear identity
 - [ ] **Phase 12: Levels on Hero** - Show current tier prominently on Home screen
@@ -46,10 +46,10 @@ evolving mascot, smooth onboarding, and shareability.
 **Plans:** 4 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Library screen polish (padding, animations)
-- [ ] 09-02-PLAN.md — Progress screen polish (cards, section headers, animations)
-- [ ] 09-03-PLAN.md — Settings screen polish (section headers, animations)
-- [ ] 09-04-PLAN.md — Quiz screen polish (main area padding)
+- [x] 09-01-PLAN.md — Library screen polish (padding, animations)
+- [x] 09-02-PLAN.md — Progress screen polish (cards, section headers, animations)
+- [x] 09-03-PLAN.md — Settings screen polish (section headers, animations)
+- [x] 09-04-PLAN.md — Quiz screen polish (main area padding)
 
 **Success Criteria**:
 1. Library screen uses same spacing, colors, and typography as Home
@@ -198,7 +198,7 @@ Ideas parked for future development:
 | Phase | Milestone | Status | Completed |
 |-------|-----------|--------|-----------|
 | 1-8 | v1.0 | Complete | 2026-01-18 |
-| 9. UI Polish | v2.0 | Planned | - |
+| 9. UI Polish | v2.0 | Complete | 2026-01-18 |
 | 10. Refine Visuals | v2.0 | Not started | - |
 | 11. Level System | v2.0 | Not started | - |
 | 12. Levels on Hero | v2.0 | Not started | - |
@@ -209,5 +209,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-18*
+*Last updated: 2026-01-18 after Phase 9 completion*
 *Current milestone: v2.0 Polish & Progression*
