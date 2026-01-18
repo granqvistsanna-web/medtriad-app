@@ -1,7 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import Animated, {
+  FadeInUp,
+  useSharedValue,
+  useAnimatedStyle,
+  withSequence,
+  withSpring,
+} from 'react-native-reanimated';
 import { CountUp } from 'use-count-up';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
@@ -11,7 +17,7 @@ import { HighScoreBadge } from '@/components/results/HighScoreBadge';
 import { useStats } from '@/hooks/useStats';
 import { calculateLevel, getQuestionsToNextLevel } from '@/services/mastery';
 import { saveQuizHistory } from '@/services/stats-storage';
-import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
+import { Colors, Typography, Spacing, Radius, Durations, Easings } from '@/constants/theme';
 import { QUESTION_COUNT } from '@/types/quiz-state';
 
 type ResultsParams = {
@@ -75,6 +81,24 @@ export default function ResultsScreen() {
     }
   }, [isPerfect]);
 
+  // Score settle animation after count-up completes
+  const scoreScale = useSharedValue(1);
+
+  useEffect(() => {
+    // CountUp takes 1 second, add small buffer
+    const timeout = setTimeout(() => {
+      scoreScale.value = withSequence(
+        withSpring(1.08, Easings.pop),    // Slight overshoot
+        withSpring(1, Easings.gentle)     // Settle
+      );
+    }, 1100);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const scoreAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scoreScale.value }],
+  }));
+
   const resultMessage = getResultMessage(correctCount, isPerfect);
   const accuracy = (correctCount / QUESTION_COUNT) * 100;
   const mascotMood = accuracy >= 70 || isPerfect ? 'happy' : 'neutral';
@@ -105,7 +129,7 @@ export default function ResultsScreen() {
         {/* Score Display */}
         <Animated.View
           entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
-          style={styles.scoreSection}
+          style={[styles.scoreSection, scoreAnimatedStyle]}
         >
           <Text style={[styles.score, { color: colors.primary }]}>
             <CountUp
