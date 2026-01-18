@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, View, useColorScheme } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import * as Haptics from 'expo-haptics';
 
 import { FindingsCard } from '@/components/quiz/FindingsCard';
@@ -25,6 +25,10 @@ export default function QuizScreen() {
   const router = useRouter();
   const scheme = useColorScheme() ?? 'light';
   const colors = Colors[scheme];
+
+  // Track results for passing to results screen
+  const correctCountRef = useRef(0);
+  const maxComboRef = useRef(1);
 
   const {
     status,
@@ -58,14 +62,22 @@ export default function QuizScreen() {
 
     const timeout = setTimeout(() => {
       if (currentIndex >= questions.length - 1) {
-        router.replace('/quiz/results');
+        router.replace({
+          pathname: '/quiz/results',
+          params: {
+            score: score.toString(),
+            correctCount: correctCountRef.current.toString(),
+            bestStreak: maxComboRef.current.toString(),
+            isNewHighScore: 'false', // Phase 5 will implement actual check
+          },
+        });
       } else {
         dispatch({ type: 'NEXT_QUESTION' });
       }
     }, ANSWER_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [status, currentIndex, questions.length, dispatch, router]);
+  }, [status, currentIndex, questions.length, dispatch, router, score]);
 
   // Handle answer selection
   const handleAnswerSelect = async (option: QuizOption) => {
@@ -78,6 +90,16 @@ export default function QuizScreen() {
       optionId: option.id,
       isCorrect: option.isCorrect,
     });
+
+    // Track correct answers and max combo
+    if (option.isCorrect) {
+      correctCountRef.current += 1;
+      // Track max combo achieved (combo will increment to this value)
+      const newCombo = state.combo + 1;
+      if (newCombo > maxComboRef.current) {
+        maxComboRef.current = newCombo;
+      }
+    }
 
     // Result haptic feedback
     if (option.isCorrect) {
