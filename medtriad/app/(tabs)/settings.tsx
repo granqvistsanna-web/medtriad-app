@@ -101,9 +101,12 @@ export default function SettingsScreen() {
         <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
 
         {/* PREFERENCES Section */}
-        <Text style={[styles.sectionHeader, { color: colors.textMuted }]}>
-          PREFERENCES
-        </Text>
+        <View style={[styles.sectionHeaderRow, { marginTop: 0 }]}>
+          <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+            PREFERENCES
+          </Text>
+          <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+        </View>
         <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
           <ToggleRow
             label="Sound Effects"
@@ -119,9 +122,12 @@ export default function SettingsScreen() {
         </View>
 
         {/* ACTIONS Section */}
-        <Text style={[styles.sectionHeader, { color: colors.textMuted }]}>
-          ACTIONS
-        </Text>
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+            ACTIONS
+          </Text>
+          <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+        </View>
         <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
           <SettingsRow
             label="Share App"
@@ -138,9 +144,12 @@ export default function SettingsScreen() {
         </View>
 
         {/* ABOUT Section */}
-        <Text style={[styles.sectionHeader, { color: colors.textMuted }]}>
-          ABOUT
-        </Text>
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+            ABOUT
+          </Text>
+          <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+        </View>
         <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
           <View style={styles.aboutRow}>
             <Text style={[styles.aboutLabel, { color: colors.text }]}>Version</Text>
@@ -173,13 +182,20 @@ const styles = StyleSheet.create({
     ...Typography.title,
     marginBottom: Spacing.lg,
   },
-  sectionHeader: {
-    ...Typography.footnote,
-    textTransform: 'uppercase',
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
     marginTop: Spacing.lg,
     marginBottom: Spacing.sm,
-    paddingHorizontal: Spacing.sm,
-    letterSpacing: 0.5,
+  },
+  sectionHeaderText: {
+    ...Typography.tiny,
+    letterSpacing: 1,
+  },
+  sectionHeaderLine: {
+    flex: 1,
+    height: 1,
   },
   section: {
     borderRadius: Radius.md,
