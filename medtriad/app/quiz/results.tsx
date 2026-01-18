@@ -120,7 +120,7 @@ export default function ResultsScreen() {
 
         {/* Result Message */}
         <Animated.Text
-          entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}
+          entering={FadeInUp.delay(Durations.staggerMedium).duration(Durations.normal).springify()}
           style={[styles.message, { color: colors.text }]}
         >
           {resultMessage}
@@ -128,7 +128,7 @@ export default function ResultsScreen() {
 
         {/* Score Display */}
         <Animated.View
-          entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
+          entering={FadeInUp.delay(Durations.staggerMedium * 2).duration(Durations.normal).springify()}
           style={[styles.scoreSection, scoreAnimatedStyle]}
         >
           <Text style={[styles.score, { color: colors.primary }]}>
@@ -148,7 +148,7 @@ export default function ResultsScreen() {
         {/* New High Score Badge */}
         {isNewHighScore && (
           <Animated.View
-            entering={FadeInUp.delay(Durations.stagger * 2.5).duration(Durations.normal).springify()}
+            entering={FadeInUp.delay(Durations.staggerMedium * 3).duration(Durations.normal).springify()}
           >
             <HighScoreBadge />
           </Animated.View>
@@ -156,7 +156,7 @@ export default function ResultsScreen() {
 
         {/* Stats Row */}
         <Animated.View
-          entering={FadeInUp.delay(Durations.stagger * 3).duration(Durations.normal).springify()}
+          entering={FadeInUp.delay(Durations.staggerMedium * 4).duration(Durations.normal).springify()}
           style={styles.statsRow}
         >
           <View style={styles.stat}>
@@ -180,7 +180,7 @@ export default function ResultsScreen() {
 
         {/* Mastery Progress */}
         <Animated.View
-          entering={FadeInUp.delay(Durations.stagger * 4).duration(Durations.normal).springify()}
+          entering={FadeInUp.delay(Durations.staggerMedium * 5).duration(Durations.normal).springify()}
           style={[styles.masteryBadge, { backgroundColor: colors.primaryLight }]}
         >
           <Text style={[styles.masteryText, { color: colors.primary }]}>
@@ -193,7 +193,7 @@ export default function ResultsScreen() {
 
       {/* Buttons */}
       <Animated.View
-        entering={FadeInUp.delay(Durations.stagger * 5).duration(Durations.normal).springify()}
+        entering={FadeInUp.delay(Durations.staggerMedium * 6).duration(Durations.normal).springify()}
         style={styles.buttons}
       >
         <Button label="Play Again" onPress={() => router.replace('/quiz')} />
