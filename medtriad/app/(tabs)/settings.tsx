@@ -98,66 +98,74 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
+        <Animated.View entering={FadeInUp.duration(Durations.normal).springify()}>
+          <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
+        </Animated.View>
 
         {/* PREFERENCES Section */}
-        <View style={[styles.sectionHeaderRow, { marginTop: 0 }]}>
-          <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
-            PREFERENCES
-          </Text>
-          <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
-        </View>
-        <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
-          <ToggleRow
-            label="Sound Effects"
-            value={settings.soundEnabled}
-            onValueChange={handleSoundToggle}
-          />
-          <View style={[styles.separator, { backgroundColor: colors.border }]} />
-          <ToggleRow
-            label="Haptic Feedback"
-            value={settings.hapticsEnabled}
-            onValueChange={handleHapticsToggle}
-          />
-        </View>
+        <Animated.View entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}>
+          <View style={[styles.sectionHeaderRow, { marginTop: 0 }]}>
+            <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+              PREFERENCES
+            </Text>
+            <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+          </View>
+          <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
+            <ToggleRow
+              label="Sound Effects"
+              value={settings.soundEnabled}
+              onValueChange={handleSoundToggle}
+            />
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <ToggleRow
+              label="Haptic Feedback"
+              value={settings.hapticsEnabled}
+              onValueChange={handleHapticsToggle}
+            />
+          </View>
+        </Animated.View>
 
         {/* ACTIONS Section */}
-        <View style={styles.sectionHeaderRow}>
-          <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
-            ACTIONS
-          </Text>
-          <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
-        </View>
-        <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
-          <SettingsRow
-            label="Share App"
-            onPress={handleShare}
-            icon="square.and.arrow.up"
-          />
-          <View style={[styles.separator, { backgroundColor: colors.border }]} />
-          <SettingsRow
-            label="Reset Statistics"
-            onPress={handleResetStats}
-            icon="trash"
-            destructive
-          />
-        </View>
+        <Animated.View entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+              ACTIONS
+            </Text>
+            <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+          </View>
+          <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
+            <SettingsRow
+              label="Share App"
+              onPress={handleShare}
+              icon="square.and.arrow.up"
+            />
+            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <SettingsRow
+              label="Reset Statistics"
+              onPress={handleResetStats}
+              icon="trash"
+              destructive
+            />
+          </View>
+        </Animated.View>
 
         {/* ABOUT Section */}
-        <View style={styles.sectionHeaderRow}>
-          <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
-            ABOUT
-          </Text>
-          <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
-        </View>
-        <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
-          <View style={styles.aboutRow}>
-            <Text style={[styles.aboutLabel, { color: colors.text }]}>Version</Text>
-            <Text style={[styles.aboutValue, { color: colors.textSecondary }]}>
-              {version} (Build {build})
+        <Animated.View entering={FadeInUp.delay(Durations.stagger * 3).duration(Durations.normal).springify()}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+              ABOUT
             </Text>
+            <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
           </View>
-        </View>
+          <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
+            <View style={styles.aboutRow}>
+              <Text style={[styles.aboutLabel, { color: colors.text }]}>Version</Text>
+              <Text style={[styles.aboutValue, { color: colors.textSecondary }]}>
+                {version} (Build {build})
+              </Text>
+            </View>
+          </View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
