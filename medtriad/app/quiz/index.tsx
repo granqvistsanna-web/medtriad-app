@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -8,10 +8,12 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { FindingsCard } from '@/components/quiz/FindingsCard';
 import { AnswerCard } from '@/components/quiz/AnswerCard';
 import { TimerBar } from '@/components/quiz/TimerBar';
+import { CancelButton } from '@/components/quiz/CancelButton';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 
 import { useQuizReducer } from '@/hooks/use-quiz-reducer';
 import { useCountdownTimer } from '@/hooks/use-countdown-timer';
+import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { generateQuestionSet } from '@/services/question-generator';
 import { isPerfectRound, getComboTier } from '@/services/scoring';
 import { useStats } from '@/hooks/useStats';
@@ -31,6 +33,7 @@ export default function QuizScreen() {
   const { height: windowHeight } = useWindowDimensions();
   const colors = Colors.light;
   const { recordQuizResult, checkHighScore } = useStats();
+  const { playSound } = useSoundEffects();
 
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
@@ -129,14 +132,23 @@ export default function QuizScreen() {
       timeRemaining: state.timeRemaining,
     });
 
+    // Play appropriate sound
     if (option.isCorrect) {
+      playSound('correct');
+      // Check for combo tier increase
+      const currentTier = getComboTier(consecutiveCorrect);
+      const newTier = getComboTier(consecutiveCorrect + 1);
+      if (newTier > currentTier) {
+        // Play combo sound slightly delayed to not overlap
+        setTimeout(() => playSound('combo'), 150);
+      }
       correctCountRef.current += 1;
-      const newComboTier = getComboTier(consecutiveCorrect + 1);
-      if (newComboTier > maxComboRef.current) {
-        maxComboRef.current = newComboTier;
+      if (newTier > maxComboRef.current) {
+        maxComboRef.current = newTier;
       }
       setFeedbackText('Correct!');
     } else {
+      playSound('incorrect');
       // Find correct answer
       const correctOption = currentQuestion.options.find((o) => o.isCorrect);
       setFeedbackText(`Correct: ${correctOption?.condition}`);
@@ -168,12 +180,6 @@ export default function QuizScreen() {
     return 'neutral';
   };
 
-  // Handle cancel
-  const handleCancel = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.back();
-  };
-
   // Loading state
   if (!currentQuestion) {
     return null;
@@ -193,9 +199,9 @@ export default function QuizScreen() {
     >
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: colors.border }]}>
-        <Pressable onPress={handleCancel} style={styles.cancelButton}>
-          <IconSymbol name="xmark" size={20} color={colors.textSecondary} />
-        </Pressable>
+        <View style={styles.cancelButton}>
+          <CancelButton />
+        </View>
 
         {/* Question progress - center */}
         <View style={styles.progressContainer}>
@@ -301,6 +307,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center',
+    pointerEvents: 'none',
   },
   progressText: {
     ...Typography.footnote,

@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+import { CountUp } from 'use-count-up';
+import ConfettiCannon from 'react-native-confetti-cannon';
 
 import { Button } from '@/components/ui/Button';
 import { TriMascot } from '@/components/home/TriMascot';
@@ -36,6 +38,8 @@ export default function ResultsScreen() {
   const router = useRouter();
   const colors = Colors.light;
   const { stats } = useStats();
+  const { width } = useWindowDimensions();
+  const confettiRef = useRef<ConfettiCannon>(null);
 
   const params = useLocalSearchParams<ResultsParams>();
 
@@ -59,6 +63,17 @@ export default function ResultsScreen() {
       });
     }
   }, [score, correctCount]);
+
+  // Trigger confetti for perfect rounds
+  useEffect(() => {
+    if (isPerfect) {
+      // Delay to let count-up animation finish
+      const timeout = setTimeout(() => {
+        confettiRef.current?.start();
+      }, 1200); // After 1s count-up + 200ms buffer
+      return () => clearTimeout(timeout);
+    }
+  }, [isPerfect]);
 
   const resultMessage = getResultMessage(correctCount, isPerfect);
   const accuracy = (correctCount / QUESTION_COUNT) * 100;
@@ -93,7 +108,13 @@ export default function ResultsScreen() {
           style={styles.scoreSection}
         >
           <Text style={[styles.score, { color: colors.primary }]}>
-            {score.toLocaleString()}
+            <CountUp
+              isCounting
+              start={0}
+              end={score}
+              duration={1}
+              thousandsSeparator=","
+            />
           </Text>
           <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>
             points
@@ -158,6 +179,19 @@ export default function ResultsScreen() {
           onPress={() => router.replace('/(tabs)')}
         />
       </Animated.View>
+
+      {/* Confetti for perfect rounds */}
+      {isPerfect && (
+        <ConfettiCannon
+          ref={confettiRef}
+          count={150}
+          origin={{ x: width / 2, y: -10 }}
+          fallSpeed={3500}
+          fadeOut
+          autoStart={false}
+          colors={['#3B82F6', '#22C55E', '#FACC15', '#F97316', '#EC4899']}
+        />
+      )}
     </SafeAreaView>
   );
 }

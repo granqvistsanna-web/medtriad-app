@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { StyleSheet, Text, useColorScheme } from 'react-native';
+import Animated, { ZoomIn } from 'react-native-reanimated';
 import { Colors, Typography, Spacing, Radius, Shadows } from '@/constants/theme';
 
 export function HighScoreBadge() {
@@ -7,7 +8,8 @@ export function HighScoreBadge() {
   const shadow = Shadows[scheme].md;
 
   return (
-    <View
+    <Animated.View
+      entering={ZoomIn.springify().damping(12)}
       style={[
         styles.badge,
         {
@@ -18,7 +20,7 @@ export function HighScoreBadge() {
     >
       <Text style={styles.star}>★</Text>
       <Text style={[styles.text, { color: colors.textInverse }]}>New High Score!</Text>
-    </View>
+    </Animated.View>
   );
 }
 
