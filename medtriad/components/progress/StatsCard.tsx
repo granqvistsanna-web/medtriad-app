@@ -7,9 +7,10 @@ interface StatsCardProps {
   label: string;
   value: string | number;
   icon?: SymbolViewProps['name'];
+  description?: string;
 }
 
-export function StatsCard({ label, value, icon }: StatsCardProps) {
+export function StatsCard({ label, value, icon, description }: StatsCardProps) {
   const colors = Colors.light;
   const shadow = Shadows.light.sm;
 
@@ -18,7 +19,7 @@ export function StatsCard({ label, value, icon }: StatsCardProps) {
       style={[
         styles.card,
         {
-          backgroundColor: colors.backgroundCard,
+          backgroundColor: colors.backgroundSecondary,
           ...shadow,
         },
       ]}
@@ -26,12 +27,15 @@ export function StatsCard({ label, value, icon }: StatsCardProps) {
       {icon && (
         <IconSymbol
           name={icon}
-          size={24}
+          size={20}
           color={colors.primary}
         />
       )}
+      <Text style={[styles.label, { color: colors.textMuted }]}>{label}</Text>
       <Text style={[styles.value, { color: colors.text }]}>{value}</Text>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
+      {description && (
+        <Text style={[styles.description, { color: colors.textMuted }]}>{description}</Text>
+      )}
     </View>
   );
 }
@@ -39,15 +43,22 @@ export function StatsCard({ label, value, icon }: StatsCardProps) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    borderRadius: Radius.md,
+    borderRadius: Radius.lg,
     padding: Spacing.base,
-    alignItems: 'center',
     gap: Spacing.xs,
-  },
-  value: {
-    ...Typography.stat,
+    minHeight: 100,
   },
   label: {
-    ...Typography.caption,
+    ...Typography.tiny,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  value: {
+    fontSize: 28,
+    fontWeight: '700',
+    lineHeight: 34,
+  },
+  description: {
+    ...Typography.footnote,
   },
 });
