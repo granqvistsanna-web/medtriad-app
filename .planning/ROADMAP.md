@@ -66,12 +66,11 @@ Plans:
   5. Results screen shows "New High Score" badge when applicable
   6. User can tap Play Again to start new quiz round
   7. User can tap Home to return to home screen
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: Home screen UI and navigation
-- [ ] 03-02: Results screen UI and navigation
-- [ ] 03-03: Quiz state management and flow integration
+- [ ] 03-01-PLAN.md - Home screen with branding, stats display, and Start Quiz button
+- [ ] 03-02-PLAN.md - Results screen with score, stats, badge, and navigation buttons
 
 ### Phase 4: Game Mechanics
 **Goal**: Scoring and timer systems create engaging gameplay pressure
@@ -136,11 +135,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Data Foundation | 2/2 | Complete | 2026-01-17 |
 | 2. Quiz Core | 2/2 | Complete | 2026-01-18 |
-| 3. Screen Flow | 0/3 | Not started | - |
+| 3. Screen Flow | 0/2 | Ready | - |
 | 4. Game Mechanics | 0/2 | Not started | - |
 | 5. Feedback & Persistence | 0/3 | Not started | - |
 | 6. Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-17*
-*Last updated: 2026-01-18 (Phase 2 complete)*
+*Last updated: 2026-01-18 (Phase 3 planned)*
