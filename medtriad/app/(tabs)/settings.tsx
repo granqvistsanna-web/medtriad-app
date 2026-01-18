@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Share, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Application from 'expo-application';
-import { Colors, Typography, Spacing, Radius } from '@/constants/theme';
+import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
 import { ToggleRow } from '@/components/settings/ToggleRow';
 import { SettingsRow } from '@/components/settings/SettingsRow';
 import { loadSettings, saveSettings, UserSettings } from '@/services/settings-storage';
@@ -164,12 +165,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.md,
     paddingBottom: Spacing.xxl,
   },
   title: {
     ...Typography.title,
-    marginTop: Spacing.lg,
     marginBottom: Spacing.lg,
   },
   sectionHeader: {
