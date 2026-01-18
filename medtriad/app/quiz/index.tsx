@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    paddingHorizontal: Spacing.base,
+    paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
     gap: Spacing.md,
   },
