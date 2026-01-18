@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: Feedback & Persistence** - Answer feedback, haptics, data persistence
 - [x] **Phase 6: Navigation & Study Mode** - Bottom tab bar, Library screen, Progress screen
 - [x] **Phase 7: Polish** - Animations, sound effects, final refinements
-- [ ] **Phase 8: Cleanup** - Tech debt closure from milestone audit
+- [x] **Phase 8: Cleanup** - Tech debt closure from milestone audit
 
 ## Phase Details
 
@@ -161,7 +161,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 08-01-PLAN.md — useHaptics hook, wire to quiz and tabs, remove orphaned exports
+- [x] 08-01-PLAN.md — useHaptics hook, wire to quiz and tabs, remove orphaned exports
 
 ## Progress
 
@@ -177,7 +177,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. Feedback & Persistence | 3/3 | Complete | 2026-01-18 |
 | 6. Navigation & Study Mode | 4/4 | Complete | 2026-01-18 |
 | 7. Polish | 2/2 | Complete | 2026-01-18 |
-| 8. Cleanup | 0/1 | Pending | - |
+| 8. Cleanup | 1/1 | Complete | 2026-01-18 |
 
 ---
 *Roadmap created: 2026-01-17*
