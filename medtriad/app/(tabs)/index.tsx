@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.xxl,
+    justifyContent: 'center',
     gap: Spacing.xxl,
   },
   header: {
