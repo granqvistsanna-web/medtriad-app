@@ -12,9 +12,9 @@ See: .planning/PROJECT.md (updated 2026-01-18)
 Phase: 10 of 15 (Refine Visuals & Motion)
 Plan: 4 of 6 in current phase
 Status: In progress
-Last activity: 2026-01-18 - Completed 10-04-PLAN.md
+Last activity: 2026-01-18 - Completed 10-02-PLAN.md
 
-Progress: [########..] 86% (v1.0 complete, Phase 10: 2/6)
+Progress: [########..] 86% (v1.0 complete, Phase 10: 4/6)
 
 ## Performance Metrics
 
@@ -58,6 +58,8 @@ Phase 10 decisions:
 - Glow effect: Absolute positioned layer behind badge with animated opacity at 30% max
 - Timer color interpolation: teal (100%) -> yellow (33%) -> red (20%) for urgency
 - Timer pulse intensity: Critical (1.25 scale + pop), Warning (1.15 scale + bouncy)
+- Button depth compression: 3px -> 1px on press via animated borderBottomWidth
+- Correct answer pop: withSequence(pop, gentle) for overshoot + settle
 
 ### Pending Todos
 
@@ -70,12 +72,12 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 10-04-PLAN.md
+Stopped at: Completed 10-02-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 10 in progress. Continue with remaining plans (10-02, 10-05, 10-06).
+Phase 10 in progress. Continue with remaining plans (10-05, 10-06).
 
 ---
-*Updated: 2026-01-18 after 10-03 and 10-04 completion*
+*Updated: 2026-01-18 after 10-02 completion*
