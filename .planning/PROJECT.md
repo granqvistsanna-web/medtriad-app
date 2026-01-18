@@ -37,17 +37,26 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 
 ### Active
 
-(None — v1.0 complete, define new requirements for v1.1)
+**v2.0 — Polish & Progression**
+
+- [ ] Visual polish: Library screen matches Home style
+- [ ] Visual polish: Progress screen matches Home style
+- [ ] Visual polish: Settings screen matches Home style
+- [ ] Visual polish: Quiz screen matches Home style
+- [ ] Level system: Engaging tier names (5-6 tiers)
+- [ ] Level system: Visual identity per tier
+- [ ] Mascot evolution: Different mascot image per level tier
+- [ ] Onboarding: 2-3 screens explaining triads and scoring
 
 ### Out of Scope
 
-- Category filtering / selection — defer to v2
-- Reverse quiz mode (condition → findings) — defer to v2
-- User accounts and cloud sync — defer to v2
-- Leaderboards — defer to v2
-- Achievements / badges — defer to v2
-- Daily challenges — defer to v2
-- iPad / Mac support — iOS iPhone only for MVP
+- Category filtering / selection — defer to v3
+- Reverse quiz mode (condition → findings) — defer to v3
+- User accounts and cloud sync — defer to v3
+- Leaderboards — defer to v3
+- Achievements / badges — level system covers progression for v2
+- Daily challenges — defer to v3
+- iPad / Mac support — iOS iPhone only
 - Android — iOS first, Android later
 - Monetization (ads, premium) — defer post-launch
 
@@ -90,4 +99,4 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 | 50-entry quiz history limit | Prevents unbounded storage growth | ✓ Good — practical limit |
 
 ---
-*Last updated: 2026-01-18 after v1.0 milestone*
+*Last updated: 2026-01-18 after v2.0 milestone start*
