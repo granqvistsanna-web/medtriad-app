@@ -1,86 +1,61 @@
 /**
  * MedTriads Design System
- * Refined Swiss Medical: Clinical precision meets editorial elegance
+ * Duolingo-inspired: Friendly, teal-centric, light mode only
  */
 
 import { Platform } from 'react-native';
+import { Easing } from 'react-native-reanimated';
 
-export const Colors = {
-  light: {
-    // Backgrounds - warm whites, not sterile
-    background: '#FAFAFA',
-    backgroundSecondary: '#F0F0F0',
-    backgroundCard: '#FFFFFF',
+// Teal color palette
+const tealPalette = {
+  // Primary brand color
+  primary: '#4ECDC4',
+  primaryDark: '#3BA99C',
+  primaryLight: '#E6FAF8',
 
-    // Text hierarchy - true black for impact
-    text: '#000000',
-    textSecondary: '#525252',
-    textMuted: '#A3A3A3',
-    textInverse: '#FFFFFF',
+  // Backgrounds
+  background: '#FFFFFF',
+  backgroundSecondary: '#F8F9FA',
+  backgroundCard: '#FFFFFF',
 
-    // Borders - subtle definition
-    border: '#E5E5E5',
-    borderStrong: '#D4D4D4',
+  // Text hierarchy
+  text: '#2D3436',
+  textSecondary: '#636E72',
+  textMuted: '#B2BEC3',
+  textInverse: '#FFFFFF',
 
-    // Interactive states
-    pressed: '#F5F5F5',
+  // Borders
+  border: '#DFE6E9',
+  borderStrong: '#B2BEC3',
 
-    // Semantic - the only colors (muted for elegance)
-    success: '#16A34A',
-    successBg: '#DCFCE7',
-    error: '#DC2626',
-    errorBg: '#FEE2E2',
+  // Interactive states
+  pressed: '#E6FAF8',
 
-    // Timer states
-    timerNormal: '#171717',
-    timerWarning: '#CA8A04',
-    timerDanger: '#DC2626',
+  // Semantic
+  success: '#00B894',
+  successBg: '#D4F5ED',
+  error: '#E17055',
+  errorBg: '#FFEAEA',
 
-    // Legacy compat
-    tint: '#000000',
-    icon: '#737373',
-    tabIconDefault: '#A3A3A3',
-    tabIconSelected: '#000000',
-  },
-  dark: {
-    // Backgrounds - deep, not muddy
-    background: '#0A0A0A',
-    backgroundSecondary: '#171717',
-    backgroundCard: '#1C1C1C',
+  // Timer states
+  timerNormal: '#4ECDC4',
+  timerWarning: '#FDCB6E',
+  timerDanger: '#E17055',
 
-    // Text hierarchy
-    text: '#FFFFFF',
-    textSecondary: '#A3A3A3',
-    textMuted: '#525252',
-    textInverse: '#000000',
-
-    // Borders
-    border: '#262626',
-    borderStrong: '#404040',
-
-    // Interactive
-    pressed: '#262626',
-
-    // Semantic
-    success: '#22C55E',
-    successBg: '#14532D',
-    error: '#EF4444',
-    errorBg: '#7F1D1D',
-
-    // Timer
-    timerNormal: '#FFFFFF',
-    timerWarning: '#FACC15',
-    timerDanger: '#F87171',
-
-    // Legacy
-    tint: '#FFFFFF',
-    icon: '#737373',
-    tabIconDefault: '#525252',
-    tabIconSelected: '#FFFFFF',
-  },
+  // Legacy compat
+  tint: '#4ECDC4',
+  icon: '#636E72',
+  tabIconDefault: '#B2BEC3',
+  tabIconSelected: '#4ECDC4',
 } as const;
 
-// Typography scale - dramatic hierarchy
+export const Colors = {
+  light: tealPalette,
+  // Dark mode aliased to light for compatibility
+  dark: tealPalette,
+} as const;
+
+// Typography scale
 export const Typography = {
   // Hero numbers (results score)
   display: {
@@ -96,6 +71,14 @@ export const Typography = {
     fontWeight: '700' as const,
     lineHeight: 38,
     letterSpacing: -0.5,
+  },
+
+  // Large title (MedTriads on home)
+  titleLarge: {
+    fontSize: 28,
+    fontWeight: '600' as const,
+    lineHeight: 34,
+    letterSpacing: -0.3,
   },
 
   // Section headers
@@ -119,6 +102,13 @@ export const Typography = {
     lineHeight: 22,
   },
 
+  // Stats values
+  stat: {
+    fontSize: 20,
+    fontWeight: '700' as const,
+    lineHeight: 24,
+  },
+
   // Secondary info
   caption: {
     fontSize: 15,
@@ -132,6 +122,14 @@ export const Typography = {
     fontWeight: '400' as const,
     lineHeight: 18,
     letterSpacing: 0.3,
+  },
+
+  // Tiny labels (category)
+  tiny: {
+    fontSize: 11,
+    fontWeight: '600' as const,
+    lineHeight: 14,
+    letterSpacing: 0.5,
   },
 } as const;
 
@@ -147,54 +145,34 @@ export const Spacing = {
   xxxl: 64,
 } as const;
 
-// Shadows - real depth
+// Shadows - light theme only
+const lightShadows = {
+  sm: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  md: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  lg: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
+    elevation: 8,
+  },
+};
+
 export const Shadows = {
-  light: {
-    sm: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.06,
-      shadowRadius: 3,
-      elevation: 2,
-    },
-    md: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.08,
-      shadowRadius: 12,
-      elevation: 4,
-    },
-    lg: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.12,
-      shadowRadius: 24,
-      elevation: 8,
-    },
-  },
-  dark: {
-    sm: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.3,
-      shadowRadius: 3,
-      elevation: 2,
-    },
-    md: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.4,
-      shadowRadius: 12,
-      elevation: 4,
-    },
-    lg: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.5,
-      shadowRadius: 24,
-      elevation: 8,
-    },
-  },
+  light: lightShadows,
+  dark: lightShadows, // Alias for compatibility
 } as const;
 
 // Border radius scale
@@ -203,7 +181,44 @@ export const Radius = {
   md: 12,
   lg: 16,
   xl: 24,
+  xxl: 32,
   full: 9999,
+} as const;
+
+// Mascot sizes
+export const MascotSizes = {
+  sm: 56,
+  md: 80,
+  lg: 112,
+  xl: 160,
+} as const;
+
+// Animation durations
+export const Durations = {
+  fast: 150,
+  normal: 300,
+  slow: 500,
+  stagger: 50,
+} as const;
+
+// Spring presets for react-native-reanimated
+export const Easings = {
+  // Standard press/release — snappy, controlled
+  press: { damping: 15, stiffness: 400 },
+
+  // Bouncy reveals — playful overshoot
+  bouncy: { damping: 10, stiffness: 300 },
+
+  // Gentle settles — slow, weighty landing
+  gentle: { damping: 20, stiffness: 150 },
+
+  // Pop effects — fast initial, slow settle
+  pop: { damping: 8, stiffness: 400 },
+
+  // Timing easings (for opacity, color)
+  easeOut: Easing.out(Easing.cubic),
+  easeInOut: Easing.inOut(Easing.cubic),
+  easeOutBack: Easing.bezier(0.34, 1.56, 0.64, 1),
 } as const;
 
 // Font families
