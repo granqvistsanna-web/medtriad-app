@@ -46,7 +46,7 @@ function getResultMessage(correctCount: number, isPerfect: boolean): string {
 export default function ResultsScreen() {
   const router = useRouter();
   const colors = Colors.light;
-  const { stats, tier, nextTier } = useStats();
+  const { stats, tier, nextTier, clearPendingTierUp } = useStats();
   const { width } = useWindowDimensions();
   const confettiRef = useRef<ConfettiCannon>(null);
 
@@ -129,7 +129,10 @@ export default function ResultsScreen() {
               oldTier={oldTierNumber}
               newTier={newTierNumber}
               newTierName={newTierName}
-              onComplete={() => setCelebrationComplete(true)}
+              onComplete={async () => {
+                await clearPendingTierUp();
+                setCelebrationComplete(true);
+              }}
             />
           ) : (
             <TriMascot mood={mascotMood} size="md" tier={tier.tier} context="results" />
