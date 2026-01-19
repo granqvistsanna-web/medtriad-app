@@ -187,6 +187,17 @@ export const Radius = {
   full: 9999,
 } as const;
 
+// Card styling - Duolingo-inspired hard border treatment
+export const CardStyle = {
+  backgroundColor: tealPalette.backgroundCard,
+  borderWidth: 2,
+  borderColor: tealPalette.border,
+  borderBottomWidth: 4,
+  borderBottomColor: tealPalette.borderStrong,
+  borderRadius: Radius.lg,
+  ...lightShadows.sm,
+} as const;
+
 // Mascot sizes
 export const MascotSizes = {
   sm: 56,
