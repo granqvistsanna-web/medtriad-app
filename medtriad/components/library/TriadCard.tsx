@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -36,7 +37,11 @@ function highlightText(text: string, query: string) {
   );
 }
 
-export function TriadCard({ triad, index, searchQuery = '' }: TriadCardProps) {
+export const TriadCard = React.memo(function TriadCard({
+  triad,
+  index,
+  searchQuery = '',
+}: TriadCardProps) {
   const colors = Colors.light;
   const categoryColor = CATEGORY_COLORS[triad.category];
   const scale = useSharedValue(1);
@@ -109,7 +114,7 @@ export function TriadCard({ triad, index, searchQuery = '' }: TriadCardProps) {
       </AnimatedPressable>
     </Animated.View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   card: {
