@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 13 ready to plan
+**Current focus:** v2.0 Polish & Progression - Phase 14 ready to plan
 
 ## Current Position
 
-Phase: 12 of 19 (Levels on Hero)
+Phase: 13 of 19 (Onboarding)
 Plan: 1 of 1 in current phase
 Status: Phase complete
-Last activity: 2026-01-19 - Completed 12-01-PLAN.md
+Last activity: 2026-01-19 - Completed 13-01-PLAN.md
 
-Progress: [######....] 61% (v1.0 complete, Phases 9-12 complete)
+Progress: [#######...] 66% (v1.0 complete, Phases 9-13 complete)
 
 ## Performance Metrics
 
@@ -25,10 +25,10 @@ Progress: [######....] 61% (v1.0 complete, Phases 9-12 complete)
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 13
-- Phases completed: 4 (9, 10, 11, 12)
-- Phases remaining: 7 (13-19)
-- Requirements: 21+ total, 13 complete
+- Plans completed: 14
+- Phases completed: 5 (9, 10, 11, 12, 13)
+- Phases remaining: 6 (14-19)
+- Requirements: 21+ total, 14 complete
 
 ### Roadmap Evolution
 
@@ -90,6 +90,12 @@ Phase 12 decisions (Plan 01):
 - Progress bar width fixed at 120px (badge + name section width)
 - Tap tier section navigates to Progress tab
 
+Phase 13 decisions (Plan 01):
+- Return null during loading to prevent flash of wrong screen
+- Stack.Protected with guard prop for conditional route access
+- router.replace for skip/get-started navigation (prevents back gesture to onboarding)
+- Track currentPage via runOnJS callback for React state sync
+
 ### Pending Todos
 
 None.
@@ -101,14 +107,14 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 12-01-PLAN.md
+Stopped at: Completed 13-01-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 12 (Levels on Hero) complete and verified. Ready for Phase 13 (Onboarding).
+Phase 13 (Onboarding) complete and verified. Ready for Phase 14 (Share Results).
 
-Run `/gsd:discuss-phase 13` to gather context, or `/gsd:plan-phase 13` to plan directly.
+Run `/gsd:discuss-phase 14` to gather context, or `/gsd:plan-phase 14` to plan directly.
 
 ---
-*Updated: 2026-01-19 after Phase 12 execution complete*
+*Updated: 2026-01-19 after Phase 13 execution complete*
