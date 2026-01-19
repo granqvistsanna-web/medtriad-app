@@ -315,6 +315,12 @@ Plans:
 
 **Requirements**: ERR-01, ERR-02, ERR-03, ERR-04
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 19-01-PLAN.md — Validation utilities and ErrorBoundary foundation
+- [ ] 19-02-PLAN.md — Apply defensive patterns to existing code
+
 **Success Criteria**:
 1. All asset loads have fallbacks
 2. UserDefaults access never crashes
@@ -375,5 +381,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 18 complete*
+*Last updated: 2026-01-19 - Phase 19 planned*
 *Current milestone: v2.0 Polish & Progression*
