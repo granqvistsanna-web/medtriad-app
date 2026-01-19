@@ -7,8 +7,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Colors, Radius } from '@/constants/theme';
+import { clampProgress } from '@/services/validation';
 
-const BAR_HEIGHT = 4; // Thin, understated per CONTEXT.md
+const BAR_HEIGHT = 8; // Thicker, more prominent Duolingo style
 
 type TierProgressBarProps = {
   progress: number; // 0-1
@@ -32,7 +33,8 @@ export function TierProgressBar({ progress }: TierProgressBarProps) {
   const animatedProgress = useSharedValue(0);
 
   useEffect(() => {
-    animatedProgress.value = withTiming(progress, {
+    const safeProgress = clampProgress(progress);
+    animatedProgress.value = withTiming(safeProgress, {
       duration: 600,
       easing: Easing.out(Easing.cubic),
     });
