@@ -5,6 +5,7 @@ import {
   updateAfterQuiz,
   getAccuracy,
   checkHighScore as checkHighScoreStorage,
+  clearPendingTierUp as clearPendingTierUpStorage,
 } from '@/services/stats-storage';
 import {
   calculateLevel,
@@ -32,6 +33,9 @@ export interface StatsData {
   tier: TierDefinition;
   tierProgress: number;
   nextTier: TierDefinition | null;
+  // Tier-up celebration
+  pendingTierUp: { tier: number; name: string } | null;
+  clearPendingTierUp: () => Promise<void>;
   // Other stats
   dailyStreak: number;
   highScore: number;
@@ -79,6 +83,11 @@ export function useStats(): StatsData {
     [fetchStats]
   );
 
+  const handleClearPendingTierUp = useCallback(async () => {
+    await clearPendingTierUpStorage();
+    await fetchStats(); // Refresh to reflect cleared state
+  }, [fetchStats]);
+
   // Derived values - Legacy (question-based)
   const isNewUser = stats?.gamesPlayed === 0;
   const accuracy = stats ? getAccuracy(stats) : 0;
@@ -96,6 +105,9 @@ export function useStats(): StatsData {
   const tierProgress = getProgressToNextTier(gamesPlayed);
   const nextTier = getNextTier(tier.tier);
 
+  // Tier-up celebration
+  const pendingTierUp = stats?.pendingTierUp ?? null;
+
   return {
     stats,
     loading,
@@ -110,6 +122,9 @@ export function useStats(): StatsData {
     tier,
     tierProgress,
     nextTier,
+    // Tier-up celebration
+    pendingTierUp,
+    clearPendingTierUp: handleClearPendingTierUp,
     // Other stats
     dailyStreak,
     highScore,

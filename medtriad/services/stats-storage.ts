@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getTierForGames } from './mastery';
 
 const STATS_KEY = '@medtriad_stats';
 const HISTORY_KEY = '@medtriad_quiz_history';
@@ -14,6 +15,8 @@ export interface StoredStats {
   highScore: number;
   dailyStreak: number;
   lastPlayedDate: string | null;
+  // Tier-up celebration
+  pendingTierUp: { tier: number; name: string } | null;
 }
 
 export interface QuizHistoryEntry {
@@ -32,6 +35,7 @@ const DEFAULT_STATS: StoredStats = {
   highScore: 0,
   dailyStreak: 0,
   lastPlayedDate: null,
+  pendingTierUp: null,
 };
 
 /**
@@ -119,6 +123,11 @@ export async function updateAfterQuiz(
 ): Promise<StoredStats> {
   const currentStats = await loadStats();
 
+  // Check for tier-up BEFORE incrementing gamesPlayed
+  const tierBefore = getTierForGames(currentStats.gamesPlayed);
+  const tierAfter = getTierForGames(currentStats.gamesPlayed + 1);
+  const didTierUp = tierAfter.tier > tierBefore.tier;
+
   // Calculate streak
   const { newStreak } = calculateStreak(
     currentStats.dailyStreak,
@@ -135,6 +144,10 @@ export async function updateAfterQuiz(
     highScore: Math.max(currentStats.highScore, score),
     dailyStreak: newStreak,
     lastPlayedDate: new Date().toDateString(),
+    // Set pendingTierUp if tier-up occurred, otherwise preserve existing
+    pendingTierUp: didTierUp
+      ? { tier: tierAfter.tier, name: tierAfter.name }
+      : currentStats.pendingTierUp,
   };
 
   await saveStats(updatedStats);
@@ -159,6 +172,14 @@ export async function clearStats(): Promise<void> {
   } catch (error) {
     console.error('Failed to clear stats:', error);
   }
+}
+
+/**
+ * Clear the pending tier-up flag after celebration is shown
+ */
+export async function clearPendingTierUp(): Promise<void> {
+  const stats = await loadStats();
+  await saveStats({ ...stats, pendingTierUp: null });
 }
 
 /**
