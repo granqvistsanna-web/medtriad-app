@@ -240,15 +240,10 @@ export default function QuizScreen() {
         />
 
         {/* Question card */}
-        <View style={styles.questionSection}>
-          <Text style={[styles.identifyLabel, { color: colors.textMuted }]}>
-            IDENTIFY THE TRIAD
-          </Text>
-          <FindingsCard
-            findings={currentQuestion.triad.findings}
-            category={currentQuestion.triad.category}
-          />
-        </View>
+        <FindingsCard
+          findings={currentQuestion.triad.findings}
+          category={currentQuestion.triad.category}
+        />
 
         {/* Answer buttons */}
         <View style={styles.answersSection}>
@@ -322,20 +317,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
-    gap: Spacing.md,
-  },
-  questionSection: {
     gap: Spacing.sm,
-  },
-  identifyLabel: {
-    ...Typography.tiny,
-    textTransform: 'uppercase',
-    letterSpacing: 1.5,
-    textAlign: 'center',
   },
   answersSection: {
-    flex: 1,
-    justifyContent: 'center',
-    gap: Spacing.sm,
+    gap: 10,
+    marginTop: Spacing.base,
   },
 });

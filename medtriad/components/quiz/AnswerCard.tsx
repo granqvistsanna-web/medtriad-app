@@ -1,4 +1,4 @@
-import { StyleSheet, Text, type ViewStyle, Pressable } from 'react-native';
+import { StyleSheet, Text, View, type ViewStyle, Pressable } from 'react-native';
 import { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -7,7 +7,8 @@ import Animated, {
   withSequence,
   FadeInUp,
 } from 'react-native-reanimated';
-import { Colors, Typography, Radius, Spacing, Durations, Easings } from '@/constants/theme';
+import { Colors, Typography, Radius, Spacing, Durations, Easings, Shadows } from '@/constants/theme';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 
 type AnswerState = 'default' | 'correct' | 'incorrect' | 'revealed' | 'faded';
 
@@ -68,14 +69,29 @@ export function AnswerCard({
     scale.value = withSpring(1, Easings.press);
   };
 
+  const getLeftBorderColor = () => {
+    switch (state) {
+      case 'correct':
+        return colors.success;
+      case 'incorrect':
+        return colors.error;
+      case 'revealed':
+        return colors.success;
+      case 'faded':
+        return colors.border;
+      default:
+        return colors.primary; // Teal accent for default - signals "tap me"
+    }
+  };
+
   const getBorderWidth = () => {
     switch (state) {
       case 'correct':
       case 'incorrect':
       case 'revealed':
-        return 3; // Thicker for visibility
-      default:
         return 2;
+      default:
+        return 1;
     }
   };
 
@@ -133,10 +149,13 @@ export function AnswerCard({
       entering={FadeInUp.delay(delay).duration(Durations.normal).springify()}
       style={[
         styles.card,
+        Shadows.light.sm,
         {
           backgroundColor: getBackgroundColor(),
           borderColor: getBorderColor(),
           borderWidth: getBorderWidth(),
+          borderLeftWidth: 5,
+          borderLeftColor: getLeftBorderColor(),
           opacity: state === 'faded' ? 0.4 : (disabled && state === 'default' ? 0.4 : 1),
         },
         animatedStyle,
@@ -150,23 +169,33 @@ export function AnswerCard({
       >
         {condition}
       </Text>
+      {state === 'default' && (
+        <View style={styles.chevronContainer}>
+          <IconSymbol name="chevron.right" size={16} color={colors.textMuted} />
+        </View>
+      )}
     </AnimatedPressable>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    height: 48,
-    borderRadius: Radius.md,
+    height: 58,
+    borderRadius: 14,
     paddingHorizontal: Spacing.base,
+    paddingLeft: Spacing.base,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   text: {
     ...Typography.label,
-    fontSize: 15,
-    textAlign: 'center',
+    fontSize: 17,
+    textAlign: 'left',
     flex: 1,
+  },
+  chevronContainer: {
+    marginLeft: Spacing.sm,
+    opacity: 0.5,
   },
 });

@@ -15,7 +15,9 @@ export function FindingsCard({ findings, category }: FindingsCardProps) {
       style={[
         styles.card,
         {
-          backgroundColor: colors.backgroundSecondary,
+          backgroundColor: colors.primaryLight,
+          borderWidth: 1,
+          borderColor: colors.border,
         },
       ]}
     >
@@ -29,18 +31,18 @@ export function FindingsCard({ findings, category }: FindingsCardProps) {
         </Animated.Text>
       )}
 
-      {/* Findings as pills */}
+      {/* Findings as compact pills */}
       <View style={styles.findingsContainer}>
         {findings.map((finding, index) => (
           <Animated.View
             key={index}
             entering={FadeInUp.delay(index * Durations.stagger).duration(Durations.normal).springify()}
-            style={[styles.findingPill, { backgroundColor: colors.primaryLight }]}
+            style={[styles.findingPill, { borderColor: colors.border }]}
           >
             <View style={[styles.numberBadge, { backgroundColor: colors.primary }]}>
               <Text style={[styles.number, { color: colors.textInverse }]}>{index + 1}</Text>
             </View>
-            <Text style={[styles.finding, { color: colors.text }]} numberOfLines={2}>
+            <Text style={[styles.finding, { color: colors.textSecondary }]} numberOfLines={2}>
               {finding}
             </Text>
           </Animated.View>
@@ -52,42 +54,44 @@ export function FindingsCard({ findings, category }: FindingsCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: Radius.lg,
-    padding: Spacing.base,
-    gap: Spacing.sm,
+    borderRadius: Radius.md,
+    padding: Spacing.md,
+    gap: Spacing.xs,
   },
   category: {
     ...Typography.tiny,
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 1.5,
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 1.2,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.xs,
   },
   findingsContainer: {
-    gap: Spacing.sm,
+    gap: 6,
   },
   findingPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: Radius.md,
-    padding: Spacing.sm,
-    paddingRight: Spacing.md,
+    borderRadius: Radius.sm,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     gap: Spacing.sm,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderWidth: 1,
   },
   numberBadge: {
-    width: 24,
-    height: 24,
+    width: 22,
+    height: 22,
     borderRadius: Radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
   number: {
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   finding: {
-    ...Typography.caption,
+    fontSize: 14,
     fontWeight: '500',
     flex: 1,
   },
