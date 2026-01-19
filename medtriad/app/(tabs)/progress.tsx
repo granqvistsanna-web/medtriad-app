@@ -6,31 +6,23 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { StatsCard } from '@/components/progress/StatsCard';
 import { QuizHistoryList } from '@/components/progress/QuizHistoryList';
-import {
-  loadStats,
-  loadQuizHistory,
-  getAccuracy,
-  StoredStats,
-  QuizHistoryEntry,
-} from '@/services/stats-storage';
+import { TierProgressBar } from '@/components/progress/TierProgressBar';
+import { useStats } from '@/hooks/useStats';
+import { loadQuizHistory, QuizHistoryEntry } from '@/services/stats-storage';
 import { Colors, Typography, Spacing, Durations } from '@/constants/theme';
 
 export default function ProgressScreen() {
   const colors = Colors.light;
-  const [stats, setStats] = useState<StoredStats | null>(null);
+  const { stats, loading, tier, tierProgress, nextTier, accuracy, refresh } = useStats();
   const [history, setHistory] = useState<QuizHistoryEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [historyLoading, setHistoryLoading] = useState(true);
 
-  // Load data on mount
+  // Load history on mount
   useEffect(() => {
     const load = async () => {
-      const [loadedStats, loadedHistory] = await Promise.all([
-        loadStats(),
-        loadQuizHistory(),
-      ]);
-      setStats(loadedStats);
+      const loadedHistory = await loadQuizHistory();
       setHistory(loadedHistory);
-      setIsLoading(false);
+      setHistoryLoading(false);
     };
     load();
   }, []);
@@ -39,18 +31,15 @@ export default function ProgressScreen() {
   useFocusEffect(
     useCallback(() => {
       const reload = async () => {
-        const [loadedStats, loadedHistory] = await Promise.all([
-          loadStats(),
-          loadQuizHistory(),
-        ]);
-        setStats(loadedStats);
+        await refresh();
+        const loadedHistory = await loadQuizHistory();
         setHistory(loadedHistory);
       };
       reload();
-    }, [])
+    }, [refresh])
   );
 
-  if (isLoading || !stats) {
+  if (loading || historyLoading || !stats) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.loadingContainer} />
@@ -58,7 +47,10 @@ export default function ProgressScreen() {
     );
   }
 
-  const accuracy = getAccuracy(stats);
+  // Games needed to reach next tier (only show if not at max tier)
+  const gamesToNext = nextTier
+    ? nextTier.gamesRequired - stats.gamesPlayed
+    : 0;
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -74,9 +66,25 @@ export default function ProgressScreen() {
           Progress
         </Animated.Text>
 
-        {/* Section header */}
+        {/* Tier Header */}
         <Animated.View
           entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}
+          style={styles.tierHeader}
+        >
+          <Text style={[styles.tierName, { color: colors.text }]}>
+            {tier.name}
+          </Text>
+          <Text style={[styles.tierSubtext, { color: colors.textMuted }]}>
+            {nextTier
+              ? `${gamesToNext} ${gamesToNext === 1 ? 'game' : 'games'} to ${nextTier.name}`
+              : 'Mastery achieved'}
+          </Text>
+          <TierProgressBar progress={tierProgress} />
+        </Animated.View>
+
+        {/* Section header */}
+        <Animated.View
+          entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
           style={styles.sectionHeader}
         >
           <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>YOUR STATS</Text>
@@ -85,7 +93,7 @@ export default function ProgressScreen() {
 
         {/* Stats Grid - 2x2 */}
         <Animated.View
-          entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
+          entering={FadeInUp.delay(Durations.stagger * 3).duration(Durations.normal).springify()}
           style={styles.statsGrid}
         >
           <View style={styles.statsRow}>
@@ -120,7 +128,7 @@ export default function ProgressScreen() {
 
         {/* Quiz History */}
         <Animated.View
-          entering={FadeInUp.delay(Durations.stagger * 3).duration(Durations.normal).springify()}
+          entering={FadeInUp.delay(Durations.stagger * 4).duration(Durations.normal).springify()}
           style={styles.historySection}
         >
           <QuizHistoryList history={history} />
@@ -148,6 +156,15 @@ const styles = StyleSheet.create({
   },
   title: {
     ...Typography.title,
+  },
+  tierHeader: {
+    gap: Spacing.sm,
+  },
+  tierName: {
+    ...Typography.heading,
+  },
+  tierSubtext: {
+    ...Typography.footnote,
   },
   sectionHeader: {
     flexDirection: 'row',
