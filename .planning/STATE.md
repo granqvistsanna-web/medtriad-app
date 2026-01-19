@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-18)
 ## Current Position
 
 Phase: 11 of 15 (Level System)
-Plan: 1 of ? in current phase
+Plan: 2 of ? in current phase
 Status: In progress
-Last activity: 2026-01-19 - Completed 11-01-PLAN.md
+Last activity: 2026-01-19 - Completed 11-02-PLAN.md
 
-Progress: [#######...] 75% (v1.0 complete, Phases 9-10 complete, Phase 11 plan 01 done)
+Progress: [#######...] 76% (v1.0 complete, Phases 9-10 complete, Phase 11 plans 01-02 done)
 
 ## Performance Metrics
 
@@ -25,7 +25,7 @@ Progress: [#######...] 75% (v1.0 complete, Phases 9-10 complete, Phase 11 plan 0
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 11
+- Plans completed: 12
 - Phases completed: 2 (9, 10)
 - Phases remaining: 5 (11-15)
 - Requirements: 21 total, 8 complete
@@ -71,6 +71,11 @@ Phase 11 decisions (Plan 01):
 - Legacy mastery functions kept with @deprecated for backward compat
 - TierProgressBar height 4px per CONTEXT.md thin style
 
+Phase 11 decisions (Plan 02):
+- Progress screen tier header: name (Typography.heading), subtext (games to next), TierProgressBar
+- Results screen: simple "Playing as [TierName]" in mastery badge
+- Singular/plural grammar: "1 game" vs "X games" to next tier
+
 ### Pending Todos
 
 None.
@@ -82,14 +87,14 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 11-01-PLAN.md (Tier Core System)
+Stopped at: Completed 11-02-PLAN.md (Screen Integration)
 Resume file: None
 
 ## Next Steps
 
-Plan 11-01 complete. Tier logic and TierProgressBar component ready.
+Phase 11 plans 01-02 complete. Tier system now visible on Progress and Results screens.
 
-Continue to Plan 11-02 to integrate tier display into Results and Progress screens.
+Continue Phase 11 if more plans exist, or proceed to Phase 12 (Home Hero) to display tier prominently on Home screen.
 
 ---
-*Updated: 2026-01-19 after 11-01-PLAN.md completion*
+*Updated: 2026-01-19 after 11-02-PLAN.md completion*
