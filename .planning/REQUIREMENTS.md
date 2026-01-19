@@ -51,11 +51,11 @@ Requirements for Polish & Progression release.
 
 ### Quiz Mode UX
 
-- [ ] **QUIZ-01**: Symptoms card visually elevated from answer options
-- [ ] **QUIZ-02**: "IDENTIFY THE TRIAD" label appears above symptoms
-- [ ] **QUIZ-03**: No text-based "Correct!"/"Incorrect!" feedback at bottom
-- [ ] **QUIZ-04**: Answer feedback via button color only (green/red fill)
-- [ ] **QUIZ-05**: All quiz content fits on screen without scrolling
+- [x] **QUIZ-01**: Symptoms card visually elevated from answer options
+- [x] **QUIZ-02**: "IDENTIFY THE TRIAD" label appears above symptoms
+- [x] **QUIZ-03**: No text-based "Correct!"/"Incorrect!" feedback at bottom
+- [x] **QUIZ-04**: Answer feedback via button color only (green/red fill)
+- [x] **QUIZ-05**: All quiz content fits on screen without scrolling
 
 ## v3.0 Requirements
 
@@ -109,11 +109,11 @@ Deferred to future release.
 | SHARE-01 | Phase 15 | Complete |
 | SHARE-02 | Phase 15 | Complete |
 | SHARE-03 | Phase 15 | Complete |
-| QUIZ-01 | Phase 16 | Planned |
-| QUIZ-02 | Phase 16 | Planned |
-| QUIZ-03 | Phase 16 | Planned |
-| QUIZ-04 | Phase 16 | Planned |
-| QUIZ-05 | Phase 16 | Planned |
+| QUIZ-01 | Phase 16 | Complete |
+| QUIZ-02 | Phase 16 | Complete |
+| QUIZ-03 | Phase 16 | Complete |
+| QUIZ-04 | Phase 16 | Complete |
+| QUIZ-05 | Phase 16 | Complete |
 
 **Coverage:**
 - v2.0 requirements: 26 total
@@ -122,4 +122,4 @@ Deferred to future release.
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 16 requirements added*
+*Last updated: 2026-01-19 - Phase 16 complete*

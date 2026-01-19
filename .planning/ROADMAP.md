@@ -30,7 +30,7 @@ evolving mascot, smooth onboarding, and shareability.
 - [x] **Phase 13: Onboarding** - New user introduction flow
 - [x] **Phase 14: Mascot Evolution** - Level-specific mascot images
 - [x] **Phase 15: Share Results** - Share score card after quiz
-- [ ] **Phase 16: Quiz Mode UX** - Improve visual hierarchy, remove distractions, no-scroll layout
+- [x] **Phase 16: Quiz Mode UX** - Improve visual hierarchy, remove distractions, no-scroll layout
 - [ ] **Phase 17: Developer Tools** - Debug onboarding and app states
 - [ ] **Phase 18: Error Handling** - Graceful failures throughout the app
 - [ ] **Phase 19: Performance** - Smooth, responsive experience
@@ -248,7 +248,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 16-01-PLAN.md — Visual hierarchy, feedback system, layout refinements
+- [x] 16-01-PLAN.md — Visual hierarchy, feedback system, layout refinements
 
 **Success Criteria**:
 1. Symptoms card visually elevated from answer options
@@ -336,7 +336,7 @@ Ideas parked for future development:
 | 13. Onboarding | v2.0 | Complete | 2026-01-19 |
 | 14. Mascot Evolution | v2.0 | Complete | 2026-01-19 |
 | 15. Share Results | v2.0 | Complete | 2026-01-19 |
-| 16. Quiz Mode UX | v2.0 | Not started | - |
+| 16. Quiz Mode UX | v2.0 | Complete | 2026-01-19 |
 | 17. Developer Tools | v2.0 | Not started | - |
 | 18. Error Handling | v2.0 | Not started | - |
 | 19. Performance | v2.0 | Not started | - |
@@ -344,5 +344,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 16 planned*
+*Last updated: 2026-01-19 - Phase 16 complete*
 *Current milestone: v2.0 Polish & Progression*
