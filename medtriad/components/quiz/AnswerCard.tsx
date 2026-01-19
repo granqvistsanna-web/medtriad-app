@@ -181,7 +181,7 @@ export function AnswerCard({
 const styles = StyleSheet.create({
   card: {
     height: 58,
-    borderRadius: 14,
+    borderRadius: Radius.md,
     paddingHorizontal: Spacing.base,
     paddingLeft: Spacing.base,
     flexDirection: 'row',
@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
   },
   text: {
     ...Typography.label,
-    fontSize: 17,
     textAlign: 'left',
     flex: 1,
   },

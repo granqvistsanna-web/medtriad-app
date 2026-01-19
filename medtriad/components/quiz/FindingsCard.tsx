@@ -60,21 +60,19 @@ const styles = StyleSheet.create({
   },
   category: {
     ...Typography.tiny,
-    fontSize: 11,
-    fontWeight: '600',
     letterSpacing: 1.2,
     textAlign: 'center',
     marginBottom: Spacing.xs,
   },
   findingsContainer: {
-    gap: 6,
+    gap: Spacing.sm,
   },
   findingPill: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: Radius.sm,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
     gap: Spacing.sm,
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     borderWidth: 1,
@@ -87,11 +85,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   number: {
-    fontSize: 12,
+    ...Typography.footnote,
     fontWeight: '600',
   },
   finding: {
-    fontSize: 14,
+    ...Typography.footnote,
     fontWeight: '500',
     flex: 1,
   },
