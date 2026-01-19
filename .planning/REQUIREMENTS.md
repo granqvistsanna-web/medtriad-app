@@ -59,10 +59,10 @@ Requirements for Polish & Progression release.
 
 ### Developer Tools
 
-- [ ] **DEV-01**: Dev menu only accessible in DEBUG builds (__DEV__)
-- [ ] **DEV-02**: Reset onboarding state without reinstalling app
-- [ ] **DEV-03**: Set user to any tier level for testing
-- [ ] **DEV-04**: Clear all app data with confirmation dialog
+- [x] **DEV-01**: Dev menu only accessible in DEBUG builds (__DEV__)
+- [x] **DEV-02**: Reset onboarding state without reinstalling app
+- [x] **DEV-03**: Set user to any tier level for testing
+- [x] **DEV-04**: Clear all app data with confirmation dialog
 
 ## v3.0 Requirements
 
@@ -121,10 +121,10 @@ Deferred to future release.
 | QUIZ-03 | Phase 16 | Complete |
 | QUIZ-04 | Phase 16 | Complete |
 | QUIZ-05 | Phase 16 | Complete |
-| DEV-01 | Phase 18 | Planned |
-| DEV-02 | Phase 18 | Planned |
-| DEV-03 | Phase 18 | Planned |
-| DEV-04 | Phase 18 | Planned |
+| DEV-01 | Phase 18 | Complete |
+| DEV-02 | Phase 18 | Complete |
+| DEV-03 | Phase 18 | Complete |
+| DEV-04 | Phase 18 | Complete |
 
 **Coverage:**
 - v2.0 requirements: 30 total
@@ -133,4 +133,4 @@ Deferred to future release.
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 18 requirements added*
+*Last updated: 2026-01-19 - Phase 18 complete*
