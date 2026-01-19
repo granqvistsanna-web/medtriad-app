@@ -125,7 +125,13 @@ export function HeroCard({
       >
         {/* Mascot centered at top */}
         <View style={styles.mascotContainer}>
-          <TriMascot mood={mascotMood} size="lg" masteryLevel={masteryLevel} />
+          <TriMascot
+            mood={mascotMood}
+            size="lg"
+            masteryLevel={masteryLevel}
+            tier={tier.tier}
+            context="home"
+          />
         </View>
 
         {/* Tier section below mascot */}
@@ -156,9 +162,8 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     borderRadius: Radius.xl,
-    paddingVertical: Spacing.xl,
+    paddingVertical: Spacing.lg,
     paddingHorizontal: Spacing.lg,
-    gap: Spacing.md,
   },
   mascotContainer: {
     alignItems: 'center',
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
   tierContainer: {
     alignItems: 'center',
     marginTop: Spacing.sm,
+    marginBottom: Spacing.md,
   },
   content: {
     alignItems: 'center',
