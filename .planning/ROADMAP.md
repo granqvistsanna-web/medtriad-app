@@ -29,7 +29,7 @@ evolving mascot, smooth onboarding, and shareability.
 - [x] **Phase 12: Levels on Hero** - Show current tier prominently on Home screen
 - [x] **Phase 13: Onboarding** - New user introduction flow
 - [x] **Phase 14: Mascot Evolution** - Level-specific mascot images
-- [ ] **Phase 15: Share Results** - Share score card after quiz
+- [x] **Phase 15: Share Results** - Share score card after quiz
 - [ ] **Phase 16: Quiz Mode UX** - Improve visual hierarchy, remove distractions, no-scroll layout
 - [ ] **Phase 17: Developer Tools** - Debug onboarding and app states
 - [ ] **Phase 18: Error Handling** - Graceful failures throughout the app
@@ -225,8 +225,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 15-01-PLAN.md — Core share infrastructure (dependencies, ShareCard component, useShareCard hook)
-- [ ] 15-02-PLAN.md — Results screen integration (share button, hidden capture card)
+- [x] 15-01-PLAN.md — Core share infrastructure (dependencies, ShareCard component, useShareCard hook)
+- [x] 15-02-PLAN.md — Results screen integration (share button, hidden capture card)
 
 **Success Criteria**:
 1. Results screen has share button
@@ -330,7 +330,7 @@ Ideas parked for future development:
 | 12. Levels on Hero | v2.0 | Complete | 2026-01-19 |
 | 13. Onboarding | v2.0 | Complete | 2026-01-19 |
 | 14. Mascot Evolution | v2.0 | Complete | 2026-01-19 |
-| 15. Share Results | v2.0 | Not started | - |
+| 15. Share Results | v2.0 | Complete | 2026-01-19 |
 | 16. Quiz Mode UX | v2.0 | Not started | - |
 | 17. Developer Tools | v2.0 | Not started | - |
 | 18. Error Handling | v2.0 | Not started | - |
@@ -339,5 +339,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 15 planned*
+*Last updated: 2026-01-19 - Phase 15 complete*
 *Current milestone: v2.0 Polish & Progression*

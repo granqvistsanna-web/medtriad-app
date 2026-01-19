@@ -150,7 +150,7 @@ Phase 15 (Share Results) complete:
 
 Ready for Phase 16 (Quiz Mode UX).
 
-Run `/gsd:execute-phase 16` to continue.
+Run `/gsd:plan-phase 16` to plan the Quiz Mode UX phase.
 
 ---
 *Updated: 2026-01-19 after 15-02 execution complete*

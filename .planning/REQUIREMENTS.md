@@ -45,9 +45,9 @@ Requirements for Polish & Progression release.
 
 ### Share Results
 
-- [ ] **SHARE-01**: Results screen has share button
-- [ ] **SHARE-02**: Share generates styled image card with score, tier, and mascot
-- [ ] **SHARE-03**: Native iOS share sheet opens with image
+- [x] **SHARE-01**: Results screen has share button
+- [x] **SHARE-02**: Share generates styled image card with score, tier, and mascot
+- [x] **SHARE-03**: Native iOS share sheet opens with image
 
 ## v3.0 Requirements
 
@@ -96,11 +96,11 @@ Deferred to future release.
 | ONBD-01 | Phase 13 | Complete |
 | ONBD-02 | Phase 13 | Complete |
 | ONBD-03 | Phase 13 | Complete |
-| MASC-01 | Phase 14 | Pending |
-| MASC-02 | Phase 14 | Pending |
-| SHARE-01 | Phase 15 | Pending |
-| SHARE-02 | Phase 15 | Pending |
-| SHARE-03 | Phase 15 | Pending |
+| MASC-01 | Phase 14 | Complete |
+| MASC-02 | Phase 14 | Complete |
+| SHARE-01 | Phase 15 | Complete |
+| SHARE-02 | Phase 15 | Complete |
+| SHARE-03 | Phase 15 | Complete |
 
 **Coverage:**
 - v2.0 requirements: 21 total
@@ -109,4 +109,4 @@ Deferred to future release.
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-19 after Phase 13 completion*
+*Last updated: 2026-01-19 after Phase 15 completion*
