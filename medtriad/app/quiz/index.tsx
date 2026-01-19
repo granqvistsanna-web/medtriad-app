@@ -250,6 +250,9 @@ export default function QuizScreen() {
 
         {/* Question card */}
         <View style={styles.questionSection}>
+          <Text style={[styles.identifyLabel, { color: colors.textMuted }]}>
+            IDENTIFY THE TRIAD
+          </Text>
           <FindingsCard
             findings={currentQuestion.triad.findings}
             category={currentQuestion.triad.category}
@@ -350,7 +353,13 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   questionSection: {
-    // Takes natural height
+    gap: Spacing.sm,
+  },
+  identifyLabel: {
+    ...Typography.tiny,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    textAlign: 'center',
   },
   answersSection: {
     flex: 1,

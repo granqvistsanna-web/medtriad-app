@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, type ViewStyle, Pressable } from 'react-native';
+import { StyleSheet, Text, type ViewStyle, Pressable } from 'react-native';
 import { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -9,7 +9,6 @@ import Animated, {
   FadeInUp,
 } from 'react-native-reanimated';
 import { Colors, Typography, Radius, Spacing, Durations, Easings } from '@/constants/theme';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 
 type AnswerState = 'default' | 'correct' | 'incorrect' | 'revealed' | 'faded';
 
@@ -127,19 +126,6 @@ export function AnswerCard({
     }
   };
 
-  const getIcon = () => {
-    switch (state) {
-      case 'correct':
-        return 'checkmark';
-      case 'incorrect':
-        return 'xmark';
-      default:
-        return null;
-    }
-  };
-
-  const icon = getIcon();
-
   return (
     <AnimatedPressable
       onPress={onPress}
@@ -166,15 +152,6 @@ export function AnswerCard({
       >
         {condition}
       </Text>
-      {icon && (
-        <View style={styles.iconContainer}>
-          <IconSymbol
-            name={icon as any}
-            size={18}
-            color={state === 'correct' ? colors.success : colors.error}
-          />
-        </View>
-      )}
     </AnimatedPressable>
   );
 }
@@ -193,8 +170,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     flex: 1,
-  },
-  iconContainer: {
-    marginLeft: Spacing.sm,
   },
 });
