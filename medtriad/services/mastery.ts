@@ -86,6 +86,25 @@ export function getProgressToNextTier(gamesPlayed: number): number {
   return gamesInCurrentTier / gamesNeededForNext;
 }
 
+/**
+ * Check if completing the next game will trigger a tier-up
+ * Call BEFORE incrementing gamesPlayed to avoid race condition
+ * @param gamesPlayedBefore - Current gamesPlayed count (before this game)
+ * @returns Object with willTierUp flag and newTier if applicable
+ */
+export function checkTierUp(
+  gamesPlayedBefore: number
+): { willTierUp: boolean; newTier: TierDefinition | null } {
+  const gamesPlayedAfter = gamesPlayedBefore + 1;
+  const tierBefore = getTierForGames(gamesPlayedBefore);
+  const tierAfter = getTierForGames(gamesPlayedAfter);
+
+  return {
+    willTierUp: tierAfter.tier > tierBefore.tier,
+    newTier: tierAfter.tier > tierBefore.tier ? tierAfter : null,
+  };
+}
+
 // ============================================
 // LEGACY SYSTEM (Question-based)
 // @deprecated - Keep for Home screen/MasteryBar until Phase 12
