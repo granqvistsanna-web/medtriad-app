@@ -188,6 +188,13 @@ Plans:
 
 **Requirements**: MASC-01, MASC-02
 
+**Plans:** 3 plans
+
+Plans:
+- [ ] 14-01-PLAN.md — Tier-based mascot foundation (checkTierUp helper, TIER_IMAGES map, tier prop)
+- [ ] 14-02-PLAN.md — Tier-up detection and celebration (pendingTierUp storage, TierUpCelebration component)
+- [ ] 14-03-PLAN.md — Catch-up celebration on Home (glow effect for missed tier-ups)
+
 **Mascot Accessories by Tier**:
 
 | Tier | Name | Mascot Accessory |
@@ -316,7 +323,7 @@ Ideas parked for future development:
 | 11. Level System | v2.0 | Complete | 2026-01-19 |
 | 12. Levels on Hero | v2.0 | Complete | 2026-01-19 |
 | 13. Onboarding | v2.0 | Complete | 2026-01-19 |
-| 14. Mascot Evolution | v2.0 | Not started | - |
+| 14. Mascot Evolution | v2.0 | Planned | - |
 | 15. Share Results | v2.0 | Not started | - |
 | 16. Quiz Mode UX | v2.0 | Not started | - |
 | 17. Developer Tools | v2.0 | Not started | - |
@@ -326,5 +333,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 13 complete*
+*Last updated: 2026-01-19 - Phase 14 planned*
 *Current milestone: v2.0 Polish & Progression*
