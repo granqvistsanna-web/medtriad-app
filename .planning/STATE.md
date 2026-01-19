@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 14 in progress
+**Current focus:** v2.0 Polish & Progression - Phase 14 complete
 
 ## Current Position
 
 Phase: 14 of 19 (Mascot Evolution)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-01-19 - Completed 14-01-PLAN.md
+Plan: 2 of 2 in current phase (COMPLETE)
+Status: Phase complete
+Last activity: 2026-01-19 - Completed 14-02-PLAN.md
 
-Progress: [########..] 69% (v1.0 complete, Phases 9-13 complete, 14-01 complete)
+Progress: [########..] 73% (v1.0 complete, Phases 9-14 complete)
 
 ## Performance Metrics
 
@@ -25,10 +25,10 @@ Progress: [########..] 69% (v1.0 complete, Phases 9-13 complete, 14-01 complete)
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 15
-- Phases completed: 5 (9, 10, 11, 12, 13)
-- Phases remaining: 6 (14-19)
-- Requirements: 21+ total, 15 complete
+- Plans completed: 17
+- Phases completed: 6 (9, 10, 11, 12, 13, 14)
+- Phases remaining: 5 (15-19)
+- Requirements: 21+ total, 17 complete
 
 ### Roadmap Evolution
 
@@ -102,6 +102,13 @@ Phase 14 decisions (Plan 01):
 - TIER_IMAGES object with static requires for Metro bundler
 - checkTierUp helper for tier boundary detection
 
+Phase 14 decisions (Plan 02):
+- pendingTierUp stored in AsyncStorage persists for catch-up celebrations
+- Tier-up detection happens BEFORE recording quiz result to avoid race condition
+- TierUpCelebration uses scale out/in mascot transition with confetti at midpoint
+- Perfect round confetti disabled when tier-up celebration is showing
+- Celebration sequence: delay -> scale out -> state change -> confetti -> scale in -> message
+
 ### Pending Todos
 
 None.
@@ -113,14 +120,14 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 14-01-PLAN.md
+Stopped at: Completed 14-02-PLAN.md (Phase 14 complete)
 Resume file: None
 
 ## Next Steps
 
-Phase 14 Plan 01 (Mascot Foundation) complete. Ready for 14-02 (Celebration Animation).
+Phase 14 (Mascot Evolution) complete. Ready for Phase 15 (Share Feature).
 
-Run `/gsd:execute-phase 14-02` to continue mascot evolution.
+Run `/gsd:plan-phase 15` to plan the Share Feature phase.
 
 ---
-*Updated: 2026-01-19 after 14-01 execution complete*
+*Updated: 2026-01-19 after 14-02 execution complete*
