@@ -1,16 +1,98 @@
 /**
  * Mastery System
  *
- * Levels are earned by answering questions:
- * - 1 level per 10 questions answered
- * - Maximum level 10 (100 questions)
+ * NEW: 6-tier game-based progression system
+ * Tiers are earned by completing games (not questions):
+ * - Student: 0 games
+ * - Intern: 10 games
+ * - Resident: 25 games
+ * - Doctor: 50 games
+ * - Specialist: 100 games
+ * - Chief: 200 games
+ *
+ * LEGACY: Question-based system kept for backward compatibility
+ * (used by existing components until Plan 02 updates them)
  */
+
+// ============================================
+// NEW TIER SYSTEM (Game-based)
+// ============================================
+
+export interface TierDefinition {
+  tier: number;
+  name: string;
+  gamesRequired: number;
+}
+
+export const TIERS: TierDefinition[] = [
+  { tier: 1, name: 'Student', gamesRequired: 0 },
+  { tier: 2, name: 'Intern', gamesRequired: 10 },
+  { tier: 3, name: 'Resident', gamesRequired: 25 },
+  { tier: 4, name: 'Doctor', gamesRequired: 50 },
+  { tier: 5, name: 'Specialist', gamesRequired: 100 },
+  { tier: 6, name: 'Chief', gamesRequired: 200 },
+];
+
+/**
+ * Get the current tier based on games played
+ * Finds the highest tier where gamesRequired <= gamesPlayed
+ */
+export function getTierForGames(gamesPlayed: number): TierDefinition {
+  // Iterate from highest tier to lowest
+  for (let i = TIERS.length - 1; i >= 0; i--) {
+    if (gamesPlayed >= TIERS[i].gamesRequired) {
+      return TIERS[i];
+    }
+  }
+  return TIERS[0];
+}
+
+/**
+ * Get the next tier after the current one
+ * @param currentTierNumber - 1-indexed tier number
+ * @returns Next tier or null if at max
+ */
+export function getNextTier(currentTierNumber: number): TierDefinition | null {
+  const nextIndex = currentTierNumber; // tier is 1-indexed, array is 0-indexed
+  return nextIndex < TIERS.length ? TIERS[nextIndex] : null;
+}
+
+/**
+ * Get progress toward the next tier (0-1)
+ * Returns 1 if at max tier (Chief)
+ *
+ * Examples:
+ * - 0 games = Student, progress 0
+ * - 5 games = Student, progress 0.5 (halfway to Intern at 10)
+ * - 10 games = Intern, progress 0 (just reached Intern)
+ * - 199 games = Specialist, progress 0.99
+ * - 200 games = Chief, progress 1 (max tier, bar stays full)
+ */
+export function getProgressToNextTier(gamesPlayed: number): number {
+  const currentTier = getTierForGames(gamesPlayed);
+  const nextTier = getNextTier(currentTier.tier);
+
+  // At max tier, progress is always 1 (bar stays full)
+  if (!nextTier) return 1;
+
+  const gamesInCurrentTier = gamesPlayed - currentTier.gamesRequired;
+  const gamesNeededForNext = nextTier.gamesRequired - currentTier.gamesRequired;
+
+  return gamesInCurrentTier / gamesNeededForNext;
+}
+
+// ============================================
+// LEGACY SYSTEM (Question-based)
+// Keep for backward compatibility - used in components
+// until Plan 02 updates them
+// ============================================
 
 export const MAX_LEVEL = 10;
 export const QUESTIONS_PER_LEVEL = 10;
 export const MAX_QUESTIONS = MAX_LEVEL * QUESTIONS_PER_LEVEL; // 100
 
 /**
+ * @deprecated Use getTierForGames() instead
  * Calculate current mastery level from total questions answered
  * @returns Level 0-10
  */
@@ -21,6 +103,7 @@ export function calculateLevel(totalAnswered: number): number {
 }
 
 /**
+ * @deprecated Use getProgressToNextTier() instead
  * Get progress within current level (0-1)
  * Returns progress toward next level
  */
@@ -31,6 +114,7 @@ export function getProgressInLevel(totalAnswered: number): number {
 }
 
 /**
+ * @deprecated Tier system uses getProgressToNextTier() instead
  * Get questions needed to reach next level
  */
 export function getQuestionsToNextLevel(totalAnswered: number): number {
@@ -40,6 +124,7 @@ export function getQuestionsToNextLevel(totalAnswered: number): number {
 }
 
 /**
+ * @deprecated Tier system uses getProgressToNextTier() instead
  * Get total progress toward mastery (0-1)
  * Based on questions answered out of 100
  */
@@ -48,6 +133,7 @@ export function getTotalProgress(totalAnswered: number): number {
 }
 
 /**
+ * @deprecated Use tier.name from getTierForGames() instead
  * Get level title based on level number
  */
 export function getLevelTitle(level: number): string {
