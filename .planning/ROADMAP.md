@@ -3,7 +3,7 @@
 ## Milestones
 
 - [x] **v1.0 MVP** - Phases 1-8 (shipped 2026-01-18)
-- [ ] **v2.0 Polish & Progression** - Phases 9-15 (in progress)
+- [ ] **v2.0 Polish & Progression** - Phases 9-19 (in progress)
 - [ ] **v3.0 Engagement** - Future
 
 ## Phases
@@ -30,6 +30,10 @@ evolving mascot, smooth onboarding, and shareability.
 - [ ] **Phase 13: Onboarding** - New user introduction flow
 - [ ] **Phase 14: Mascot Evolution** - Level-specific mascot images
 - [ ] **Phase 15: Share Results** - Share score card after quiz
+- [ ] **Phase 16: Quiz Mode UX** - Improve visual hierarchy, remove distractions, no-scroll layout
+- [ ] **Phase 17: Developer Tools** - Debug onboarding and app states
+- [ ] **Phase 18: Error Handling** - Graceful failures throughout the app
+- [ ] **Phase 19: Performance** - Smooth, responsive experience
 
 ---
 
@@ -141,6 +145,11 @@ Plans:
 
 **Requirements**: HERO-01, HERO-02
 
+**Plans:** 1 plan
+
+Plans:
+- [ ] 12-01-PLAN.md — TierBadge, TierSection components, HeroCard integration
+
 **Success Criteria**:
 1. Home screen hero area shows current tier name
 2. Progress bar or indicator shows progress to next tier
@@ -210,6 +219,75 @@ Plans:
 
 ---
 
+### Phase 16: Quiz Mode UX
+
+**Goal**: Improve quiz visual hierarchy and remove distractions
+
+**Depends on**: Phase 15
+
+**Requirements**: QUIZ-01, QUIZ-02, QUIZ-03, QUIZ-04, QUIZ-05
+
+**Success Criteria**:
+1. Symptoms card visually elevated from answer options
+2. "IDENTIFY THE TRIAD" label above symptoms
+3. Remove "Correct!"/"Incorrect!" text feedback at bottom
+4. Answer feedback via button color only
+5. All content fits on screen without scrolling
+6. Dynamic layout adapts to screen sizes
+
+---
+
+### Phase 17: Developer Tools
+
+**Goal**: Enable efficient testing and debugging
+
+**Depends on**: Phase 16
+
+**Requirements**: DEV-01, DEV-02, DEV-03, DEV-04
+
+**Success Criteria**:
+1. Dev menu only accessible in DEBUG builds
+2. Reset onboarding without reinstalling
+3. Set user to any level for testing
+4. Clear all user data with confirmation
+5. Simulate error states for testing
+
+---
+
+### Phase 18: Error Handling
+
+**Goal**: App never crashes, fails gracefully
+
+**Depends on**: Phase 17
+
+**Requirements**: ERR-01, ERR-02, ERR-03, ERR-04
+
+**Success Criteria**:
+1. All asset loads have fallbacks
+2. UserDefaults access never crashes
+3. Invalid state clamped to valid ranges
+4. User-friendly error messages (no technical jargon)
+5. App never crashes from data issues
+
+---
+
+### Phase 19: Performance
+
+**Goal**: Smooth, responsive experience
+
+**Depends on**: Phase 18
+
+**Requirements**: PERF-01, PERF-02, PERF-03, PERF-04
+
+**Success Criteria**:
+1. Cold launch < 1.5s to interactive
+2. Quiz loads instantly (< 100ms)
+3. No dropped frames during animations
+4. Memory stays under 100MB
+5. Smooth on oldest supported device
+
+---
+
 ## v3.0 Engagement (Future)
 
 Ideas parked for future development:
@@ -231,13 +309,17 @@ Ideas parked for future development:
 | 9. UI Polish | v2.0 | Complete | 2026-01-18 |
 | 10. Refine Visuals & Motion | v2.0 | Complete | 2026-01-18 |
 | 11. Level System | v2.0 | Complete | 2026-01-19 |
-| 12. Levels on Hero | v2.0 | Not started | - |
+| 12. Levels on Hero | v2.0 | Planned | - |
 | 13. Onboarding | v2.0 | Not started | - |
 | 14. Mascot Evolution | v2.0 | Not started | - |
 | 15. Share Results | v2.0 | Not started | - |
+| 16. Quiz Mode UX | v2.0 | Not started | - |
+| 17. Developer Tools | v2.0 | Not started | - |
+| 18. Error Handling | v2.0 | Not started | - |
+| 19. Performance | v2.0 | Not started | - |
 
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 after Phase 11 execution*
+*Last updated: 2026-01-19 - Phase 12 planned*
 *Current milestone: v2.0 Polish & Progression*
