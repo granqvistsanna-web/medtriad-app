@@ -11,6 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { MascotSizes, Colors } from '@/constants/theme';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export type MascotMood = 'neutral' | 'happy' | 'reassuring' | 'streak' | 'tierUp';
 export type MascotSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -44,6 +45,7 @@ const TIER_IMAGES: Record<number, ReturnType<typeof require>> = {
 export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, masteryLevel = 0, tier, context }: TriMascotProps) {
   const colors = Colors.light;
   const pixelSize = MascotSizes[size];
+  const reduceMotion = useReducedMotion();
 
   // Animation values
   const breathe = useSharedValue(0);
@@ -68,6 +70,18 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
   useEffect(() => {
     if (!animate) return;
 
+    // Reduced motion: skip continuous animations, use simple fades
+    if (reduceMotion) {
+      breathe.value = 0;
+      float.value = 0;
+      rise.value = mood === 'happy' ? 1 : 0;
+      // Static glow for streak/tierUp moods (no pulsing)
+      glow.value = (mood === 'streak' || mood === 'tierUp')
+        ? withTiming(0.6, { duration: 300 })
+        : withTiming(0, { duration: 150 });
+      return;
+    }
+
     // Breathing animation - subtle scale pulse
     breathe.value = withRepeat(
       withSequence(
@@ -90,11 +104,11 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
       );
     }
 
-    // Rise animation for happy mood
+    // Rise animation for happy mood (tuned spring: damping 20, stiffness 90)
     if (mood === 'happy') {
-      rise.value = withSpring(1, { damping: 12, stiffness: 100 });
+      rise.value = withSpring(1, { damping: 20, stiffness: 90 });
     } else {
-      rise.value = withSpring(0, { damping: 12, stiffness: 100 });
+      rise.value = withSpring(0, { damping: 20, stiffness: 90 });
     }
 
     // Glow animation for streak (infinite) or tierUp (finite)
@@ -120,9 +134,16 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
     } else {
       glow.value = withTiming(0, { duration: 300 });
     }
-  }, [mood, animate]);
+  }, [mood, animate, reduceMotion]);
 
   const animatedStyle = useAnimatedStyle(() => {
+    // Reduced motion: no scale/translate, just static
+    if (reduceMotion) {
+      return {
+        transform: [{ scale: 1 }, { translateY: 0 }],
+      };
+    }
+
     const breatheScale = interpolate(breathe.value, [0, 1], [1, 1.03]);
     const floatY = interpolate(float.value, [0, 1], [0, -8]);
     const riseY = interpolate(rise.value, [0, 1], [0, -6]);

@@ -16,6 +16,7 @@ import { TriMascot } from '@/components/home/TriMascot';
 import { HighScoreBadge } from '@/components/results/HighScoreBadge';
 import { TierUpCelebration } from '@/components/results/TierUpCelebration';
 import { useStats } from '@/hooks/useStats';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { saveQuizHistory } from '@/services/stats-storage';
 import { Colors, Typography, Spacing, Radius, Durations, Easings } from '@/constants/theme';
 import { QUESTION_COUNT } from '@/types/quiz-state';
@@ -49,6 +50,7 @@ export default function ResultsScreen() {
   const { stats, tier, nextTier, clearPendingTierUp } = useStats();
   const { width } = useWindowDimensions();
   const confettiRef = useRef<ConfettiCannon>(null);
+  const reduceMotion = useReducedMotion();
 
   const params = useLocalSearchParams<ResultsParams>();
 
@@ -81,15 +83,16 @@ export default function ResultsScreen() {
   }, [score, correctCount]);
 
   // Trigger confetti for perfect rounds (only if not showing tier-up celebration)
+  // Skip confetti for users with reduced motion preference
   useEffect(() => {
-    if (isPerfect && !tierUp) {
+    if (isPerfect && !tierUp && !reduceMotion) {
       // Delay to let count-up animation finish
       const timeout = setTimeout(() => {
         confettiRef.current?.start();
       }, 1200); // After 1s count-up + 200ms buffer
       return () => clearTimeout(timeout);
     }
-  }, [isPerfect, tierUp]);
+  }, [isPerfect, tierUp, reduceMotion]);
 
   // Score settle animation after count-up completes
   const scoreScale = useSharedValue(1);
@@ -225,8 +228,8 @@ export default function ResultsScreen() {
         />
       </Animated.View>
 
-      {/* Confetti for perfect rounds */}
-      {isPerfect && (
+      {/* Confetti for perfect rounds (skip for reduced motion users) */}
+      {isPerfect && !reduceMotion && (
         <ConfettiCannon
           ref={confettiRef}
           count={150}

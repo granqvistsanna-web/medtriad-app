@@ -10,6 +10,7 @@ import Animated, {
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { TriMascot } from '@/components/home/TriMascot';
 import { Colors, Typography, Spacing, Easings } from '@/constants/theme';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 type TierUpCelebrationProps = {
   oldTier: number;
@@ -27,6 +28,7 @@ export function TierUpCelebration({
   const colors = Colors.light;
   const { width } = useWindowDimensions();
   const confettiRef = useRef<ConfettiCannon>(null);
+  const reduceMotion = useReducedMotion();
 
   // Track which tier image to display
   const [displayedTier, setDisplayedTier] = useState(oldTier);
@@ -34,43 +36,70 @@ export function TierUpCelebration({
 
   // Animation values
   const mascotScale = useSharedValue(1);
+  const mascotOpacity = useSharedValue(1); // For reduced motion cross-fade
   const messageOpacity = useSharedValue(0);
 
   const triggerConfetti = () => {
-    confettiRef.current?.start();
+    // Skip confetti for reduced motion users
+    if (!reduceMotion) {
+      confettiRef.current?.start();
+    }
     // Call onComplete after celebration finishes
     setTimeout(() => {
       onComplete?.();
-    }, 2500);
+    }, reduceMotion ? 1000 : 2500);
   };
 
   useEffect(() => {
     // Start the celebration sequence after a brief delay
     const timer = setTimeout(() => {
-      // Phase 1: Scale mascot out
-      mascotScale.value = withTiming(0, { duration: 300 }, (finished) => {
-        if (finished) {
-          // Phase 2: Switch to new tier image and fire confetti
-          runOnJS(setDisplayedTier)(newTier);
-          runOnJS(triggerConfetti)();
-
-          // Phase 3: Scale mascot back in with spring after confetti starts
-          setTimeout(() => {
-            mascotScale.value = withSpring(1, Easings.bouncy);
-            // Show "Level Up!" message
+      if (reduceMotion) {
+        // Reduced motion: simple opacity cross-fade (no scale, no confetti)
+        mascotOpacity.value = withTiming(0, { duration: 200 }, (finished) => {
+          if (finished) {
+            runOnJS(setDisplayedTier)(newTier);
+            mascotOpacity.value = withTiming(1, { duration: 200 });
             runOnJS(setShowMessage)(true);
-            messageOpacity.value = withSpring(1, Easings.gentle);
-          }, 200);
-        }
-      });
+            messageOpacity.value = withTiming(1, { duration: 200 });
+            runOnJS(triggerConfetti)();
+          }
+        });
+      } else {
+        // Full motion: Scale mascot out
+        mascotScale.value = withTiming(0, { duration: 300 }, (finished) => {
+          if (finished) {
+            // Phase 2: Switch to new tier image and fire confetti
+            runOnJS(setDisplayedTier)(newTier);
+            runOnJS(triggerConfetti)();
+
+            // Phase 3: Scale mascot back in with spring after confetti starts
+            setTimeout(() => {
+              mascotScale.value = withSpring(1, Easings.bouncy);
+              // Show "Level Up!" message
+              runOnJS(setShowMessage)(true);
+              messageOpacity.value = withSpring(1, Easings.gentle);
+            }, 200);
+          }
+        });
+      }
     }, 500); // Initial delay to let results screen settle
 
     return () => clearTimeout(timer);
-  }, [newTier]);
+  }, [newTier, reduceMotion]);
 
-  const mascotAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: mascotScale.value }],
-  }));
+  const mascotAnimatedStyle = useAnimatedStyle(() => {
+    if (reduceMotion) {
+      // Reduced motion: only opacity, no scale transform
+      return {
+        opacity: mascotOpacity.value,
+        transform: [{ scale: 1 }],
+      };
+    }
+    return {
+      opacity: 1,
+      transform: [{ scale: mascotScale.value }],
+    };
+  });
 
   const messageAnimatedStyle = useAnimatedStyle(() => ({
     opacity: messageOpacity.value,
