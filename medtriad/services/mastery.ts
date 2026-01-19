@@ -1,7 +1,7 @@
 /**
  * Mastery System
  *
- * NEW: 6-tier game-based progression system
+ * PRIMARY: 6-tier game-based progression system
  * Tiers are earned by completing games (not questions):
  * - Student: 0 games
  * - Intern: 10 games
@@ -10,8 +10,13 @@
  * - Specialist: 100 games
  * - Chief: 200 games
  *
- * LEGACY: Question-based system kept for backward compatibility
- * (used by existing components until Plan 02 updates them)
+ * Tier functions:
+ * - getTierForGames(gamesPlayed) - Get current tier
+ * - getNextTier(tierNumber) - Get next tier or null at max
+ * - getProgressToNextTier(gamesPlayed) - Progress 0-1 toward next
+ *
+ * LEGACY: Question-based system kept for Home screen (Phase 12 will migrate)
+ * Functions marked @deprecated - use tier functions for new code
  */
 
 // ============================================
@@ -83,8 +88,8 @@ export function getProgressToNextTier(gamesPlayed: number): number {
 
 // ============================================
 // LEGACY SYSTEM (Question-based)
-// Keep for backward compatibility - used in components
-// until Plan 02 updates them
+// @deprecated - Keep for Home screen/MasteryBar until Phase 12
+// These functions use totalAnswered (questions), not gamesPlayed
 // ============================================
 
 export const MAX_LEVEL = 10;
