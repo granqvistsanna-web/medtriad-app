@@ -222,6 +222,12 @@ Plans:
 
 **Requirements**: SHARE-01, SHARE-02, SHARE-03
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 15-01-PLAN.md — Core share infrastructure (dependencies, ShareCard component, useShareCard hook)
+- [ ] 15-02-PLAN.md — Results screen integration (share button, hidden capture card)
+
 **Success Criteria**:
 1. Results screen has share button
 2. Share generates styled image card with score, correct answers, tier
@@ -333,5 +339,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 14 complete*
+*Last updated: 2026-01-19 - Phase 15 planned*
 *Current milestone: v2.0 Polish & Progression*
