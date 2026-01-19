@@ -7,11 +7,14 @@ import * as Application from 'expo-application';
 import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
 import { ToggleRow } from '@/components/settings/ToggleRow';
 import { SettingsRow } from '@/components/settings/SettingsRow';
+import { DevSection } from '@/components/settings/DevSection';
 import { loadSettings, saveSettings, UserSettings } from '@/services/settings-storage';
 import { clearStats } from '@/services/stats-storage';
+import { useStats } from '@/hooks/useStats';
 
 export default function SettingsScreen() {
   const colors = Colors.light;
+  const { refresh: refreshStats } = useStats();
   const [settings, setSettings] = useState<UserSettings>({
     soundEnabled: true,
     hapticsEnabled: true,
@@ -166,6 +169,11 @@ export default function SettingsScreen() {
             </View>
           </View>
         </Animated.View>
+
+        {/* DEVELOPER Section - only in dev mode */}
+        {__DEV__ && (
+          <DevSection onRefresh={refreshStats} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
