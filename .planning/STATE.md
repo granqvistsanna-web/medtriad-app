@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 16 complete
+**Current focus:** v2.0 Polish & Progression - Phase 17 in progress
 
 ## Current Position
 
-Phase: 16 of 19 (Quiz Mode UX)
-Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-01-19 - Completed 16-01-PLAN.md
+Phase: 17 of 19 (Design System Audit)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-01-19 - Completed 17-01-PLAN.md
 
-Progress: [########..] 80% (v1.0 complete, Phases 9-16 complete)
+Progress: [########..] 82% (v1.0 complete, Phases 9-16 complete, 17-01 complete)
 
 ## Performance Metrics
 
@@ -25,7 +25,7 @@ Progress: [########..] 80% (v1.0 complete, Phases 9-16 complete)
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 22
+- Plans completed: 23
 - Phases completed: 8 (9, 10, 11, 12, 13, 14, 15, 16)
 - Phases remaining: 3 (17-19)
 - Requirements: 26 total, 26 complete
@@ -37,6 +37,8 @@ Progress: [########..] 80% (v1.0 complete, Phases 9-16 complete)
   - Phase 17: Developer Tools - debug onboarding and states
   - Phase 18: Error Handling - graceful failures
   - Phase 19: Performance - smooth, responsive experience
+- 2026-01-19: Phase 17 added (renumbered existing 17-19 to 18-20)
+  - Phase 17: Design System Audit - enhance docs, audit app alignment with design tokens
 
 ## Accumulated Context
 
@@ -133,6 +135,11 @@ Phase 16 decisions (Plan 01):
 - ANSWER_DELAY reduced to 1200ms for snappier flow
 - Spring-based shake: damping 3-10, stiffness 300-500, 2-3 oscillations
 
+Phase 17 decisions (Plan 01):
+- CardStyle uses Radius.lg (16px) for cards vs Button's Radius.xl (24px)
+- CardStyle spreads lightShadows.sm directly (same file scope)
+- Common Mistakes section uses Don't/Do format for antipattern guidance
+
 ### Pending Todos
 
 None.
@@ -144,19 +151,17 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 16-01-PLAN.md
+Stopped at: Completed 17-01-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 16 (Quiz Mode UX) complete:
-- Symptoms card elevated with backgroundSecondary contrast
-- "IDENTIFY THE TRIAD" label above symptoms
-- Color-only answer feedback (icons removed)
-- Text feedback removed
-- Spring-based shake animation for incorrect answers
+Phase 17 Plan 01 (Design System Docs & CardStyle) complete:
+- DESIGN-SYSTEM.md enhanced with Icons, Card Styling, and Common Mistakes sections
+- CardStyle constant added to theme.ts for Duolingo-inspired hard border treatment
+- Ready for component audits (Plans 02-03)
 
-Ready for Phase 17 (Developer Tools) or continue with any remaining v2.0 phases.
+Continue with 17-02-PLAN.md or remaining v2.0 phases.
 
 ---
-*Updated: 2026-01-19 after 16-01 execution complete*
+*Updated: 2026-01-19 after 17-01 execution complete*
