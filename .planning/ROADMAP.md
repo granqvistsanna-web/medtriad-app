@@ -3,7 +3,7 @@
 ## Milestones
 
 - [x] **v1.0 MVP** - Phases 1-8 (shipped 2026-01-18)
-- [ ] **v2.0 Polish & Progression** - Phases 9-19 (in progress)
+- [ ] **v2.0 Polish & Progression** - Phases 9-20 (in progress)
 - [ ] **v3.0 Engagement** - Future
 
 ## Phases
@@ -31,9 +31,10 @@ evolving mascot, smooth onboarding, and shareability.
 - [x] **Phase 14: Mascot Evolution** - Level-specific mascot images
 - [x] **Phase 15: Share Results** - Share score card after quiz
 - [x] **Phase 16: Quiz Mode UX** - Improve visual hierarchy, remove distractions, no-scroll layout
-- [ ] **Phase 17: Developer Tools** - Debug onboarding and app states
-- [ ] **Phase 18: Error Handling** - Graceful failures throughout the app
-- [ ] **Phase 19: Performance** - Smooth, responsive experience
+- [ ] **Phase 17: Design System Audit** - Enhance docs, audit app alignment with design tokens
+- [ ] **Phase 18: Developer Tools** - Debug onboarding and app states
+- [ ] **Phase 19: Error Handling** - Graceful failures throughout the app
+- [ ] **Phase 20: Performance** - Smooth, responsive experience
 
 ---
 
@@ -260,11 +261,35 @@ Plans:
 
 ---
 
-### Phase 17: Developer Tools
+### Phase 17: Design System Audit
+
+**Goal**: Enhance design system documentation and ensure app-wide alignment with design tokens
+
+**Depends on**: Phase 16
+
+**Requirements**: DSAUD-01, DSAUD-02, DSAUD-03
+
+**Plans:** 3 plans
+
+Plans:
+- [ ] 17-01-PLAN.md — Documentation enhancement + CardStyle foundation
+- [ ] 17-02-PLAN.md — HeroCard and home components hard border alignment
+- [ ] 17-03-PLAN.md — Library and quiz components design token audit
+
+**Success Criteria**:
+1. DESIGN-SYSTEM.md enhanced with complete token coverage
+2. All components audited for hardcoded values vs design tokens
+3. Inconsistencies documented and fixed
+4. Color, spacing, typography, and radius tokens used consistently
+5. No hardcoded colors/spacing outside theme.ts
+
+---
+
+### Phase 18: Developer Tools
 
 **Goal**: Enable efficient testing and debugging
 
-**Depends on**: Phase 16
+**Depends on**: Phase 17
 
 **Requirements**: DEV-01, DEV-02, DEV-03, DEV-04
 
@@ -277,11 +302,11 @@ Plans:
 
 ---
 
-### Phase 18: Error Handling
+### Phase 19: Error Handling
 
 **Goal**: App never crashes, fails gracefully
 
-**Depends on**: Phase 17
+**Depends on**: Phase 18
 
 **Requirements**: ERR-01, ERR-02, ERR-03, ERR-04
 
@@ -294,11 +319,11 @@ Plans:
 
 ---
 
-### Phase 19: Performance
+### Phase 20: Performance
 
 **Goal**: Smooth, responsive experience
 
-**Depends on**: Phase 18
+**Depends on**: Phase 19
 
 **Requirements**: PERF-01, PERF-02, PERF-03, PERF-04
 
@@ -337,12 +362,13 @@ Ideas parked for future development:
 | 14. Mascot Evolution | v2.0 | Complete | 2026-01-19 |
 | 15. Share Results | v2.0 | Complete | 2026-01-19 |
 | 16. Quiz Mode UX | v2.0 | Complete | 2026-01-19 |
-| 17. Developer Tools | v2.0 | Not started | - |
-| 18. Error Handling | v2.0 | Not started | - |
-| 19. Performance | v2.0 | Not started | - |
+| 17. Design System Audit | v2.0 | Not started | - |
+| 18. Developer Tools | v2.0 | Not started | - |
+| 19. Error Handling | v2.0 | Not started | - |
+| 20. Performance | v2.0 | Not started | - |
 
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 16 complete*
+*Last updated: 2026-01-19 - Phase 17 planned*
 *Current milestone: v2.0 Polish & Progression*
