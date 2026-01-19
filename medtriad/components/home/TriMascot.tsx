@@ -12,7 +12,7 @@ import Animated, {
 import { useEffect } from 'react';
 import { MascotSizes, Colors } from '@/constants/theme';
 
-export type MascotMood = 'neutral' | 'happy' | 'reassuring' | 'streak';
+export type MascotMood = 'neutral' | 'happy' | 'reassuring' | 'streak' | 'tierUp';
 export type MascotSize = 'sm' | 'md' | 'lg' | 'xl';
 export type MascotContext = 'home' | 'quiz' | 'results';
 
@@ -60,7 +60,7 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
     // Quiz/results continue using mood-based images (existing behavior)
     if (masteryLevel >= 10) return triSupermaster;
     if (masteryLevel >= 7) return triMaster;
-    if (mood === 'happy' || mood === 'streak') return triHappy;
+    if (mood === 'happy' || mood === 'streak' || mood === 'tierUp') return triHappy;
     return triNeutral;
   };
   const imageSource = getImageSource();
@@ -97,16 +97,28 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
       rise.value = withSpring(0, { damping: 12, stiffness: 100 });
     }
 
-    // Glow animation for streak
+    // Glow animation for streak (infinite) or tierUp (finite)
     if (mood === 'streak') {
       glow.value = withRepeat(
         withSequence(
           withTiming(1, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
           withTiming(0.3, { duration: 1000, easing: Easing.inOut(Easing.ease) })
         ),
-        -1,
+        -1, // Infinite for streak
         false
       );
+    } else if (mood === 'tierUp') {
+      // Finite glow for tier-up celebration (3 pulses)
+      glow.value = withRepeat(
+        withSequence(
+          withTiming(1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
+          withTiming(0.2, { duration: 800, easing: Easing.inOut(Easing.ease) })
+        ),
+        3, // Run 3 times then stop
+        false
+      );
+    } else {
+      glow.value = withTiming(0, { duration: 300 });
     }
   }, [mood, animate]);
 
@@ -124,7 +136,7 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
   });
 
   const glowStyle = useAnimatedStyle(() => {
-    if (mood !== 'streak') return { opacity: 0 };
+    if (mood !== 'streak' && mood !== 'tierUp') return { opacity: 0 };
 
     return {
       opacity: interpolate(glow.value, [0, 1], [0, 0.4]),
