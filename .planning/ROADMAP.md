@@ -166,6 +166,11 @@ Plans:
 
 **Requirements**: ONBD-01, ONBD-02, ONBD-03
 
+**Plans:** 1 plan
+
+Plans:
+- [ ] 13-01-PLAN.md — Root layout guards, onboarding screen with pagination
+
 **Success Criteria**:
 1. User with gamesPlayed = 0 sees onboarding on app launch
 2. User with gamesPlayed > 0 never sees onboarding
@@ -310,7 +315,7 @@ Ideas parked for future development:
 | 10. Refine Visuals & Motion | v2.0 | Complete | 2026-01-18 |
 | 11. Level System | v2.0 | Complete | 2026-01-19 |
 | 12. Levels on Hero | v2.0 | Complete | 2026-01-19 |
-| 13. Onboarding | v2.0 | Not started | - |
+| 13. Onboarding | v2.0 | Planned | - |
 | 14. Mascot Evolution | v2.0 | Not started | - |
 | 15. Share Results | v2.0 | Not started | - |
 | 16. Quiz Mode UX | v2.0 | Not started | - |
@@ -321,5 +326,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 12 complete*
+*Last updated: 2026-01-19 - Phase 13 planned*
 *Current milestone: v2.0 Polish & Progression*
