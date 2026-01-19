@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 17 complete
+**Current focus:** v2.0 Polish & Progression - Phase 18 in progress
 
 ## Current Position
 
-Phase: 17 of 19 (Design System Audit)
-Plan: 3 of 3 in current phase
+Phase: 18 of 19 (Developer Tools)
+Plan: 1 of 1 in current phase
 Status: Phase complete
-Last activity: 2026-01-19 - Completed 17-03-PLAN.md
+Last activity: 2026-01-19 - Completed 18-01-PLAN.md
 
-Progress: [########..] 85% (v1.0 complete, Phases 9-17 complete)
+Progress: [#########.] 90% (v1.0 complete, Phases 9-18 complete)
 
 ## Performance Metrics
 
@@ -25,10 +25,10 @@ Progress: [########..] 85% (v1.0 complete, Phases 9-17 complete)
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 26
-- Phases completed: 9 (9, 10, 11, 12, 13, 14, 15, 16, 17)
-- Phases remaining: 2 (18-19)
-- Requirements: 26 total, 26 complete
+- Plans completed: 27
+- Phases completed: 10 (9, 10, 11, 12, 13, 14, 15, 16, 17, 18)
+- Phases remaining: 1 (19)
+- Requirements: 27 total, 27 complete
 
 ### Roadmap Evolution
 
@@ -151,6 +151,12 @@ Phase 17 decisions (Plan 03):
 - FilterChips CATEGORY_COLORS kept as domain-specific inline constants
 - Highlight yellow (#FEF08A) kept as domain-specific (search highlight)
 
+Phase 18 decisions (Plan 01):
+- Use multiRemove instead of AsyncStorage.clear to avoid affecting other apps
+- Red header/line for DEVELOPER section as visual warning
+- Skip Student tier in Simulate Tier Up (can't tier UP to tier 1)
+- __DEV__ guard pattern for conditional dev-only features
+
 ### Pending Todos
 
 None.
@@ -162,18 +168,17 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 17-03-PLAN.md
+Stopped at: Completed 18-01-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 17 (Design System Audit) complete:
-- DESIGN-SYSTEM.md enhanced with complete token documentation
-- CardStyle constant added to theme.ts
-- HeroCard, StatsGrid, tier components aligned to hard border style
-- Library and quiz components using design tokens consistently
+Phase 18 (Developer Tools) complete:
+- Dev menu added to Settings with 4 functions
+- Reset onboarding, set tier, simulate tier-up, clear all data
+- Conditional __DEV__ rendering for production safety
 
-Continue with Phase 18 (Developer Tools) or remaining v2.0 phases.
+Continue with Phase 19 (Performance) - final v2.0 phase.
 
 ---
-*Updated: 2026-01-19 after 17-03 execution complete*
+*Updated: 2026-01-19 after 18-01 execution complete*
