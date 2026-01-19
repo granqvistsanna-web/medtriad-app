@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, {
@@ -14,6 +14,7 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 import { Button } from '@/components/ui/Button';
 import { TriMascot } from '@/components/home/TriMascot';
 import { HighScoreBadge } from '@/components/results/HighScoreBadge';
+import { TierUpCelebration } from '@/components/results/TierUpCelebration';
 import { useStats } from '@/hooks/useStats';
 import { saveQuizHistory } from '@/services/stats-storage';
 import { Colors, Typography, Spacing, Radius, Durations, Easings } from '@/constants/theme';
@@ -25,6 +26,9 @@ type ResultsParams = {
   bestStreak: string;
   isNewHighScore: string;
   isPerfect: string;
+  tierUp: string;
+  newTierName: string;
+  newTierNumber: string;
 };
 
 /**
@@ -54,6 +58,13 @@ export default function ResultsScreen() {
   const bestStreak = parseInt(params.bestStreak ?? '1', 10);
   const isPerfect = params.isPerfect === 'true';
   const isNewHighScore = params.isNewHighScore === 'true';
+  const tierUp = params.tierUp === 'true';
+  const newTierName = params.newTierName ?? '';
+  const newTierNumber = parseInt(params.newTierNumber ?? '0', 10);
+  const oldTierNumber = newTierNumber > 1 ? newTierNumber - 1 : 1;
+
+  // Track celebration completion
+  const [celebrationComplete, setCelebrationComplete] = useState(!tierUp);
 
   // Save quiz history when results are displayed (once per mount)
   const historySaved = useRef(false);
@@ -69,16 +80,16 @@ export default function ResultsScreen() {
     }
   }, [score, correctCount]);
 
-  // Trigger confetti for perfect rounds
+  // Trigger confetti for perfect rounds (only if not showing tier-up celebration)
   useEffect(() => {
-    if (isPerfect) {
+    if (isPerfect && !tierUp) {
       // Delay to let count-up animation finish
       const timeout = setTimeout(() => {
         confettiRef.current?.start();
       }, 1200); // After 1s count-up + 200ms buffer
       return () => clearTimeout(timeout);
     }
-  }, [isPerfect]);
+  }, [isPerfect, tierUp]);
 
   // Score settle animation after count-up completes
   const scoreScale = useSharedValue(1);
@@ -98,28 +109,42 @@ export default function ResultsScreen() {
     transform: [{ scale: scoreScale.value }],
   }));
 
-  const resultMessage = getResultMessage(correctCount, isPerfect);
   const accuracy = (correctCount / QUESTION_COUNT) * 100;
   const mascotMood = accuracy >= 70 || isPerfect ? 'happy' : 'neutral';
+  // Hide result message during tier-up celebration (TierUpCelebration shows its own)
+  const resultMessage = tierUp && !celebrationComplete
+    ? ''
+    : getResultMessage(correctCount, isPerfect);
 
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        {/* Mascot */}
+        {/* Mascot or Tier-Up Celebration */}
         <Animated.View
           entering={FadeInUp.delay(0).duration(Durations.normal).springify()}
         >
-          <TriMascot mood={mascotMood} size="md" />
+          {tierUp && !celebrationComplete ? (
+            <TierUpCelebration
+              oldTier={oldTierNumber}
+              newTier={newTierNumber}
+              newTierName={newTierName}
+              onComplete={() => setCelebrationComplete(true)}
+            />
+          ) : (
+            <TriMascot mood={mascotMood} size="md" tier={tier.tier} context="results" />
+          )}
         </Animated.View>
 
         {/* Result Message */}
-        <Animated.Text
-          entering={FadeInUp.delay(Durations.staggerMedium).duration(Durations.normal).springify()}
-          style={[styles.message, { color: colors.text }]}
-        >
-          {resultMessage}
-        </Animated.Text>
+        {resultMessage ? (
+          <Animated.Text
+            entering={FadeInUp.delay(Durations.staggerMedium).duration(Durations.normal).springify()}
+            style={[styles.message, { color: colors.text }]}
+          >
+            {resultMessage}
+          </Animated.Text>
+        ) : null}
 
         {/* Score Display */}
         <Animated.View
