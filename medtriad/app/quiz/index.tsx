@@ -16,6 +16,7 @@ import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useHaptics } from '@/hooks/useHaptics';
 import { generateQuestionSet } from '@/services/question-generator';
 import { isPerfectRound, getComboTier } from '@/services/scoring';
+import { checkTierUp } from '@/services/mastery';
 import { useStats } from '@/hooks/useStats';
 
 import { QuizOption } from '@/types';
@@ -32,7 +33,7 @@ export default function QuizScreen() {
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
   const colors = Colors.light;
-  const { recordQuizResult, checkHighScore } = useStats();
+  const { stats, recordQuizResult, checkHighScore } = useStats();
   const { playSound } = useSoundEffects();
   const { triggerHaptic } = useHaptics();
 
@@ -93,7 +94,11 @@ export default function QuizScreen() {
         // Check for new high score BEFORE saving stats
         const isNewHighScore = await checkHighScore(score);
 
-        // Save stats
+        // Check for tier-up BEFORE recording quiz result
+        // stats?.gamesPlayed is the current count, quiz will increment it
+        const { willTierUp, newTier } = checkTierUp(stats?.gamesPlayed ?? 0);
+
+        // Save stats (this increments gamesPlayed and sets pendingTierUp)
         await recordQuizResult(
           correctCountRef.current,
           QUESTION_COUNT,
@@ -101,7 +106,7 @@ export default function QuizScreen() {
           score
         );
 
-        // Navigate to results
+        // Navigate to results with tier-up info
         const perfect = isPerfectRound(correctCountRef.current, QUESTION_COUNT);
         router.replace({
           pathname: '/quiz/results',
@@ -111,6 +116,10 @@ export default function QuizScreen() {
             bestStreak: maxComboRef.current.toString(),
             isNewHighScore: isNewHighScore ? 'true' : 'false',
             isPerfect: perfect ? 'true' : 'false',
+            // Tier-up params
+            tierUp: willTierUp ? 'true' : 'false',
+            newTierName: newTier?.name ?? '',
+            newTierNumber: newTier?.tier.toString() ?? '',
           },
         });
       } else {
@@ -120,7 +129,7 @@ export default function QuizScreen() {
     }, ANSWER_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [status, currentIndex, questions.length, dispatch, router, score, recordQuizResult, checkHighScore]);
+  }, [status, currentIndex, questions.length, dispatch, router, score, recordQuizResult, checkHighScore, stats?.gamesPlayed]);
 
   // Handle answer selection - single Light haptic on tap (consistent, understated)
   const handleAnswerSelect = async (option: QuizOption) => {
