@@ -108,6 +108,12 @@ Plans:
 
 **Requirements**: LEVL-01, LEVL-02, LEVL-03
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — Core tier logic, useStats hook, TierProgressBar component
+- [ ] 11-02-PLAN.md — Progress and Results screen integration
+
 **Tier Definitions**:
 
 | Tier | Name | Games Played |
@@ -121,8 +127,8 @@ Plans:
 
 **Success Criteria**:
 1. App displays 6 named progression tiers
-2. Each tier has a distinct accent color
-3. User can see current tier name and progress percentage toward next tier
+2. Each tier has name-based visual distinction (shared accent color per CONTEXT.md)
+3. User can see current tier name and progress bar toward next tier
 4. Tier thresholds based on games played
 
 ---
@@ -224,7 +230,7 @@ Ideas parked for future development:
 | 1-8 | v1.0 | Complete | 2026-01-18 |
 | 9. UI Polish | v2.0 | Complete | 2026-01-18 |
 | 10. Refine Visuals & Motion | v2.0 | Complete | 2026-01-18 |
-| 11. Level System | v2.0 | Not started | - |
+| 11. Level System | v2.0 | Planning complete | - |
 | 12. Levels on Hero | v2.0 | Not started | - |
 | 13. Onboarding | v2.0 | Not started | - |
 | 14. Mascot Evolution | v2.0 | Not started | - |
@@ -233,5 +239,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-18 after Phase 10 completion*
+*Last updated: 2026-01-19 after Phase 11 planning*
 *Current milestone: v2.0 Polish & Progression*
