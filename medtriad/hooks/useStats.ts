@@ -11,6 +11,11 @@ import {
   getProgressInLevel,
   getQuestionsToNextLevel,
   getLevelTitle,
+  // New tier system
+  TierDefinition,
+  getTierForGames,
+  getProgressToNextTier,
+  getNextTier,
 } from '@/services/mastery';
 
 export interface StatsData {
@@ -18,10 +23,16 @@ export interface StatsData {
   loading: boolean;
   isNewUser: boolean;
   accuracy: number;
+  // Legacy (question-based) - kept for backward compatibility
   masteryLevel: number;
   masteryProgress: number;
   questionsToNextLevel: number;
   levelTitle: string;
+  // New tier system (game-based)
+  tier: TierDefinition;
+  tierProgress: number;
+  nextTier: TierDefinition | null;
+  // Other stats
   dailyStreak: number;
   highScore: number;
   refresh: () => Promise<void>;
@@ -68,7 +79,7 @@ export function useStats(): StatsData {
     [fetchStats]
   );
 
-  // Derived values
+  // Derived values - Legacy (question-based)
   const isNewUser = stats?.gamesPlayed === 0;
   const accuracy = stats ? getAccuracy(stats) : 0;
   const totalAnswered = stats?.totalAnswered ?? 0;
@@ -79,15 +90,27 @@ export function useStats(): StatsData {
   const dailyStreak = stats?.dailyStreak ?? 0;
   const highScore = stats?.highScore ?? 0;
 
+  // Derived values - New tier system (game-based)
+  const gamesPlayed = stats?.gamesPlayed ?? 0;
+  const tier = getTierForGames(gamesPlayed);
+  const tierProgress = getProgressToNextTier(gamesPlayed);
+  const nextTier = getNextTier(tier.tier);
+
   return {
     stats,
     loading,
     isNewUser,
     accuracy,
+    // Legacy
     masteryLevel,
     masteryProgress,
     questionsToNextLevel,
     levelTitle,
+    // New tier system
+    tier,
+    tierProgress,
+    nextTier,
+    // Other stats
     dailyStreak,
     highScore,
     refresh: fetchStats,
