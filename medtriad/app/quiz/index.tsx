@@ -87,37 +87,63 @@ export default function QuizScreen() {
 
     const timeout = setTimeout(async () => {
       if (currentIndex >= questions.length - 1) {
-        // Check for new high score BEFORE saving stats
-        const isNewHighScore = await checkHighScore(score);
+        try {
+          // Check for new high score BEFORE saving stats
+          const isNewHighScore = await checkHighScore(score);
 
-        // Check for tier-up BEFORE recording quiz result
-        // stats?.gamesPlayed is the current count, quiz will increment it
-        const { willTierUp, newTier } = checkTierUp(stats?.gamesPlayed ?? 0);
+          // Check for tier-up BEFORE recording quiz result
+          // stats?.gamesPlayed is the current count, quiz will increment it
+          const { willTierUp, newTier } = checkTierUp(stats?.gamesPlayed ?? 0);
 
-        // Save stats (this increments gamesPlayed and sets pendingTierUp)
-        await recordQuizResult(
-          correctCountRef.current,
-          QUESTION_COUNT,
-          maxComboRef.current,
-          score
-        );
+          // Save stats (this increments gamesPlayed and sets pendingTierUp)
+          await recordQuizResult(
+            correctCountRef.current,
+            QUESTION_COUNT,
+            maxComboRef.current,
+            score
+          );
 
-        // Navigate to results with tier-up info
-        const perfect = isPerfectRound(correctCountRef.current, QUESTION_COUNT);
-        router.replace({
-          pathname: '/quiz/results',
-          params: {
-            score: score.toString(),
-            correctCount: correctCountRef.current.toString(),
-            bestStreak: maxComboRef.current.toString(),
-            isNewHighScore: isNewHighScore ? 'true' : 'false',
-            isPerfect: perfect ? 'true' : 'false',
-            // Tier-up params
-            tierUp: willTierUp ? 'true' : 'false',
-            newTierName: newTier?.name ?? '',
-            newTierNumber: newTier?.tier.toString() ?? '',
-          },
-        });
+          // Navigate to results with tier-up info
+          const perfect = isPerfectRound(correctCountRef.current, QUESTION_COUNT);
+          router.replace({
+            pathname: '/quiz/results',
+            params: {
+              score: score.toString(),
+              correctCount: correctCountRef.current.toString(),
+              bestStreak: maxComboRef.current.toString(),
+              isNewHighScore: isNewHighScore ? 'true' : 'false',
+              isPerfect: perfect ? 'true' : 'false',
+              // Tier-up params
+              tierUp: willTierUp ? 'true' : 'false',
+              newTierName: newTier?.name ?? '',
+              newTierNumber: newTier?.tier.toString() ?? '',
+            },
+          });
+        } catch (error) {
+          // DESIGN DECISION (ERR-04): Silent fallback is intentional for MVP.
+          // Per 19-RESEARCH.md, user-friendly error messages are not needed here because:
+          // 1. The quiz experience completes successfully (user sees results)
+          // 2. Only persistence fails, which is invisible to user anyway
+          // 3. Showing an error would confuse users ("save failed" when they see their score)
+          // We log for debugging but don't interrupt the user flow.
+          console.error('Failed to save quiz result:', error);
+
+          // Still navigate to results even if save failed
+          // User sees their score, just may not persist
+          router.replace({
+            pathname: '/quiz/results',
+            params: {
+              score: score.toString(),
+              correctCount: correctCountRef.current.toString(),
+              bestStreak: maxComboRef.current.toString(),
+              isNewHighScore: 'false',
+              isPerfect: isPerfectRound(correctCountRef.current, QUESTION_COUNT) ? 'true' : 'false',
+              tierUp: 'false',
+              newTierName: '',
+              newTierNumber: '',
+            },
+          });
+        }
       } else {
         dispatch({ type: 'NEXT_QUESTION' });
       }
