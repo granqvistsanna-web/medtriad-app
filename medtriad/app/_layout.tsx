@@ -5,6 +5,7 @@ import 'react-native-reanimated';
 
 import { Colors } from '@/constants/theme';
 import { useStats } from '@/hooks/useStats';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -32,33 +33,35 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={LightTheme}>
-      <Stack>
-        {/* Onboarding for new users only */}
-        <Stack.Protected guard={isNewUser}>
-          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-        </Stack.Protected>
+    <ErrorBoundary>
+      <ThemeProvider value={LightTheme}>
+        <Stack>
+          {/* Onboarding for new users only */}
+          <Stack.Protected guard={isNewUser}>
+            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+          </Stack.Protected>
 
-        {/* Main app for returning users */}
-        <Stack.Protected guard={!isNewUser}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack.Protected>
+          {/* Main app for returning users */}
+          <Stack.Protected guard={!isNewUser}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack.Protected>
 
-        {/* Always available routes */}
-        <Stack.Screen
-          name="modal"
-          options={{ presentation: 'modal', title: 'Modal' }}
-        />
-        <Stack.Screen
-          name="quiz"
-          options={{
-            presentation: 'fullScreenModal',
-            headerShown: false,
-            gestureEnabled: false,
-          }}
-        />
-      </Stack>
-      <StatusBar style="dark" />
-    </ThemeProvider>
+          {/* Always available routes */}
+          <Stack.Screen
+            name="modal"
+            options={{ presentation: 'modal', title: 'Modal' }}
+          />
+          <Stack.Screen
+            name="quiz"
+            options={{
+              presentation: 'fullScreenModal',
+              headerShown: false,
+              gestureEnabled: false,
+            }}
+          />
+        </Stack>
+        <StatusBar style="dark" />
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
