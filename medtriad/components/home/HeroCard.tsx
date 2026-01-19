@@ -16,6 +16,7 @@ type HeroCardProps = {
   tier: TierDefinition;
   tierProgress: number;
   onTierPress?: () => void;
+  showTierUpGlow?: boolean;  // Catch-up celebration for missed tier-up
 };
 
 /**
@@ -107,11 +108,15 @@ export function HeroCard({
   tier,
   tierProgress,
   onTierPress,
+  showTierUpGlow = false,
 }: HeroCardProps) {
   const colors = Colors.light;
 
   const { title, subtitle } = getHeroContent(isNewUser, accuracy, dailyStreak, lastPlayed);
-  const mascotMood = getMascotMood(isNewUser, accuracy, dailyStreak);
+  // Override mood to 'tierUp' for catch-up celebration glow
+  const mascotMood = showTierUpGlow
+    ? 'tierUp'
+    : getMascotMood(isNewUser, accuracy, dailyStreak);
 
   return (
     <Animated.View

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, View, ActivityIndicator, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -23,7 +24,26 @@ export default function HomeScreen() {
     highScore,
     tier,
     tierProgress,
+    pendingTierUp,
+    clearPendingTierUp,
   } = useStats();
+
+  // Track if we're showing the tier-up catch-up glow
+  const [showTierUpGlow, setShowTierUpGlow] = useState(false);
+
+  // Detect pendingTierUp and trigger glow, then clear
+  useEffect(() => {
+    if (pendingTierUp && !showTierUpGlow) {
+      setShowTierUpGlow(true);
+      // Clear the pending flag after showing glow
+      // Delay to let the glow animation complete (3 pulses x 1.6s = ~5s)
+      const clearTimer = setTimeout(async () => {
+        await clearPendingTierUp();
+        setShowTierUpGlow(false);
+      }, 5000);
+      return () => clearTimeout(clearTimer);
+    }
+  }, [pendingTierUp, showTierUpGlow, clearPendingTierUp]);
 
   // Show loading state
   if (loading) {
@@ -65,6 +85,7 @@ export default function HomeScreen() {
           tier={tier}
           tierProgress={tierProgress}
           onTierPress={() => router.push('/(tabs)/progress')}
+          showTierUpGlow={showTierUpGlow}
         />
 
         {/* Start Quiz button */}
