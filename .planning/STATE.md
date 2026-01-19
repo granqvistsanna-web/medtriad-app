@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 17 in progress
+**Current focus:** v2.0 Polish & Progression - Phase 17 complete
 
 ## Current Position
 
 Phase: 17 of 19 (Design System Audit)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-19 - Completed 17-02-PLAN.md
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-01-19 - Completed 17-03-PLAN.md
 
-Progress: [########..] 84% (v1.0 complete, Phases 9-16 complete, 17-01, 17-02 complete)
+Progress: [########..] 85% (v1.0 complete, Phases 9-17 complete)
 
 ## Performance Metrics
 
@@ -25,9 +25,9 @@ Progress: [########..] 84% (v1.0 complete, Phases 9-16 complete, 17-01, 17-02 co
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 23
-- Phases completed: 8 (9, 10, 11, 12, 13, 14, 15, 16)
-- Phases remaining: 3 (17-19)
+- Plans completed: 26
+- Phases completed: 9 (9, 10, 11, 12, 13, 14, 15, 16, 17)
+- Phases remaining: 2 (18-19)
 - Requirements: 26 total, 26 complete
 
 ### Roadmap Evolution
@@ -145,6 +145,12 @@ Phase 17 decisions (Plan 02):
 - Domain-specific pill colors (streak, accuracy) kept as hardcoded for semantic meaning
 - StatsGrid spreads CardStyle for consistent hard border treatment
 
+Phase 17 decisions (Plan 03):
+- TriadCard uses CardStyle spread for hard border treatment
+- SearchBar input uses Typography.caption (fontSize: 15)
+- FilterChips CATEGORY_COLORS kept as domain-specific inline constants
+- Highlight yellow (#FEF08A) kept as domain-specific (search highlight)
+
 ### Pending Todos
 
 None.
@@ -156,17 +162,18 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 17-02-PLAN.md
+Stopped at: Completed 17-03-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 17 Plan 02 (Home Components Hard Border) complete:
-- HeroCard transformed from gradient to solid background with hard borders
-- StatsGrid cards now use CardStyle for consistent hard border treatment
-- TierSection and TierBadge updated to use design tokens
+Phase 17 (Design System Audit) complete:
+- DESIGN-SYSTEM.md enhanced with complete token documentation
+- CardStyle constant added to theme.ts
+- HeroCard, StatsGrid, tier components aligned to hard border style
+- Library and quiz components using design tokens consistently
 
-Continue with 17-03-PLAN.md (remaining component audits) or other v2.0 phases.
+Continue with Phase 18 (Developer Tools) or remaining v2.0 phases.
 
 ---
-*Updated: 2026-01-19 after 17-02 execution complete*
+*Updated: 2026-01-19 after 17-03 execution complete*
