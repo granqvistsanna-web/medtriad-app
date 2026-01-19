@@ -31,11 +31,11 @@ const triNeutral = require('@/assets/images/tri-neutral.png');
 const triHappy = require('@/assets/images/tri-success.png');
 
 // Tier-specific mascot images (static requires for Metro bundler)
-// Naming: tri-lvl1.png through tri-lvl6.png (lvl3 missing, falls back to lvl2)
+// Naming: tri-lvl1.png through tri-lvl6.png
 const TIER_IMAGES: Record<number, ReturnType<typeof require>> = {
   1: require('@/assets/images/tri-lvl1.png'),
   2: require('@/assets/images/tri-lvl2.png'),
-  3: require('@/assets/images/tri-lvl2.png'),  // Fallback: lvl3 not provided
+  3: require('@/assets/images/tri-lvl3.png'),
   4: require('@/assets/images/tri-lvl4.png'),
   5: require('@/assets/images/tri-lvl5.png'),
   6: require('@/assets/images/tri-lvl6.png'),
