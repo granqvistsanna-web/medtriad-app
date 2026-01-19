@@ -9,7 +9,7 @@ import { QuizHistoryList } from '@/components/progress/QuizHistoryList';
 import { TierProgressBar } from '@/components/progress/TierProgressBar';
 import { useStats } from '@/hooks/useStats';
 import { loadQuizHistory, QuizHistoryEntry } from '@/services/stats-storage';
-import { Colors, Typography, Spacing, Durations } from '@/constants/theme';
+import { Colors, Typography, Spacing, Durations, CardStyle, Radius } from '@/constants/theme';
 
 export default function ProgressScreen() {
   const colors = Colors.light;
@@ -48,8 +48,9 @@ export default function ProgressScreen() {
   }
 
   // Games needed to reach next tier (only show if not at max tier)
+  // Use Math.max to ensure never negative, fallback to 0 if calculation fails
   const gamesToNext = nextTier
-    ? nextTier.gamesRequired - stats.gamesPlayed
+    ? Math.max(0, (nextTier.gamesRequired ?? nextTier.pointsRequired ?? 0) - (stats?.gamesPlayed ?? 0))
     : 0;
 
   return (
@@ -66,10 +67,10 @@ export default function ProgressScreen() {
           Progress
         </Animated.Text>
 
-        {/* Tier Header */}
+        {/* Tier Header - Card with hard border */}
         <Animated.View
           entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}
-          style={styles.tierHeader}
+          style={[styles.tierCard, { backgroundColor: colors.backgroundCard }]}
         >
           <Text style={[styles.tierName, { color: colors.text }]}>
             {tier.name}
@@ -79,7 +80,9 @@ export default function ProgressScreen() {
               ? `${gamesToNext} ${gamesToNext === 1 ? 'game' : 'games'} to ${nextTier.name}`
               : 'Mastery achieved'}
           </Text>
-          <TierProgressBar progress={tierProgress} />
+          <View style={styles.progressBarContainer}>
+            <TierProgressBar progress={tierProgress} />
+          </View>
         </Animated.View>
 
         {/* Section header */}
@@ -157,14 +160,23 @@ const styles = StyleSheet.create({
   title: {
     ...Typography.title,
   },
-  tierHeader: {
+  tierCard: {
+    ...CardStyle,
+    padding: Spacing.xl,
     gap: Spacing.sm,
+    alignItems: 'center',
   },
   tierName: {
     ...Typography.heading,
+    fontSize: 24,
+    fontWeight: '700',
   },
   tierSubtext: {
     ...Typography.footnote,
+    marginBottom: Spacing.sm,
+  },
+  progressBarContainer: {
+    width: '100%',
   },
   sectionHeader: {
     flexDirection: 'row',

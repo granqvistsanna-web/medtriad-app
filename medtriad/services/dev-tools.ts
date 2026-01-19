@@ -77,5 +77,11 @@ export async function setPendingTierUp(tier: number, name: string): Promise<void
  * Does NOT use AsyncStorage.clear() which would affect other apps.
  */
 export async function clearAllData(): Promise<void> {
-  await AsyncStorage.multiRemove(ALL_APP_KEYS);
+  try {
+    await AsyncStorage.multiRemove(ALL_APP_KEYS);
+  } catch (error) {
+    console.error('Failed to clear all data:', error);
+    // Rethrow to let caller handle (UI shows error state)
+    throw error;
+  }
 }
