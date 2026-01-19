@@ -338,6 +338,12 @@ Plans:
 
 **Requirements**: PERF-01, PERF-02, PERF-03, PERF-04
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 20-01-PLAN.md — Library screen virtualization with FlashList
+- [ ] 20-02-PLAN.md — Image preloading and loading UX improvements
+
 **Success Criteria**:
 1. Cold launch < 1.5s to interactive
 2. Quiz loads instantly (< 100ms)
@@ -381,5 +387,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 19 complete*
+*Last updated: 2026-01-19 - Phase 20 planned*
 *Current milestone: v2.0 Polish & Progression*
