@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-18)
 ## Current Position
 
 Phase: 17 of 19 (Design System Audit)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-01-19 - Completed 17-01-PLAN.md
+Last activity: 2026-01-19 - Completed 17-02-PLAN.md
 
-Progress: [########..] 82% (v1.0 complete, Phases 9-16 complete, 17-01 complete)
+Progress: [########..] 84% (v1.0 complete, Phases 9-16 complete, 17-01, 17-02 complete)
 
 ## Performance Metrics
 
@@ -140,6 +140,11 @@ Phase 17 decisions (Plan 01):
 - CardStyle spreads lightShadows.sm directly (same file scope)
 - Common Mistakes section uses Don't/Do format for antipattern guidance
 
+Phase 17 decisions (Plan 02):
+- HeroCard uses backgroundSecondary for solid background instead of gradient
+- Domain-specific pill colors (streak, accuracy) kept as hardcoded for semantic meaning
+- StatsGrid spreads CardStyle for consistent hard border treatment
+
 ### Pending Todos
 
 None.
@@ -151,17 +156,17 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 17-01-PLAN.md
+Stopped at: Completed 17-02-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 17 Plan 01 (Design System Docs & CardStyle) complete:
-- DESIGN-SYSTEM.md enhanced with Icons, Card Styling, and Common Mistakes sections
-- CardStyle constant added to theme.ts for Duolingo-inspired hard border treatment
-- Ready for component audits (Plans 02-03)
+Phase 17 Plan 02 (Home Components Hard Border) complete:
+- HeroCard transformed from gradient to solid background with hard borders
+- StatsGrid cards now use CardStyle for consistent hard border treatment
+- TierSection and TierBadge updated to use design tokens
 
-Continue with 17-02-PLAN.md or remaining v2.0 phases.
+Continue with 17-03-PLAN.md (remaining component audits) or other v2.0 phases.
 
 ---
-*Updated: 2026-01-19 after 17-01 execution complete*
+*Updated: 2026-01-19 after 17-02 execution complete*
