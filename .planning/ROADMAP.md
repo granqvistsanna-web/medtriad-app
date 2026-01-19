@@ -27,7 +27,7 @@ evolving mascot, smooth onboarding, and shareability.
 - [x] **Phase 10: Refine Visuals & Motion** - Tighten spacing, colors, polished motion
 - [x] **Phase 11: Level System** - 6 progression tiers with clear identity
 - [x] **Phase 12: Levels on Hero** - Show current tier prominently on Home screen
-- [ ] **Phase 13: Onboarding** - New user introduction flow
+- [x] **Phase 13: Onboarding** - New user introduction flow
 - [ ] **Phase 14: Mascot Evolution** - Level-specific mascot images
 - [ ] **Phase 15: Share Results** - Share score card after quiz
 - [ ] **Phase 16: Quiz Mode UX** - Improve visual hierarchy, remove distractions, no-scroll layout
@@ -169,7 +169,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 13-01-PLAN.md — Root layout guards, onboarding screen with pagination
+- [x] 13-01-PLAN.md — Root layout guards, onboarding screen with pagination
 
 **Success Criteria**:
 1. User with gamesPlayed = 0 sees onboarding on app launch
@@ -315,7 +315,7 @@ Ideas parked for future development:
 | 10. Refine Visuals & Motion | v2.0 | Complete | 2026-01-18 |
 | 11. Level System | v2.0 | Complete | 2026-01-19 |
 | 12. Levels on Hero | v2.0 | Complete | 2026-01-19 |
-| 13. Onboarding | v2.0 | Planned | - |
+| 13. Onboarding | v2.0 | Complete | 2026-01-19 |
 | 14. Mascot Evolution | v2.0 | Not started | - |
 | 15. Share Results | v2.0 | Not started | - |
 | 16. Quiz Mode UX | v2.0 | Not started | - |
@@ -326,5 +326,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 13 planned*
+*Last updated: 2026-01-19 - Phase 13 complete*
 *Current milestone: v2.0 Polish & Progression*

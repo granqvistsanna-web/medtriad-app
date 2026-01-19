@@ -34,9 +34,9 @@ Requirements for Polish & Progression release.
 
 ### Onboarding
 
-- [ ] **ONBD-01**: User can skip onboarding at any point
-- [ ] **ONBD-02**: Onboarding only shows for new users (gamesPlayed = 0)
-- [ ] **ONBD-03**: Onboarding has 2-3 screens explaining triads and scoring
+- [x] **ONBD-01**: User can skip onboarding at any point
+- [x] **ONBD-02**: Onboarding only shows for new users (gamesPlayed = 0)
+- [x] **ONBD-03**: Onboarding has 2-3 screens explaining triads and scoring
 
 ### Mascot
 
@@ -93,9 +93,9 @@ Deferred to future release.
 | LEVL-03 | Phase 11 | Complete |
 | HERO-01 | Phase 12 | Complete |
 | HERO-02 | Phase 12 | Complete |
-| ONBD-01 | Phase 13 | Pending |
-| ONBD-02 | Phase 13 | Pending |
-| ONBD-03 | Phase 13 | Pending |
+| ONBD-01 | Phase 13 | Complete |
+| ONBD-02 | Phase 13 | Complete |
+| ONBD-03 | Phase 13 | Complete |
 | MASC-01 | Phase 14 | Pending |
 | MASC-02 | Phase 14 | Pending |
 | SHARE-01 | Phase 15 | Pending |
@@ -109,4 +109,4 @@ Deferred to future release.
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-19 after Phase 12 completion*
+*Last updated: 2026-01-19 after Phase 13 completion*
