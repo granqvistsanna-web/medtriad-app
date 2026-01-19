@@ -2,6 +2,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { TriMascot, MascotMood } from './TriMascot';
+import { TierSection } from './TierSection';
+import { TierDefinition } from '@/services/mastery';
 import { Colors, Typography, Radius, Spacing, Durations } from '@/constants/theme';
 
 type HeroCardProps = {
@@ -11,6 +13,9 @@ type HeroCardProps = {
   lastPlayed?: Date | null;
   delay?: number;
   masteryLevel?: number;
+  tier: TierDefinition;
+  tierProgress: number;
+  onTierPress?: () => void;
 };
 
 /**
@@ -99,6 +104,9 @@ export function HeroCard({
   lastPlayed,
   delay = 0,
   masteryLevel = 0,
+  tier,
+  tierProgress,
+  onTierPress,
 }: HeroCardProps) {
   const colors = Colors.light;
 
@@ -119,6 +127,18 @@ export function HeroCard({
         <View style={styles.mascotContainer}>
           <TriMascot mood={mascotMood} size="lg" masteryLevel={masteryLevel} />
         </View>
+
+        {/* Tier section below mascot */}
+        <Animated.View
+          entering={FadeInUp.delay(delay + Durations.stagger).duration(Durations.normal).springify()}
+          style={styles.tierContainer}
+        >
+          <TierSection
+            tier={tier}
+            tierProgress={tierProgress}
+            onPress={onTierPress}
+          />
+        </Animated.View>
 
         {/* Content centered below */}
         <View style={styles.content}>
@@ -143,6 +163,10 @@ const styles = StyleSheet.create({
   mascotContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tierContainer: {
+    alignItems: 'center',
+    marginTop: Spacing.sm,
   },
   content: {
     alignItems: 'center',

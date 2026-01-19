@@ -21,6 +21,8 @@ export default function HomeScreen() {
     accuracy,
     dailyStreak,
     highScore,
+    tier,
+    tierProgress,
   } = useStats();
 
   // Show loading state
@@ -60,6 +62,9 @@ export default function HomeScreen() {
           lastPlayed={stats?.lastPlayedAt ? new Date(stats.lastPlayedAt) : null}
           delay={Durations.stagger}
           masteryLevel={calculateLevel(stats?.totalAnswered ?? 0)}
+          tier={tier}
+          tierProgress={tierProgress}
+          onTierPress={() => router.push('/(tabs)/progress')}
         />
 
         {/* Start Quiz button */}
