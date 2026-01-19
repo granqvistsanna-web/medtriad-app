@@ -121,6 +121,79 @@ Quick reference for design tokens and motion patterns.
 
 ---
 
+## Icons
+
+All icons use SF Symbols via `IconSymbol` component (expo/symbols).
+
+### Icon Sizes
+
+| Size | Usage |
+|------|-------|
+| 14 | Tiny indicators |
+| 16 | Small inline icons |
+| 18 | Button icons |
+| 20 | Standard UI icons |
+| 22 | Emphasized icons |
+| 32 | Large feature icons |
+
+### Usage
+
+```typescript
+import { IconSymbol } from '@/components/ui/icon-symbol';
+
+<IconSymbol name="checkmark.circle.fill" size={20} color={colors.success} />
+```
+
+---
+
+## Card Styling
+
+Duolingo-inspired hard border treatment for all cards.
+
+### CardStyle Pattern
+
+```typescript
+import { CardStyle } from '@/constants/theme';
+
+// Spread into StyleSheet
+const styles = StyleSheet.create({
+  card: {
+    ...CardStyle,
+    padding: Spacing.base,
+  },
+});
+```
+
+### Properties
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| backgroundColor | backgroundCard | White base |
+| borderWidth | 2 | Visible border all around |
+| borderColor | border | Subtle border |
+| borderBottomWidth | 4 | Extra depth on bottom |
+| borderBottomColor | borderStrong | Stronger bottom edge |
+| borderRadius | Radius.lg (16) | Rounded corners |
+| shadow | Shadows.light.sm | Subtle lift |
+
+### Press Animation Pattern
+
+For interactive cards, animate borderBottomWidth on press:
+
+```typescript
+const borderBottom = useSharedValue(4);
+
+const handlePressIn = () => {
+  borderBottom.value = withSpring(2, Easings.press);
+};
+
+const handlePressOut = () => {
+  borderBottom.value = withSpring(4, Easings.press);
+};
+```
+
+---
+
 ## Animation
 
 ### Durations
@@ -190,4 +263,71 @@ scale.value = withSequence(
 
 ---
 
+## Common Mistakes
+
+Antipatterns to avoid when building UI.
+
+### Hardcoded Colors
+
+```typescript
+// Don't
+backgroundColor: '#F0F2F4',
+
+// Do
+backgroundColor: Colors.light.backgroundSecondary,
+```
+
+### Magic Spacing Numbers
+
+```typescript
+// Don't
+paddingHorizontal: 16,
+gap: 8,
+
+// Do
+paddingHorizontal: Spacing.base,
+gap: Spacing.sm,
+```
+
+### Custom Typography
+
+```typescript
+// Don't
+fontSize: 14,
+fontWeight: '400',
+
+// Do
+...Typography.caption,
+```
+
+### Soft Card Borders
+
+```typescript
+// Don't
+borderWidth: 1,
+borderColor: '#eee',
+
+// Do
+borderWidth: 2,
+borderColor: Colors.light.border,
+borderBottomWidth: 4,
+borderBottomColor: Colors.light.borderStrong,
+```
+
+### Inline Shadows
+
+```typescript
+// Don't
+shadowColor: '#000',
+shadowOffset: { width: 0, height: 2 },
+shadowOpacity: 0.1,
+shadowRadius: 4,
+
+// Do
+...Shadows.light.sm,
+```
+
+---
+
 *Generated: Phase 10 - Refine Visuals & Motion*
+*Updated: Phase 17 - Design System Audit*
