@@ -1,15 +1,37 @@
+import { useEffect, useState } from 'react';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import { Image } from 'expo-image';
 import 'react-native-reanimated';
 
 import { Colors } from '@/constants/theme';
 import { useStats } from '@/hooks/useStats';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { LoadingSkeleton } from '@/components/LoadingSkeleton';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
+
+// Keep splash visible during initialization
+SplashScreen.preventAutoHideAsync();
+
+// All mascot images to preload
+const MASCOT_IMAGES = [
+  require('@/assets/images/tri-neutral.png'),
+  require('@/assets/images/tri-success.png'),
+  require('@/assets/images/tri-lvl1.png'),
+  require('@/assets/images/tri-lvl2.png'),
+  require('@/assets/images/tri-lvl3.png'),
+  require('@/assets/images/tri-lvl4.png'),
+  require('@/assets/images/tri-lvl5.png'),
+  require('@/assets/images/tri-lvl6.png'),
+  require('@/assets/images/tri-chill.png'),
+  require('@/assets/images/tri-thinking.png'),
+  require('@/assets/images/tri-share.png'),
+];
 
 // Custom light theme with teal accent
 const LightTheme = {
@@ -25,11 +47,34 @@ const LightTheme = {
 };
 
 export default function RootLayout() {
-  const { isNewUser, loading } = useStats();
+  const { isNewUser, loading: statsLoading } = useStats();
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Prevent flash - show nothing while determining user state
-  if (loading) {
-    return null;
+  // Preload mascot images
+  useEffect(() => {
+    async function preloadImages() {
+      try {
+        await Image.prefetch(MASCOT_IMAGES);
+        setImagesLoaded(true);
+      } catch (error) {
+        // Images will load on-demand if prefetch fails
+        console.warn('Image prefetch failed:', error);
+        setImagesLoaded(true);
+      }
+    }
+    preloadImages();
+  }, []);
+
+  // Hide splash when both stats and images are ready
+  useEffect(() => {
+    if (!statsLoading && imagesLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [statsLoading, imagesLoaded]);
+
+  // Show skeleton while loading (not blank screen)
+  if (statsLoading || !imagesLoaded) {
+    return <LoadingSkeleton />;
   }
 
   return (
