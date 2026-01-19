@@ -75,15 +75,15 @@ export function TierSection({ tier, tierProgress, onPress }: TierSectionProps) {
       onPressOut={handlePressOut}
       style={[styles.container, animatedStyle]}
     >
-      {/* Badge and tier name row */}
+      {/* Compact inline layout: badge + name + progress */}
       <View style={styles.row}>
         <TierBadge tierNumber={tier.tier} />
-        <Text style={[styles.tierName, { color: colors.text }]}>
+        <Text style={[styles.tierName, { color: colors.textSecondary }]}>
           {tier.name}
         </Text>
       </View>
 
-      {/* Progress bar below */}
+      {/* Thin progress bar below, same width as row */}
       <View style={styles.progressContainer}>
         <TierProgressBar progress={displayProgress} />
       </View>
@@ -93,20 +93,20 @@ export function TierSection({ tier, tierProgress, onPress }: TierSectionProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
+    alignItems: 'center',
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
+    gap: Spacing.xs,
   },
   tierName: {
-    ...Typography.label,
+    ...Typography.footnote,
+    fontWeight: '500' as const,
+    letterSpacing: 0.3,
   },
   progressContainer: {
     marginTop: Spacing.xs,
-    // Match width of badge + gap + reasonable name width
-    width: 120,
+    width: 100,
   },
 });

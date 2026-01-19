@@ -1,4 +1,4 @@
-import Svg, { Path, Text as SvgText } from 'react-native-svg';
+import Svg, { Path, Text as SvgText, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { Colors } from '@/constants/theme';
 
 type TierBadgeProps = {
@@ -9,36 +9,57 @@ type TierBadgeProps = {
 /**
  * Shield-shaped badge displaying the current tier number.
  *
- * Features:
- * - Shield SVG shape with pointed bottom
- * - Tier number (1-6) centered inside
- * - Uses colors.primary for shield fill
- * - Uses colors.textInverse for number text
+ * Design features:
+ * - Clean heraldic shield silhouette
+ * - Subtle gradient for dimension
+ * - Refined border for definition
+ * - No container shadow (integrates cleanly with any background)
  *
  * Usage:
  *   <TierBadge tierNumber={tier.tier} />
- *   <TierBadge tierNumber={3} size={40} />
+ *   <TierBadge tierNumber={3} size={32} />
  */
-export function TierBadge({ tierNumber, size = 32 }: TierBadgeProps) {
+export function TierBadge({ tierNumber, size = 26 }: TierBadgeProps) {
   const colors = Colors.light;
 
-  // Scale factor for viewBox to size conversion
-  const viewBoxWidth = 24;
-  const viewBoxHeight = 26;
+  // ViewBox for shield proportions
+  const viewBoxWidth = 20;
+  const viewBoxHeight = 24;
+
+  // Clean shield path
+  const shieldPath = 'M10 1 L18 4 L18 10 C18 16 14 20 10 22 C6 20 2 16 2 10 L2 4 Z';
 
   return (
-    <Svg width={size} height={size * (viewBoxHeight / viewBoxWidth)} viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
-      {/* Shield shape */}
+    <Svg
+      width={size}
+      height={size * (viewBoxHeight / viewBoxWidth)}
+      viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+    >
+      <Defs>
+        {/* Subtle vertical gradient */}
+        <LinearGradient id="shieldFill" x1="0" y1="0" x2="0" y2="1">
+          <Stop offset="0%" stopColor="#5DD4CC" stopOpacity="1" />
+          <Stop offset="100%" stopColor={colors.primary} stopOpacity="1" />
+        </LinearGradient>
+      </Defs>
+
+      {/* Shield fill */}
+      <Path d={shieldPath} fill="url(#shieldFill)" />
+
+      {/* Subtle border */}
       <Path
-        d="M12 1 L22 5 L22 12 C22 18 17 22 12 24 C7 22 2 18 2 12 L2 5 Z"
-        fill={colors.primary}
+        d={shieldPath}
+        fill="none"
+        stroke={colors.primaryDark}
+        strokeWidth="0.75"
       />
-      {/* Tier number centered in shield */}
+
+      {/* Tier number */}
       <SvgText
-        x="12"
+        x="10"
         y="14"
         textAnchor="middle"
-        fontSize="12"
+        fontSize="10"
         fontWeight="700"
         fill={colors.textInverse}
       >
