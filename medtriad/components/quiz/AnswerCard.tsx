@@ -5,7 +5,6 @@ import Animated, {
   useSharedValue,
   withSpring,
   withSequence,
-  withTiming,
   FadeInUp,
 } from 'react-native-reanimated';
 import { Colors, Typography, Radius, Spacing, Durations, Easings } from '@/constants/theme';
@@ -45,13 +44,12 @@ export function AnswerCard({
         withSpring(1, Easings.gentle)    // Settle back
       );
     } else if (state === 'incorrect') {
-      // Shake animation when incorrect
+      // Shake animation when incorrect - spring-based for physical feel
       shakeX.value = withSequence(
-        withTiming(-8, { duration: 50 }),
-        withTiming(8, { duration: 50 }),
-        withTiming(-6, { duration: 50 }),
-        withTiming(6, { duration: 50 }),
-        withTiming(0, { duration: 50 })
+        withSpring(-5, { damping: 3, stiffness: 500 }),
+        withSpring(5, { damping: 3, stiffness: 500 }),
+        withSpring(-3, { damping: 5, stiffness: 500 }),
+        withSpring(0, { damping: 10, stiffness: 300 })
       );
     }
   }, [state]);

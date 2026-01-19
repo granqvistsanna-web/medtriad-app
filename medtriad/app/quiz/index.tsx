@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { useState, useEffect, useCallback, useRef } from 'react';
-import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { useEffect, useCallback, useRef } from 'react';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { FindingsCard } from '@/components/quiz/FindingsCard';
 import { AnswerCard } from '@/components/quiz/AnswerCard';
@@ -25,7 +25,7 @@ import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/them
 import { MascotMood } from '@/components/home/TriMascot';
 
 /** Delay in ms before advancing to next question after answer */
-const ANSWER_DELAY = 1500;
+const ANSWER_DELAY = 1200;
 
 export default function QuizScreen() {
   const [state, dispatch] = useQuizReducer();
@@ -40,9 +40,6 @@ export default function QuizScreen() {
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
   const maxComboRef = useRef(1);
-
-  // Feedback text state
-  const [feedbackText, setFeedbackText] = useState<string | null>(null);
 
   const {
     status,
@@ -75,7 +72,6 @@ export default function QuizScreen() {
   // Handle timeout - no haptic, visual feedback only
   useEffect(() => {
     if (status === 'playing' && timeRemaining === 0) {
-      setFeedbackText("Time's up!");
       dispatch({
         type: 'SELECT_ANSWER',
         optionId: '',
@@ -123,7 +119,6 @@ export default function QuizScreen() {
           },
         });
       } else {
-        setFeedbackText(null);
         dispatch({ type: 'NEXT_QUESTION' });
       }
     }, ANSWER_DELAY);
@@ -156,12 +151,8 @@ export default function QuizScreen() {
       if (newTier > maxComboRef.current) {
         maxComboRef.current = newTier;
       }
-      setFeedbackText('Correct!');
     } else {
       playSound('incorrect');
-      // Find correct answer
-      const correctOption = currentQuestion.options.find((o) => o.isCorrect);
-      setFeedbackText(`Correct: ${correctOption?.condition}`);
     }
   };
 
@@ -272,25 +263,6 @@ export default function QuizScreen() {
             />
           ))}
         </View>
-
-        {/* Feedback text */}
-        {feedbackText && (
-          <Animated.View
-            entering={FadeInUp.duration(Durations.normal).springify()}
-            style={styles.feedbackContainer}
-          >
-            <Text
-              style={[
-                styles.feedbackText,
-                {
-                  color: feedbackText === 'Correct!' ? colors.success : colors.textSecondary,
-                },
-              ]}
-            >
-              {feedbackText === 'Correct!' ? 'Correct! ✨' : feedbackText}
-            </Text>
-          </Animated.View>
-        )}
       </View>
     </View>
   );
@@ -365,12 +337,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     gap: Spacing.sm,
-  },
-  feedbackContainer: {
-    alignItems: 'center',
-    paddingVertical: Spacing.sm,
-  },
-  feedbackText: {
-    ...Typography.label,
   },
 });
