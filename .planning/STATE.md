@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 19 complete
+**Current focus:** v2.0 Polish & Progression - Phase 20 in progress
 
 ## Current Position
 
-Phase: 19 of 20 (Error Handling)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-01-19 - Completed 19-02-PLAN.md
+Phase: 20 of 20 (Performance)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-01-19 - Completed 20-01-PLAN.md
 
-Progress: [#########.] 95% (v1.0 complete, Phases 9-19 complete)
+Progress: [#########.] 97% (v1.0 complete, Phases 9-19 complete, Phase 20 plan 1/2)
 
 ## Performance Metrics
 
@@ -25,9 +25,9 @@ Progress: [#########.] 95% (v1.0 complete, Phases 9-19 complete)
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 29
+- Plans completed: 30
 - Phases completed: 11 (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
-- Phases remaining: 1 (20)
+- Phases remaining: 1 (20) - 1/2 plans done
 - Requirements: 30 total, 30 complete
 
 ### Roadmap Evolution
@@ -168,6 +168,12 @@ Phase 19 decisions (Plan 02):
 - Dev tools clearAllData rethrows error for caller handling
 - gamesToNext uses Math.max(0, ...) to prevent negative display
 
+Phase 20 decisions (Plan 01):
+- estimatedItemSize: 140px for TriadCard (content + separator)
+- ItemSeparatorComponent for gaps (FlashList doesn't support gap in contentContainerStyle)
+- React.memo explicit wrap despite React Compiler (guaranteed optimization)
+- FlashList pattern: Use for lists with 20+ items for virtualization benefits
+
 ### Pending Todos
 
 None.
@@ -179,18 +185,17 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 19-02-PLAN.md
+Stopped at: Completed 20-01-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 19 (Error Handling) complete:
-- ErrorBoundary component with fallback UI
-- Validation utilities integrated into components
-- Defensive patterns applied to TierProgressBar, quiz, dev-tools, progress screen
-- App is now crash-proof for common edge cases
+Phase 20 (Performance) plan 1 complete:
+- Library screen virtualized with FlashList
+- TriadCard memoized for cell recycling optimization
+- Smooth scrolling with 45+ triads
 
-Ready to proceed to Phase 20 (final phase).
+Ready for 20-02 (remaining performance optimizations).
 
 ---
-*Updated: 2026-01-19 after 19-02 execution complete*
+*Updated: 2026-01-19 after 20-01 execution complete*
