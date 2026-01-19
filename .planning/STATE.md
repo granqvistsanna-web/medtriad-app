@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 20 in progress
+**Current focus:** v2.0 Polish & Progression - COMPLETE
 
 ## Current Position
 
 Phase: 20 of 20 (Performance)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-01-19 - Completed 20-01-PLAN.md
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-01-19 - Completed 20-02-PLAN.md
 
-Progress: [#########.] 97% (v1.0 complete, Phases 9-19 complete, Phase 20 plan 1/2)
+Progress: [##########] 100% (v1.0 complete, Phases 9-20 complete)
 
 ## Performance Metrics
 
@@ -25,9 +25,9 @@ Progress: [#########.] 97% (v1.0 complete, Phases 9-19 complete, Phase 20 plan 1
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 30
-- Phases completed: 11 (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
-- Phases remaining: 1 (20) - 1/2 plans done
+- Plans completed: 31
+- Phases completed: 12 (9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+- Phases remaining: 0
 - Requirements: 30 total, 30 complete
 
 ### Roadmap Evolution
@@ -99,7 +99,7 @@ Phase 13 decisions (Plan 01):
 - Track currentPage via runOnJS callback for React state sync
 
 Phase 14 decisions (Plan 01):
-- Image naming: tri-lvlX.png (user-provided), tier 3 falls back to tier 2
+- Image naming: tri-lvlX.png (user-provided), tier 3 now has its own image
 - Context prop on TriMascot controls image selection behavior
 - TIER_IMAGES object with static requires for Metro bundler
 - checkTierUp helper for tier boundary detection
@@ -174,28 +174,51 @@ Phase 20 decisions (Plan 01):
 - React.memo explicit wrap despite React Compiler (guaranteed optimization)
 - FlashList pattern: Use for lists with 20+ items for virtualization benefits
 
+Phase 20 decisions (Plan 02):
+- expo-image prefetch for all mascot images during splash
+- LoadingSkeleton with ActivityIndicator (not shimmer - overkill for brief load)
+- memory-disk cache policy for optimal image caching
+- SplashScreen control: preventAutoHideAsync at module level, hideAsync when ready
+
 ### Pending Todos
 
 None.
 
 ### Blockers/Concerns
 
-- tri-lvl3.png (Resident tier) not provided - using tier 2 fallback
+None - all assets and features complete.
 
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 20-01-PLAN.md
+Stopped at: Completed 20-02-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 20 (Performance) plan 1 complete:
-- Library screen virtualized with FlashList
-- TriadCard memoized for cell recycling optimization
-- Smooth scrolling with 45+ triads
+v2.0 COMPLETE - All 12 phases executed successfully:
+- Phase 9: Home Screen UI Polish
+- Phase 10: Motion & Delight
+- Phase 11: Level System
+- Phase 12: Home Screen Integration
+- Phase 13: Onboarding Flow
+- Phase 14: Mascot Personality
+- Phase 15: Share Feature
+- Phase 16: Quiz Mode UX
+- Phase 17: Design System Audit
+- Phase 18: Developer Tools
+- Phase 19: Error Handling
+- Phase 20: Performance Optimization
 
-Ready for 20-02 (remaining performance optimizations).
+App is production-ready with:
+- Complete tier progression system (6 tiers: Student -> Chief)
+- Tier-up celebrations with confetti
+- Share card generation
+- Onboarding for new users
+- FlashList virtualization for Library
+- Image preloading for instant mascot display
+- Error boundaries and defensive patterns
+- Developer tools for testing
 
 ---
-*Updated: 2026-01-19 after 20-01 execution complete*
+*Updated: 2026-01-19 after 20-02 execution complete - v2.0 COMPLETE*
