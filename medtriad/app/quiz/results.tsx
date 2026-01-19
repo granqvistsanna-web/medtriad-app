@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/Button';
 import { TriMascot } from '@/components/home/TriMascot';
 import { HighScoreBadge } from '@/components/results/HighScoreBadge';
 import { useStats } from '@/hooks/useStats';
-import { calculateLevel, getQuestionsToNextLevel } from '@/services/mastery';
 import { saveQuizHistory } from '@/services/stats-storage';
 import { Colors, Typography, Spacing, Radius, Durations, Easings } from '@/constants/theme';
 import { QUESTION_COUNT } from '@/types/quiz-state';
@@ -43,7 +42,7 @@ function getResultMessage(correctCount: number, isPerfect: boolean): string {
 export default function ResultsScreen() {
   const router = useRouter();
   const colors = Colors.light;
-  const { stats } = useStats();
+  const { stats, tier, nextTier } = useStats();
   const { width } = useWindowDimensions();
   const confettiRef = useRef<ConfettiCannon>(null);
 
@@ -103,10 +102,6 @@ export default function ResultsScreen() {
   const accuracy = (correctCount / QUESTION_COUNT) * 100;
   const mascotMood = accuracy >= 70 || isPerfect ? 'happy' : 'neutral';
 
-  // Mastery progress info
-  const totalAnswered = stats?.totalAnswered ?? 0;
-  const level = calculateLevel(totalAnswered);
-  const questionsToNext = getQuestionsToNextLevel(totalAnswered);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -178,15 +173,13 @@ export default function ResultsScreen() {
           </View>
         </Animated.View>
 
-        {/* Mastery Progress */}
+        {/* Tier Badge */}
         <Animated.View
           entering={FadeInUp.delay(Durations.staggerMedium * 5).duration(Durations.normal).springify()}
           style={[styles.masteryBadge, { backgroundColor: colors.primaryLight }]}
         >
           <Text style={[styles.masteryText, { color: colors.primary }]}>
-            {questionsToNext > 0
-              ? `+${QUESTION_COUNT} questions toward Level ${level + 1}`
-              : `Level ${level} Master!`}
+            {nextTier ? `Playing as ${tier.name}` : tier.name}
           </Text>
         </Animated.View>
       </View>
