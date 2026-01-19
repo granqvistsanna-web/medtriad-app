@@ -29,8 +29,8 @@ Requirements for Polish & Progression release.
 
 ### Hero Display
 
-- [ ] **HERO-01**: Home screen hero area shows current tier name and progress
-- [ ] **HERO-02**: Tier badge or icon visible alongside mascot
+- [x] **HERO-01**: Home screen hero area shows current tier name and progress
+- [x] **HERO-02**: Tier badge or icon visible alongside mascot
 
 ### Onboarding
 
@@ -91,8 +91,8 @@ Deferred to future release.
 | LEVL-01 | Phase 11 | Complete |
 | LEVL-02 | Phase 11 | Complete |
 | LEVL-03 | Phase 11 | Complete |
-| HERO-01 | Phase 12 | Pending |
-| HERO-02 | Phase 12 | Pending |
+| HERO-01 | Phase 12 | Complete |
+| HERO-02 | Phase 12 | Complete |
 | ONBD-01 | Phase 13 | Pending |
 | ONBD-02 | Phase 13 | Pending |
 | ONBD-03 | Phase 13 | Pending |
@@ -109,4 +109,4 @@ Deferred to future release.
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-19 after Phase 11 completion*
+*Last updated: 2026-01-19 after Phase 12 completion*

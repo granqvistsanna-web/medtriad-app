@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 12 Plan 01 complete
+**Current focus:** v2.0 Polish & Progression - Phase 13 ready to plan
 
 ## Current Position
 
@@ -106,7 +106,7 @@ Resume file: None
 
 ## Next Steps
 
-Phase 12 (Levels on Hero) complete. Ready for Phase 13 (Mascot Tiers).
+Phase 12 (Levels on Hero) complete and verified. Ready for Phase 13 (Onboarding).
 
 Run `/gsd:discuss-phase 13` to gather context, or `/gsd:plan-phase 13` to plan directly.
 

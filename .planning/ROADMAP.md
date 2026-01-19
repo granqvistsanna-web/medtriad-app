@@ -26,7 +26,7 @@ evolving mascot, smooth onboarding, and shareability.
 - [x] **Phase 9: UI Polish** - Consistent visual style across all screens
 - [x] **Phase 10: Refine Visuals & Motion** - Tighten spacing, colors, polished motion
 - [x] **Phase 11: Level System** - 6 progression tiers with clear identity
-- [ ] **Phase 12: Levels on Hero** - Show current tier prominently on Home screen
+- [x] **Phase 12: Levels on Hero** - Show current tier prominently on Home screen
 - [ ] **Phase 13: Onboarding** - New user introduction flow
 - [ ] **Phase 14: Mascot Evolution** - Level-specific mascot images
 - [ ] **Phase 15: Share Results** - Share score card after quiz
@@ -148,7 +148,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 12-01-PLAN.md — TierBadge, TierSection components, HeroCard integration
+- [x] 12-01-PLAN.md — TierBadge, TierSection components, HeroCard integration
 
 **Success Criteria**:
 1. Home screen hero area shows current tier name
@@ -309,7 +309,7 @@ Ideas parked for future development:
 | 9. UI Polish | v2.0 | Complete | 2026-01-18 |
 | 10. Refine Visuals & Motion | v2.0 | Complete | 2026-01-18 |
 | 11. Level System | v2.0 | Complete | 2026-01-19 |
-| 12. Levels on Hero | v2.0 | Planned | - |
+| 12. Levels on Hero | v2.0 | Complete | 2026-01-19 |
 | 13. Onboarding | v2.0 | Not started | - |
 | 14. Mascot Evolution | v2.0 | Not started | - |
 | 15. Share Results | v2.0 | Not started | - |
@@ -321,5 +321,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 12 planned*
+*Last updated: 2026-01-19 - Phase 12 complete*
 *Current milestone: v2.0 Polish & Progression*
