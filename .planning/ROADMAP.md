@@ -245,6 +245,11 @@ Plans:
 
 **Requirements**: QUIZ-01, QUIZ-02, QUIZ-03, QUIZ-04, QUIZ-05
 
+**Plans:** 1 plan
+
+Plans:
+- [ ] 16-01-PLAN.md — Visual hierarchy, feedback system, layout refinements
+
 **Success Criteria**:
 1. Symptoms card visually elevated from answer options
 2. "IDENTIFY THE TRIAD" label above symptoms
@@ -339,5 +344,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 15 complete*
+*Last updated: 2026-01-19 - Phase 16 planned*
 *Current milestone: v2.0 Polish & Progression*

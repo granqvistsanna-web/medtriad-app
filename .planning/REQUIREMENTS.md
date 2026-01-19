@@ -49,13 +49,21 @@ Requirements for Polish & Progression release.
 - [x] **SHARE-02**: Share generates styled image card with score, tier, and mascot
 - [x] **SHARE-03**: Native iOS share sheet opens with image
 
+### Quiz Mode UX
+
+- [ ] **QUIZ-01**: Symptoms card visually elevated from answer options
+- [ ] **QUIZ-02**: "IDENTIFY THE TRIAD" label appears above symptoms
+- [ ] **QUIZ-03**: No text-based "Correct!"/"Incorrect!" feedback at bottom
+- [ ] **QUIZ-04**: Answer feedback via button color only (green/red fill)
+- [ ] **QUIZ-05**: All quiz content fits on screen without scrolling
+
 ## v3.0 Requirements
 
 Deferred to future release.
 
 ### Gameplay
 - **GAME-01**: Category filtering / selection for quizzes
-- **GAME-02**: Reverse quiz mode (condition → findings)
+- **GAME-02**: Reverse quiz mode (condition -> findings)
 - **GAME-03**: Daily challenges
 
 ### Social
@@ -101,12 +109,17 @@ Deferred to future release.
 | SHARE-01 | Phase 15 | Complete |
 | SHARE-02 | Phase 15 | Complete |
 | SHARE-03 | Phase 15 | Complete |
+| QUIZ-01 | Phase 16 | Planned |
+| QUIZ-02 | Phase 16 | Planned |
+| QUIZ-03 | Phase 16 | Planned |
+| QUIZ-04 | Phase 16 | Planned |
+| QUIZ-05 | Phase 16 | Planned |
 
 **Coverage:**
-- v2.0 requirements: 21 total
-- Mapped to phases: 21
-- Unmapped: 0 ✓
+- v2.0 requirements: 26 total
+- Mapped to phases: 26
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-19 after Phase 15 completion*
+*Last updated: 2026-01-19 - Phase 16 requirements added*
