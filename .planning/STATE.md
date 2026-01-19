@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.0 Polish & Progression - Phase 15 complete
+**Current focus:** v2.0 Polish & Progression - Phase 16 in progress
 
 ## Current Position
 
-Phase: 15 of 19 (Share Results)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-01-19 - Completed 15-02-PLAN.md
+Phase: 16 of 19 (Quiz Mode UX)
+Plan: 1 of 1 in current phase
+Status: In progress
+Last activity: 2026-01-19 - Completed 16-01-PLAN.md
 
-Progress: [########..] 78% (v1.0 complete, Phases 9-15 complete)
+Progress: [########..] 80% (v1.0 complete, Phases 9-16 complete)
 
 ## Performance Metrics
 
@@ -25,10 +25,10 @@ Progress: [########..] 78% (v1.0 complete, Phases 9-15 complete)
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 21
-- Phases completed: 7 (9, 10, 11, 12, 13, 14, 15)
-- Phases remaining: 4 (16-19)
-- Requirements: 21+ total, 21 complete
+- Plans completed: 22
+- Phases completed: 8 (9, 10, 11, 12, 13, 14, 15, 16)
+- Phases remaining: 3 (17-19)
+- Requirements: 22+ total, 22 complete
 
 ### Roadmap Evolution
 
@@ -126,6 +126,13 @@ Phase 15 decisions (Plan 02):
 - Button label changes to "Sharing..." during share operation
 - Offscreen container uses position: absolute, left: -9999 to hide ShareCard
 
+Phase 16 decisions (Plan 01):
+- backgroundSecondary (#F8F9FA) for symptoms card contrast without borders
+- Color fill sufficient for answer feedback (no checkmark/X icons)
+- Text feedback removed for cleaner UI
+- ANSWER_DELAY reduced to 1200ms for snappier flow
+- Spring-based shake: damping 3-10, stiffness 300-500, 2-3 oscillations
+
 ### Pending Todos
 
 None.
@@ -137,20 +144,19 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 15-02-PLAN.md (Phase 15 complete)
+Stopped at: Completed 16-01-PLAN.md
 Resume file: None
 
 ## Next Steps
 
-Phase 15 (Share Results) complete:
-- ShareCard component with mascot, headline, score, branding
-- useShareCard hook with capture and share logic
-- Results screen integration with Share button
-- End-to-end share flow working
+Phase 16 (Quiz Mode UX) complete:
+- Symptoms card elevated with backgroundSecondary contrast
+- "IDENTIFY THE TRIAD" label above symptoms
+- Color-only answer feedback (icons removed)
+- Text feedback removed
+- Spring-based shake animation for incorrect answers
 
-Ready for Phase 16 (Quiz Mode UX).
-
-Run `/gsd:plan-phase 16` to plan the Quiz Mode UX phase.
+Ready for Phase 17 (Developer Tools) or continue with any remaining v2.0 phases.
 
 ---
-*Updated: 2026-01-19 after 15-02 execution complete*
+*Updated: 2026-01-19 after 16-01 execution complete*
