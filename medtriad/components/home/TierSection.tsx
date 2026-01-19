@@ -40,6 +40,11 @@ export function TierSection({ tier, tierProgress, onPress }: TierSectionProps) {
   const colors = Colors.light;
   const scale = useSharedValue(1);
 
+  // Guard against undefined tier (can happen during hot reload)
+  if (!tier) {
+    return null;
+  }
+
   // Animate progress from 0 to actual value on mount
   const [displayProgress, setDisplayProgress] = useState(0);
 
