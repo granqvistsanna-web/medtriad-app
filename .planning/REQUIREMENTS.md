@@ -40,8 +40,8 @@ Requirements for Polish & Progression release.
 
 ### Mascot
 
-- [ ] **MASC-01**: Different mascot image displays for each level tier
-- [ ] **MASC-02**: Mascot is visible on Home screen
+- [x] **MASC-01**: Different mascot image displays for each level tier
+- [x] **MASC-02**: Mascot is visible on Home screen
 
 ### Share Results
 
