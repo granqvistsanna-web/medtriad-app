@@ -1,4 +1,5 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -28,8 +29,6 @@ type TriMascotProps = {
 
 const triNeutral = require('@/assets/images/tri-neutral.png');
 const triHappy = require('@/assets/images/tri-success.png');
-const triMaster = require('@/assets/images/tri-master.png');
-const triSupermaster = require('@/assets/images/tri-supermaster.png');
 
 // Tier-specific mascot images (static requires for Metro bundler)
 // Naming: tri-lvl1.png through tri-lvl6.png (lvl3 missing, falls back to lvl2)
@@ -60,8 +59,7 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
       return TIER_IMAGES[tier] || TIER_IMAGES[1];
     }
     // Quiz/results continue using mood-based images (existing behavior)
-    if (masteryLevel >= 10) return triSupermaster;
-    if (masteryLevel >= 7) return triMaster;
+    if (masteryLevel >= 7) return TIER_IMAGES[6];
     if (mood === 'happy' || mood === 'streak' || mood === 'tierUp') return triHappy;
     return triNeutral;
   };
@@ -157,11 +155,8 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
   });
 
   const glowStyle = useAnimatedStyle(() => {
-    if (mood !== 'streak' && mood !== 'tierUp') return { opacity: 0 };
-
-    return {
-      opacity: interpolate(glow.value, [0, 1], [0, 0.4]),
-    };
+    // Glow disabled for cleaner look on neutral backgrounds
+    return { opacity: 0 };
   });
 
   return (
@@ -188,7 +183,8 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
             width: pixelSize,
             height: pixelSize,
           }}
-          resizeMode="contain"
+          contentFit="contain"
+          cachePolicy="memory-disk"
         />
       </Animated.View>
     </View>
