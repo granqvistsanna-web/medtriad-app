@@ -14,12 +14,15 @@ import { MascotSizes, Colors } from '@/constants/theme';
 
 export type MascotMood = 'neutral' | 'happy' | 'reassuring' | 'streak';
 export type MascotSize = 'sm' | 'md' | 'lg' | 'xl';
+export type MascotContext = 'home' | 'quiz' | 'results';
 
 type TriMascotProps = {
   mood?: MascotMood;
   size?: MascotSize;
   animate?: boolean;
-  masteryLevel?: number;
+  masteryLevel?: number;  // Keep for backward compat
+  tier?: number;          // 1-6 tier number
+  context?: MascotContext;  // Determines image selection logic
 };
 
 const triNeutral = require('@/assets/images/tri-neutral.png');
@@ -27,7 +30,18 @@ const triHappy = require('@/assets/images/tri-success.png');
 const triMaster = require('@/assets/images/tri-master.png');
 const triSupermaster = require('@/assets/images/tri-supermaster.png');
 
-export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, masteryLevel = 0 }: TriMascotProps) {
+// Tier-specific mascot images (static requires for Metro bundler)
+// Naming: tri-lvl1.png through tri-lvl6.png (lvl3 missing, falls back to lvl2)
+const TIER_IMAGES: Record<number, ReturnType<typeof require>> = {
+  1: require('@/assets/images/tri-lvl1.png'),
+  2: require('@/assets/images/tri-lvl2.png'),
+  3: require('@/assets/images/tri-lvl2.png'),  // Fallback: lvl3 not provided
+  4: require('@/assets/images/tri-lvl4.png'),
+  5: require('@/assets/images/tri-lvl5.png'),
+  6: require('@/assets/images/tri-lvl6.png'),
+};
+
+export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, masteryLevel = 0, tier, context }: TriMascotProps) {
   const colors = Colors.light;
   const pixelSize = MascotSizes[size];
 
@@ -37,8 +51,13 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
   const rise = useSharedValue(0);
   const glow = useSharedValue(0);
 
-  // Select image based on mastery level first, then mood
+  // Select image based on context, tier, mastery level, and mood
   const getImageSource = () => {
+    // Home screen uses tier-specific images
+    if (context === 'home' && tier) {
+      return TIER_IMAGES[tier] || TIER_IMAGES[1];
+    }
+    // Quiz/results continue using mood-based images (existing behavior)
     if (masteryLevel >= 10) return triSupermaster;
     if (masteryLevel >= 7) return triMaster;
     if (mood === 'happy' || mood === 'streak') return triHappy;
