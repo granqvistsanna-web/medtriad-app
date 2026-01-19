@@ -15,8 +15,10 @@ import { Button } from '@/components/ui/Button';
 import { TriMascot } from '@/components/home/TriMascot';
 import { HighScoreBadge } from '@/components/results/HighScoreBadge';
 import { TierUpCelebration } from '@/components/results/TierUpCelebration';
+import { ShareCard } from '@/components/share/ShareCard';
 import { useStats } from '@/hooks/useStats';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { useShareCard } from '@/hooks/useShareCard';
 import { saveQuizHistory } from '@/services/stats-storage';
 import { Colors, Typography, Spacing, Radius, Durations, Easings } from '@/constants/theme';
 import { QUESTION_COUNT } from '@/types/quiz-state';
@@ -51,6 +53,7 @@ export default function ResultsScreen() {
   const { width } = useWindowDimensions();
   const confettiRef = useRef<ConfettiCannon>(null);
   const reduceMotion = useReducedMotion();
+  const { cardRef, share, isSharing } = useShareCard();
 
   const params = useLocalSearchParams<ResultsParams>();
 
@@ -221,6 +224,12 @@ export default function ResultsScreen() {
         style={styles.buttons}
       >
         <Button label="Play Again" onPress={() => router.replace('/quiz')} />
+        <Button
+          label={isSharing ? 'Sharing...' : 'Share'}
+          variant="secondary"
+          onPress={share}
+          disabled={isSharing}
+        />
         <Button
           label="Home"
           variant="secondary"
