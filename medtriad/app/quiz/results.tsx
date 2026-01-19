@@ -237,6 +237,17 @@ export default function ResultsScreen() {
         />
       </Animated.View>
 
+      {/* Hidden share card for capture */}
+      <View style={styles.offscreen}>
+        <View ref={cardRef} collapsable={false}>
+          <ShareCard
+            score={score}
+            correctCount={correctCount}
+            totalQuestions={QUESTION_COUNT}
+          />
+        </View>
+      </View>
+
       {/* Confetti for perfect rounds (skip for reduced motion users) */}
       {isPerfect && !reduceMotion && (
         <ConfettiCannon
@@ -314,5 +325,10 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     alignSelf: 'center',
     width: '100%',
+  },
+  offscreen: {
+    position: 'absolute',
+    left: -9999,
+    top: 0,
   },
 });
