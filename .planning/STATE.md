@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-18)
 ## Current Position
 
 Phase: 14 of 19 (Mascot Evolution)
-Plan: 2 of 2 in current phase (COMPLETE)
+Plan: 3 of 3 in current phase (COMPLETE)
 Status: Phase complete
-Last activity: 2026-01-19 - Completed 14-02-PLAN.md
+Last activity: 2026-01-19 - Completed 14-03-PLAN.md
 
-Progress: [########..] 73% (v1.0 complete, Phases 9-14 complete)
+Progress: [########..] 74% (v1.0 complete, Phases 9-14 complete)
 
 ## Performance Metrics
 
@@ -25,10 +25,10 @@ Progress: [########..] 73% (v1.0 complete, Phases 9-14 complete)
 - Phases: 8
 
 **v2.0:**
-- Plans completed: 17
+- Plans completed: 18
 - Phases completed: 6 (9, 10, 11, 12, 13, 14)
 - Phases remaining: 5 (15-19)
-- Requirements: 21+ total, 17 complete
+- Requirements: 21+ total, 18 complete
 
 ### Roadmap Evolution
 
@@ -109,6 +109,12 @@ Phase 14 decisions (Plan 02):
 - Perfect round confetti disabled when tier-up celebration is showing
 - Celebration sequence: delay -> scale out -> state change -> confetti -> scale in -> message
 
+Phase 14 decisions (Plan 03):
+- tierUp mood uses finite 3-pulse glow (800ms per half-cycle)
+- showTierUpGlow prop controls mood override in HeroCard
+- 5-second delay before clearing pendingTierUp allows animation to complete
+- clearPendingTierUp called both on Results celebration complete and Home glow timeout
+
 ### Pending Todos
 
 None.
@@ -120,14 +126,18 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-19
-Stopped at: Completed 14-02-PLAN.md (Phase 14 complete)
+Stopped at: Completed 14-03-PLAN.md (Phase 14 complete)
 Resume file: None
 
 ## Next Steps
 
-Phase 14 (Mascot Evolution) complete. Ready for Phase 15 (Share Feature).
+Phase 14 (Mascot Evolution) fully complete with all tier-up celebration flows:
+1. Results screen: Full celebration with confetti + mascot transition
+2. Home screen: Catch-up glow for users who missed Results
+
+Ready for Phase 15 (Share Feature).
 
 Run `/gsd:plan-phase 15` to plan the Share Feature phase.
 
 ---
-*Updated: 2026-01-19 after 14-02 execution complete*
+*Updated: 2026-01-19 after 14-03 execution complete*
