@@ -57,6 +57,13 @@ Requirements for Polish & Progression release.
 - [x] **QUIZ-04**: Answer feedback via button color only (green/red fill)
 - [x] **QUIZ-05**: All quiz content fits on screen without scrolling
 
+### Developer Tools
+
+- [ ] **DEV-01**: Dev menu only accessible in DEBUG builds (__DEV__)
+- [ ] **DEV-02**: Reset onboarding state without reinstalling app
+- [ ] **DEV-03**: Set user to any tier level for testing
+- [ ] **DEV-04**: Clear all app data with confirmation dialog
+
 ## v3.0 Requirements
 
 Deferred to future release.
@@ -114,12 +121,16 @@ Deferred to future release.
 | QUIZ-03 | Phase 16 | Complete |
 | QUIZ-04 | Phase 16 | Complete |
 | QUIZ-05 | Phase 16 | Complete |
+| DEV-01 | Phase 18 | Planned |
+| DEV-02 | Phase 18 | Planned |
+| DEV-03 | Phase 18 | Planned |
+| DEV-04 | Phase 18 | Planned |
 
 **Coverage:**
-- v2.0 requirements: 26 total
-- Mapped to phases: 26
+- v2.0 requirements: 30 total
+- Mapped to phases: 30
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 16 complete*
+*Last updated: 2026-01-19 - Phase 18 requirements added*

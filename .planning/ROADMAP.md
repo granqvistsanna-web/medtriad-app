@@ -293,12 +293,17 @@ Plans:
 
 **Requirements**: DEV-01, DEV-02, DEV-03, DEV-04
 
+**Plans:** 1 plan
+
+Plans:
+- [ ] 18-01-PLAN.md — Dev tools service and settings integration
+
 **Success Criteria**:
 1. Dev menu only accessible in DEBUG builds
 2. Reset onboarding without reinstalling
 3. Set user to any level for testing
 4. Clear all user data with confirmation
-5. Simulate error states for testing
+5. Simulate tier-up celebrations for testing
 
 ---
 
@@ -370,5 +375,5 @@ Ideas parked for future development:
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 17 complete*
+*Last updated: 2026-01-19 - Phase 18 planned*
 *Current milestone: v2.0 Polish & Progression*
