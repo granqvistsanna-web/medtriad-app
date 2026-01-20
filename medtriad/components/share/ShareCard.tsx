@@ -9,6 +9,7 @@ type ShareCardProps = {
   score: number;
   correctCount: number;
   totalQuestions: number;
+  variant?: 'share' | 'challenge';
 };
 
 /**
@@ -24,13 +25,26 @@ function getHeadline(correctCount: number, total: number): string {
 }
 
 /**
+ * Get competitive challenge message based on accuracy
+ */
+function getChallengeMessage(correctCount: number, total: number): string {
+  const accuracy = (correctCount / total) * 100;
+  if (accuracy === 100) return 'Beat my perfect score!';
+  if (accuracy >= 90) return 'Think you can beat this?';
+  if (accuracy >= 70) return 'Challenge accepted?';
+  if (accuracy >= 50) return 'Can you do better?';
+  return "Let's see what you've got!";
+}
+
+/**
  * ShareCard - Visual card component for sharing quiz results
  *
  * Fixed dimensions for consistent image capture.
  * Uses solid background and collapsable={false} for reliable view-shot capture.
  */
-export function ShareCard({ score, correctCount, totalQuestions }: ShareCardProps) {
+export function ShareCard({ score, correctCount, totalQuestions, variant = 'share' }: ShareCardProps) {
   const headline = getHeadline(correctCount, totalQuestions);
+  const challengeMessage = variant === 'challenge' ? getChallengeMessage(correctCount, totalQuestions) : null;
 
   return (
     <View style={styles.card} collapsable={false}>
@@ -38,6 +52,13 @@ export function ShareCard({ score, correctCount, totalQuestions }: ShareCardProp
       <Text variant="titleLarge" style={styles.headline}>
         {headline}
       </Text>
+
+      {/* Challenge Message (when variant='challenge') */}
+      {challengeMessage && (
+        <Text variant="body" color={theme.colors.brand.primary} style={styles.challengeMessage}>
+          {challengeMessage}
+        </Text>
+      )}
 
       {/* Mascot Hero */}
       <View style={styles.mascotContainer}>
@@ -77,7 +98,12 @@ const styles = StyleSheet.create({
   },
   headline: {
     textAlign: 'center',
+    marginBottom: Spacing.xs,
+  },
+  challengeMessage: {
+    textAlign: 'center',
     marginBottom: Spacing.base,
+    fontWeight: '600',
   },
   mascotContainer: {
     width: 160,
