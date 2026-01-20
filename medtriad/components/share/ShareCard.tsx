@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Colors, Typography, Spacing, Radius } from '@/constants/theme';
+import { StyleSheet, View, Image } from 'react-native';
+import { Text } from '@/components/primitives';
+import { theme, Spacing, Radius } from '@/constants/theme';
 import { QUESTION_COUNT } from '@/types/quiz-state';
 
 const triShare = require('@/assets/images/tri-share.png');
@@ -29,13 +30,12 @@ function getHeadline(correctCount: number, total: number): string {
  * Uses solid background and collapsable={false} for reliable view-shot capture.
  */
 export function ShareCard({ score, correctCount, totalQuestions }: ShareCardProps) {
-  const colors = Colors.light;
   const headline = getHeadline(correctCount, totalQuestions);
 
   return (
     <View style={styles.card} collapsable={false}>
       {/* Performance Headline */}
-      <Text style={[styles.headline, { color: colors.text }]}>
+      <Text variant="titleLarge" style={styles.headline}>
         {headline}
       </Text>
 
@@ -45,18 +45,18 @@ export function ShareCard({ score, correctCount, totalQuestions }: ShareCardProp
       </View>
 
       {/* Score */}
-      <Text style={[styles.score, { color: colors.primary }]}>
+      <Text variant="display" color={theme.colors.brand.primary} style={styles.score}>
         {score.toLocaleString()}
       </Text>
 
       {/* Correct Count */}
-      <Text style={[styles.correctCount, { color: colors.textSecondary }]}>
+      <Text variant="body" color="secondary" style={styles.correctCount}>
         {correctCount}/{totalQuestions} correct
       </Text>
 
       {/* Branding Bar */}
-      <View style={[styles.brandingBar, { backgroundColor: colors.primaryLight }]}>
-        <Text style={[styles.brandingText, { color: colors.primary }]}>
+      <View style={[styles.brandingBar, { backgroundColor: theme.colors.surface.brand }]}>
+        <Text variant="label" color={theme.colors.brand.primary} weight="semibold">
           MedTriads
         </Text>
       </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   card: {
     width: 360,
     height: 450,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.surface.primary,
     borderRadius: Radius.lg,
     alignItems: 'center',
     paddingTop: Spacing.xl,
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   headline: {
-    ...Typography.titleLarge,
     textAlign: 'center',
     marginBottom: Spacing.base,
   },
@@ -93,13 +92,11 @@ const styles = StyleSheet.create({
   },
   score: {
     fontSize: 56,
-    fontWeight: '700',
     lineHeight: 64,
     letterSpacing: -2,
     textAlign: 'center',
   },
   correctCount: {
-    ...Typography.body,
     textAlign: 'center',
     marginTop: Spacing.xs,
   },
@@ -110,9 +107,5 @@ const styles = StyleSheet.create({
     right: 0,
     paddingVertical: Spacing.md,
     alignItems: 'center',
-  },
-  brandingText: {
-    ...Typography.label,
-    fontWeight: '600',
   },
 });

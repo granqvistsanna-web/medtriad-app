@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,8 +8,9 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { Text } from '@/components/primitives';
 import { TriMascot } from '@/components/home/TriMascot';
-import { Colors, Typography, Spacing, Easings } from '@/constants/theme';
+import { theme, Spacing, Easings } from '@/constants/theme';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 type TierUpCelebrationProps = {
@@ -25,7 +26,6 @@ export function TierUpCelebration({
   newTierName,
   onComplete,
 }: TierUpCelebrationProps) {
-  const colors = Colors.light;
   const { width } = useWindowDimensions();
   const confettiRef = useRef<ConfettiCannon>(null);
   const reduceMotion = useReducedMotion();
@@ -120,16 +120,17 @@ export function TierUpCelebration({
       {/* Level Up message */}
       {showMessage && (
         <Animated.View style={[styles.messageContainer, messageAnimatedStyle]}>
-          <Text style={[styles.levelUpText, { color: colors.primary }]}>
+          <Text variant="display" color={theme.colors.brand.primary} style={styles.levelUpText}>
             Level Up!
           </Text>
-          <Text style={[styles.tierName, { color: colors.text }]}>
+          <Text variant="heading" style={styles.tierName}>
             You're now a {newTierName}
           </Text>
         </Animated.View>
       )}
 
       {/* Confetti */}
+      {/* DESIGN SYSTEM EXCEPTION: Confetti colors are celebration-specific */}
       <ConfettiCannon
         ref={confettiRef}
         count={200}
@@ -157,12 +158,9 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
   },
   levelUpText: {
-    ...Typography.display,
     fontSize: 32,
-    fontWeight: '700',
   },
   tierName: {
-    ...Typography.heading,
     marginTop: Spacing.xs,
   },
 });

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { SafeAreaView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Animated, {
   FadeInUp,
@@ -11,7 +11,7 @@ import Animated, {
 import { CountUp } from 'use-count-up';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
-import { Button } from '@/components/ui/Button';
+import { Text, Button } from '@/components/primitives';
 import { TriMascot } from '@/components/home/TriMascot';
 import { HighScoreBadge } from '@/components/results/HighScoreBadge';
 import { TierUpCelebration } from '@/components/results/TierUpCelebration';
@@ -20,7 +20,7 @@ import { useStats } from '@/hooks/useStats';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useShareCard } from '@/hooks/useShareCard';
 import { saveQuizHistory } from '@/services/stats-storage';
-import { Colors, Typography, Spacing, Radius, Durations, Easings } from '@/constants/theme';
+import { theme, Typography, Spacing, Radius, Durations, Easings } from '@/constants/theme';
 import { QUESTION_COUNT } from '@/types/quiz-state';
 
 type ResultsParams = {
@@ -48,7 +48,6 @@ function getResultMessage(correctCount: number, isPerfect: boolean): string {
 
 export default function ResultsScreen() {
   const router = useRouter();
-  const colors = Colors.light;
   const { stats, tier, nextTier, clearPendingTierUp } = useStats();
   const { width } = useWindowDimensions();
   const confettiRef = useRef<ConfettiCannon>(null);
@@ -124,7 +123,7 @@ export default function ResultsScreen() {
 
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
       <View style={styles.content}>
         {/* Mascot or Tier-Up Celebration */}
         <Animated.View
@@ -147,12 +146,13 @@ export default function ResultsScreen() {
 
         {/* Result Message */}
         {resultMessage ? (
-          <Animated.Text
+          <Animated.View
             entering={FadeInUp.delay(Durations.staggerMedium).duration(Durations.normal).springify()}
-            style={[styles.message, { color: colors.text }]}
           >
-            {resultMessage}
-          </Animated.Text>
+            <Text variant="titleLarge" align="center">
+              {resultMessage}
+            </Text>
+          </Animated.View>
         ) : null}
 
         {/* Score Display */}
@@ -160,7 +160,7 @@ export default function ResultsScreen() {
           entering={FadeInUp.delay(Durations.staggerMedium * 2).duration(Durations.normal).springify()}
           style={[styles.scoreSection, scoreAnimatedStyle]}
         >
-          <Text style={[styles.score, { color: colors.primary }]}>
+          <Text variant="display" color={theme.colors.brand.primary} style={styles.score}>
             <CountUp
               isCounting
               start={0}
@@ -169,7 +169,7 @@ export default function ResultsScreen() {
               thousandsSeparator=","
             />
           </Text>
-          <Text style={[styles.scoreLabel, { color: colors.textMuted }]}>
+          <Text variant="caption" color="muted" style={styles.scoreLabel}>
             points
           </Text>
         </Animated.View>
@@ -189,19 +189,19 @@ export default function ResultsScreen() {
           style={styles.statsRow}
         >
           <View style={styles.stat}>
-            <Text style={[styles.statValue, { color: colors.text }]}>
+            <Text variant="heading">
               {correctCount}/{QUESTION_COUNT}
             </Text>
-            <Text style={[styles.statLabel, { color: colors.textMuted }]}>
+            <Text variant="footnote" color="muted">
               Correct
             </Text>
           </View>
-          <View style={[styles.divider, { backgroundColor: colors.border }]} />
+          <View style={[styles.divider, { backgroundColor: theme.colors.border.default }]} />
           <View style={styles.stat}>
-            <Text style={[styles.statValue, { color: colors.text }]}>
+            <Text variant="heading">
               {bestStreak}x
             </Text>
-            <Text style={[styles.statLabel, { color: colors.textMuted }]}>
+            <Text variant="footnote" color="muted">
               Best Streak
             </Text>
           </View>
@@ -210,9 +210,9 @@ export default function ResultsScreen() {
         {/* Tier Badge */}
         <Animated.View
           entering={FadeInUp.delay(Durations.staggerMedium * 5).duration(Durations.normal).springify()}
-          style={[styles.masteryBadge, { backgroundColor: colors.primaryLight }]}
+          style={[styles.masteryBadge, { backgroundColor: theme.colors.surface.brand }]}
         >
-          <Text style={[styles.masteryText, { color: colors.primary }]}>
+          <Text variant="footnote" color={theme.colors.brand.primary} weight="semibold">
             {nextTier ? `Playing as ${tier.name}` : tier.name}
           </Text>
         </Animated.View>
@@ -275,19 +275,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     gap: Spacing.lg,
   },
-  message: {
-    ...Typography.titleLarge,
-    textAlign: 'center',
-  },
   scoreSection: {
     alignItems: 'center',
   },
   score: {
-    ...Typography.display,
     fontSize: 56,
   },
   scoreLabel: {
-    ...Typography.caption,
     marginTop: -Spacing.xs,
   },
   statsRow: {
@@ -299,12 +293,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.xs,
   },
-  statValue: {
-    ...Typography.heading,
-  },
-  statLabel: {
-    ...Typography.footnote,
-  },
   divider: {
     width: 1,
     height: 40,
@@ -313,10 +301,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: Radius.full,
-  },
-  masteryText: {
-    ...Typography.footnote,
-    fontWeight: '600',
   },
   buttons: {
     padding: Spacing.lg,
