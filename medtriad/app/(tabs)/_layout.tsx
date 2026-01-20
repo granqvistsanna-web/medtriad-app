@@ -2,20 +2,29 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { theme } from '@/constants/theme';
+
+// Solar Icons - Bold for focused, Linear for unfocused
+import {
+  HomeBold,
+  HomeLinear,
+  BookBold,
+  BookMinimalisticLinear,
+  ChartSquareBold,
+  ChartSquareLinear,
+  SettingsBold,
+  SettingsLinear,
+} from '@solar-icons/react-native';
 
 export default function TabLayout() {
-  const colors = Colors.light;
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.tint,
-        tabBarInactiveTintColor: colors.tabIconDefault,
+        tabBarActiveTintColor: theme.colors.brand.primary,
+        tabBarInactiveTintColor: theme.colors.icon.muted,
         tabBarStyle: {
-          backgroundColor: colors.background,
-          borderTopColor: colors.border,
+          backgroundColor: theme.colors.surface.primary,
+          borderTopColor: theme.colors.border.default,
         },
         headerShown: false,
         tabBarButton: HapticTab,
@@ -25,52 +34,48 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name={focused ? 'house.fill' : 'house'}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <HomeBold size={28} color={color} />
+            ) : (
+              <HomeLinear size={28} color={color} />
+            ),
         }}
       />
       <Tabs.Screen
         name="library"
         options={{
           title: 'Library',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name={focused ? 'book.fill' : 'book'}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <BookBold size={28} color={color} />
+            ) : (
+              <BookMinimalisticLinear size={28} color={color} />
+            ),
         }}
       />
       <Tabs.Screen
         name="progress"
         options={{
           title: 'Progress',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name={focused ? 'chart.bar.fill' : 'chart.bar'}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <ChartSquareBold size={28} color={color} />
+            ) : (
+              <ChartSquareLinear size={28} color={color} />
+            ),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color, focused }) => (
-            <IconSymbol
-              size={28}
-              name={focused ? 'gearshape.fill' : 'gearshape'}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
+              <SettingsBold size={28} color={color} />
+            ) : (
+              <SettingsLinear size={28} color={color} />
+            ),
         }}
       />
     </Tabs>
