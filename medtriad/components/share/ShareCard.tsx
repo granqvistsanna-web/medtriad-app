@@ -7,9 +7,9 @@ const triShare = require('@/assets/images/tri-share.png');
 
 type ShareCardProps = {
   score: number;
-  correctCount: number;
-  totalQuestions: number;
-  variant?: 'share' | 'challenge';
+  correctCount?: number;
+  totalQuestions?: number;
+  variant?: 'share' | 'challenge' | 'highscore';
 };
 
 /**
@@ -37,14 +37,29 @@ function getChallengeMessage(correctCount: number, total: number): string {
 }
 
 /**
+ * Get challenge message for high score sharing
+ */
+function getHighScoreMessage(score: number): string {
+  if (score >= 10000) return 'Beat my high score!';
+  if (score >= 5000) return 'Think you can top this?';
+  if (score >= 1000) return 'Can you beat my score?';
+  return 'Challenge me on MedTriads!';
+}
+
+/**
  * ShareCard - Visual card component for sharing quiz results
  *
  * Fixed dimensions for consistent image capture.
  * Uses solid background and collapsable={false} for reliable view-shot capture.
  */
 export function ShareCard({ score, correctCount, totalQuestions, variant = 'share' }: ShareCardProps) {
-  const headline = getHeadline(correctCount, totalQuestions);
-  const challengeMessage = variant === 'challenge' ? getChallengeMessage(correctCount, totalQuestions) : null;
+  const isHighScore = variant === 'highscore';
+  const headline = isHighScore ? 'My High Score' : getHeadline(correctCount!, totalQuestions!);
+  const challengeMessage = isHighScore
+    ? getHighScoreMessage(score)
+    : variant === 'challenge'
+      ? getChallengeMessage(correctCount!, totalQuestions!)
+      : null;
 
   return (
     <View style={styles.card} collapsable={false}>
@@ -70,10 +85,12 @@ export function ShareCard({ score, correctCount, totalQuestions, variant = 'shar
         {score.toLocaleString()}
       </Text>
 
-      {/* Correct Count */}
-      <Text variant="body" color="secondary" style={styles.correctCount}>
-        {correctCount}/{totalQuestions} correct
-      </Text>
+      {/* Correct Count (hidden for highscore variant) */}
+      {!isHighScore && correctCount !== undefined && totalQuestions !== undefined && (
+        <Text variant="body" color="secondary" style={styles.correctCount}>
+          {correctCount}/{totalQuestions} correct
+        </Text>
+      )}
 
       {/* Branding Bar */}
       <View style={[styles.brandingBar, { backgroundColor: theme.colors.surface.brand }]}>

@@ -7,11 +7,14 @@ import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroCard } from '@/components/home/HeroCard';
 import { ActionButtons } from '@/components/home/ActionButtons';
 import { CategoryMastery } from '@/components/home/CategoryMastery';
+import { ShareCard } from '@/components/share/ShareCard';
 import { useStats } from '@/hooks/useStats';
+import { useShareCard } from '@/hooks/useShareCard';
 import { theme, Spacing, Durations } from '@/constants/theme';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { cardRef, share, isSharing } = useShareCard();
 
   const {
     stats,
@@ -62,6 +65,10 @@ export default function HomeScreen() {
     router.push('/quiz');
   };
 
+  const handleChallenge = async () => {
+    await share('Challenge a Friend');
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
       <ScrollView
@@ -96,7 +103,7 @@ export default function HomeScreen() {
         {/* Action buttons - Study and Challenge */}
         <ActionButtons
           onStudy={() => router.push('/quiz/study')}
-          onChallenge={() => router.push('/quiz')}
+          onChallenge={handleChallenge}
           delay={Durations.stagger * 2.5}
         />
 
@@ -112,6 +119,16 @@ export default function HomeScreen() {
           delay={Durations.stagger * 3}
         />
       </ScrollView>
+
+      {/* Hidden share card for capture */}
+      <View style={styles.offscreen}>
+        <View ref={cardRef} collapsable={false}>
+          <ShareCard
+            score={highScore}
+            variant="highscore"
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -133,5 +150,10 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.md,
     paddingBottom: Spacing.xxl,
     gap: Spacing.lg,
+  },
+  offscreen: {
+    position: 'absolute',
+    left: -9999,
+    top: 0,
   },
 });
