@@ -49,6 +49,7 @@ export const palette = {
     500: '#58CC02',  // Main success
     600: '#46A302',  // Dark success
     700: '#3D8B00',  // Success text
+    800: '#16A34A',  // Darker green for 3D depth borders
   },
 
   // Error/wrong answer family
@@ -56,6 +57,7 @@ export const palette = {
     100: '#FFE5E5',  // Light background
     500: '#FF4B4B',  // Main error
     600: '#EA2B2B',  // Dark error
+    700: '#DC2626',  // Darker red for 3D depth borders
   },
 
   // Streak/fire badge family
@@ -66,12 +68,12 @@ export const palette = {
     700: '#C44545',  // Streak text
   },
 
-  // Blue family (info/category)
+  // Teal family (info/category) - muted, sophisticated
   blue: {
-    100: '#E3F2FD',  // Light background
-    500: '#1CB0F6',  // Main blue
-    600: '#1899D6',  // Dark blue
-    700: '#0A5A7C',  // Blue text
+    100: '#E8F4F3',  // Light teal background
+    500: '#5BA9A2',  // Main muted teal
+    600: '#4A908A',  // Dark teal (depth)
+    700: '#2D5F5B',  // Teal text
   },
 
   // Purple/lavender family

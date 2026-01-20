@@ -62,6 +62,7 @@ export const theme = {
     success: {
       main: palette.success[500],        // Green
       dark: palette.success[600],        // Dark green
+      darker: palette.success[800],      // Darker green for 3D depth borders
       light: palette.success[100],       // Light green bg
       text: palette.success[700],        // Green text
     },
@@ -78,6 +79,7 @@ export const theme = {
     danger: {
       main: palette.error[500],          // Red
       dark: palette.error[600],          // Dark red
+      darker: palette.error[700],        // Darker red for 3D depth borders
       light: palette.error[100],         // Light red bg
     },
 
