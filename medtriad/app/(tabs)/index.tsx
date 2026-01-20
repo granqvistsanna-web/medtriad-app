@@ -5,15 +5,13 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroCard } from '@/components/home/HeroCard';
-import { StatsGrid } from '@/components/home/StatsGrid';
-import { Button } from '@/components/ui/Button';
+import { ActionButtons } from '@/components/home/ActionButtons';
+import { CategoryMastery } from '@/components/home/CategoryMastery';
 import { useStats } from '@/hooks/useStats';
-import { Colors, Spacing, Durations } from '@/constants/theme';
-import { calculateLevel } from '@/services/mastery';
+import { theme, Spacing, Durations } from '@/constants/theme';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const colors = Colors.light;
 
   const {
     stats,
@@ -24,6 +22,9 @@ export default function HomeScreen() {
     highScore,
     tier,
     tierProgress,
+    nextTier,
+    totalPoints,
+    pointsToNextTier,
     pendingTierUp,
     clearPendingTierUp,
   } = useStats();
@@ -48,9 +49,9 @@ export default function HomeScreen() {
   // Show loading state
   if (loading) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={theme.colors.brand.primary} />
         </View>
       </SafeAreaView>
     );
@@ -60,54 +61,48 @@ export default function HomeScreen() {
     router.push('/quiz');
   };
 
-  const handleStatPress = (stat: string) => {
-    router.push('/(tabs)/progress');
-  };
-
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header with greeting */}
-        <HomeHeader delay={0} />
+        {/* Header with greeting and gamification badges */}
+        <HomeHeader
+          delay={0}
+          totalPoints={totalPoints}
+          dailyStreak={dailyStreak}
+        />
 
-        {/* Hero card with mascot and message */}
+        {/* Hero card with mascot, tier info, and start button */}
         <HeroCard
           isNewUser={isNewUser}
           accuracy={accuracy}
           dailyStreak={dailyStreak}
           lastPlayed={stats?.lastPlayedAt ? new Date(stats.lastPlayedAt) : null}
           delay={Durations.stagger}
-          masteryLevel={calculateLevel(stats?.totalAnswered ?? 0)}
           tier={tier}
           tierProgress={tierProgress}
+          nextTier={nextTier}
+          totalPoints={totalPoints}
+          pointsToNextTier={pointsToNextTier}
           onTierPress={() => router.push('/(tabs)/progress')}
+          onStartQuiz={handleStartQuiz}
           showTierUpGlow={showTierUpGlow}
         />
 
-        {/* Start Quiz button */}
-        <Animated.View
-          entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
-        >
-          <Button
-            label="Start Quiz"
-            icon="play.fill"
-            onPress={handleStartQuiz}
-          />
-        </Animated.View>
+        {/* Action buttons - Study and Challenge */}
+        <ActionButtons
+          onStudy={() => router.push('/library')}
+          onChallenge={() => router.push('/quiz')}
+          delay={Durations.stagger * 2.5}
+        />
 
-        {/* Stats grid */}
-        <StatsGrid
-          isNewUser={isNewUser}
-          accuracy={accuracy}
-          dailyStreak={dailyStreak}
-          bestStreak={stats?.bestStreak ?? 0}
-          highScore={highScore}
-          totalAnswered={stats?.totalAnswered ?? 0}
-          onStatPress={handleStatPress}
+        {/* Category mastery progress */}
+        <CategoryMastery
+          categoryMastery={{}}
+          onCategoryPress={(category) => router.push('/(tabs)/progress')}
           delay={Durations.stagger * 3}
         />
       </ScrollView>

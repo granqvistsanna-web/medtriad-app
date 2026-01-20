@@ -1,4 +1,4 @@
-import { View, FlatList, useWindowDimensions, Text, Pressable, StyleSheet } from 'react-native';
+import { View, FlatList, useWindowDimensions, Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, {
@@ -8,11 +8,12 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import { useState, useCallback } from 'react';
+import { Play } from '@solar-icons/react-native/Bold';
 
 import { TriMascot, MascotMood } from '@/components/home/TriMascot';
 import { PaginationDots } from '@/components/onboarding/PaginationDots';
-import { Button } from '@/components/ui/Button';
-import { Colors, Typography, Spacing, Durations } from '@/constants/theme';
+import { Text, Button } from '@/components/primitives';
+import { theme, Spacing, Durations } from '@/constants/theme';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList<PageData>);
 
@@ -47,7 +48,6 @@ const PAGES: PageData[] = [
 export default function OnboardingScreen() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const colors = Colors.light;
 
   const scrollX = useSharedValue(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -84,16 +84,16 @@ export default function OnboardingScreen() {
         <TriMascot mood={item.mascotMood} size="xl" />
       </Animated.View>
 
-      <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
+      <Text variant="title" align="center" style={styles.title}>{item.title}</Text>
 
-      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+      <Text variant="body" color="secondary" align="center" style={styles.subtitle}>
         {item.subtitle}
       </Text>
     </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
       {/* Skip button - always visible */}
       <Pressable
         onPress={handleSkip}
@@ -102,9 +102,7 @@ export default function OnboardingScreen() {
           { top: insets.top + Spacing.sm, right: Spacing.lg },
         ]}
       >
-        <Text style={[styles.skipText, { color: colors.textSecondary }]}>
-          Skip
-        </Text>
+        <Text variant="label" color="secondary">Skip</Text>
       </Pressable>
 
       {/* Pages */}
@@ -132,7 +130,7 @@ export default function OnboardingScreen() {
           >
             <Button
               label="Get Started"
-              icon="play.fill"
+              icon={Play}
               onPress={handleGetStarted}
             />
           </Animated.View>
@@ -151,22 +149,15 @@ const styles = StyleSheet.create({
     zIndex: 10,
     padding: Spacing.sm,
   },
-  skipText: {
-    ...Typography.label,
-  },
   page: {
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: Spacing.xl,
   },
   title: {
-    ...Typography.title,
-    textAlign: 'center',
     marginTop: Spacing.xl,
   },
   subtitle: {
-    ...Typography.body,
-    textAlign: 'center',
     marginTop: Spacing.md,
   },
   bottomSection: {

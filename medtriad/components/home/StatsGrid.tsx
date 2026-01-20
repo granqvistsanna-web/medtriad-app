@@ -1,16 +1,20 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Colors, Typography, Shadows, Radius, Spacing, Durations, Easings, CardStyle } from '@/constants/theme';
+import { theme, Radius, Spacing, Durations, Easings, FrameCardStyle, FrameCardInnerStyle } from '@/constants/theme';
+import { Text } from '@/components/primitives';
 
 type StatCardData = {
   label: string;
   value: string | number;
-  description: string;
+  description?: string;       // Optional - not shown in frame style
+  frameColor?: string;        // Background color for frame
+  frameDarkColor?: string;    // Darker shade for bottom of frame
+  valueColor?: string;        // Color for the value text
   onPress?: () => void;
 };
 
@@ -20,14 +24,18 @@ type StatCardProps = StatCardData & {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+/**
+ * Duolingo-style frame card with colored border and white inner area
+ */
 function StatCard({
   label,
   value,
-  description,
+  frameColor,
+  frameDarkColor,
+  valueColor,
   onPress,
   delay,
 }: StatCardProps) {
-  const colors = Colors.light;
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -51,13 +59,31 @@ function StatCard({
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        style={[styles.card, animatedStyle]}
+        style={[
+          styles.frameCard,
+          {
+            backgroundColor: frameColor || theme.colors.brand.primary,
+            borderBottomColor: frameDarkColor || theme.colors.brand.primaryDark,
+          },
+          animatedStyle,
+        ]}
       >
-        <Text style={[styles.label, { color: colors.textMuted }]}>{label}</Text>
-        <Text style={[styles.value, { color: colors.text }]}>{value}</Text>
-        <Text style={[styles.description, { color: colors.textMuted }]}>
-          {description}
+        {/* Label above inner card */}
+        <Text variant="tiny" color={valueColor || theme.colors.text.primary} weight="extrabold" style={styles.frameLabel}>
+          {label.toUpperCase()}
         </Text>
+
+        {/* White inner area with rounded corners */}
+        <View style={styles.frameInner}>
+          <Text
+            variant="stat"
+            color={valueColor || theme.colors.text.primary}
+            weight="extrabold"
+            style={styles.frameValue}
+          >
+            {value}
+          </Text>
+        </View>
       </AnimatedPressable>
     </Animated.View>
   );
@@ -85,57 +111,72 @@ export function StatsGrid({
   onStatPress,
 }: StatsGridProps) {
   // Different data for new vs returning users
+  // Using Duolingo frame-style cards with colored borders
   const cards: StatCardData[] = isNewUser
     ? [
         {
           label: 'Triads',
           value: '15',
-          description: 'conditions to learn',
+          frameColor: theme.colors.brand.primary,
+          frameDarkColor: theme.colors.brand.primaryDark,
+          valueColor: theme.colors.brand.primaryDarker,
         },
         {
           label: 'Timer',
           value: '15s',
-          description: 'per question',
+          frameColor: theme.colors.streak.main,
+          frameDarkColor: theme.colors.streak.dark,
+          valueColor: theme.colors.streak.text,
         },
         {
           label: 'Choices',
           value: '4',
-          description: 'multiple choice',
+          frameColor: theme.colors.purple.main,
+          frameDarkColor: theme.colors.purple.dark,
+          valueColor: theme.colors.purple.text,
         },
         {
           label: 'Mode',
           value: 'Quick',
-          description: 'endless practice',
+          frameColor: theme.colors.blue.main,
+          frameDarkColor: theme.colors.blue.dark,
+          valueColor: theme.colors.blue.text,
         },
       ]
     : [
         {
           label: 'Accuracy',
           value: `${accuracy}%`,
-          description: 'overall score',
+          frameColor: theme.colors.brand.primary,
+          frameDarkColor: theme.colors.brand.primaryDark,
+          valueColor: theme.colors.brand.primaryDarker,
           onPress: () => onStatPress?.('accuracy'),
         },
         {
           label: 'Streak',
           value: dailyStreak.toString(),
-          description: bestStreak > dailyStreak ? `best: ${bestStreak}` : 'day streak',
+          frameColor: theme.colors.streak.main,
+          frameDarkColor: theme.colors.streak.dark,
+          valueColor: theme.colors.streak.text,
           onPress: () => onStatPress?.('streak'),
         },
         {
           label: 'High Score',
           value: highScore.toLocaleString(),
-          description: 'personal best',
+          frameColor: theme.colors.purple.main,
+          frameDarkColor: theme.colors.purple.dark,
+          valueColor: theme.colors.purple.text,
           onPress: () => onStatPress?.('score'),
         },
         {
           label: 'Answered',
           value: totalAnswered.toString(),
-          description: 'total questions',
+          frameColor: theme.colors.blue.main,
+          frameDarkColor: theme.colors.blue.dark,
+          valueColor: theme.colors.blue.text,
           onPress: () => onStatPress?.('answered'),
         },
       ];
-
-  const colors = Colors.light;
 
   return (
     <Animated.View
@@ -144,10 +185,10 @@ export function StatsGrid({
     >
       {/* Section heading */}
       <View style={styles.headingRow}>
-        <Text style={[styles.heading, { color: colors.textMuted }]}>
+        <Text variant="tiny" color="muted">
           {isNewUser ? 'WHAT TO EXPECT' : 'YOUR PROGRESS'}
         </Text>
-        <View style={[styles.headingLine, { backgroundColor: colors.border }]} />
+        <View style={[styles.headingLine, { backgroundColor: theme.colors.border.default }]} />
       </View>
 
       {/* Stats grid */}
@@ -174,10 +215,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.md,
   },
-  heading: {
-    ...Typography.tiny,
-    letterSpacing: 1,
-  },
   headingLine: {
     flex: 1,
     height: 1,
@@ -192,24 +229,31 @@ const styles = StyleSheet.create({
   cardWrapper: {
     flex: 1,
   },
-  card: {
-    ...CardStyle,
+  // Duolingo-style frame card
+  frameCard: {
+    ...FrameCardStyle,
     flex: 1,
-    padding: Spacing.base,
-    gap: Spacing.xs,
-    minHeight: 100,
+    minHeight: 90,
+    borderBottomWidth: 4,
+    alignItems: 'center',
   },
-  label: {
-    ...Typography.tiny,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+  frameLabel: {
+    fontSize: 10,
+    letterSpacing: 0.8,
+    marginBottom: 2,
+    paddingVertical: Spacing.xs,
   },
-  value: {
+  frameInner: {
+    ...FrameCardInnerStyle,
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.sm,
+  },
+  frameValue: {
     fontSize: 28,
-    fontWeight: '700',
     lineHeight: 34,
-  },
-  description: {
-    ...Typography.footnote,
   },
 });

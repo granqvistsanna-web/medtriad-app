@@ -5,7 +5,7 @@ import Animated, {
   Extrapolation,
   SharedValue,
 } from 'react-native-reanimated';
-import { Colors, Radius } from '@/constants/theme';
+import { theme, Radius } from '@/constants/theme';
 
 type PaginationDotsProps = {
   scrollX: SharedValue<number>;
@@ -20,8 +20,6 @@ type DotProps = {
 };
 
 function Dot({ index, scrollX, width }: DotProps) {
-  const colors = Colors.light;
-
   const animatedStyle = useAnimatedStyle(() => {
     const inputRange = [
       (index - 1) * width,
@@ -53,7 +51,7 @@ function Dot({ index, scrollX, width }: DotProps) {
     <Animated.View
       style={[
         styles.dot,
-        { backgroundColor: colors.primary },
+        { backgroundColor: theme.colors.brand.primary },
         animatedStyle,
       ]}
     />
