@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 Category Mastery (Phase 24 in progress)
+**Current focus:** v2.1 Category Mastery (Phase 24 COMPLETE)
 
 ## Current Position
 
-Phase: 24 of 26 (Category Mastery) - IN PROGRESS
-Plan: 1 of 2 in current phase (complete)
-Status: Plan 24-01 complete - ready for 24-02
-Last activity: 2026-01-20 - Completed 24-01-PLAN.md (Category Mastery Data Foundation)
+Phase: 24 of 26 (Category Mastery) - COMPLETE
+Plan: 2 of 2 in current phase (complete)
+Status: Phase 24 complete - ready for Phase 25
+Last activity: 2026-01-20 - Completed 24-02-PLAN.md (Category Mastery UI)
 
-Progress: [#################...] 76% (30/40 phases across all milestones)
+Progress: [##################..] 78% (31/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,14 +28,14 @@ Progress: [#################...] 76% (30/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 14
+- Plans completed: 15
 - Phases: 6 (21-26)
-- Requirements: 37 total, 27 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01)
+- Requirements: 37 total, 31 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01 through CM-04)
 
 **Cumulative:**
-- Total phases: 26 (23 complete, 3 remaining)
-- Total plans: 60 complete
-- Total lines: ~124,500 TypeScript
+- Total phases: 26 (24 complete, 2 remaining)
+- Total plans: 61 complete
+- Total lines: ~124,600 TypeScript
 
 ## Accumulated Context
 
@@ -121,6 +121,11 @@ Summary of key v2.0 decisions:
 - All 10 categories get zero-value defaults - existing users auto-migrate via spread pattern
 - categoryResults parameter is optional to avoid breaking existing updateAfterQuiz callers
 
+**v2.1 Decisions (Phase 24-02):**
+- Category tracking happens on each answer selection (not quiz completion)
+- categoryResultsRef tracks both correct and incorrect answers per category
+- Home screen displays top 4 categories: cardiology, neurology, pulmonary, endocrine
+
 ### Pending Todos
 
 None.
@@ -131,49 +136,51 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 18:58 UTC
-Stopped at: Completed 24-01-PLAN.md (Category Mastery Data Foundation)
+Last session: 2026-01-20 19:15 UTC
+Stopped at: Completed 24-02-PLAN.md (Category Mastery UI)
 Resume file: None
 
 ## Category Mastery Progress
 
-Phase 24 (Category Mastery) is **IN PROGRESS**.
+Phase 24 (Category Mastery) is **COMPLETE**.
 
 **Completed Plans:**
 
 | Plan | Name | Status |
 |------|------|--------|
 | 24-01 | Category Mastery Data Foundation | Complete |
-| 24-02 | Category Mastery UI | Pending |
+| 24-02 | Category Mastery UI | Complete |
 
-**Artifacts Created (24-01):**
+**Artifacts Created:**
 
 | File | Purpose |
 |------|---------|
 | medtriad/services/stats-storage.ts | CategoryMasteryData type, categoryMastery field, updateAfterQuiz with category results |
 | medtriad/hooks/useStats.ts | categoryMastery and getCategoryPercent exposed from hook |
+| medtriad/app/quiz/index.tsx | categoryResultsRef tracks per-answer category results |
+| medtriad/app/(tabs)/index.tsx | Real category percentages passed to CategoryMastery component |
 
 **Patterns Established:**
 - Category data: Record<TriadCategory, {correct, total}> pattern
 - Percentage helper: getCategoryPercent returns 0-100 rounded integer
+- Per-answer tracking: Update ref immediately after dispatch in handleAnswerSelect
+
+**Requirements Complete:**
+- CM-01: Each quiz answer updates the corresponding category's correct/total count
+- CM-02: Category mastery data persists across app restarts
+- CM-03: Home screen displays category mastery cards showing progress
+- CM-04: Each category card shows a visual progress indicator (percentage)
 
 ## Next Steps
 
-**Plan 24-01 Complete - Category Mastery Data Foundation**
+**Phase 24 Complete - Category Mastery**
 
-Data layer complete and ready for UI:
-1. CategoryMasteryData type for per-category tracking
-2. categoryMastery persisted in StoredStats
-3. getCategoryPercent helper for UI percentage display
-4. updateAfterQuiz accepts category results
+Ready for Phase 25 (Achievements) or Phase 26 (Final Polish).
 
-Next:
-- Plan 24-02: Build UI components for category mastery display
-
-To continue with Plan 24-02:
+To continue:
 ```
-/gsd:execute-phase 24
+/gsd:plan-phase 25
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 24-01-PLAN.md (Category Mastery Data Foundation)*
+*Updated: 2026-01-20 - Completed 24-02-PLAN.md (Category Mastery UI)*
