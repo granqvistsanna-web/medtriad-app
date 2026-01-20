@@ -117,7 +117,12 @@ Plans:
 - [ ] User can view their tricky questions list from Library or Progress screen
 - [ ] Study Mode has a visually calm, distinct appearance from timed quiz mode
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 23-01-PLAN.md — Types, reducer, and storage service foundation
+- [ ] 23-02-PLAN.md — Study screen and components (ExplanationCard, TrickyButton, StudyHeader)
+- [ ] 23-03-PLAN.md — Results screen, tricky list, and entry point wiring
 
 ---
 
@@ -202,7 +207,7 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 |-------|----------------|--------|-----------|
 | 21. Design System Foundation | 4/4 | ✓ Complete | 2026-01-20 |
 | 22. Design System Application | 5/5 | ✓ Complete | 2026-01-20 |
-| 23. Study Mode | 0/TBD | Not started | - |
+| 23. Study Mode | 0/3 | Planned | - |
 | 24. Category Mastery | 0/TBD | Not started | - |
 | 25. Challenge | 0/TBD | Not started | - |
 | 26. App Store Preparation | 0/TBD | Not started | - |
@@ -227,3 +232,4 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 *Phase 21 complete: 2026-01-20*
 *Phase 22 planned: 2026-01-20*
 *Phase 22 complete: 2026-01-20*
+*Phase 23 planned: 2026-01-20*
