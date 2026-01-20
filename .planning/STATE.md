@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 Study Mode (Phase 23 complete)
+**Current focus:** v2.1 Category Mastery (Phase 24 in progress)
 
 ## Current Position
 
-Phase: 23 of 26 (Study Mode) - COMPLETE
-Plan: 3 of 3 in current phase (complete)
-Status: Phase 23 complete - ready for Phase 24
-Last activity: 2026-01-20 - Completed 23-03-PLAN.md (Study Mode Integration)
+Phase: 24 of 26 (Category Mastery) - IN PROGRESS
+Plan: 1 of 2 in current phase (complete)
+Status: Plan 24-01 complete - ready for 24-02
+Last activity: 2026-01-20 - Completed 24-01-PLAN.md (Category Mastery Data Foundation)
 
-Progress: [################....] 74% (29/40 phases across all milestones)
+Progress: [#################...] 76% (30/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,13 +28,13 @@ Progress: [################....] 74% (29/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 13
+- Plans completed: 14
 - Phases: 6 (21-26)
-- Requirements: 37 total, 26 complete (DS-01 through DS-21, SM-01 through SM-05)
+- Requirements: 37 total, 27 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01)
 
 **Cumulative:**
 - Total phases: 26 (23 complete, 3 remaining)
-- Total plans: 59 complete
+- Total plans: 60 complete
 - Total lines: ~124,500 TypeScript
 
 ## Accumulated Context
@@ -116,6 +116,11 @@ Summary of key v2.0 decisions:
 - TrickyQuestionsList inline in Progress (not modal) for quick reference
 - Study button navigates to /quiz/study (was /library)
 
+**v2.1 Decisions (Phase 24-01):**
+- CategoryMasteryData uses simple correct/total counts (consistent with existing stats patterns)
+- All 10 categories get zero-value defaults - existing users auto-migrate via spread pattern
+- categoryResults parameter is optional to avoid breaking existing updateAfterQuiz callers
+
 ### Pending Todos
 
 None.
@@ -126,60 +131,49 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 19:12 UTC
-Stopped at: Completed 23-03-PLAN.md (Study Mode Integration)
+Last session: 2026-01-20 18:58 UTC
+Stopped at: Completed 24-01-PLAN.md (Category Mastery Data Foundation)
 Resume file: None
 
-## Study Mode Progress
+## Category Mastery Progress
 
-Phase 23 (Study Mode) is **COMPLETE**.
+Phase 24 (Category Mastery) is **IN PROGRESS**.
 
 **Completed Plans:**
 
 | Plan | Name | Status |
 |------|------|--------|
-| 23-01 | Study Mode Foundation | Complete |
-| 23-02 | Study Screen UI | Complete |
-| 23-03 | Study Mode Integration | Complete |
+| 24-01 | Category Mastery Data Foundation | Complete |
+| 24-02 | Category Mastery UI | Pending |
 
-**Artifacts Created:**
+**Artifacts Created (24-01):**
 
 | File | Purpose |
 |------|---------|
-| medtriad/types/study-state.ts | StudyStatus, StudyState, StudyAction, StudySessionResult types |
-| medtriad/hooks/use-study-reducer.ts | useStudyReducer hook with 5 action handlers |
-| medtriad/services/study-storage.ts | TrickyQuestion persistence and study history storage |
-| medtriad/components/quiz/StudyHeader.tsx | Header with progress and STUDY badge (no timer) |
-| medtriad/components/quiz/ExplanationCard.tsx | Triad info display with calm blue styling |
-| medtriad/components/quiz/TrickyButton.tsx | Toggle button for marking tricky questions |
-| medtriad/app/quiz/study.tsx | Main study screen with full quiz flow |
-| medtriad/app/quiz/study-results.tsx | Session summary screen with calm blue styling |
-| medtriad/components/progress/TrickyQuestionsList.tsx | Displays tricky questions on Progress screen |
+| medtriad/services/stats-storage.ts | CategoryMasteryData type, categoryMastery field, updateAfterQuiz with category results |
+| medtriad/hooks/useStats.ts | categoryMastery and getCategoryPercent exposed from hook |
 
 **Patterns Established:**
-- Untimed quiz pattern: Same reducer architecture without timer/scoring
-- Feature-specific storage: Separate AsyncStorage keys per feature
-- Calm blue theme: Use theme.colors.blue.* for study mode accents
-- Manual advancement: User clicks Continue (no auto-advance like timed quiz)
-- Results screen variant: Same layout pattern, different intent (learning vs scoring)
+- Category data: Record<TriadCategory, {correct, total}> pattern
+- Percentage helper: getCategoryPercent returns 0-100 rounded integer
 
 ## Next Steps
 
-**Phase 23 Complete - Study Mode Fully Integrated**
+**Plan 24-01 Complete - Category Mastery Data Foundation**
 
-Study mode is now fully accessible and functional:
-1. Home screen Study button navigates to /quiz/study
-2. Complete study session shows results on study-results screen
-3. Tricky questions visible on Progress screen
+Data layer complete and ready for UI:
+1. CategoryMasteryData type for per-category tracking
+2. categoryMastery persisted in StoredStats
+3. getCategoryPercent helper for UI percentage display
+4. updateAfterQuiz accepts category results
 
 Next:
-- Phase 24: Additional features or refinements as needed
-- Future: Tricky questions filter in Library view
+- Plan 24-02: Build UI components for category mastery display
 
-To continue with Phase 24:
+To continue with Plan 24-02:
 ```
-/gsd:plan-phase 24
+/gsd:execute-phase 24
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 23-03-PLAN.md (Study Mode Integration)*
+*Updated: 2026-01-20 - Completed 24-01-PLAN.md (Category Mastery Data Foundation)*
