@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 22 of 26 (Design System Application) - COMPLETE
-Plan: 4 of 4 in current phase (complete)
+Plan: 5 of 5 in current phase (complete)
 Status: Phase complete - ready for Phase 23
-Last activity: 2026-01-20 - Completed 22-04-PLAN.md (Complex Screen Migration - Quiz)
+Last activity: 2026-01-20 - Completed 22-05-PLAN.md (Design System Documentation)
 
-Progress: [#############.......] 65% (25/40 phases across all milestones)
+Progress: [##############......] 68% (26/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,13 +28,13 @@ Progress: [#############.......] 65% (25/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 8
+- Plans completed: 9
 - Phases: 6 (21-26)
-- Requirements: 37 total, 20 complete (DS-01 through DS-20)
+- Requirements: 37 total, 21 complete (DS-01 through DS-21)
 
 **Cumulative:**
 - Total phases: 26 (22 complete, 4 remaining)
-- Total plans: 54 complete
+- Total plans: 55 complete
 - Total lines: ~123,200 TypeScript
 
 ## Accumulated Context
@@ -94,6 +94,10 @@ Summary of key v2.0 decisions:
 - TierUpCelebration confetti colors documented as exception (celebration-specific)
 - AnswerCard uses success.darker/danger.darker for 3D depth borders
 
+**v2.1 Decisions (Phase 22-05):**
+- IconSymbol kept in unused legacy components (StatRow, collapsible, CategorySection, TriadItem)
+- Legacy ui/Button.tsx deleted as no longer imported anywhere
+
 ### Pending Todos
 
 None.
@@ -104,8 +108,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 14:39 UTC
-Stopped at: Completed 22-04-PLAN.md (Complex Screen Migration - Quiz)
+Last session: 2026-01-20 14:58 UTC
+Stopped at: Completed 22-05-PLAN.md (Design System Documentation)
 Resume file: None
 
 ## Design System Application Progress
@@ -120,6 +124,7 @@ Phase 22 (Design System Application) is **COMPLETE**.
 | 22-02 | Simple Screen Migration | Complete |
 | 22-03 | Medium Screen Migration | Complete |
 | 22-04 | Complex Screen Migration (Quiz) | Complete |
+| 22-05 | Design System Documentation | Complete |
 
 **Migration Status by Screen:**
 
@@ -135,10 +140,20 @@ Phase 22 (Design System Application) is **COMPLETE**.
 | Quiz | Complete | Text, Icon, success.darker/danger.darker |
 | Results | Complete | Text, Button, Star icon |
 
+**Documentation:**
+- DESIGN-SYSTEM.md: 741 lines, all 7 primitives documented
+- Migration guide with 5 before/after examples
+- SF Symbol to Solar Icon mapping (23 icons)
+
 **Documented Exceptions:**
 - FilterChips category colors (10 unique colors for medical specialties)
 - StatsCard accuracy teal color (visual variety)
 - TierUpCelebration confetti colors (celebration-specific)
+
+**Legacy Components (unused):**
+- StatRow, collapsible, CategorySection, TriadItem still use IconSymbol
+- Not imported anywhere in active app code
+- Can be deleted in future cleanup phase
 
 ## Next Steps
 
@@ -155,4 +170,4 @@ To continue:
 ```
 
 ---
-*Updated: 2026-01-20 - Completed Phase 22 (Design System Application)*
+*Updated: 2026-01-20 - Completed 22-05-PLAN.md (Design System Documentation)*
