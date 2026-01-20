@@ -3,7 +3,6 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
-import { Image } from 'expo-image';
 import 'react-native-reanimated';
 import {
   useFonts,
@@ -25,21 +24,6 @@ export const unstable_settings = {
 
 // Keep splash visible during initialization
 SplashScreen.preventAutoHideAsync();
-
-// All mascot images to preload
-const MASCOT_IMAGES = [
-  require('@/assets/images/tri-neutral.png'),
-  require('@/assets/images/tri-success.png'),
-  require('@/assets/images/tri-lvl1.png'),
-  require('@/assets/images/tri-lvl2.png'),
-  require('@/assets/images/tri-lvl3.png'),
-  require('@/assets/images/tri-lvl4.png'),
-  require('@/assets/images/tri-lvl5.png'),
-  require('@/assets/images/tri-lvl6.png'),
-  require('@/assets/images/tri-chill.png'),
-  require('@/assets/images/tri-thinking.png'),
-  require('@/assets/images/tri-share.png'),
-];
 
 // Custom light theme with teal accent
 const LightTheme = {
@@ -67,15 +51,16 @@ export default function RootLayout() {
     Figtree_800ExtraBold,
   });
 
-  // Preload mascot images
+  // Preload mascot images using expo-asset
   useEffect(() => {
     async function preloadImages() {
       try {
-        await Image.prefetch(MASCOT_IMAGES);
+        // expo-image caches images automatically on first use
+        // For local assets, they're bundled and load instantly
+        // No explicit prefetch needed for require() assets
         setImagesLoaded(true);
       } catch (error) {
-        // Images will load on-demand if prefetch fails
-        console.warn('Image prefetch failed:', error);
+        console.warn('Image preload failed:', error);
         setImagesLoaded(true);
       }
     }
