@@ -21,8 +21,9 @@ import { isPerfectRound, getComboTier } from '@/services/scoring';
 import { checkTierUp } from '@/services/mastery';
 import { useStats } from '@/hooks/useStats';
 
-import { QuizOption } from '@/types';
+import { QuizOption, TriadCategory } from '@/types';
 import { QUESTION_COUNT, QUESTION_TIME } from '@/types/quiz-state';
+import { CategoryMasteryData } from '@/services/stats-storage';
 import { theme, Typography, Spacing, Radius, Durations } from '@/constants/theme';
 import { MascotMood } from '@/components/home/TriMascot';
 
@@ -41,6 +42,7 @@ export default function QuizScreen() {
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
   const maxComboRef = useRef(1);
+  const categoryResultsRef = useRef<Record<TriadCategory, CategoryMasteryData>>({} as Record<TriadCategory, CategoryMasteryData>);
 
   const {
     status,
@@ -101,7 +103,8 @@ export default function QuizScreen() {
             correctCountRef.current,
             QUESTION_COUNT,
             maxComboRef.current,
-            score
+            score,
+            categoryResultsRef.current
           );
 
           // Navigate to results with tier-up info
@@ -163,6 +166,14 @@ export default function QuizScreen() {
       isCorrect: option.isCorrect,
       timeRemaining: state.timeRemaining,
     });
+
+    // Track category result for mastery
+    const category = currentQuestion.triad.category;
+    const current = categoryResultsRef.current[category] ?? { correct: 0, total: 0 };
+    categoryResultsRef.current[category] = {
+      correct: current.correct + (option.isCorrect ? 1 : 0),
+      total: current.total + 1,
+    };
 
     // Play appropriate sound
     if (option.isCorrect) {
@@ -282,6 +293,7 @@ export default function QuizScreen() {
               state={getAnswerState(option)}
               disabled={status === 'answered'}
               delay={index * Durations.stagger}
+              letter={['A', 'B', 'C', 'D'][index]}
             />
           ))}
         </View>
@@ -336,7 +348,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   answersSection: {
-    gap: 10,
-    marginTop: Spacing.base,
+    gap: Spacing.md,
+    marginTop: Spacing.lg,
   },
 });
