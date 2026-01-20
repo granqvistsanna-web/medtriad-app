@@ -1,201 +1,355 @@
 /**
- * MedTriads Design System
- * Duolingo-inspired: Friendly, teal-centric, light mode only
+ * MedTriads Design System - Semantic Theme
  *
- * For full documentation, see DESIGN-SYSTEM.md in this folder.
+ * Layer 2 of the design system token architecture.
+ * Maps raw tokens to semantic meanings for component consumption.
+ *
+ * Light mode only - Duolingo-inspired, friendly, premium.
  */
 
 import { Platform } from 'react-native';
-import { Easing } from 'react-native-reanimated';
 
-// Teal color palette
-const tealPalette = {
-  // Primary brand color
-  primary: '#4ECDC4',
-  primaryDark: '#3BA99C',
-  primaryLight: '#E6FAF8',
+// Import raw tokens
+import { palette } from './tokens/colors';
+import {
+  fontFamily,
+  fontSizes,
+  fontWeights,
+  lineHeights,
+  letterSpacing,
+  typographyStyles,
+} from './tokens/typography';
+import { spacing } from './tokens/spacing';
+import { radius } from './tokens/radius';
+import { shadows } from './tokens/shadows';
+import { durations, springs, easings } from './tokens/motion';
+
+// =============================================================================
+// SEMANTIC THEME (Layer 2)
+// =============================================================================
+
+export const theme = {
+  colors: {
+    // Surface colors - backgrounds and containers
+    surface: {
+      primary: palette.neutral[0],       // White - main background
+      secondary: palette.neutral[50],    // Light gray - secondary background
+      card: palette.neutral[0],          // White - card background
+      brand: palette.wine[100],          // Light wine - brand background
+      brandSubtle: palette.wine[50],     // Ultra light wine
+      pressed: palette.wine[100],        // Pressed state background
+    },
+
+    // Text colors - hierarchy
+    text: {
+      primary: palette.neutral[600],     // Dark gray - main text
+      secondary: palette.neutral[500],   // Medium gray - secondary text
+      muted: palette.neutral[700],       // Light gray - muted text
+      inverse: palette.neutral[0],       // White - text on dark bg
+      brand: palette.wine[700],          // Dark wine - brand accent text
+    },
+
+    // Brand colors - primary identity
+    brand: {
+      primary: palette.wine[500],        // Wine - main brand
+      primaryDark: palette.wine[600],    // Dark wine - depth/shadow
+      primaryDarker: palette.wine[700],  // Darkest wine - strong accent
+      accent: palette.pink[100],         // Light pink - accent
+      accentStrong: palette.pink[200],   // Stronger pink
+    },
+
+    // Success/correct state
+    success: {
+      main: palette.success[500],        // Green
+      dark: palette.success[600],        // Dark green
+      light: palette.success[100],       // Light green bg
+      text: palette.success[700],        // Green text
+    },
+
+    // Warning state
+    warning: {
+      main: palette.yellow[500],         // Gold/yellow
+      dark: palette.yellow[600],         // Dark gold
+      light: palette.yellow[100],        // Light yellow bg
+      text: palette.yellow[700],         // Yellow text
+    },
+
+    // Danger/error state
+    danger: {
+      main: palette.error[500],          // Red
+      dark: palette.error[600],          // Dark red
+      light: palette.error[100],         // Light red bg
+    },
+
+    // Border colors
+    border: {
+      default: palette.neutral[200],     // Light border
+      strong: palette.neutral[300],      // Strong border (3D depth)
+    },
+
+    // Achievement/gold colors
+    gold: {
+      main: palette.yellow[500],
+      dark: palette.yellow[600],
+      light: palette.yellow[100],
+      text: palette.yellow[700],
+    },
+
+    // Streak/fire colors
+    streak: {
+      main: palette.streak[500],
+      dark: palette.streak[600],
+      light: palette.streak[100],
+      text: palette.streak[700],
+    },
+
+    // Blue/info colors
+    blue: {
+      main: palette.blue[500],
+      dark: palette.blue[600],
+      light: palette.blue[100],
+      text: palette.blue[700],
+    },
+
+    // Purple colors
+    purple: {
+      main: palette.purple[500],
+      dark: palette.purple[600],
+      light: palette.purple[100],
+      text: palette.purple[700],
+    },
+
+    // Timer state colors
+    timer: {
+      normal: palette.timer.normal,
+      warning: palette.timer.warning,
+      danger: palette.timer.danger,
+    },
+
+    // Icon colors
+    icon: {
+      default: palette.neutral[500],
+      muted: palette.neutral[700],
+      brand: palette.wine[500],
+      selected: palette.wine[500],
+    },
+  },
+
+  // Typography - semantic text styles
+  typography: typographyStyles,
+
+  // Font family
+  fontFamily,
+
+  // Spacing scale
+  spacing,
+
+  // Border radius scale
+  radius,
+
+  // Shadow definitions
+  shadows,
+
+  // Motion/animation
+  motion: {
+    durations,
+    springs,
+    easings,
+  },
+} as const;
+
+// =============================================================================
+// BACKWARD-COMPATIBLE EXPORTS (Layer 1.5)
+// These map new token structure to old export names for gradual migration
+// =============================================================================
+
+// Legacy winePalette-style Colors export
+const legacyColors = {
+  // Primary brand
+  primary: palette.wine[500],
+  primaryDark: palette.wine[600],
+  primaryDarker: palette.wine[700],
+  primaryLight: palette.wine[100],
+  primaryUltraLight: palette.wine[50],
 
   // Backgrounds
-  background: '#FFFFFF',
-  backgroundSecondary: '#F8F9FA',
-  backgroundCard: '#FFFFFF',
+  background: palette.neutral[0],
+  backgroundSecondary: palette.neutral[50],
+  backgroundCard: palette.neutral[0],
 
   // Text hierarchy
-  text: '#2D3436',
-  textSecondary: '#636E72',
-  textMuted: '#B2BEC3',
-  textInverse: '#FFFFFF',
+  text: palette.neutral[600],
+  textSecondary: palette.neutral[500],
+  textMuted: palette.neutral[700],
+  textInverse: palette.neutral[0],
 
   // Borders
-  border: '#DFE6E9',
-  borderStrong: '#B2BEC3',
+  border: palette.neutral[200],
+  borderStrong: palette.neutral[300],
 
   // Interactive states
-  pressed: '#E6FAF8',
+  pressed: palette.wine[100],
 
-  // Semantic
-  success: '#00B894',
-  successBg: '#D4F5ED',
-  error: '#E17055',
-  errorBg: '#FFEAEA',
+  // Semantic colors
+  success: palette.success[500],
+  successDark: palette.success[600],
+  successBg: palette.success[100],
+  successText: palette.success[700],
+  error: palette.error[500],
+  errorDark: palette.error[600],
+  errorBg: palette.error[100],
 
-  // Timer states
-  timerNormal: '#4ECDC4',
-  timerWarning: '#FDCB6E',
-  timerDanger: '#E17055',
+  // Gold
+  gold: palette.yellow[500],
+  goldDark: palette.yellow[600],
+  goldLight: palette.yellow[100],
+  goldText: palette.yellow[700],
+
+  // Streak
+  streak: palette.streak[500],
+  streakDark: palette.streak[600],
+  streakLight: palette.streak[100],
+  streakText: palette.streak[700],
+
+  // Purple
+  purple: palette.purple[500],
+  purpleDark: palette.purple[600],
+  purpleText: palette.purple[700],
+
+  // Blue
+  blue: palette.blue[500],
+  blueDark: palette.blue[600],
+  blueText: palette.blue[700],
+
+  // Timer
+  timerNormal: palette.timer.normal,
+  timerWarning: palette.timer.warning,
+  timerDanger: palette.timer.danger,
 
   // Legacy compat
-  tint: '#4ECDC4',
-  icon: '#636E72',
-  tabIconDefault: '#B2BEC3',
-  tabIconSelected: '#4ECDC4',
+  tint: palette.wine[500],
+  icon: palette.neutral[500],
+  tabIconDefault: palette.neutral[700],
+  tabIconSelected: palette.wine[500],
 } as const;
 
 export const Colors = {
-  light: tealPalette,
-  // Dark mode aliased to light for compatibility
-  dark: tealPalette,
+  light: legacyColors,
+  dark: legacyColors, // Aliased for compatibility
 } as const;
 
-// Typography scale
+// Legacy Typography export (without fontFamily)
 export const Typography = {
-  // Hero numbers (results score)
   display: {
-    fontSize: 64,
-    fontWeight: '700' as const,
-    lineHeight: 64,
-    letterSpacing: -2,
+    fontSize: fontSizes.display,
+    fontWeight: fontWeights.bold,
+    lineHeight: lineHeights.display,
+    letterSpacing: letterSpacing.tight,
   },
-
-  // Screen titles
   title: {
-    fontSize: 32,
-    fontWeight: '700' as const,
-    lineHeight: 38,
-    letterSpacing: -0.5,
+    fontSize: fontSizes.title,
+    fontWeight: fontWeights.bold,
+    lineHeight: lineHeights.title,
+    letterSpacing: letterSpacing.normal,
   },
-
-  // Large title (MedTriads on home)
   titleLarge: {
-    fontSize: 28,
-    fontWeight: '600' as const,
-    lineHeight: 34,
+    fontSize: fontSizes.titleLarge,
+    fontWeight: fontWeights.semibold,
+    lineHeight: lineHeights.titleLarge,
     letterSpacing: -0.3,
   },
-
-  // Section headers
   heading: {
-    fontSize: 22,
-    fontWeight: '600' as const,
-    lineHeight: 28,
+    fontSize: fontSizes.heading,
+    fontWeight: fontWeights.semibold,
+    lineHeight: lineHeights.heading,
   },
-
-  // Findings, card titles
   body: {
-    fontSize: 18,
-    fontWeight: '500' as const,
-    lineHeight: 26,
+    fontSize: fontSizes.body,
+    fontWeight: fontWeights.medium,
+    lineHeight: lineHeights.body,
   },
-
-  // Button labels
   label: {
-    fontSize: 17,
-    fontWeight: '600' as const,
-    lineHeight: 22,
+    fontSize: fontSizes.label,
+    fontWeight: fontWeights.semibold,
+    lineHeight: lineHeights.label,
   },
-
-  // Stats values
   stat: {
-    fontSize: 20,
-    fontWeight: '700' as const,
-    lineHeight: 24,
+    fontSize: fontSizes.stat,
+    fontWeight: fontWeights.extrabold,
+    lineHeight: lineHeights.stat,
   },
-
-  // Secondary info
   caption: {
-    fontSize: 15,
-    fontWeight: '400' as const,
-    lineHeight: 20,
+    fontSize: fontSizes.caption,
+    fontWeight: fontWeights.regular,
+    lineHeight: lineHeights.caption,
   },
-
-  // Small details
   footnote: {
-    fontSize: 13,
-    fontWeight: '400' as const,
-    lineHeight: 18,
-    letterSpacing: 0.3,
+    fontSize: fontSizes.footnote,
+    fontWeight: fontWeights.regular,
+    lineHeight: lineHeights.footnote,
+    letterSpacing: letterSpacing.loose,
   },
-
-  // Tiny labels (category)
   tiny: {
-    fontSize: 11,
-    fontWeight: '600' as const,
-    lineHeight: 14,
-    letterSpacing: 0.5,
+    fontSize: fontSizes.tiny,
+    fontWeight: fontWeights.semibold,
+    lineHeight: lineHeights.tiny,
+    letterSpacing: letterSpacing.wide,
   },
 } as const;
 
-// Spacing scale (8px base)
-export const Spacing = {
-  xs: 4,
-  sm: 8,
-  md: 12,
-  base: 16,
-  lg: 24,
-  xl: 32,
-  xxl: 48,
-  xxxl: 64,
-} as const;
+// Legacy Spacing export
+export const Spacing = spacing;
 
-// Shadows - light theme only
-const lightShadows = {
-  sm: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  md: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
-  },
-  lg: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
-    elevation: 8,
-  },
-};
-
+// Legacy Shadows export
 export const Shadows = {
-  light: lightShadows,
-  dark: lightShadows, // Alias for compatibility
+  light: shadows,
+  dark: shadows, // Aliased for compatibility
 } as const;
 
-// Border radius scale
-export const Radius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  xxl: 32,
-  full: 9999,
+// Legacy Radius export
+export const Radius = radius;
+
+// Legacy Durations export
+export const Durations = durations;
+
+// Legacy Easings export (combined springs + timing easings)
+export const Easings = {
+  ...springs,
+  ...easings,
 } as const;
 
-// Card styling - Duolingo-inspired hard border treatment
+// =============================================================================
+// COMPONENT-LEVEL STYLES (Compound tokens)
+// =============================================================================
+
+// Card styling - Duolingo-style with hard border-bottom
 export const CardStyle = {
-  backgroundColor: tealPalette.backgroundCard,
+  backgroundColor: theme.colors.surface.card,
   borderWidth: 2,
-  borderColor: tealPalette.border,
+  borderColor: theme.colors.border.default,
   borderBottomWidth: 4,
-  borderBottomColor: tealPalette.borderStrong,
-  borderRadius: Radius.lg,
-  ...lightShadows.sm,
+  borderBottomColor: theme.colors.border.strong,
+  borderRadius: theme.radius.lg,
+  ...theme.shadows.sm,
+} as const;
+
+// Frame card styling - colored border with 3D depth
+export const FrameCardStyle = {
+  borderRadius: theme.radius.lg,
+  borderWidth: 2,
+  borderBottomWidth: 4,
+} as const;
+
+// Badge styling - pill with 3D border-bottom
+export const BadgeStyle = {
+  borderRadius: theme.radius.md,
+  borderWidth: 2,
+  borderBottomWidth: 3,
+} as const;
+
+export const FrameCardInnerStyle = {
+  backgroundColor: theme.colors.surface.card,
+  borderRadius: theme.radius.md,
 } as const;
 
 // Mascot sizes
@@ -206,37 +360,7 @@ export const MascotSizes = {
   xl: 160,
 } as const;
 
-// Animation durations
-export const Durations = {
-  fast: 150,
-  normal: 300,
-  slow: 500,
-  slower: 800,      // Score count-ups, tier celebrations
-  stagger: 50,
-  staggerMedium: 80, // Celebratory reveals
-} as const;
-
-// Spring presets for react-native-reanimated
-export const Easings = {
-  // Standard press/release — snappy, controlled
-  press: { damping: 15, stiffness: 400 },
-
-  // Bouncy reveals — playful overshoot
-  bouncy: { damping: 10, stiffness: 300 },
-
-  // Gentle settles — slow, weighty landing
-  gentle: { damping: 20, stiffness: 150 },
-
-  // Pop effects — fast initial, slow settle
-  pop: { damping: 8, stiffness: 400 },
-
-  // Timing easings (for opacity, color)
-  easeOut: Easing.out(Easing.cubic),
-  easeInOut: Easing.inOut(Easing.cubic),
-  easeOutBack: Easing.bezier(0.34, 1.56, 0.64, 1),
-} as const;
-
-// Font families
+// Font families (platform-specific fallbacks for system fonts)
 export const Fonts = Platform.select({
   ios: {
     sans: 'system-ui',
@@ -257,3 +381,11 @@ export const Fonts = Platform.select({
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, monospace",
   },
 });
+
+// =============================================================================
+// TYPE EXPORTS
+// =============================================================================
+
+export type Theme = typeof theme;
+export type ThemeColors = typeof theme.colors;
+export type ThemeTypography = typeof theme.typography;
