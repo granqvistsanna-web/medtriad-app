@@ -229,9 +229,9 @@ export default function ResultsScreen() {
         <Button label="Play Again" onPress={() => router.replace('/quiz')} />
         <View style={styles.secondaryButtons}>
           <Button
-            label={isSharing ? 'Sharing...' : 'Share'}
+            label={isSharing ? 'Challenging...' : 'Challenge a Friend'}
             variant="outline"
-            onPress={share}
+            onPress={() => share('Challenge a Friend')}
             disabled={isSharing}
             fullWidth={false}
             style={styles.secondaryButton}
@@ -253,6 +253,7 @@ export default function ResultsScreen() {
             score={score}
             correctCount={correctCount}
             totalQuestions={QUESTION_COUNT}
+            variant="challenge"
           />
         </View>
       </View>

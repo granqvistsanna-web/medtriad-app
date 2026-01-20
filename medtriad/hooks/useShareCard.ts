@@ -20,13 +20,13 @@ import * as Sharing from 'expo-sharing';
  */
 export function useShareCard(): {
   cardRef: React.RefObject<View | null>;
-  share: () => Promise<void>;
+  share: (dialogTitle?: string) => Promise<void>;
   isSharing: boolean;
 } {
   const cardRef = useRef<View>(null);
   const [isSharing, setIsSharing] = useState(false);
 
-  const share = useCallback(async () => {
+  const share = useCallback(async (dialogTitle?: string) => {
     // Guard: no ref or already sharing
     if (!cardRef.current || isSharing) {
       return;
@@ -52,6 +52,7 @@ export function useShareCard(): {
       // Open native share sheet
       await Sharing.shareAsync(uri, {
         mimeType: 'image/png',
+        dialogTitle, // Android only - shows in share dialog header
       });
     } catch (error) {
       console.error('Share failed:', error);
