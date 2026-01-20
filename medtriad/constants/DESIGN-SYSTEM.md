@@ -1,333 +1,741 @@
 # MedTriads Design System
 
-Quick reference for design tokens and motion patterns.
+Complete reference for design tokens, primitive components, and usage patterns.
 
-## Color Palette
-
-### Primary
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| primary | #4ECDC4 | Brand color, buttons, links |
-| primaryDark | #3BA99C | Button borders, pressed states |
-| primaryLight | #E6FAF8 | Badges, highlights |
-
-### Backgrounds
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| background | #FFFFFF | Page backgrounds |
-| backgroundSecondary | #F8F9FA | Cards, sections |
-| backgroundCard | #FFFFFF | Elevated cards |
-
-### Text
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| text | #2D3436 | Primary text |
-| textSecondary | #636E72 | Secondary text |
-| textMuted | #B2BEC3 | Hints, captions |
-| textInverse | #FFFFFF | Text on primary |
-
-### Borders
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| border | #DFE6E9 | Default borders |
-| borderStrong | #B2BEC3 | Emphasized borders |
-
-### Semantic
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| success | #00B894 | Correct answers |
-| successBg | #D4F5ED | Success backgrounds |
-| error | #E17055 | Wrong answers, errors |
-| errorBg | #FFEAEA | Error backgrounds |
-
-### Timer States
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| timerNormal | #4ECDC4 | >5 seconds |
-| timerWarning | #FDCB6E | 3-5 seconds |
-| timerDanger | #E17055 | <3 seconds |
+**Version:** 2.1 (Phase 22 - Design System Application)
 
 ---
 
-## Spacing Scale (8pt Grid)
+## Table of Contents
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| xs | 4px | Tight gaps, icon margins |
-| sm | 8px | Small gaps, padding |
-| md | 12px | Medium gaps |
-| base | 16px | Standard padding |
-| lg | 24px | Section padding |
-| xl | 32px | Large gaps |
-| xxl | 48px | Major sections |
-| xxxl | 64px | Hero spacing |
+1. [Design Tokens](#design-tokens)
+2. [Primitive Components](#primitive-components)
+3. [Icon System](#icon-system)
+4. [Migration Guide](#migration-guide)
+5. [Documented Exceptions](#documented-exceptions)
+6. [Common Mistakes](#common-mistakes)
 
 ---
 
-## Typography
+## Design Tokens
 
-| Style | Size | Weight | Usage |
-|-------|------|--------|-------|
-| display | 64 | 700 | Results score |
-| title | 32 | 700 | Screen titles |
-| titleLarge | 28 | 600 | App name |
-| heading | 22 | 600 | Section headers |
-| body | 18 | 500 | Content, findings |
-| label | 17 | 600 | Button labels |
-| stat | 20 | 700 | Stat values |
-| caption | 15 | 400 | Secondary info |
-| footnote | 13 | 400 | Small details |
-| tiny | 11 | 600 | Category labels |
+The design system uses a three-layer token architecture:
 
----
+1. **Raw Tokens** (`constants/tokens/*.ts`) - Base values (colors, sizes)
+2. **Semantic Theme** (`constants/theme.ts`) - Contextual meanings
+3. **Components** (`components/primitives/*`) - Ready-to-use UI
 
-## Border Radius
+### Colors
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| sm | 8px | Small buttons |
-| md | 12px | Cards, inputs |
-| lg | 16px | Large cards |
-| xl | 24px | Buttons |
-| xxl | 32px | Modals |
-| full | 9999px | Pills, avatars |
-
----
-
-## Shadows
-
-| Token | Offset | Opacity | Radius | Usage |
-|-------|--------|---------|--------|-------|
-| sm | 0, 1 | 0.06 | 3 | Subtle lift |
-| md | 0, 4 | 0.08 | 12 | Cards |
-| lg | 0, 8 | 0.12 | 24 | Modals, overlays |
-
----
-
-## Mascot Sizes
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| sm | 56px | Inline, small UI |
-| md | 80px | Cards, avatars |
-| lg | 112px | Home screen |
-| xl | 160px | Results, celebrations |
-
----
-
-## Icons
-
-All icons use SF Symbols via `IconSymbol` component (expo/symbols).
-
-### Icon Sizes
-
-| Size | Usage |
-|------|-------|
-| 14 | Tiny indicators |
-| 16 | Small inline icons |
-| 18 | Button icons |
-| 20 | Standard UI icons |
-| 22 | Emphasized icons |
-| 32 | Large feature icons |
-
-### Usage
+#### Semantic Theme Structure
 
 ```typescript
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { theme } from '@/constants/theme';
 
-<IconSymbol name="checkmark.circle.fill" size={20} color={colors.success} />
+theme.colors.surface   // Background colors
+theme.colors.text      // Text colors
+theme.colors.brand     // Brand identity
+theme.colors.success   // Success/correct states
+theme.colors.warning   // Warning states
+theme.colors.danger    // Error/danger states
+theme.colors.border    // Border colors
+theme.colors.gold      // Achievement colors
+theme.colors.streak    // Streak/fire colors
+theme.colors.blue      // Info/teal colors
+theme.colors.purple    // Purple accent
+theme.colors.timer     // Timer state colors
+theme.colors.icon      // Icon colors
+```
+
+#### Surface Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `surface.primary` | #FFFFFF | Main page backgrounds |
+| `surface.secondary` | #F7F7F7 | Secondary backgrounds |
+| `surface.card` | #FFFFFF | Card backgrounds |
+| `surface.brand` | #F8E8EE | Light wine brand background |
+| `surface.brandSubtle` | #FCF5F8 | Ultra-light wine |
+
+#### Text Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `text.primary` | #3C3C3C | Primary text |
+| `text.secondary` | #777777 | Secondary text |
+| `text.muted` | #AFAFAF | Muted/hint text |
+| `text.inverse` | #FFFFFF | Text on dark backgrounds |
+| `text.brand` | #4A1230 | Brand-colored text |
+
+#### Brand Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `brand.primary` | #8B2252 | Primary brand (wine) |
+| `brand.primaryDark` | #6B1A3F | 3D depth/shadow |
+| `brand.primaryDarker` | #4A1230 | Strong accent |
+| `brand.accent` | #FFE8EE | Light pink accent |
+
+#### Success Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `success.main` | #58CC02 | Correct answers |
+| `success.dark` | #46A302 | 3D depth |
+| `success.darker` | #16A34A | Deeper 3D borders |
+| `success.light` | #E5F9DB | Success background |
+| `success.text` | #3D8B00 | Success text |
+
+#### Danger Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `danger.main` | #FF4B4B | Errors/incorrect |
+| `danger.dark` | #EA2B2B | 3D depth |
+| `danger.darker` | #DC2626 | Deeper 3D borders |
+| `danger.light` | #FFE5E5 | Error background |
+
+#### Gold Colors (Achievements)
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `gold.main` | #F5B800 | XP, achievements |
+| `gold.dark` | #D4A000 | 3D depth |
+| `gold.light` | #FFF8E1 | Gold background |
+| `gold.text` | #996600 | Gold text |
+
+#### Streak Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `streak.main` | #FF6B6B | Streak flame |
+| `streak.dark` | #E85555 | 3D depth |
+| `streak.light` | #FFE8E8 | Streak background |
+| `streak.text` | #C44545 | Streak text |
+
+#### Border Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `border.default` | #E5E5E5 | Standard borders |
+| `border.strong` | #CDCDCD | 3D depth borders |
+
+#### Timer Colors
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `timer.normal` | #8B2252 | Normal time |
+| `timer.warning` | #FF9500 | Warning (< 5s) |
+| `timer.danger` | #FF4B4B | Danger (< 2s) |
+
+---
+
+### Typography
+
+Font: **Figtree** (Google Font)
+
+#### Font Families
+
+```typescript
+import { fontFamily } from '@/constants/tokens/typography';
+
+fontFamily.regular   // Figtree_400Regular
+fontFamily.medium    // Figtree_500Medium
+fontFamily.semibold  // Figtree_600SemiBold
+fontFamily.bold      // Figtree_700Bold
+fontFamily.extrabold // Figtree_800ExtraBold
+```
+
+#### Typography Variants
+
+| Variant | Size | Weight | Line Height | Usage |
+|---------|------|--------|-------------|-------|
+| `display` | 64px | Bold | 64px | Results score |
+| `title` | 32px | Bold | 38px | Screen titles |
+| `titleLarge` | 28px | SemiBold | 34px | App name |
+| `heading` | 22px | SemiBold | 28px | Section headers |
+| `body` | 18px | Medium | 26px | Body text, findings |
+| `label` | 17px | SemiBold | 22px | Button labels |
+| `stat` | 24px | ExtraBold | 28px | Stats values |
+| `caption` | 15px | Regular | 20px | Secondary info |
+| `footnote` | 13px | Regular | 18px | Small details |
+| `tiny` | 11px | SemiBold | 14px | Category labels |
+
+---
+
+### Spacing
+
+8px grid system with smaller increments for fine control.
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `xs` | 4px | Tight inline spacing |
+| `sm` | 8px | Small gaps |
+| `md` | 12px | Medium gaps |
+| `base` | 16px | Standard padding |
+| `lg` | 24px | Large sections |
+| `xl` | 32px | Extra large |
+| `xxl` | 48px | Page-level spacing |
+| `xxxl` | 64px | Hero sections |
+
+```typescript
+import { theme } from '@/constants/theme';
+
+paddingHorizontal: theme.spacing.base,  // 16px
+gap: theme.spacing.sm,                   // 8px
 ```
 
 ---
 
-## Card Styling
+### Border Radius
 
-Duolingo-inspired hard border treatment for all cards.
-
-### CardStyle Pattern
-
-```typescript
-import { CardStyle } from '@/constants/theme';
-
-// Spread into StyleSheet
-const styles = StyleSheet.create({
-  card: {
-    ...CardStyle,
-    padding: Spacing.base,
-  },
-});
-```
-
-### Properties
-
-| Property | Value | Purpose |
-|----------|-------|---------|
-| backgroundColor | backgroundCard | White base |
-| borderWidth | 2 | Visible border all around |
-| borderColor | border | Subtle border |
-| borderBottomWidth | 4 | Extra depth on bottom |
-| borderBottomColor | borderStrong | Stronger bottom edge |
-| borderRadius | Radius.lg (16) | Rounded corners |
-| shadow | Shadows.light.sm | Subtle lift |
-
-### Press Animation Pattern
-
-For interactive cards, animate borderBottomWidth on press:
+| Token | Value | Usage |
+|-------|-------|-------|
+| `sm` | 8px | Small elements, badges |
+| `md` | 12px | Medium elements, buttons |
+| `lg` | 16px | Cards, containers |
+| `xl` | 24px | Large containers |
+| `xxl` | 32px | Extra large |
+| `full` | 9999px | Pills, circles |
 
 ```typescript
-const borderBottom = useSharedValue(4);
-
-const handlePressIn = () => {
-  borderBottom.value = withSpring(2, Easings.press);
-};
-
-const handlePressOut = () => {
-  borderBottom.value = withSpring(4, Easings.press);
-};
+borderRadius: theme.radius.lg,  // 16px
 ```
 
 ---
 
-## Animation
+### Shadows
 
-### Durations
+Platform-aware shadow definitions (iOS uses shadow*, Android uses elevation).
+
+| Token | Usage |
+|-------|-------|
+| `sm` | Subtle depth |
+| `md` | Standard cards |
+| `lg` | Elevated modals |
+
+```typescript
+...theme.shadows.md,  // Spread shadow props
+```
+
+---
+
+### Motion
+
+#### Durations
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| fast | 150ms | Quick feedback |
-| normal | 300ms | Standard transitions |
-| slow | 500ms | Deliberate reveals |
-| slower | 800ms | Count-ups, celebrations |
-| stagger | 50ms | List item delays |
-| staggerMedium | 80ms | Dramatic reveals |
+| `fast` | 150ms | Quick feedback |
+| `normal` | 300ms | Standard transitions |
+| `slow` | 500ms | Deliberate animations |
+| `slower` | 800ms | Score count-ups |
+| `stagger` | 50ms | List item delays |
+| `staggerMedium` | 80ms | Celebratory reveals |
 
-### Spring Presets (Easings)
+#### Spring Presets
 
 | Preset | Damping | Stiffness | Usage |
 |--------|---------|-----------|-------|
-| press | 15 | 400 | Button press/release |
-| bouncy | 10 | 300 | Playful reveals |
-| gentle | 20 | 150 | Settle animations |
-| pop | 8 | 400 | Celebration pops |
+| `press` | 15 | 400 | Button press/release |
+| `bouncy` | 10 | 300 | Playful reveals |
+| `gentle` | 20 | 150 | Settle animations |
+| `pop` | 8 | 400 | Celebration pops |
 
-### Timing Easings
+```typescript
+import { theme } from '@/constants/theme';
 
-| Preset | Usage |
-|--------|-------|
-| easeOut | Exit animations, fades |
-| easeInOut | Color transitions |
-| easeOutBack | Overshoot entrances |
+withSpring(1, theme.motion.springs.press)
+```
 
 ---
 
-## Motion Principles
+## Primitive Components
 
-1. **Springs over timing** - Use withSpring for position/scale changes
-2. **Easing on everything** - No linear motion
-3. **Stagger grouped elements** - Build anticipation with delays
-4. **Soft, weighted, physical** - Motion should feel real
-5. **Nothing snaps** - Everything settles
+All primitives are exported from `@/components/primitives`.
+
+```typescript
+import { Icon, Text, Surface, Button, Badge, Tag, Card } from '@/components/primitives';
+```
+
+---
+
+### Icon
+
+Renders Solar Icons with standardized sizes.
+
+```typescript
+import { Icon } from '@/components/primitives';
+import { Fire } from '@solar-icons/react-native/Bold';
+
+<Icon icon={Fire} size="md" color={theme.colors.brand.primary} />
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `icon` | `ComponentType` | required | Solar Icon component |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Icon size |
+| `color` | `string` | `theme.colors.text.primary` | Icon color |
+| `mirrored` | `boolean` | `false` | Mirror horizontally |
+| `alt` | `string` | - | Accessibility label |
+
+**Size Reference:**
+
+| Size | Pixels | Usage |
+|------|--------|-------|
+| `sm` | 16px | Badges, inline text |
+| `md` | 20px | Buttons, default |
+| `lg` | 24px | Navigation, prominent |
+
+---
+
+### Text
+
+Typography primitive using Figtree font and semantic tokens.
+
+```typescript
+import { Text } from '@/components/primitives';
+
+<Text variant="title" color="primary">Screen Title</Text>
+<Text variant="body">Body text content</Text>
+<Text variant="caption" color="secondary">Secondary info</Text>
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `TextVariant` | `'body'` | Typography variant |
+| `color` | `TextColor \| string` | `'primary'` | Color (semantic key or raw) |
+| `weight` | `TextWeight` | varies | Font weight override |
+| `align` | `'left' \| 'center' \| 'right'` | - | Text alignment |
+| `children` | `ReactNode` | required | Text content |
+
+**Variants:** `display`, `title`, `titleLarge`, `heading`, `body`, `label`, `stat`, `caption`, `footnote`, `tiny`
+
+**Colors (semantic):** `primary`, `secondary`, `muted`, `inverse`, `brand`
+
+**Weights:** `regular`, `medium`, `semibold`, `bold`, `extrabold`
+
+---
+
+### Surface
+
+Themed container with semantic background colors and optional shadows.
+
+```typescript
+import { Surface } from '@/components/primitives';
+
+<Surface variant="card" elevation="sm">
+  <Text>Card content</Text>
+</Surface>
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `SurfaceVariant` | `'primary'` | Background color variant |
+| `elevation` | `SurfaceElevation` | `'none'` | Shadow level |
+| `style` | `ViewStyle` | - | Additional styles |
+| `children` | `ReactNode` | - | Content |
+
+**Variants:** `primary`, `secondary`, `card`, `brand`, `brandSubtle`
+
+**Elevations:** `none`, `sm`, `md`, `lg`
+
+---
+
+### Button
+
+Duolingo-style button with 3D press animation.
+
+```typescript
+import { Button } from '@/components/primitives';
+import { Play } from '@solar-icons/react-native/Bold';
+
+<Button label="Start Quiz" onPress={() => {}} />
+<Button label="Play" onPress={() => {}} icon={Play} />
+<Button label="Loading..." onPress={() => {}} loading />
+<Button label="Cancel" onPress={() => {}} variant="outline" />
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | required | Button text |
+| `onPress` | `() => void` | required | Press handler |
+| `variant` | `ButtonVariant` | `'primary'` | Visual variant |
+| `size` | `ButtonSize` | `'lg'` | Button size |
+| `icon` | `ComponentType` | - | Solar Icon component |
+| `iconPosition` | `'left' \| 'right'` | `'left'` | Icon position |
+| `loading` | `boolean` | `false` | Show spinner |
+| `disabled` | `boolean` | `false` | Disabled state |
+| `fullWidth` | `boolean` | `true` | Full width |
+| `style` | `ViewStyle` | - | Additional styles |
+
+**Variants:**
+
+| Variant | Background | Text | Usage |
+|---------|------------|------|-------|
+| `primary` | Wine | White | Primary actions |
+| `secondary` | Green | White | Secondary actions |
+| `outline` | White | Wine | Tertiary actions |
+| `ghost` | Transparent | Wine | Subtle actions |
+
+**Sizes:** `sm` (40px), `md` (48px), `lg` (56px)
+
+---
+
+### Badge
+
+Status indicator with Duolingo-style 3D depth.
+
+```typescript
+import { Badge } from '@/components/primitives';
+import { Fire, Star } from '@solar-icons/react-native/Bold';
+
+<Badge label="5 Day Streak" icon={Fire} variant="streak" />
+<Badge label="100 XP" icon={Star} variant="gold" />
+<Badge label="Mastered" variant="success" />
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | required | Badge text |
+| `icon` | `ComponentType` | - | Solar Icon component |
+| `variant` | `BadgeVariant` | `'default'` | Visual variant |
+| `size` | `'sm' \| 'md'` | `'md'` | Badge size |
+| `style` | `ViewStyle` | - | Additional styles |
+
+**Variants:** `default`, `success`, `warning`, `danger`, `brand`, `gold`, `streak`
+
+---
+
+### Tag
+
+Flat label/category component without 3D depth.
+
+```typescript
+import { Tag } from '@/components/primitives';
+import { Bookmark } from '@solar-icons/react-native/Bold';
+
+<Tag label="Cardiology" variant="brand" />
+<Tag label="Filter" icon={Bookmark} onPress={() => {}} />
+<Tag label="Selected" onRemove={() => {}} />
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | required | Tag text |
+| `icon` | `ComponentType` | - | Solar Icon component |
+| `variant` | `TagVariant` | `'default'` | Visual variant |
+| `onPress` | `() => void` | - | Makes tag tappable |
+| `onRemove` | `() => void` | - | Shows X button |
+| `style` | `ViewStyle` | - | Additional styles |
+
+**Variants:** `default`, `brand`, `success`, `info`, `purple`
+
+**Badge vs Tag:**
+- **Badge** has 3D depth (borderBottomWidth: 3) - for status, achievements
+- **Tag** is flat - for labels, categories, filters
+
+---
+
+### Card
+
+Container with Duolingo-style 3D depth and optional press animation.
+
+```typescript
+import { Card } from '@/components/primitives';
+
+<Card>Static content</Card>
+<Card onPress={() => {}}>Tappable card</Card>
+<Card variant="elevated">Shadow-only card</Card>
+```
+
+**Props:**
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | required | Card content |
+| `variant` | `CardVariant` | `'default'` | Visual variant |
+| `onPress` | `() => void` | - | Makes card interactive |
+| `disabled` | `boolean` | `false` | Disabled state |
+| `style` | `ViewStyle` | - | Additional styles |
+
+**Variants:**
+
+| Variant | Borders | Shadow | Animation |
+|---------|---------|--------|-----------|
+| `default` | 3D depth | sm | Yes (if onPress) |
+| `elevated` | None | md | No |
+| `outlined` | 3D depth | None | Yes (if onPress) |
+
+---
+
+## Icon System
+
+### Solar Icons
+
+We use `@solar-icons/react-native` for all icons.
+
+```typescript
+// Bold (filled) icons
+import { Home, Fire, Star } from '@solar-icons/react-native/Bold';
+
+// Linear (outline) icons
+import { Home2, BookMinimalistic } from '@solar-icons/react-native/Linear';
+```
+
+### SF Symbol to Solar Icon Mapping
+
+| SF Symbol | Solar Icon | Import Path |
+|-----------|------------|-------------|
+| `house.fill` | `Home` | `@solar-icons/react-native/Bold` |
+| `house` | `Home2` | `@solar-icons/react-native/Linear` |
+| `book.fill` | `Book` | `@solar-icons/react-native/Bold` |
+| `book` | `BookMinimalistic` | `@solar-icons/react-native/Linear` |
+| `chart.bar.fill` | `ChartSquare` | `@solar-icons/react-native/Bold` |
+| `chart.bar` | `ChartSquare` | `@solar-icons/react-native/Linear` |
+| `gearshape.fill` | `Settings` | `@solar-icons/react-native/Bold` |
+| `flame.fill` | `Fire` | `@solar-icons/react-native/Bold` |
+| `star.fill` | `Star` | `@solar-icons/react-native/Bold` |
+| `trophy.fill` | `Cup` | `@solar-icons/react-native/Bold` |
+| `percent` | `PieChart` | `@solar-icons/react-native/Bold` |
+| `gamecontroller.fill` | `Gamepad` | `@solar-icons/react-native/Bold` |
+| `play.fill` | `Play` | `@solar-icons/react-native/Bold` |
+| `bolt.fill` | `Bolt` | `@solar-icons/react-native/Bold` |
+| `magnifyingglass` | `MagnifyingGlass` | `@solar-icons/react-native/Linear` |
+| `xmark` | `CloseCircle` | `@solar-icons/react-native/Bold` |
+| `chevron.right` | `AltArrowRight` | `@solar-icons/react-native/Bold` |
+| `square.and.arrow.up` | `Share` | `@solar-icons/react-native/Bold` |
+| `trash` | `TrashBinTrash` | `@solar-icons/react-native/Bold` |
+| `checkmark.circle.fill` | `CheckCircle` | `@solar-icons/react-native/Bold` |
+| `target` | `Target` | `@solar-icons/react-native/Bold` |
+| `doc.text.fill` | `Document` | `@solar-icons/react-native/Bold` |
+
+### Tab Bar Icons
+
+Tab bar uses raw Solar Icons directly (not Icon primitive) because Expo Router passes the `color` prop:
+
+```typescript
+tabBarIcon: ({ color, focused }) =>
+  focused ? <Home size={28} color={color} /> : <Home2 size={28} color={color} />
+```
+
+---
+
+## Migration Guide
+
+### Before/After Examples
+
+#### Text Migration
+
+```typescript
+// BEFORE
+import { Text } from 'react-native';
+import { Typography, Colors } from '@/constants/theme';
+
+<Text style={[styles.title, { color: colors.text }]}>Title</Text>
+
+const styles = StyleSheet.create({
+  title: { ...Typography.title },
+});
+
+// AFTER
+import { Text } from '@/components/primitives';
+
+<Text variant="title">Title</Text>
+```
+
+#### Icon Migration
+
+```typescript
+// BEFORE
+import { IconSymbol } from '@/components/ui/icon-symbol';
+
+<IconSymbol name="flame.fill" size={16} color={colors.primary} />
+
+// AFTER
+import { Icon } from '@/components/primitives';
+import { Fire } from '@solar-icons/react-native/Bold';
+
+<Icon icon={Fire} size="sm" color={theme.colors.brand.primary} />
+```
+
+#### Badge Migration
+
+```typescript
+// BEFORE
+<View style={[styles.badge, { backgroundColor: colors.goldLight }]}>
+  <IconSymbol name="star.fill" size={14} color={colors.gold} />
+  <Text style={{ color: colors.goldText }}>100 XP</Text>
+</View>
+
+// AFTER
+import { Badge } from '@/components/primitives';
+import { Star } from '@solar-icons/react-native/Bold';
+
+<Badge label="100 XP" icon={Star} variant="gold" />
+```
+
+#### Card Migration
+
+```typescript
+// BEFORE
+<Pressable style={[styles.card, CardStyle]}>
+  <Text>Content</Text>
+</Pressable>
+
+// AFTER
+import { Card } from '@/components/primitives';
+
+<Card onPress={() => {}}>
+  <Text variant="body">Content</Text>
+</Card>
+```
+
+#### Button Migration
+
+```typescript
+// BEFORE
+import { Button } from '@/components/ui/Button';
+
+<Button label="Start" onPress={() => {}} icon="play.fill" />
+
+// AFTER
+import { Button } from '@/components/primitives';
+import { Play } from '@solar-icons/react-native/Bold';
+
+<Button label="Start" onPress={() => {}} icon={Play} />
+```
+
+---
+
+## Documented Exceptions
+
+These intentional deviations from the design system are documented and acceptable.
+
+### Category Colors (FilterChips.tsx)
+
+10 unique color palettes for medical categories are kept for visual differentiation between specialties.
+
+**Location:** `components/library/FilterChips.tsx`
+
+**Reason:** Visual distinction helps users quickly identify categories. Semantic colors would make all categories look identical.
+
+### Accuracy Stat Color (StatsCard.tsx)
+
+Teal color used for accuracy stat instead of semantic color.
+
+**Location:** `components/progress/StatsCard.tsx`
+
+**Reason:** Visual variety in stats grid. Each stat has its own color for quick recognition.
+
+### Confetti Colors (TierUpCelebration.tsx)
+
+Celebration-specific colors for confetti animation.
+
+**Location:** `components/results/TierUpCelebration.tsx`
+
+**Reason:** Confetti colors are decorative and don't need semantic meaning.
+
+---
+
+## Common Mistakes
+
+### DO NOT
+
+```typescript
+// Import Text from react-native
+import { Text } from 'react-native';  // WRONG
+import { Text } from '@/components/primitives';  // CORRECT
+
+// Use IconSymbol
+import { IconSymbol } from '@/components/ui/icon-symbol';  // WRONG
+import { Icon } from '@/components/primitives';  // CORRECT
+
+// Use Colors.light.*
+backgroundColor: Colors.light.primary,  // WRONG
+backgroundColor: theme.colors.brand.primary,  // CORRECT
+
+// Use hardcoded colors
+color: '#8B2252',  // WRONG
+color: theme.colors.brand.primary,  // CORRECT
+
+// Use Typography spread
+style: { ...Typography.title },  // WRONG
+<Text variant="title">...</Text>  // CORRECT
+```
+
+### DO
+
+```typescript
+// Import from primitives
+import { Text, Icon, Button, Badge, Card } from '@/components/primitives';
+
+// Use theme.colors for all colors
+backgroundColor: theme.colors.surface.card,
+
+// Use Text variant prop
+<Text variant="heading">Section Title</Text>
+
+// Use Icon with Solar Icon components
+import { Fire } from '@solar-icons/react-native/Bold';
+<Icon icon={Fire} size="md" color={theme.colors.streak.main} />
+
+// Document exceptions
+// NOTE: Exception - category colors for visual differentiation
+const categoryColor = CATEGORY_COLORS[category];
+```
+
+---
+
+## Component Styling Patterns
+
+### Press Animation (Duolingo-style 3D)
+
+```typescript
+const scale = useSharedValue(1);
+const borderBottom = useSharedValue(4);
+
+const handlePressIn = () => {
+  scale.value = withSpring(0.98, theme.motion.springs.press);
+  borderBottom.value = withSpring(2, theme.motion.springs.press);
+};
+
+const handlePressOut = () => {
+  scale.value = withSpring(1, theme.motion.springs.press);
+  borderBottom.value = withSpring(4, theme.motion.springs.press);
+};
+```
 
 ### Entry Animation Pattern
 
 ```typescript
-entering={FadeInUp.delay(N * Durations.stagger).duration(Durations.normal).springify()}
-```
-
-### Press Animation Pattern
-
-```typescript
-const handlePressIn = () => {
-  scale.value = withSpring(0.98, Easings.press);
-};
-
-const handlePressOut = () => {
-  scale.value = withSpring(1, Easings.press);
-};
+entering={FadeInUp.delay(index * theme.motion.durations.stagger)
+  .duration(theme.motion.durations.normal)
+  .springify()}
 ```
 
 ### Pop Effect Pattern
 
 ```typescript
 scale.value = withSequence(
-  withSpring(1.35, Easings.pop),   // Overshoot
-  withSpring(1, Easings.gentle)    // Settle
+  withSpring(1.35, theme.motion.springs.pop),   // Overshoot
+  withSpring(1, theme.motion.springs.gentle)    // Settle
 );
 ```
 
 ---
 
-## Common Mistakes
-
-Antipatterns to avoid when building UI.
-
-### Hardcoded Colors
-
-```typescript
-// Don't
-backgroundColor: '#F0F2F4',
-
-// Do
-backgroundColor: Colors.light.backgroundSecondary,
-```
-
-### Magic Spacing Numbers
-
-```typescript
-// Don't
-paddingHorizontal: 16,
-gap: 8,
-
-// Do
-paddingHorizontal: Spacing.base,
-gap: Spacing.sm,
-```
-
-### Custom Typography
-
-```typescript
-// Don't
-fontSize: 14,
-fontWeight: '400',
-
-// Do
-...Typography.caption,
-```
-
-### Soft Card Borders
-
-```typescript
-// Don't
-borderWidth: 1,
-borderColor: '#eee',
-
-// Do
-borderWidth: 2,
-borderColor: Colors.light.border,
-borderBottomWidth: 4,
-borderBottomColor: Colors.light.borderStrong,
-```
-
-### Inline Shadows
-
-```typescript
-// Don't
-shadowColor: '#000',
-shadowOffset: { width: 0, height: 2 },
-shadowOpacity: 0.1,
-shadowRadius: 4,
-
-// Do
-...Shadows.light.sm,
-```
-
----
-
-*Generated: Phase 10 - Refine Visuals & Motion*
-*Updated: Phase 17 - Design System Audit*
+*Last updated: Phase 22 - Design System Application*
+*Components: Icon, Text, Surface, Button, Badge, Tag, Card*
