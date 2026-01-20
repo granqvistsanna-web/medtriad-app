@@ -94,7 +94,7 @@ export default function HomeScreen() {
 
         {/* Action buttons - Study and Challenge */}
         <ActionButtons
-          onStudy={() => router.push('/library')}
+          onStudy={() => router.push('/quiz/study')}
           onChallenge={() => router.push('/quiz')}
           delay={Durations.stagger * 2.5}
         />
