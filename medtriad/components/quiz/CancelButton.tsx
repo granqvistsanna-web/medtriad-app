@@ -1,20 +1,18 @@
-import { Alert, Pressable, StyleSheet, useColorScheme, Platform } from 'react-native';
+import { Alert, Pressable, StyleSheet, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors, Easings } from '@/constants/theme';
+import { CloseCircle } from '@solar-icons/react-native/Bold';
+import { Icon } from '@/components/primitives';
+import { theme, Easings } from '@/constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function CancelButton() {
   const router = useRouter();
-  const scheme = useColorScheme() ?? 'light';
-  const colors = Colors[scheme];
-
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -58,7 +56,7 @@ export function CancelButton() {
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       style={[styles.button, animatedStyle]}
     >
-      <IconSymbol name="xmark" size={22} color={colors.textSecondary} />
+      <Icon icon={CloseCircle} size="lg" color={theme.colors.text.secondary} />
     </AnimatedPressable>
   );
 }

@@ -9,7 +9,7 @@ import Animated, {
   interpolateColor,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
-import { Colors, Typography, Spacing, Radius, Easings, Durations } from '@/constants/theme';
+import { theme, Typography, Spacing, Radius, Easings, Durations } from '@/constants/theme';
 import { TriMascot, MascotMood } from '@/components/home/TriMascot';
 
 type TimerBarProps = {
@@ -19,8 +19,6 @@ type TimerBarProps = {
 };
 
 export function TimerBar({ seconds, totalSeconds, mascotMood = 'neutral' }: TimerBarProps) {
-  const colors = Colors.light;
-
   const progress = seconds / totalSeconds;
   const isLow = seconds <= 5;
   const isCritical = seconds <= 3;
@@ -69,7 +67,7 @@ export function TimerBar({ seconds, totalSeconds, mascotMood = 'neutral' }: Time
     const backgroundColor = interpolateColor(
       animatedProgress.value,
       [0, 0.2, 0.33, 1],
-      [colors.error, colors.error, colors.timerWarning, colors.primary]
+      [theme.colors.timer.danger, theme.colors.timer.danger, theme.colors.timer.warning, theme.colors.brand.primary]
     );
 
     return {
@@ -83,7 +81,7 @@ export function TimerBar({ seconds, totalSeconds, mascotMood = 'neutral' }: Time
     const textColor = interpolateColor(
       animatedProgress.value,
       [0, 0.2, 0.33, 1],
-      [colors.error, colors.error, colors.timerWarning, colors.text]
+      [theme.colors.timer.danger, theme.colors.timer.danger, theme.colors.timer.warning, theme.colors.text.primary]
     );
 
     return {
@@ -101,7 +99,7 @@ export function TimerBar({ seconds, totalSeconds, mascotMood = 'neutral' }: Time
 
       {/* Timer bar */}
       <View style={styles.barSection}>
-        <View style={[styles.track, { backgroundColor: colors.border }]}>
+        <View style={[styles.track, { backgroundColor: theme.colors.border.default }]}>
           <Animated.View style={[styles.fill, barAnimatedStyle]} />
         </View>
       </View>

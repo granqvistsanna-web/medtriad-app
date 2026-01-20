@@ -1,14 +1,16 @@
-import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useEffect, useCallback, useRef } from 'react';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
+import { Fire } from '@solar-icons/react-native/Bold';
+
+import { Text, Icon } from '@/components/primitives';
 import { FindingsCard } from '@/components/quiz/FindingsCard';
 import { AnswerCard } from '@/components/quiz/AnswerCard';
 import { TimerBar } from '@/components/quiz/TimerBar';
 import { CancelButton } from '@/components/quiz/CancelButton';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 
 import { useQuizReducer } from '@/hooks/use-quiz-reducer';
 import { useCountdownTimer } from '@/hooks/use-countdown-timer';
@@ -21,7 +23,7 @@ import { useStats } from '@/hooks/useStats';
 
 import { QuizOption } from '@/types';
 import { QUESTION_COUNT, QUESTION_TIME } from '@/types/quiz-state';
-import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
+import { theme, Typography, Spacing, Radius, Durations } from '@/constants/theme';
 import { MascotMood } from '@/components/home/TriMascot';
 
 /** Delay in ms before advancing to next question after answer */
@@ -32,7 +34,6 @@ export default function QuizScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
-  const colors = Colors.light;
   const { stats, recordQuizResult, checkHighScore } = useStats();
   const { playSound } = useSoundEffects();
   const { triggerHaptic } = useHaptics();
@@ -217,7 +218,7 @@ export default function QuizScreen() {
       style={[
         styles.container,
         {
-          backgroundColor: colors.background,
+          backgroundColor: theme.colors.surface.primary,
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
           height: windowHeight,
@@ -225,14 +226,14 @@ export default function QuizScreen() {
       ]}
     >
       {/* Header */}
-      <View style={[styles.header, { borderBottomColor: colors.border }]}>
+      <View style={[styles.header, { borderBottomColor: theme.colors.border.default }]}>
         <View style={styles.cancelButton}>
           <CancelButton />
         </View>
 
         {/* Question progress - center */}
         <View style={styles.progressContainer}>
-          <Text style={[styles.progressText, { color: colors.textMuted }]}>
+          <Text variant="footnote" color="muted" weight="medium">
             {currentIndex + 1} of {QUESTION_COUNT}
           </Text>
         </View>
@@ -242,15 +243,15 @@ export default function QuizScreen() {
           {combo > 1 && (
             <Animated.View
               entering={FadeIn.duration(Durations.fast)}
-              style={[styles.streakBadge, { backgroundColor: colors.primaryLight }]}
+              style={[styles.streakBadge, { backgroundColor: theme.colors.surface.brand }]}
             >
-              <IconSymbol name="flame.fill" size={14} color={colors.primary} />
-              <Text style={[styles.streakText, { color: colors.primary }]}>{combo}x</Text>
+              <Icon icon={Fire} size="sm" color={theme.colors.brand.primary} />
+              <Text variant="footnote" color={theme.colors.brand.primary} weight="bold">{combo}x</Text>
             </Animated.View>
           )}
 
           {/* Score display */}
-          <Text style={[styles.scoreText, { color: colors.text }]}>
+          <Text variant="label">
             {correctCountRef.current}/{currentIndex + (status === 'answered' ? 1 : 0)}
           </Text>
         </View>
@@ -315,10 +316,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     pointerEvents: 'none',
   },
-  progressText: {
-    ...Typography.footnote,
-    fontWeight: '500',
-  },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -331,13 +328,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     borderRadius: Radius.full,
-  },
-  streakText: {
-    ...Typography.footnote,
-    fontWeight: '700',
-  },
-  scoreText: {
-    ...Typography.label,
   },
   main: {
     flex: 1,
