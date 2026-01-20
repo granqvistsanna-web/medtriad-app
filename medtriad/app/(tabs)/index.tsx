@@ -27,6 +27,7 @@ export default function HomeScreen() {
     pointsToNextTier,
     pendingTierUp,
     clearPendingTierUp,
+    getCategoryPercent,
   } = useStats();
 
   // Track if we're showing the tier-up catch-up glow
@@ -101,7 +102,12 @@ export default function HomeScreen() {
 
         {/* Category mastery progress */}
         <CategoryMastery
-          categoryMastery={{}}
+          categoryMastery={{
+            cardiology: getCategoryPercent('cardiology'),
+            neurology: getCategoryPercent('neurology'),
+            pulmonary: getCategoryPercent('pulmonary'),
+            endocrine: getCategoryPercent('endocrine'),
+          }}
           onCategoryPress={(category) => router.push('/(tabs)/progress')}
           delay={Durations.stagger * 3}
         />
