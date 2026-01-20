@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 Challenge a Friend (Phase 25 Plan 01 COMPLETE)
+**Current focus:** v2.1 App Store Preparation (Phase 26 Plan 01 COMPLETE)
 
 ## Current Position
 
-Phase: 25 of 26 (Challenge a Friend)
+Phase: 26 of 26 (App Store Preparation)
 Plan: 1 of 1 in current phase (complete)
-Status: Phase 25 complete - ready for Phase 26
-Last activity: 2026-01-20 - Completed 25-01-PLAN.md (Challenge a Friend)
+Status: Phase 26 complete - ready for App Store submission
+Last activity: 2026-01-20 - Completed 26-01-PLAN.md (App Store Configuration)
 
-Progress: [###################.] 80% (32/40 phases across all milestones)
+Progress: [####################] 100% (63/63 plans complete across all milestones)
 
 ## Performance Metrics
 
@@ -28,13 +28,13 @@ Progress: [###################.] 80% (32/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 16
+- Plans completed: 17
 - Phases: 7 (21-26)
-- Requirements: 40 total, 34 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01 through CM-04, CH-01 through CH-03)
+- Requirements: 40 total, 37 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01 through CM-04, CH-01 through CH-03, AS-01, AS-07 partial)
 
 **Cumulative:**
-- Total phases: 26 (25 complete, 1 remaining)
-- Total plans: 62 complete
+- Total phases: 26 (26 complete)
+- Total plans: 63 complete
 - Total lines: ~124,700 TypeScript
 
 ## Accumulated Context
@@ -132,6 +132,12 @@ Summary of key v2.0 decisions:
 - getChallengeMessage returns score-based competitive text (5 tiers)
 - useShareCard share function accepts optional dialogTitle for Android
 
+**v2.1 Decisions (Phase 26-01):**
+- Bundle ID uses placeholder format (com.YOURNAME.medtriad) for user customization
+- EAS appVersionSource set to remote with autoIncrement for automated version management
+- Privacy manifest declares NSUserDefaults with CA92.1 reason code for AsyncStorage
+- supportsTablet set to false for iPhone-only deployment
+
 ### Pending Todos
 
 None.
@@ -142,48 +148,46 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 20:30 UTC
-Stopped at: Completed 25-01-PLAN.md (Challenge a Friend)
+Last session: 2026-01-20 20:28 UTC
+Stopped at: Completed 26-01-PLAN.md (App Store Configuration)
 Resume file: None
 
-## Challenge a Friend Progress
+## App Store Preparation Progress
 
-Phase 25 (Challenge a Friend) is **COMPLETE**.
+Phase 26 (App Store Preparation) is **COMPLETE**.
 
 **Completed Plans:**
 
 | Plan | Name | Status |
 |------|------|--------|
-| 25-01 | Challenge a Friend | Complete |
+| 26-01 | App Store Configuration | Complete |
 
 **Artifacts Modified:**
 
 | File | Purpose |
 |------|---------|
-| medtriad/components/share/ShareCard.tsx | Share card with competitive messaging variant |
-| medtriad/hooks/useShareCard.ts | Share hook with dialogTitle support |
-| medtriad/app/quiz/results.tsx | Results screen with Challenge a Friend button |
+| medtriad/app.json | iOS bundle identifier, privacy manifest, tablet support |
+| medtriad/eas.json | EAS build and submit configuration |
 
 **Patterns Established:**
-- ShareCard variant system: `'share' | 'challenge'` with default backward compatibility
-- Score-based messaging: 5-tier competitive text based on accuracy percentage
-- Optional hook parameters: dialogTitle passed through to native share API
+- EAS remote version source: Prevents duplicate buildNumber errors via automatic tracking
+- Privacy manifest in app.json: Expo generates PrivacyInfo.xcprivacy during prebuild
 
 **Requirements Complete:**
-- CH-01: Results screen shows "Challenge a Friend" button after completing quiz
-- CH-02: Tapping button generates share card with competitive message based on score
-- CH-03: System share sheet opens for sharing via Messages, social apps, etc.
+- AS-01: App icon verified at 1024x1024 pixels
+- AS-07 (partial): Bundle ID format established (user customizes value)
 
 ## Next Steps
 
-**Phase 25 Complete - Challenge a Friend**
+**Phase 26 Complete - App Store Preparation**
 
-Ready for Phase 26 (Final Polish).
+The technical configuration is complete. Before App Store submission, user must:
 
-To continue:
-```
-/gsd:plan-phase 26
-```
+1. **Customize bundle identifier** in `medtriad/app.json`
+2. **Add App Store Connect App ID** in `medtriad/eas.json`
+3. **Create privacy policy URL** (required for all apps)
+4. **Capture screenshots** (6.9" iPhone, 1260x2736 pixels)
+5. **Build and submit:** `eas build --platform ios --profile production`
 
 ---
-*Updated: 2026-01-20 - Completed 25-01-PLAN.md (Challenge a Friend)*
+*Updated: 2026-01-20 - Completed 26-01-PLAN.md (App Store Configuration)*
