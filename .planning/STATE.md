@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 22 of 26 (Design System Application)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase (complete)
 Status: In progress
-Last activity: 2026-01-20 - Completed 22-02-PLAN.md (Simple Screen Migration)
+Last activity: 2026-01-20 - Completed 22-03-PLAN.md (Medium Screen Migration)
 
-Progress: [############........] 58% (23/40 phases across all milestones)
+Progress: [############........] 60% (24/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,14 +28,14 @@ Progress: [############........] 58% (23/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 6
+- Plans completed: 7
 - Phases: 6 (21-26)
-- Requirements: 37 total, 14 complete (DS-01 through DS-14)
+- Requirements: 37 total, 17 complete (DS-01 through DS-17)
 
 **Cumulative:**
 - Total phases: 26 (21 complete, 5 remaining)
-- Total plans: 52 complete
-- Total lines: ~122,900 TypeScript
+- Total plans: 53 complete
+- Total lines: ~123,200 TypeScript
 
 ## Accumulated Context
 
@@ -85,18 +85,23 @@ Summary of key v2.0 decisions:
 - Text primitive color accepts raw color strings for cases like danger text
 - DevSection migrated as blocking dependency of SettingsRow changes
 
+**v2.1 Decisions (Phase 22-03):**
+- Category colors (FilterChips) kept as documented exception for UX differentiation
+- Icon names mapped to Solar Icons in StatsCard for clean API
+- Accuracy stat keeps teal color for visual variety (not semantic)
+
 ### Pending Todos
 
 None.
 
 ### Blockers/Concerns
 
-None.
+**Pre-existing issue:** FlashList estimatedItemSize type error in library.tsx - not caused by migration, unrelated to design system work.
 
 ## Session Continuity
 
-Last session: 2026-01-20 12:17 UTC
-Stopped at: Completed 22-02-PLAN.md (Simple Screen Migration)
+Last session: 2026-01-20 13:30 UTC
+Stopped at: Completed 22-03-PLAN.md (Medium Screen Migration)
 Resume file: None
 
 ## Design System Application Progress
@@ -109,37 +114,37 @@ Phase 22 migrates existing components to use the design system primitives and to
 |------|------|--------|
 | 22-01 | Tokens and Tab Bar Icons | Complete |
 | 22-02 | Simple Screen Migration | Complete |
-| 22-03 | Quiz Screen Migration | Pending |
-| 22-04 | Library & Progress Migration | Pending |
+| 22-03 | Medium Screen Migration | Complete |
+| 22-04 | Complex Screen Migration (Quiz) | Pending |
 
-**New Tokens Added:**
-- `theme.colors.success.darker` (#16A34A) - for correct answer 3D borders
-- `theme.colors.danger.darker` (#DC2626) - for incorrect answer 3D borders
+**Migration Status by Screen:**
 
-**Tab Bar Icons Migrated:**
-- Home: HomeBold/HomeLinear
-- Library: BookBold/BookMinimalisticLinear
-- Progress: ChartSquareBold/ChartSquareLinear
-- Settings: SettingsBold/SettingsLinear
+| Screen | Status | Notes |
+|--------|--------|-------|
+| Tab Layout | Complete | Solar Icons for tab bar |
+| Home | Complete | Badge, Text, theme tokens |
+| Library | Complete | Icon, Text, documented exception |
+| Progress | Complete | Icon, Text, StatsCard theme colors |
+| Settings | Complete | Text primitive, Solar Icons |
+| Onboarding | Complete | Text, Button primitives |
+| Modal | Complete | Text primitive |
+| Quiz | Pending | Complex - next plan |
+| Results | Pending | Part of Quiz plan |
 
-**Simple Screens Migrated (22-02):**
-- Settings screen: Text primitive, Solar Icons (ShareCircle, TrashBin2)
-- SettingsRow: Icon primitive with component prop pattern
-- ToggleRow: Text primitive
-- DevSection: Solar Icons (Restart, UserPlus, Star, TrashBin2)
-- Onboarding: Text/Button primitives with Play icon
-- PaginationDots: theme.colors.brand.primary
-- Modal: Text primitive
+**Documented Exceptions:**
+- FilterChips category colors (10 unique colors for medical specialties)
+- StatsCard accuracy teal color (visual variety)
 
 ## Next Steps
 
-**Continue with 22-03: Quiz Screen Migration**
+**Continue with 22-04: Complex Screen Migration (Quiz)**
 
-Ready to migrate quiz screen components to use primitives:
-- QuizScreen, AnswerCard, FindingsCard
-- Replace hardcoded colors with semantic tokens
-- Replace Text with Text primitive
-- Use Button primitive for quiz actions
+Ready to migrate Quiz screen and related components:
+- AnswerCard (correct/incorrect states with darker tokens)
+- TimerBar (timer colors)
+- QuizHeader
+- FindingsCard
+- Results screen
 
 To continue:
 ```
@@ -147,4 +152,4 @@ To continue:
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 22-02-PLAN.md*
+*Updated: 2026-01-20 - Completed 22-03-PLAN.md*
