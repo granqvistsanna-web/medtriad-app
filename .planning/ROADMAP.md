@@ -200,7 +200,12 @@ Plans:
 - [ ] App Store Connect metadata (description, keywords, category, age rating) is finalized
 - [ ] Release checklist confirms: no placeholders, no debug menus, crash-free startup
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 26-01-PLAN.md — Configure app.json and eas.json for App Store submission
+- [ ] 26-02-PLAN.md — Create PRIVACY_SUMMARY.md and APP_STORE_METADATA.md
+- [ ] 26-03-PLAN.md — Add Privacy Policy link, SCREENSHOT_PLAN.md, and RELEASE_CHECKLIST.md
 
 ---
 
@@ -217,7 +222,7 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 | 23. Study Mode | 3/3 | ✓ Complete | 2026-01-20 |
 | 24. Category Mastery | 2/2 | ✓ Complete | 2026-01-20 |
 | 25. Challenge | 1/1 | ✓ Complete | 2026-01-20 |
-| 26. App Store Preparation | 0/TBD | Not started | - |
+| 26. App Store Preparation | 0/3 | Not started | - |
 
 ## Coverage
 
@@ -245,3 +250,4 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 *Phase 24 complete: 2026-01-20*
 *Phase 25 planned: 2026-01-20*
 *Phase 25 complete: 2026-01-20*
+*Phase 26 planned: 2026-01-20*
