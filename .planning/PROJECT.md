@@ -53,14 +53,45 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 
 ### Active
 
-(None — v3.0 requirements to be defined)
+**v2.1 — Design System, Modes & App Store**
+
+*Design System Consolidation:*
+- [ ] Tokenized design system (colors, typography, spacing, radius, shadows, motion)
+- [ ] Core UI primitives (Text, Surface, Button, Icon, Badge, Tag, Card, Input, Toast, Modal)
+- [ ] Quiz-specific components matching Figma specs
+- [ ] Solar Icons via single wrapper component with standardized sizes
+- [ ] All component states implemented (default, pressed, disabled, loading, error, success)
+- [ ] Category mastery tracking and display on Home screen
+
+*Study Mode:*
+- [ ] Untimed quiz flow with calm, instructional UI
+- [ ] Immediate feedback with explanations shown after answer
+- [ ] Optional "mark as tricky" for local review lists
+- [ ] Per-topic session summaries stored locally
+- [ ] Clear visual distinction from timed mode
+
+*Challenge Feature:*
+- [ ] Share challenge via styled card with score and competitive messaging
+- [ ] Simple share sheet integration (no deep links for now — app not live yet)
+- [ ] Challenge framing on existing share infrastructure
+
+*App Store Preparation:*
+- [ ] Bundle ID, app name, versioning finalized
+- [ ] App icons at all required sizes (including 1024x1024)
+- [ ] Screenshots for required iPhone device sizes
+- [ ] Privacy policy URL and App Privacy questionnaire answers
+- [ ] App Store metadata (description, keywords, category, age rating)
+- [ ] Release checklist (no placeholders, no debug menus, crash-free)
 
 ### Out of Scope
 
-- Category filtering / selection — consider for v3.0 Engagement
+- Deep link challenge URLs — app not live yet, defer until post-launch
+- Challenge tracking/persistence — simple share card is enough for v2.1
+- Adaptive difficulty algorithm — consider for v3.0
+- Spaced repetition system — consider for v3.0
 - Reverse quiz mode (condition → findings) — consider for v3.0
-- User accounts and cloud sync — consider for v3.0
-- Leaderboards — consider for v3.0
+- User accounts and cloud sync — no backend
+- Leaderboards — no backend
 - Achievements / badges — level system covers progression adequately
 - Daily challenges — consider for v3.0 Engagement
 - iPad / Mac support — iOS iPhone only
@@ -79,6 +110,13 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 - FlashList virtualization for smooth scrolling
 - Error boundaries and defensive patterns throughout
 
+**v2.1 Design Direction:**
+- Figma as source of truth (partial designs: Home, Library, Progress, Settings)
+- Quiz flow designs to be created during implementation
+- Solar Icons for unified iconography
+- Design tokens for all visual values (no hardcoded colors/spacing)
+- Component states: default, pressed, disabled, loading, error, success
+
 **Origin:** Boyfriend is a doctor, suggested the app idea. He can validate triad accuracy.
 
 **Domain:** Medical education. Triads are fundamental diagnostic patterns tested in USMLE, COMLEX, and clinical practice.
@@ -87,10 +125,13 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 
 ## Constraints
 
-- **Platform:** iOS 16+ (iPhone only for MVP) — PRD specifies iOS-first
+- **Platform:** iOS 16+ (iPhone only) — preparing for App Store submission
 - **Tech stack:** React Native/Expo — cross-platform capability preserved for future
-- **Storage:** AsyncStorage for local persistence — no backend for MVP
+- **Storage:** AsyncStorage for local persistence — no backend
 - **Content:** 45 triads across 10 medical categories
+- **Design:** Figma is authoritative — no creative deviations without approval
+- **Icons:** Solar Icons only via wrapper component — no mixed icon sets
+- **Tokens:** All styles via design tokens — no hardcoded values
 
 ## Key Decisions
 
@@ -115,4 +156,4 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 | __DEV__ dev tools | Test tier-ups without playing 200 games | ✓ Good — faster testing |
 
 ---
-*Last updated: 2026-01-20 after v2.0 milestone complete*
+*Last updated: 2026-01-20 after v2.1 milestone start*
