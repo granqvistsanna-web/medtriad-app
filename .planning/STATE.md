@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 
 ## Current Position
 
-Phase: 22 of 26 (Design System Application) - COMPLETE
-Plan: 5 of 5 in current phase (complete)
-Status: Phase complete - ready for Phase 23
-Last activity: 2026-01-20 - Completed 22-05-PLAN.md (Design System Documentation)
+Phase: 23 of 26 (Study Mode) - IN PROGRESS
+Plan: 1 of 2 in current phase (complete)
+Status: Plan 23-01 complete - ready for Plan 23-02
+Last activity: 2026-01-20 - Completed 23-01-PLAN.md (Study Mode Foundation)
 
-Progress: [##############......] 68% (26/40 phases across all milestones)
+Progress: [###############.....] 70% (27/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,14 +28,14 @@ Progress: [##############......] 68% (26/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 9
+- Plans completed: 10
 - Phases: 6 (21-26)
-- Requirements: 37 total, 21 complete (DS-01 through DS-21)
+- Requirements: 37 total, 22 complete (DS-01 through DS-21, SM-01)
 
 **Cumulative:**
 - Total phases: 26 (22 complete, 4 remaining)
-- Total plans: 55 complete
-- Total lines: ~123,200 TypeScript
+- Total plans: 56 complete
+- Total lines: ~123,500 TypeScript
 
 ## Accumulated Context
 
@@ -98,6 +98,12 @@ Summary of key v2.0 decisions:
 - IconSymbol kept in unused legacy components (StatRow, collapsible, CategorySection, TriadItem)
 - Legacy ui/Button.tsx deleted as no longer imported anywhere
 
+**v2.1 Decisions (Phase 23-01):**
+- Study mode uses simple correctCount instead of scoring system
+- showExplanation set immediately on answer selection (no delay)
+- Tricky questions stored with category for filtering capability
+- toggleTrickyQuestion returns boolean to indicate add vs remove
+
 ### Pending Todos
 
 None.
@@ -108,67 +114,47 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 14:58 UTC
-Stopped at: Completed 22-05-PLAN.md (Design System Documentation)
+Last session: 2026-01-20 18:35 UTC
+Stopped at: Completed 23-01-PLAN.md (Study Mode Foundation)
 Resume file: None
 
-## Design System Application Progress
+## Study Mode Progress
 
-Phase 22 (Design System Application) is **COMPLETE**.
+Phase 23 (Study Mode) is **IN PROGRESS**.
 
 **Completed Plans:**
 
 | Plan | Name | Status |
 |------|------|--------|
-| 22-01 | Tokens and Tab Bar Icons | Complete |
-| 22-02 | Simple Screen Migration | Complete |
-| 22-03 | Medium Screen Migration | Complete |
-| 22-04 | Complex Screen Migration (Quiz) | Complete |
-| 22-05 | Design System Documentation | Complete |
+| 23-01 | Study Mode Foundation | Complete |
+| 23-02 | Study Screen UI | Pending |
 
-**Migration Status by Screen:**
+**Artifacts Created:**
 
-| Screen | Status | Notes |
-|--------|--------|-------|
-| Tab Layout | Complete | Solar Icons for tab bar |
-| Home | Complete | Badge, Text, theme tokens |
-| Library | Complete | Icon, Text, documented exception |
-| Progress | Complete | Icon, Text, StatsCard theme colors |
-| Settings | Complete | Text primitive, Solar Icons |
-| Onboarding | Complete | Text, Button primitives |
-| Modal | Complete | Text primitive |
-| Quiz | Complete | Text, Icon, success.darker/danger.darker |
-| Results | Complete | Text, Button, Star icon |
+| File | Purpose |
+|------|---------|
+| medtriad/types/study-state.ts | StudyStatus, StudyState, StudyAction, StudySessionResult types |
+| medtriad/hooks/use-study-reducer.ts | useStudyReducer hook with 5 action handlers |
+| medtriad/services/study-storage.ts | TrickyQuestion persistence and study history storage |
 
-**Documentation:**
-- DESIGN-SYSTEM.md: 741 lines, all 7 primitives documented
-- Migration guide with 5 before/after examples
-- SF Symbol to Solar Icon mapping (23 icons)
-
-**Documented Exceptions:**
-- FilterChips category colors (10 unique colors for medical specialties)
-- StatsCard accuracy teal color (visual variety)
-- TierUpCelebration confetti colors (celebration-specific)
-
-**Legacy Components (unused):**
-- StatRow, collapsible, CategorySection, TriadItem still use IconSymbol
-- Not imported anywhere in active app code
-- Can be deleted in future cleanup phase
+**Patterns Established:**
+- Untimed quiz pattern: Same reducer architecture without timer/scoring
+- Feature-specific storage: Separate AsyncStorage keys per feature
 
 ## Next Steps
 
-**Phase 22 Complete - Proceed to Phase 23: Study Mode**
+**Plan 23-01 Complete - Proceed to Plan 23-02**
 
-Phase 23 will add a relaxed study mode:
-- Untimed quiz flow without countdown timer
-- Immediate feedback with explanations after each answer
-- "Mark as tricky" button to flag questions for review
-- Tricky questions list accessible from Library or Progress
+Plan 23-02 will build the Study screen UI:
+- Study mode screen with question display
+- Explanation card shown after each answer
+- Mark as tricky button integration
+- Session complete screen with summary
 
 To continue:
 ```
-/gsd:plan-phase 23
+/gsd:execute-phase 23-02
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 22-05-PLAN.md (Design System Documentation)*
+*Updated: 2026-01-20 - Completed 23-01-PLAN.md (Study Mode Foundation)*
