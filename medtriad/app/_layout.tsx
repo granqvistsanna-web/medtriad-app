@@ -5,6 +5,14 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { Image } from 'expo-image';
 import 'react-native-reanimated';
+import {
+  useFonts,
+  Figtree_400Regular,
+  Figtree_500Medium,
+  Figtree_600SemiBold,
+  Figtree_700Bold,
+  Figtree_800ExtraBold,
+} from '@expo-google-fonts/figtree';
 
 import { Colors } from '@/constants/theme';
 import { useStats } from '@/hooks/useStats';
@@ -50,6 +58,15 @@ export default function RootLayout() {
   const { isNewUser, loading: statsLoading } = useStats();
   const [imagesLoaded, setImagesLoaded] = useState(false);
 
+  // Load Figtree fonts
+  const [fontsLoaded, fontError] = useFonts({
+    Figtree_400Regular,
+    Figtree_500Medium,
+    Figtree_600SemiBold,
+    Figtree_700Bold,
+    Figtree_800ExtraBold,
+  });
+
   // Preload mascot images
   useEffect(() => {
     async function preloadImages() {
@@ -65,14 +82,19 @@ export default function RootLayout() {
     preloadImages();
   }, []);
 
-  // Hide splash when both stats and images are ready
+  // Hide splash when fonts, stats, and images are ready
   useEffect(() => {
-    if (!statsLoading && imagesLoaded) {
+    if ((fontsLoaded || fontError) && !statsLoading && imagesLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [statsLoading, imagesLoaded]);
+  }, [fontsLoaded, fontError, statsLoading, imagesLoaded]);
 
   // Show skeleton while loading (not blank screen)
+  // Wait for fonts too to prevent FOUT
+  if (!fontsLoaded && !fontError) {
+    return null; // Keep splash screen visible
+  }
+
   if (statsLoading || !imagesLoaded) {
     return <LoadingSkeleton />;
   }
