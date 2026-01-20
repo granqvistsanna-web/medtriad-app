@@ -164,14 +164,14 @@ Plans:
 - CH-03: System share sheet integration
 
 **Success Criteria:**
-- [ ] Results screen shows "Challenge a Friend" button after completing a quiz
-- [ ] Tapping the button generates a visually styled share card with score and competitive text
-- [ ] System share sheet opens allowing sharing via Messages, social apps, etc.
+- [x] Results screen shows "Challenge a Friend" button after completing a quiz
+- [x] Tapping the button generates a visually styled share card with score and competitive text
+- [x] System share sheet opens allowing sharing via Messages, social apps, etc.
 
 **Plans:** 1 plan
 
 Plans:
-- [ ] 25-01-PLAN.md — Add competitive messaging to ShareCard and Challenge button to Results
+- [x] 25-01-PLAN.md — Add competitive messaging to ShareCard and Challenge button to Results
 
 ---
 
@@ -216,7 +216,7 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 | 22. Design System Application | 5/5 | ✓ Complete | 2026-01-20 |
 | 23. Study Mode | 3/3 | ✓ Complete | 2026-01-20 |
 | 24. Category Mastery | 2/2 | ✓ Complete | 2026-01-20 |
-| 25. Challenge | 0/1 | Planned | - |
+| 25. Challenge | 1/1 | ✓ Complete | 2026-01-20 |
 | 26. App Store Preparation | 0/TBD | Not started | - |
 
 ## Coverage
@@ -244,3 +244,4 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 *Phase 24 planned: 2026-01-20*
 *Phase 24 complete: 2026-01-20*
 *Phase 25 planned: 2026-01-20*
+*Phase 25 complete: 2026-01-20*
