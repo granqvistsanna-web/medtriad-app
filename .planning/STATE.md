@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 Design System Validation (Phase 23)
+**Current focus:** v2.1 Study Mode (Phase 23)
 
 ## Current Position
 
@@ -157,16 +157,17 @@ Phase 22 (Design System Application) is **COMPLETE**.
 
 ## Next Steps
 
-**Phase 22 Complete - Proceed to Phase 23: Design System Validation**
+**Phase 22 Complete - Proceed to Phase 23: Study Mode**
 
-Phase 23 will validate the design system implementation:
-- Audit for remaining hardcoded colors
-- Verify primitive usage consistency
-- Document any remaining technical debt
+Phase 23 will add a relaxed study mode:
+- Untimed quiz flow without countdown timer
+- Immediate feedback with explanations after each answer
+- "Mark as tricky" button to flag questions for review
+- Tricky questions list accessible from Library or Progress
 
 To continue:
 ```
-/gsd:execute-phase 23
+/gsd:plan-phase 23
 ```
 
 ---

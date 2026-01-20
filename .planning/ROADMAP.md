@@ -78,19 +78,19 @@ Plans:
 - DS-12: DESIGN_SYSTEM.md documentation
 
 **Success Criteria:**
-- [ ] Every screen uses design tokens exclusively (no hardcoded colors, spacing, or typography)
-- [ ] All icons throughout the app are Solar Icons rendered via the Icon wrapper
-- [ ] DESIGN_SYSTEM.md documents all tokens, component APIs, and usage examples
-- [ ] Visual regression check passes (app looks consistent and polished)
+- [x] Every screen uses design tokens exclusively (no hardcoded colors, spacing, or typography)
+- [x] All icons throughout the app are Solar Icons rendered via the Icon wrapper
+- [x] DESIGN_SYSTEM.md documents all tokens, component APIs, and usage examples
+- [x] Visual regression check passes (app looks consistent and polished)
 
 **Plans:** 5 plans
 
 Plans:
-- [ ] 22-01-PLAN.md — Add missing tokens and migrate tab bar icons to Solar Icons
-- [ ] 22-02-PLAN.md — Migrate simple screens (Settings, Onboarding, Modal)
-- [ ] 22-03-PLAN.md — Migrate medium screens (Home, Library, Progress)
-- [ ] 22-04-PLAN.md — Migrate complex screen (Quiz and Results)
-- [ ] 22-05-PLAN.md — DESIGN_SYSTEM.md documentation and cleanup
+- [x] 22-01-PLAN.md — Add missing tokens and migrate tab bar icons to Solar Icons
+- [x] 22-02-PLAN.md — Migrate simple screens (Settings, Onboarding, Modal)
+- [x] 22-03-PLAN.md — Migrate medium screens (Home, Library, Progress)
+- [x] 22-04-PLAN.md — Migrate complex screen (Quiz and Results)
+- [x] 22-05-PLAN.md — DESIGN_SYSTEM.md documentation and cleanup
 
 ---
 
@@ -201,7 +201,7 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 21. Design System Foundation | 4/4 | ✓ Complete | 2026-01-20 |
-| 22. Design System Application | 0/5 | Not started | - |
+| 22. Design System Application | 5/5 | ✓ Complete | 2026-01-20 |
 | 23. Study Mode | 0/TBD | Not started | - |
 | 24. Category Mastery | 0/TBD | Not started | - |
 | 25. Challenge | 0/TBD | Not started | - |
@@ -226,3 +226,4 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 *Phase 21 planned: 2026-01-20*
 *Phase 21 complete: 2026-01-20*
 *Phase 22 planned: 2026-01-20*
+*Phase 22 complete: 2026-01-20*
