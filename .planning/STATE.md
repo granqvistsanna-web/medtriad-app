@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 App Store Preparation (Phase 26 Plan 01 COMPLETE)
+**Current focus:** v2.1 App Store Preparation (Phase 26 Plan 02 COMPLETE)
 
 ## Current Position
 
 Phase: 26 of 26 (App Store Preparation)
-Plan: 1 of 1 in current phase (complete)
-Status: Phase 26 complete - ready for App Store submission
-Last activity: 2026-01-20 - Completed 26-01-PLAN.md (App Store Configuration)
+Plan: 2 of 3 in current phase (complete)
+Status: In progress - ready for 26-03
+Last activity: 2026-01-20 - Completed 26-02-PLAN.md (App Store Metadata & Privacy)
 
-Progress: [####################] 100% (63/63 plans complete across all milestones)
+Progress: [####################] 100% (64/65 plans complete across all milestones)
 
 ## Performance Metrics
 
@@ -28,13 +28,13 @@ Progress: [####################] 100% (63/63 plans complete across all milestone
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 17
+- Plans completed: 18
 - Phases: 7 (21-26)
-- Requirements: 40 total, 37 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01 through CM-04, CH-01 through CH-03, AS-01, AS-07 partial)
+- Requirements: 40 total, 42 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01 through CM-04, CH-01 through CH-03, AS-01, AS-03, AS-04, AS-05, AS-06, AS-07 partial, AS-09)
 
 **Cumulative:**
-- Total phases: 26 (26 complete)
-- Total plans: 63 complete
+- Total phases: 26 (26 in progress)
+- Total plans: 64 complete
 - Total lines: ~124,700 TypeScript
 
 ## Accumulated Context
@@ -138,6 +138,13 @@ Summary of key v2.0 decisions:
 - Privacy manifest declares NSUserDefaults with CA92.1 reason code for AsyncStorage
 - supportsTablet set to false for iPhone-only deployment
 
+**v2.1 Decisions (Phase 26-02):**
+- Privacy label: Data Not Collected (no analytics, no tracking, local storage only)
+- Primary category: Medical (targets healthcare audience)
+- Secondary category: Education (broader discoverability)
+- Age rating: 12+ or 17+ expected (due to Medical/Treatment Information)
+- Keywords: 94 chars focused on medical education terms
+
 ### Pending Todos
 
 None.
@@ -148,46 +155,56 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 20:28 UTC
-Stopped at: Completed 26-01-PLAN.md (App Store Configuration)
+Last session: 2026-01-20 20:29 UTC
+Stopped at: Completed 26-02-PLAN.md (App Store Metadata & Privacy)
 Resume file: None
 
 ## App Store Preparation Progress
 
-Phase 26 (App Store Preparation) is **COMPLETE**.
+Phase 26 (App Store Preparation) is **IN PROGRESS**.
 
 **Completed Plans:**
 
 | Plan | Name | Status |
 |------|------|--------|
 | 26-01 | App Store Configuration | Complete |
+| 26-02 | App Store Metadata & Privacy | Complete |
 
-**Artifacts Modified:**
+**Artifacts Created:**
 
 | File | Purpose |
 |------|---------|
 | medtriad/app.json | iOS bundle identifier, privacy manifest, tablet support |
 | medtriad/eas.json | EAS build and submit configuration |
+| .planning/phases/26-app-store-preparation/PRIVACY_SUMMARY.md | Privacy policy content and App Privacy questionnaire |
+| .planning/phases/26-app-store-preparation/APP_STORE_METADATA.md | App Store description, keywords, category, age rating |
 
 **Patterns Established:**
 - EAS remote version source: Prevents duplicate buildNumber errors via automatic tracking
 - Privacy manifest in app.json: Expo generates PrivacyInfo.xcprivacy during prebuild
+- Documentation-as-submission-prep: All metadata in markdown for copy-paste
 
 **Requirements Complete:**
 - AS-01: App icon verified at 1024x1024 pixels
+- AS-03: Privacy policy content ready (user hosts at URL)
+- AS-04: App Privacy questionnaire answers documented
+- AS-05: App Store description and keywords finalized
+- AS-06: Category (Medical/Education) and age rating (12+/17+) determined
 - AS-07 (partial): Bundle ID format established (user customizes value)
+- AS-09: PRIVACY_SUMMARY.md documenting data practices
 
 ## Next Steps
 
-**Phase 26 Complete - App Store Preparation**
+**Plan 26-03 remaining:**
 
-The technical configuration is complete. Before App Store submission, user must:
+1. Add Privacy Policy link to Settings screen
+2. Create SCREENSHOT_PLAN.md listing screens and device sizes
+3. Create RELEASE_CHECKLIST.md for final verification
 
-1. **Customize bundle identifier** in `medtriad/app.json`
-2. **Add App Store Connect App ID** in `medtriad/eas.json`
-3. **Create privacy policy URL** (required for all apps)
-4. **Capture screenshots** (6.9" iPhone, 1260x2736 pixels)
-5. **Build and submit:** `eas build --platform ios --profile production`
+To continue:
+```
+/gsd:execute-phase .planning/phases/26-app-store-preparation/26-03-PLAN.md
+```
 
 ---
-*Updated: 2026-01-20 - Completed 26-01-PLAN.md (App Store Configuration)*
+*Updated: 2026-01-20 - Completed 26-02-PLAN.md (App Store Metadata & Privacy)*
