@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getTierForGames } from './mastery';
+import { getTierForPoints, checkTierUp } from './mastery';
+import { TriadCategory } from '@/types/triad';
 
 const STATS_KEY = '@medtriad_stats';
 const HISTORY_KEY = '@medtriad_quiz_history';
@@ -15,8 +16,12 @@ export interface StoredStats {
   highScore: number;
   dailyStreak: number;
   lastPlayedDate: string | null;
+  // Points-based progression
+  totalPoints: number;
   // Tier-up celebration
   pendingTierUp: { tier: number; name: string } | null;
+  // Category mastery tracking
+  categoryMastery: Record<TriadCategory, CategoryMasteryData>;
 }
 
 export interface QuizHistoryEntry {
@@ -25,6 +30,24 @@ export interface QuizHistoryEntry {
   correct: number;       // Questions answered correctly
   total: number;         // Total questions (always 10)
 }
+
+export interface CategoryMasteryData {
+  correct: number;
+  total: number;
+}
+
+const DEFAULT_CATEGORY_MASTERY: Record<TriadCategory, CategoryMasteryData> = {
+  cardiology: { correct: 0, total: 0 },
+  neurology: { correct: 0, total: 0 },
+  endocrine: { correct: 0, total: 0 },
+  pulmonary: { correct: 0, total: 0 },
+  gastroenterology: { correct: 0, total: 0 },
+  infectious: { correct: 0, total: 0 },
+  hematology: { correct: 0, total: 0 },
+  rheumatology: { correct: 0, total: 0 },
+  renal: { correct: 0, total: 0 },
+  obstetrics: { correct: 0, total: 0 },
+};
 
 const DEFAULT_STATS: StoredStats = {
   totalAnswered: 0,
@@ -35,7 +58,9 @@ const DEFAULT_STATS: StoredStats = {
   highScore: 0,
   dailyStreak: 0,
   lastPlayedDate: null,
+  totalPoints: 0,
   pendingTierUp: null,
+  categoryMastery: DEFAULT_CATEGORY_MASTERY,
 };
 
 /**
@@ -119,14 +144,13 @@ export async function updateAfterQuiz(
   correctCount: number,
   totalQuestions: number,
   maxStreak: number,
-  score: number
+  score: number,
+  categoryResults?: Record<TriadCategory, CategoryMasteryData>
 ): Promise<StoredStats> {
   const currentStats = await loadStats();
 
-  // Check for tier-up BEFORE incrementing gamesPlayed
-  const tierBefore = getTierForGames(currentStats.gamesPlayed);
-  const tierAfter = getTierForGames(currentStats.gamesPlayed + 1);
-  const didTierUp = tierAfter.tier > tierBefore.tier;
+  // Check for tier-up using points BEFORE adding new score
+  const { willTierUp, newTier } = checkTierUp(currentStats.totalPoints, score);
 
   // Calculate streak
   const { newStreak } = calculateStreak(
@@ -134,20 +158,40 @@ export async function updateAfterQuiz(
     currentStats.lastPlayedDate
   );
 
+  // Merge category results if provided
+  const mergedCategoryMastery = categoryResults
+    ? Object.entries(categoryResults).reduce(
+        (acc, [category, { correct, total }]) => {
+          const current = currentStats.categoryMastery[category as TriadCategory] ?? { correct: 0, total: 0 };
+          return {
+            ...acc,
+            [category]: {
+              correct: current.correct + correct,
+              total: current.total + total,
+            },
+          };
+        },
+        { ...currentStats.categoryMastery }
+      )
+    : currentStats.categoryMastery;
+
   const updatedStats: StoredStats = {
     totalAnswered: currentStats.totalAnswered + totalQuestions,
     totalCorrect: currentStats.totalCorrect + correctCount,
     bestStreak: Math.max(currentStats.bestStreak, maxStreak),
     gamesPlayed: currentStats.gamesPlayed + 1,
     lastPlayedAt: new Date().toISOString(),
-    // High score updated separately via checkHighScore
     highScore: Math.max(currentStats.highScore, score),
     dailyStreak: newStreak,
     lastPlayedDate: new Date().toDateString(),
+    // Accumulate total points for tier progression
+    totalPoints: currentStats.totalPoints + score,
     // Set pendingTierUp if tier-up occurred, otherwise preserve existing
-    pendingTierUp: didTierUp
-      ? { tier: tierAfter.tier, name: tierAfter.name }
+    pendingTierUp: willTierUp && newTier
+      ? { tier: newTier.tier, name: newTier.name }
       : currentStats.pendingTierUp,
+    // Category mastery
+    categoryMastery: mergedCategoryMastery,
   };
 
   await saveStats(updatedStats);
@@ -209,3 +253,5 @@ export async function saveQuizHistory(entry: QuizHistoryEntry): Promise<void> {
     console.error('Failed to save quiz history:', error);
   }
 }
+
+export { DEFAULT_CATEGORY_MASTERY };
