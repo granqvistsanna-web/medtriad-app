@@ -92,11 +92,10 @@ export default function StudyScreen() {
         console.error('Failed to save study session:', error);
       }
 
-      // Navigate to results (study results screen will be added in future plan)
+      // Navigate to study results screen
       router.replace({
-        pathname: '/(tabs)',
+        pathname: '/quiz/study-results',
         params: {
-          studyComplete: 'true',
           correctCount: correctCount.toString(),
           totalQuestions: questions.length.toString(),
           trickyCount: trickyQuestionIds.length.toString(),
