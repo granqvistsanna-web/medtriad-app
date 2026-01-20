@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 Design System, Study Mode & App Store (Phase 21)
+**Current focus:** v2.1 Design System Application (Phase 22)
 
 ## Current Position
 
-Phase: 21 of 26 (Design System Foundation)
-Plan: 4 of 4 in current phase (PHASE COMPLETE)
-Status: Phase 21 complete
-Last activity: 2026-01-20 - Completed 21-04-PLAN.md (Badge, Tag, and Card Primitives)
+Phase: 22 of 26 (Design System Application)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-01-20 - Completed 22-01-PLAN.md (Tokens and Tab Bar Icons)
 
-Progress: [##########..........] 52% (21/40 phases across all milestones)
+Progress: [###########.........] 55% (22/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,13 +28,13 @@ Progress: [##########..........] 52% (21/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 4
+- Plans completed: 5
 - Phases: 6 (21-26)
-- Requirements: 37 total, 9 complete (DS-01 through DS-09)
+- Requirements: 37 total, 11 complete (DS-01 through DS-11)
 
 **Cumulative:**
 - Total phases: 26 (21 complete, 5 remaining)
-- Total plans: 50 complete
+- Total plans: 51 complete
 - Total lines: ~122,900 TypeScript
 
 ## Accumulated Context
@@ -75,6 +75,11 @@ Summary of key v2.0 decisions:
 - Card press animation only when interactive (onPress provided) and has 3D depth
 - All components use semantic color tokens - no hardcoded color values
 
+**v2.1 Decisions (Phase 22-01):**
+- success[800] added for darker shade (700 already used for text)
+- Tab bar uses raw Solar Icons (not Icon primitive) for color prop compatibility
+- Solar Icon import pattern: {IconName}Bold, {IconName}Linear
+
 ### Pending Todos
 
 None.
@@ -85,33 +90,42 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 08:29 UTC
-Stopped at: Completed 21-04-PLAN.md (Badge, Tag, and Card Primitives)
+Last session: 2026-01-20 09:45 UTC
+Stopped at: Completed 22-01-PLAN.md (Tokens and Tab Bar Icons)
 Resume file: None
 
-## Design System Foundation Complete
+## Design System Application Progress
 
-All 7 primitives are now available:
+Phase 22 migrates existing components to use the design system primitives and tokens.
 
-| Primitive | Purpose | File |
-|-----------|---------|------|
-| Icon | Icon wrapper | primitives/Icon.tsx |
-| Surface | Background containers | primitives/Surface.tsx |
-| Text | Typography | primitives/Text.tsx |
-| Button | Interactive buttons | primitives/Button.tsx |
-| Badge | Status indicators | primitives/Badge.tsx |
-| Tag | Labels/categories | primitives/Tag.tsx |
-| Card | Content containers | primitives/Card.tsx |
+**Completed Plans:**
+
+| Plan | Name | Status |
+|------|------|--------|
+| 22-01 | Tokens and Tab Bar Icons | Complete |
+| 22-02 | Home Screen Migration | Pending |
+| 22-03 | Quiz Screen Migration | Pending |
+| 22-04 | Library & Progress Migration | Pending |
+
+**New Tokens Added:**
+- `theme.colors.success.darker` (#16A34A) - for correct answer 3D borders
+- `theme.colors.danger.darker` (#DC2626) - for incorrect answer 3D borders
+
+**Tab Bar Icons Migrated:**
+- Home: HomeBold/HomeLinear
+- Library: BookBold/BookMinimalisticLinear
+- Progress: ChartSquareBold/ChartSquareLinear
+- Settings: SettingsBold/SettingsLinear
 
 ## Next Steps
 
-**Ready for Phase 22: Home Screen Migration**
+**Continue with 22-02: Home Screen Migration**
 
-Design system foundation is complete. Phase 22 will migrate the home screen to use the new primitives:
+Ready to migrate home screen components to use primitives:
+- HeroCard, ActionButtons, HomeHeader
 - Replace hardcoded colors with semantic tokens
-- Replace Text elements with Text primitive
+- Replace Text with Text primitive
 - Replace custom cards with Card primitive
-- Add Badge and Tag where appropriate
 
 To continue:
 ```
@@ -119,4 +133,4 @@ To continue:
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 21-04-PLAN.md (Phase 21 Complete)*
+*Updated: 2026-01-20 - Completed 22-01-PLAN.md*
