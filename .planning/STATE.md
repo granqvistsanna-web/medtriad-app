@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 Study Mode (Phase 23)
+**Current focus:** v2.1 Study Mode (Phase 23 complete)
 
 ## Current Position
 
-Phase: 23 of 26 (Study Mode) - IN PROGRESS
-Plan: 1 of 2 in current phase (complete)
-Status: Plan 23-01 complete - ready for Plan 23-02
-Last activity: 2026-01-20 - Completed 23-01-PLAN.md (Study Mode Foundation)
+Phase: 23 of 26 (Study Mode) - COMPLETE
+Plan: 2 of 2 in current phase (complete)
+Status: Phase 23 complete - ready for Phase 24
+Last activity: 2026-01-20 - Completed 23-02-PLAN.md (Study Screen UI)
 
-Progress: [###############.....] 70% (27/40 phases across all milestones)
+Progress: [################....] 72% (28/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,14 +28,14 @@ Progress: [###############.....] 70% (27/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 10
+- Plans completed: 12
 - Phases: 6 (21-26)
-- Requirements: 37 total, 22 complete (DS-01 through DS-21, SM-01)
+- Requirements: 37 total, 23 complete (DS-01 through DS-21, SM-01, SM-02)
 
 **Cumulative:**
-- Total phases: 26 (22 complete, 4 remaining)
-- Total plans: 56 complete
-- Total lines: ~123,500 TypeScript
+- Total phases: 26 (23 complete, 3 remaining)
+- Total plans: 58 complete
+- Total lines: ~124,000 TypeScript
 
 ## Accumulated Context
 
@@ -104,6 +104,13 @@ Summary of key v2.0 decisions:
 - Tricky questions stored with category for filtering capability
 - toggleTrickyQuestion returns boolean to indicate add vs remove
 
+**v2.1 Decisions (Phase 23-02):**
+- Study screen uses ScrollView for long content with explanation
+- ExplanationCard shows condition + findings as MVP explanation
+- Blue color family (theme.colors.blue) for study mode visual distinction
+- TrickyButton uses Bookmark icons from solar-icons school category
+- Continue button text changes to "Finish Study" on last question
+
 ### Pending Todos
 
 None.
@@ -114,20 +121,20 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 18:35 UTC
-Stopped at: Completed 23-01-PLAN.md (Study Mode Foundation)
+Last session: 2026-01-20 18:42 UTC
+Stopped at: Completed 23-02-PLAN.md (Study Screen UI)
 Resume file: None
 
 ## Study Mode Progress
 
-Phase 23 (Study Mode) is **IN PROGRESS**.
+Phase 23 (Study Mode) is **COMPLETE**.
 
 **Completed Plans:**
 
 | Plan | Name | Status |
 |------|------|--------|
 | 23-01 | Study Mode Foundation | Complete |
-| 23-02 | Study Screen UI | Pending |
+| 23-02 | Study Screen UI | Complete |
 
 **Artifacts Created:**
 
@@ -136,25 +143,30 @@ Phase 23 (Study Mode) is **IN PROGRESS**.
 | medtriad/types/study-state.ts | StudyStatus, StudyState, StudyAction, StudySessionResult types |
 | medtriad/hooks/use-study-reducer.ts | useStudyReducer hook with 5 action handlers |
 | medtriad/services/study-storage.ts | TrickyQuestion persistence and study history storage |
+| medtriad/components/quiz/StudyHeader.tsx | Header with progress and STUDY badge (no timer) |
+| medtriad/components/quiz/ExplanationCard.tsx | Triad info display with calm blue styling |
+| medtriad/components/quiz/TrickyButton.tsx | Toggle button for marking tricky questions |
+| medtriad/app/quiz/study.tsx | Main study screen with full quiz flow |
 
 **Patterns Established:**
 - Untimed quiz pattern: Same reducer architecture without timer/scoring
 - Feature-specific storage: Separate AsyncStorage keys per feature
+- Calm blue theme: Use theme.colors.blue.* for study mode accents
+- Manual advancement: User clicks Continue (no auto-advance like timed quiz)
 
 ## Next Steps
 
-**Plan 23-01 Complete - Proceed to Plan 23-02**
+**Phase 23 Complete - Study Mode Core Ready**
 
-Plan 23-02 will build the Study screen UI:
-- Study mode screen with question display
-- Explanation card shown after each answer
-- Mark as tricky button integration
-- Session complete screen with summary
+Study mode screen accessible at /quiz/study route. Next steps:
+1. Phase 24: Add entry point from home screen (Study Mode button)
+2. Future: Study results screen (currently returns to home tab)
+3. Future: Tricky questions filter in Library view
 
-To continue:
+To continue with Phase 24:
 ```
-/gsd:execute-phase 23-02
+/gsd:plan-phase 24
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 23-01-PLAN.md (Study Mode Foundation)*
+*Updated: 2026-01-20 - Completed 23-02-PLAN.md (Study Screen UI)*
