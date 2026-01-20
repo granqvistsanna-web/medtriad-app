@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 21 of 26 (Design System Foundation)
-Plan: 1 of TBD in current phase
+Plan: 2 of TBD in current phase
 Status: In progress
-Last activity: 2026-01-20 - Completed 21-01-PLAN.md (Token Architecture)
+Last activity: 2026-01-20 - Completed 21-02-PLAN.md (Font Loading & Primitives)
 
 Progress: [##########..........] 50% (20/40 phases across all milestones)
 
@@ -28,14 +28,14 @@ Progress: [##########..........] 50% (20/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 1
+- Plans completed: 2
 - Phases: 6 (21-26)
-- Requirements: 37 total, 2 complete (DS-01, DS-02)
+- Requirements: 37 total, 4 complete (DS-01, DS-02, DS-03, DS-05)
 
 **Cumulative:**
 - Total phases: 26 (20 complete, 6 remaining)
-- Total plans: 47 complete
-- Total lines: ~122,000 TypeScript
+- Total plans: 48 complete
+- Total lines: ~122,200 TypeScript
 
 ## Accumulated Context
 
@@ -58,6 +58,11 @@ Summary of key v2.0 decisions:
 - Backward-compatible exports maintained for gradual migration
 - Solar Icons React Native package available (@solar-icons/react-native@1.0.1)
 
+**v2.1 Decisions (Phase 21-02):**
+- Icon API uses component pass-through for type safety and tree-shaking
+- Surface variants mirror theme.colors.surface keys exactly
+- Font loading integrated with existing splash screen flow
+
 ### Pending Todos
 
 None.
@@ -68,19 +73,18 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 08:20 UTC
-Stopped at: Completed 21-01-PLAN.md (Token Architecture)
+Last session: 2026-01-20 08:23 UTC
+Stopped at: Completed 21-02-PLAN.md (Font Loading & Primitives)
 Resume file: None
 
 ## Next Steps
 
-**Ready for Plan 21-02: Primitive Components**
+**Ready for Plan 21-03: Text and Button Primitives**
 
-The token foundation is in place. Next plan will:
-- Create Text primitive with typography tokens + Figtree font loading
-- Create Surface primitive for backgrounds
-- Create Button/Badge/Tag primitives
-- Create Icon wrapper for Solar Icons
+Font loading and base primitives are in place. Next plan will:
+- Create Text primitive with typography tokens
+- Create Button primitive with Duolingo-style press animation
+- Create Badge/Tag primitives
 
 To continue:
 ```
@@ -88,4 +92,4 @@ To continue:
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 21-01-PLAN.md*
+*Updated: 2026-01-20 - Completed 21-02-PLAN.md*
