@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   FadeInUp,
 } from 'react-native-reanimated';
-import { Colors, Typography, Spacing, Radius, Shadows, Easings, CardStyle } from '@/constants/theme';
+import { theme, Spacing, Radius, CardStyle } from '@/constants/theme';
+import { Text, Card } from '@/components/primitives';
 import { Triad } from '@/types';
 import { CATEGORY_COLORS, CATEGORY_LABELS } from './FilterChips';
 
@@ -19,21 +20,40 @@ interface TriadCardProps {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 function highlightText(text: string, query: string) {
-  if (!query.trim()) return <Text>{text}</Text>;
+  if (!query.trim()) return <Text variant="caption" color="secondary">{text}</Text>;
 
   const parts = text.split(new RegExp(`(${query})`, 'gi'));
   return (
-    <Text>
+    <>
       {parts.map((part, i) =>
         part.toLowerCase() === query.toLowerCase() ? (
-          <Text key={i} style={styles.highlight}>
+          <Text key={i} variant="caption" color="secondary" style={styles.highlight}>
             {part}
           </Text>
         ) : (
-          <Text key={i}>{part}</Text>
+          <Text key={i} variant="caption" color="secondary">{part}</Text>
         )
       )}
-    </Text>
+    </>
+  );
+}
+
+function highlightCondition(text: string, query: string) {
+  if (!query.trim()) return <Text variant="body" color="primary" weight="semibold">{text}</Text>;
+
+  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === query.toLowerCase() ? (
+          <Text key={i} variant="body" color="primary" weight="semibold" style={styles.highlight}>
+            {part}
+          </Text>
+        ) : (
+          <Text key={i} variant="body" color="primary" weight="semibold">{part}</Text>
+        )
+      )}
+    </>
   );
 }
 
@@ -42,7 +62,6 @@ export const TriadCard = React.memo(function TriadCard({
   index,
   searchQuery = '',
 }: TriadCardProps) {
-  const colors = Colors.light;
   const categoryColor = CATEGORY_COLORS[triad.category];
   const scale = useSharedValue(1);
 
@@ -77,17 +96,14 @@ export const TriadCard = React.memo(function TriadCard({
           animatedStyle,
         ]}
       >
-        {/* Category accent bar */}
-        <View style={[styles.accentBar, { backgroundColor: categoryColor.activeBg }]} />
-
         <View style={styles.content}>
           {/* Header row with condition and category badge */}
           <View style={styles.header}>
-            <Text style={[styles.condition, { color: colors.text }]} numberOfLines={2}>
-              {highlightText(triad.condition, searchQuery)}
-            </Text>
+            <View style={styles.conditionContainer}>
+              {highlightCondition(triad.condition, searchQuery)}
+            </View>
             <View style={[styles.categoryBadge, { backgroundColor: categoryColor.bg }]}>
-              <Text style={[styles.categoryText, { color: categoryColor.text }]}>
+              <Text variant="tiny" color={categoryColor.text} weight="semibold">
                 {CATEGORY_LABELS[triad.category]}
               </Text>
             </View>
@@ -100,13 +116,13 @@ export const TriadCard = React.memo(function TriadCard({
                 key={i}
                 style={[
                   styles.findingPill,
-                  { backgroundColor: colors.backgroundSecondary },
+                  { backgroundColor: theme.colors.surface.secondary },
                 ]}
               >
                 <View style={[styles.findingDot, { backgroundColor: categoryColor.activeBg }]} />
-                <Text style={[styles.findingText, { color: colors.textSecondary }]} numberOfLines={1}>
+                <View style={styles.findingTextContainer}>
                   {highlightText(finding, searchQuery)}
-                </Text>
+                </View>
               </View>
             ))}
           </View>
@@ -119,10 +135,6 @@ export const TriadCard = React.memo(function TriadCard({
 const styles = StyleSheet.create({
   card: {
     overflow: 'hidden',
-    flexDirection: 'row',
-  },
-  accentBar: {
-    width: 4,
   },
   content: {
     flex: 1,
@@ -135,13 +147,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: Spacing.sm,
   },
-  condition: {
-    ...Typography.body,
-    fontWeight: '600',
+  conditionContainer: {
     flex: 1,
   },
   highlight: {
-    backgroundColor: '#FEF08A',
+    backgroundColor: theme.colors.warning.light,
     borderRadius: 2,
   },
   categoryBadge: {
@@ -149,10 +159,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xs,
     borderRadius: Radius.full,
     flexShrink: 0,
-  },
-  categoryText: {
-    ...Typography.tiny,
-    fontWeight: '600',
   },
   findingsContainer: {
     gap: Spacing.xs,
@@ -170,8 +176,9 @@ const styles = StyleSheet.create({
     height: 6,
     borderRadius: 3,
   },
-  findingText: {
-    ...Typography.caption,
+  findingTextContainer: {
     flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });

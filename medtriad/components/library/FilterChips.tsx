@@ -1,14 +1,20 @@
-import { ScrollView, Pressable, Text, StyleSheet, View } from 'react-native';
+// DESIGN SYSTEM EXCEPTION: Category colors are intentionally hardcoded
+// for visual differentiation. See 22-RESEARCH.md for rationale.
+
+import { ScrollView, Pressable, StyleSheet, View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   FadeIn,
 } from 'react-native-reanimated';
-import { Colors, Typography, Spacing, Radius, Easings } from '@/constants/theme';
+import { theme, Spacing, Radius } from '@/constants/theme';
+import { Text } from '@/components/primitives';
 import { TriadCategory } from '@/types';
 
 // Category colors - soft, medical-inspired palette
+// EXCEPTION: These 10 unique colors serve UX purpose (visual differentiation)
+// and are localized to this one component.
 const CATEGORY_COLORS: Record<TriadCategory, { bg: string; text: string; activeBg: string }> = {
   cardiology: { bg: '#FEE2E2', text: '#DC2626', activeBg: '#DC2626' },
   neurology: { bg: '#E0E7FF', text: '#4F46E5', activeBg: '#4F46E5' },
@@ -58,7 +64,6 @@ function FilterChip({
   onPress: () => void;
   index: number;
 }) {
-  const colors = Colors.light;
   const scale = useSharedValue(1);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -78,16 +83,16 @@ function FilterChip({
 
   const backgroundColor = isSelected
     ? isAll
-      ? colors.primary
+      ? theme.colors.brand.primary
       : categoryColor!.activeBg
     : isAll
-    ? colors.backgroundSecondary
+    ? theme.colors.surface.secondary
     : categoryColor!.bg;
 
   const textColor = isSelected
-    ? colors.textInverse
+    ? theme.colors.text.inverse
     : isAll
-    ? colors.text
+    ? theme.colors.text.primary
     : categoryColor!.text;
 
   return (
@@ -97,11 +102,13 @@ function FilterChip({
       onPressOut={handlePressOut}
       style={[styles.chip, { backgroundColor }, animatedStyle]}
     >
-      <Text style={[styles.chipLabel, { color: textColor }]}>
+      <Text variant="footnote" color={textColor} weight="semibold">
         {isAll ? 'All' : CATEGORY_LABELS[category]}
       </Text>
       <View style={[styles.countBadge, { backgroundColor: isSelected ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.08)' }]}>
-        <Text style={[styles.countText, { color: textColor }]}>{count}</Text>
+        <Text variant="tiny" color={textColor} weight="bold">
+          {count}
+        </Text>
       </View>
     </AnimatedPressable>
   );
@@ -160,19 +167,11 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
     gap: Spacing.xs,
   },
-  chipLabel: {
-    ...Typography.footnote,
-    fontWeight: '600',
-  },
   countBadge: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: Radius.full,
     minWidth: 20,
     alignItems: 'center',
-  },
-  countText: {
-    ...Typography.tiny,
-    fontWeight: '700',
   },
 });

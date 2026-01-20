@@ -1,15 +1,16 @@
 import { useState, useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import { Colors, Typography, Spacing, Durations } from '@/constants/theme';
+import { Magnifer } from '@solar-icons/react-native/Bold';
+import { theme, Spacing, Durations } from '@/constants/theme';
 import { getAllTriads, getTriadsByCategory } from '@/services/triads';
 import { TriadCategory } from '@/types';
 import { SearchBar } from '@/components/library/SearchBar';
 import { FilterChips } from '@/components/library/FilterChips';
 import { TriadCard } from '@/components/library/TriadCard';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Text, Icon } from '@/components/primitives';
 
 // All 10 medical categories in display order
 const CATEGORIES: TriadCategory[] = [
@@ -26,7 +27,6 @@ const CATEGORIES: TriadCategory[] = [
 ];
 
 export default function LibraryScreen() {
-  const colors = Colors.light;
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<TriadCategory | null>(null);
 
@@ -61,12 +61,12 @@ export default function LibraryScreen() {
   const hasFilters = searchQuery.trim() || selectedCategory;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]} edges={['top']}>
       {/* Fixed header with search and filters */}
       <View style={styles.header}>
         <Animated.View entering={FadeIn.duration(250)} style={styles.titleRow}>
-          <Text style={[styles.title, { color: colors.text }]}>Library</Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          <Text variant="title" color="primary">Library</Text>
+          <Text variant="footnote" color="secondary">
             {allTriads.length} triads
           </Text>
         </Animated.View>
@@ -105,7 +105,7 @@ export default function LibraryScreen() {
         ListHeaderComponent={
           hasFilters && !showEmptyState ? (
             <Animated.View entering={FadeIn.duration(200)} style={styles.resultsHeader}>
-              <Text style={[styles.resultsCount, { color: colors.textSecondary }]}>
+              <Text variant="footnote" color="secondary">
                 {filteredTriads.length} {filteredTriads.length === 1 ? 'result' : 'results'}
               </Text>
             </Animated.View>
@@ -114,11 +114,13 @@ export default function LibraryScreen() {
         ListEmptyComponent={
           showEmptyState ? (
             <Animated.View entering={FadeIn.duration(200)} style={styles.emptyState}>
-              <View style={[styles.emptyIcon, { backgroundColor: colors.backgroundSecondary }]}>
-                <IconSymbol name="magnifyingglass" size={32} color={colors.textMuted} />
+              <View style={[styles.emptyIcon, { backgroundColor: theme.colors.surface.secondary }]}>
+                <Icon icon={Magnifer} size="lg" color={theme.colors.text.muted} />
               </View>
-              <Text style={[styles.emptyTitle, { color: colors.text }]}>No triads found</Text>
-              <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
+              <Text variant="heading" color="primary" style={styles.emptyTitle}>
+                No triads found
+              </Text>
+              <Text variant="caption" color="secondary" align="center">
                 {searchQuery
                   ? `No results for "${searchQuery}"`
                   : 'Try adjusting your filters'}
@@ -149,12 +151,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
   },
-  title: {
-    ...Typography.title,
-  },
-  subtitle: {
-    ...Typography.footnote,
-  },
   searchContainer: {
     paddingHorizontal: Spacing.lg,
   },
@@ -165,9 +161,6 @@ const styles = StyleSheet.create({
   },
   resultsHeader: {
     marginBottom: Spacing.md,
-  },
-  resultsCount: {
-    ...Typography.footnote,
   },
   emptyState: {
     alignItems: 'center',
@@ -183,11 +176,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   emptyTitle: {
-    ...Typography.heading,
     marginBottom: Spacing.xs,
-  },
-  emptySubtitle: {
-    ...Typography.caption,
-    textAlign: 'center',
   },
 });
