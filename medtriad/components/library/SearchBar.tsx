@@ -4,9 +4,10 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
   interpolateColor,
+  withTiming,
 } from 'react-native-reanimated';
 import { Magnifer, CloseCircle } from '@solar-icons/react-native/Bold';
-import { theme, Typography, Spacing, Radius, Shadows } from '@/constants/theme';
+import { theme, Typography, Spacing, Radius } from '@/constants/theme';
 import { Icon } from '@/components/primitives';
 
 interface SearchBarProps {
@@ -26,9 +27,20 @@ export function SearchBar({ value, onChangeText, placeholder = 'Search triads...
       [0, 1],
       [theme.colors.border.default, theme.colors.brand.primary]
     );
+    const shadowOpacity = withTiming(focus.value * 0.15, { duration: 200 });
     return {
       borderColor,
+      shadowOpacity,
     };
+  });
+
+  const iconStyle = useAnimatedStyle(() => {
+    const color = interpolateColor(
+      focus.value,
+      [0, 1],
+      [theme.colors.text.secondary, theme.colors.brand.primary]
+    );
+    return { color };
   });
 
   const handleFocus = () => {
@@ -43,11 +55,13 @@ export function SearchBar({ value, onChangeText, placeholder = 'Search triads...
     onChangeText('');
   };
 
+  const iconColor = focus.value ? theme.colors.brand.primary : theme.colors.text.secondary;
+
   return (
     <AnimatedView style={[styles.container, containerStyle]}>
-      <View style={styles.iconContainer}>
+      <Animated.View style={styles.iconContainer}>
         <Icon icon={Magnifer} size="md" color={theme.colors.text.secondary} />
-      </View>
+      </Animated.View>
       <TextInput
         style={styles.input}
         value={value}
@@ -62,7 +76,7 @@ export function SearchBar({ value, onChangeText, placeholder = 'Search triads...
       />
       {value.length > 0 && (
         <Pressable onPress={handleClear} style={styles.clearButton} hitSlop={8}>
-          <Icon icon={CloseCircle} size="sm" color={theme.colors.text.muted} />
+          <Icon icon={CloseCircle} size="md" color={theme.colors.brand.primary} />
         </Pressable>
       )}
     </AnimatedView>
@@ -73,23 +87,29 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: Radius.md,
+    borderRadius: Radius.lg,
     borderWidth: 2,
+    borderBottomWidth: 3,
+    borderBottomColor: theme.colors.border.strong,
     paddingHorizontal: Spacing.base,
-    height: 52,
-    backgroundColor: theme.colors.surface.secondary,
-    ...Shadows.light.sm,
+    height: 54,
+    backgroundColor: theme.colors.surface.card,
+    shadowColor: theme.colors.brand.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 3,
   },
   iconContainer: {
-    marginRight: Spacing.sm,
+    marginRight: Spacing.md,
   },
   input: {
     flex: 1,
-    ...Typography.caption,
+    ...Typography.body,
     color: theme.colors.text.primary,
     paddingVertical: 0,
   },
   clearButton: {
     marginLeft: Spacing.sm,
+    padding: Spacing.xs,
   },
 });

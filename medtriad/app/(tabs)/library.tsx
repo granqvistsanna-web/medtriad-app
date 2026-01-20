@@ -3,8 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import { Magnifer } from '@solar-icons/react-native/Bold';
-import { theme, Spacing, Durations } from '@/constants/theme';
+import { Magnifer, BookBookmark } from '@solar-icons/react-native/Bold';
+import { theme, Spacing, Radius } from '@/constants/theme';
 import { getAllTriads, getTriadsByCategory } from '@/services/triads';
 import { TriadCategory } from '@/types';
 import { SearchBar } from '@/components/library/SearchBar';
@@ -65,10 +65,20 @@ export default function LibraryScreen() {
       {/* Fixed header with search and filters */}
       <View style={styles.header}>
         <Animated.View entering={FadeIn.duration(250)} style={styles.titleRow}>
-          <Text variant="title" color="primary">Library</Text>
-          <Text variant="footnote" color="secondary">
-            {allTriads.length} triads
-          </Text>
+          <View style={styles.titleLeft}>
+            <View style={styles.titleIcon}>
+              <Icon icon={BookBookmark} size="lg" color={theme.colors.brand.primary} />
+            </View>
+            <Text variant="title" color="primary">Library</Text>
+          </View>
+          <View style={styles.countBadge}>
+            <Text variant="label" color={theme.colors.brand.primary} weight="bold">
+              {allTriads.length}
+            </Text>
+            <Text variant="tiny" color="secondary">
+              triads
+            </Text>
+          </View>
         </Animated.View>
 
         <Animated.View entering={FadeIn.duration(250).delay(30)} style={styles.searchContainer}>
@@ -114,8 +124,8 @@ export default function LibraryScreen() {
         ListEmptyComponent={
           showEmptyState ? (
             <Animated.View entering={FadeIn.duration(200)} style={styles.emptyState}>
-              <View style={[styles.emptyIcon, { backgroundColor: theme.colors.surface.secondary }]}>
-                <Icon icon={Magnifer} size="lg" color={theme.colors.text.muted} />
+              <View style={[styles.emptyIcon, { backgroundColor: theme.colors.brand.accent }]}>
+                <Icon icon={Magnifer} size="lg" color={theme.colors.brand.primary} />
               </View>
               <Text variant="heading" color="primary" style={styles.emptyTitle}>
                 No triads found
@@ -139,23 +149,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: Spacing.md,
+    paddingTop: Spacing.base,
     gap: Spacing.md,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(0,0,0,0.06)',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border.default,
     paddingBottom: Spacing.md,
+    backgroundColor: theme.colors.surface.primary,
   },
   titleRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
+  },
+  titleLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  titleIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: Radius.md,
+    backgroundColor: theme.colors.brand.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  countBadge: {
+    alignItems: 'flex-end',
   },
   searchContainer: {
     paddingHorizontal: Spacing.lg,
   },
   content: {
-    paddingTop: Spacing.md,
+    paddingTop: Spacing.base,
     paddingBottom: Spacing.xxl,
     paddingHorizontal: Spacing.lg,
   },
@@ -168,12 +195,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   emptyIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 88,
+    height: 88,
+    borderRadius: 44,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.lg,
+    borderWidth: 2,
+    borderColor: theme.colors.brand.primary,
   },
   emptyTitle: {
     marginBottom: Spacing.xs,

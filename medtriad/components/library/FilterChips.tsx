@@ -65,17 +65,21 @@ function FilterChip({
   index: number;
 }) {
   const scale = useSharedValue(1);
+  const borderBottom = useSharedValue(isSelected ? 3 : 2);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
+    borderBottomWidth: borderBottom.value,
   }));
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.97, { damping: 20, stiffness: 400 });
+    scale.value = withSpring(0.96, { damping: 20, stiffness: 400 });
+    borderBottom.value = withSpring(1, { damping: 20, stiffness: 400 });
   };
 
   const handlePressOut = () => {
     scale.value = withSpring(1, { damping: 20, stiffness: 400 });
+    borderBottom.value = withSpring(isSelected ? 3 : 2, { damping: 20, stiffness: 400 });
   };
 
   const isAll = category === 'all';
@@ -86,8 +90,24 @@ function FilterChip({
       ? theme.colors.brand.primary
       : categoryColor!.activeBg
     : isAll
-    ? theme.colors.surface.secondary
+    ? theme.colors.surface.card
     : categoryColor!.bg;
+
+  const borderColor = isSelected
+    ? isAll
+      ? theme.colors.brand.primaryDark
+      : categoryColor!.activeBg
+    : isAll
+    ? theme.colors.border.default
+    : `${categoryColor!.activeBg}40`;
+
+  const borderBottomColor = isSelected
+    ? isAll
+      ? theme.colors.brand.primaryDarker
+      : categoryColor!.text
+    : isAll
+    ? theme.colors.border.strong
+    : categoryColor!.activeBg;
 
   const textColor = isSelected
     ? theme.colors.text.inverse
@@ -100,12 +120,25 @@ function FilterChip({
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[styles.chip, { backgroundColor }, animatedStyle]}
+      style={[
+        styles.chip,
+        {
+          backgroundColor,
+          borderColor,
+          borderBottomColor,
+        },
+        animatedStyle,
+      ]}
     >
       <Text variant="footnote" color={textColor} weight="semibold">
         {isAll ? 'All' : CATEGORY_LABELS[category]}
       </Text>
-      <View style={[styles.countBadge, { backgroundColor: isSelected ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.08)' }]}>
+      <View style={[
+        styles.countBadge,
+        {
+          backgroundColor: isSelected ? 'rgba(255,255,255,0.3)' : `${isAll ? theme.colors.text.secondary : categoryColor!.activeBg}18`,
+        }
+      ]}>
         <Text variant="tiny" color={textColor} weight="bold">
           {count}
         </Text>
@@ -166,12 +199,14 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: Radius.full,
     gap: Spacing.xs,
+    borderWidth: 1.5,
+    borderBottomWidth: 2,
   },
   countBadge: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: Radius.full,
-    minWidth: 20,
+    minWidth: 22,
     alignItems: 'center',
   },
 });
