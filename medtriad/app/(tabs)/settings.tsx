@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, Share, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Share, Alert, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Application from 'expo-application';
-import { ShareCircle } from '@solar-icons/react-native/Bold';
-import { TrashBin2 } from '@solar-icons/react-native/Bold';
+import { ShareCircle, TrashBin2, Document } from '@solar-icons/react-native/Bold';
 import { Text } from '@/components/primitives';
 import { theme, Spacing, Radius, Durations } from '@/constants/theme';
 import { ToggleRow } from '@/components/settings/ToggleRow';
@@ -83,6 +82,11 @@ export default function SettingsScreen() {
         },
       ]
     );
+  };
+
+  const handlePrivacyPolicy = () => {
+    // TODO: Replace with actual privacy policy URL before submission
+    Linking.openURL('https://YOUR_PRIVACY_POLICY_URL');
   };
 
   const version = Application.nativeApplicationVersion || '1.0.0';
@@ -169,6 +173,12 @@ export default function SettingsScreen() {
                 {version} (Build {build})
               </Text>
             </View>
+            <View style={[styles.separator, { backgroundColor: theme.colors.border.default }]} />
+            <SettingsRow
+              label="Privacy Policy"
+              onPress={handlePrivacyPolicy}
+              icon={Document}
+            />
           </View>
         </Animated.View>
 
