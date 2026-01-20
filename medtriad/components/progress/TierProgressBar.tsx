@@ -6,7 +6,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
-import { Colors, Radius } from '@/constants/theme';
+import { theme, Radius } from '@/constants/theme';
 import { clampProgress } from '@/services/validation';
 
 const BAR_HEIGHT = 8; // Thicker, more prominent Duolingo style
@@ -19,17 +19,16 @@ type TierProgressBarProps = {
  * Thin progress bar for tier progression display.
  *
  * Features:
- * - 4px height (thin, understated)
+ * - 8px height (Duolingo style)
  * - No percentage text (bar only)
- * - Uses colors.primary for fill
- * - Uses colors.border for track background
+ * - Uses theme.colors.brand.primary for fill
+ * - Uses theme.colors.border.default for track background
  * - Animated fill using withTiming
  *
  * Usage:
  *   <TierProgressBar progress={tierProgress} />
  */
 export function TierProgressBar({ progress }: TierProgressBarProps) {
-  const colors = Colors.light;
   const animatedProgress = useSharedValue(0);
 
   useEffect(() => {
@@ -45,10 +44,8 @@ export function TierProgressBar({ progress }: TierProgressBarProps) {
   }));
 
   return (
-    <View style={[styles.track, { backgroundColor: colors.border }]}>
-      <Animated.View
-        style={[styles.fill, { backgroundColor: colors.primary }, fillStyle]}
-      />
+    <View style={styles.track}>
+      <Animated.View style={[styles.fill, fillStyle]} />
     </View>
   );
 }
@@ -58,9 +55,11 @@ const styles = StyleSheet.create({
     height: BAR_HEIGHT,
     borderRadius: Radius.full,
     overflow: 'hidden',
+    backgroundColor: theme.colors.border.default,
   },
   fill: {
     height: '100%',
     borderRadius: Radius.full,
+    backgroundColor: theme.colors.brand.primary,
   },
 });

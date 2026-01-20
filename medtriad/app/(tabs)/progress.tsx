@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -9,10 +9,10 @@ import { QuizHistoryList } from '@/components/progress/QuizHistoryList';
 import { TierProgressBar } from '@/components/progress/TierProgressBar';
 import { useStats } from '@/hooks/useStats';
 import { loadQuizHistory, QuizHistoryEntry } from '@/services/stats-storage';
-import { Colors, Typography, Spacing, Durations, CardStyle, Radius } from '@/constants/theme';
+import { theme, Spacing, Durations, Radius } from '@/constants/theme';
+import { Text } from '@/components/primitives';
 
 export default function ProgressScreen() {
-  const colors = Colors.light;
   const { stats, loading, tier, tierProgress, nextTier, accuracy, refresh } = useStats();
   const [history, setHistory] = useState<QuizHistoryEntry[]>([]);
   const [historyLoading, setHistoryLoading] = useState(true);
@@ -41,7 +41,7 @@ export default function ProgressScreen() {
 
   if (loading || historyLoading || !stats) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
         <View style={styles.loadingContainer} />
       </SafeAreaView>
     );
@@ -54,28 +54,37 @@ export default function ProgressScreen() {
     : 0;
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <Animated.Text
-          entering={FadeInUp.duration(Durations.normal).springify()}
-          style={[styles.title, { color: colors.text }]}
-        >
-          Progress
-        </Animated.Text>
+        <Animated.View entering={FadeInUp.duration(Durations.normal).springify()}>
+          <Text variant="title" color="primary">Progress</Text>
+        </Animated.View>
 
-        {/* Tier Header - Card with hard border */}
+        {/* Tier Header - Enhanced card with wine accent */}
         <Animated.View
           entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}
-          style={[styles.tierCard, { backgroundColor: colors.backgroundCard }]}
+          style={[
+            styles.tierCard,
+            {
+              backgroundColor: theme.colors.surface.brand,
+              borderColor: theme.colors.brand.primary,
+              borderBottomColor: theme.colors.brand.primaryDark,
+            },
+          ]}
         >
-          <Text style={[styles.tierName, { color: colors.text }]}>
+          <View style={[styles.tierBadge, { backgroundColor: theme.colors.brand.primary }]}>
+            <Text variant="tiny" color="inverse" weight="extrabold" style={styles.tierBadgeText}>
+              LEVEL {tier.tier}
+            </Text>
+          </View>
+          <Text variant="heading" color="brand" weight="bold" style={styles.tierName}>
             {tier.name}
           </Text>
-          <Text style={[styles.tierSubtext, { color: colors.textMuted }]}>
+          <Text variant="footnote" color="secondary" style={styles.tierSubtext}>
             {nextTier
               ? `${gamesToNext} ${gamesToNext === 1 ? 'game' : 'games'} to ${nextTier.name}`
               : 'Mastery achieved'}
@@ -90,8 +99,8 @@ export default function ProgressScreen() {
           entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
           style={styles.sectionHeader}
         >
-          <Text style={[styles.sectionTitle, { color: colors.textMuted }]}>YOUR STATS</Text>
-          <View style={[styles.sectionLine, { backgroundColor: colors.border }]} />
+          <Text variant="tiny" color="muted" style={styles.sectionTitle}>YOUR STATS</Text>
+          <View style={[styles.sectionLine, { backgroundColor: theme.colors.border.default }]} />
         </Animated.View>
 
         {/* Stats Grid - 2x2 */}
@@ -103,13 +112,13 @@ export default function ProgressScreen() {
             <StatsCard
               label="High Score"
               value={stats.highScore.toLocaleString()}
-              icon="trophy.fill"
+              icon="trophy"
               description="personal best"
             />
             <StatsCard
               label="Accuracy"
               value={`${accuracy}%`}
-              icon="percent"
+              icon="target"
               description="overall score"
             />
           </View>
@@ -117,13 +126,13 @@ export default function ProgressScreen() {
             <StatsCard
               label="Games Played"
               value={stats.gamesPlayed}
-              icon="gamecontroller.fill"
+              icon="gamepad"
               description="total sessions"
             />
             <StatsCard
               label="Best Streak"
               value={`${stats.bestStreak}x`}
-              icon="flame.fill"
+              icon="fire"
               description="in a row"
             />
           </View>
@@ -157,22 +166,27 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xxl,
     gap: Spacing.lg,
   },
-  title: {
-    ...Typography.title,
-  },
   tierCard: {
-    ...CardStyle,
+    borderRadius: Radius.lg,
+    borderWidth: 2,
+    borderBottomWidth: 4,
     padding: Spacing.xl,
     gap: Spacing.sm,
     alignItems: 'center',
   },
+  tierBadge: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    borderRadius: Radius.full,
+    marginBottom: Spacing.xs,
+  },
+  tierBadgeText: {
+    letterSpacing: 1.5,
+  },
   tierName: {
-    ...Typography.heading,
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 26,
   },
   tierSubtext: {
-    ...Typography.footnote,
     marginBottom: Spacing.sm,
   },
   progressBarContainer: {
@@ -184,7 +198,6 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   sectionTitle: {
-    ...Typography.tiny,
     letterSpacing: 1,
   },
   sectionLine: {
