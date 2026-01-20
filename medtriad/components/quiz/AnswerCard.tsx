@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, type ViewStyle, Pressable } from 'react-native';
+import { StyleSheet, View, type ViewStyle, Pressable } from 'react-native';
 import { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -7,8 +7,9 @@ import Animated, {
   withSequence,
   FadeInUp,
 } from 'react-native-reanimated';
-import { Colors, Typography, Radius, Spacing, Durations, Easings, Shadows } from '@/constants/theme';
-import { IconSymbol } from '@/components/ui/icon-symbol';
+import { AltArrowRight } from '@solar-icons/react-native/Bold';
+import { Text, Icon } from '@/components/primitives';
+import { theme, Radius, Spacing, Durations, Easings, Shadows } from '@/constants/theme';
 
 type AnswerState = 'default' | 'correct' | 'incorrect' | 'revealed' | 'faded';
 
@@ -31,8 +32,6 @@ export function AnswerCard({
   style,
   delay = 0,
 }: AnswerCardProps) {
-  const colors = Colors.light;
-
   const scale = useSharedValue(1);
   const shakeX = useSharedValue(0);
 
@@ -69,20 +68,6 @@ export function AnswerCard({
     scale.value = withSpring(1, Easings.press);
   };
 
-  const getLeftBorderColor = () => {
-    switch (state) {
-      case 'correct':
-        return colors.success;
-      case 'incorrect':
-        return colors.error;
-      case 'revealed':
-        return colors.success;
-      case 'faded':
-        return colors.border;
-      default:
-        return colors.primary; // Teal accent for default - signals "tap me"
-    }
-  };
 
   const getBorderWidth = () => {
     switch (state) {
@@ -98,45 +83,61 @@ export function AnswerCard({
   const getBackgroundColor = () => {
     switch (state) {
       case 'correct':
-        return colors.successBg;
+        return theme.colors.success.light;
       case 'incorrect':
-        return colors.errorBg;
+        return theme.colors.danger.light;
       case 'revealed':
-        return colors.successBg;
+        return theme.colors.success.light;
       case 'faded':
-        return colors.backgroundCard;
+        return theme.colors.surface.card;
       default:
-        return colors.backgroundCard;
+        return theme.colors.surface.card;
     }
   };
 
   const getBorderColor = () => {
     switch (state) {
       case 'correct':
-        return colors.success;
+        return theme.colors.success.main;
       case 'incorrect':
-        return colors.error;
+        return theme.colors.danger.main;
       case 'revealed':
-        return colors.success;
+        return theme.colors.success.main;
       case 'faded':
-        return colors.border;
+        return theme.colors.border.default;
       default:
-        return colors.border;
+        return theme.colors.surface.brand; // Wine-toned border
+    }
+  };
+
+  // Duolingo-style: darker bottom border for depth using semantic tokens
+  const getBottomBorderColor = () => {
+    switch (state) {
+      case 'correct':
+        return theme.colors.success.darker; // Uses semantic token
+      case 'incorrect':
+        return theme.colors.danger.darker; // Uses semantic token
+      case 'revealed':
+        return theme.colors.success.darker;
+      case 'faded':
+        return theme.colors.border.strong;
+      default:
+        return theme.colors.brand.primary; // Wine bottom border for depth
     }
   };
 
   const getTextColor = () => {
     switch (state) {
       case 'correct':
-        return colors.success;
+        return theme.colors.success.main;
       case 'incorrect':
-        return colors.error;
+        return theme.colors.danger.main;
       case 'revealed':
-        return colors.success;
+        return theme.colors.success.main;
       case 'faded':
-        return colors.text;
+        return theme.colors.text.primary;
       default:
-        return colors.text;
+        return theme.colors.text.primary;
     }
   };
 
@@ -154,8 +155,7 @@ export function AnswerCard({
           backgroundColor: getBackgroundColor(),
           borderColor: getBorderColor(),
           borderWidth: getBorderWidth(),
-          borderLeftWidth: 5,
-          borderLeftColor: getLeftBorderColor(),
+          borderBottomColor: getBottomBorderColor(),
           opacity: state === 'faded' ? 0.4 : (disabled && state === 'default' ? 0.4 : 1),
         },
         animatedStyle,
@@ -163,7 +163,9 @@ export function AnswerCard({
       ]}
     >
       <Text
-        style={[styles.text, { color: getTextColor() }]}
+        variant="label"
+        color={getTextColor()}
+        style={styles.text}
         numberOfLines={1}
         ellipsizeMode="tail"
       >
@@ -171,7 +173,7 @@ export function AnswerCard({
       </Text>
       {state === 'default' && (
         <View style={styles.chevronContainer}>
-          <IconSymbol name="chevron.right" size={16} color={colors.textMuted} />
+          <Icon icon={AltArrowRight} size="sm" color={theme.colors.text.muted} />
         </View>
       )}
     </AnimatedPressable>
@@ -187,9 +189,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    // Duolingo-style hard border
+    borderBottomWidth: 4,
   },
   text: {
-    ...Typography.label,
     textAlign: 'left',
     flex: 1,
   },

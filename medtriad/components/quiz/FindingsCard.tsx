@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Colors, Typography, Radius, Spacing, Durations } from '@/constants/theme';
+import { Text } from '@/components/primitives';
+import { theme, Radius, Spacing, Durations } from '@/constants/theme';
 
 type FindingsCardProps = {
   findings: [string, string, string];
@@ -8,41 +9,41 @@ type FindingsCardProps = {
 };
 
 export function FindingsCard({ findings, category }: FindingsCardProps) {
-  const colors = Colors.light;
-
   return (
     <View
       style={[
         styles.card,
         {
-          backgroundColor: colors.primaryLight,
-          borderWidth: 1,
-          borderColor: colors.border,
+          backgroundColor: theme.colors.surface.brand,
+          borderColor: theme.colors.surface.brand,
+          borderBottomColor: theme.colors.brand.primary,
         },
       ]}
     >
       {/* Category label */}
       {category && (
-        <Animated.Text
+        <Animated.View
           entering={FadeInUp.duration(Durations.normal)}
-          style={[styles.category, { color: colors.primary }]}
+          style={styles.categoryContainer}
         >
-          {category.toUpperCase()}
-        </Animated.Text>
+          <Text variant="tiny" color={theme.colors.brand.primary} style={styles.category}>
+            {category.toUpperCase()}
+          </Text>
+        </Animated.View>
       )}
 
-      {/* Findings as compact pills */}
-      <View style={styles.findingsContainer}>
+      {/* Findings as simple list */}
+      <View style={styles.findingsList}>
         {findings.map((finding, index) => (
           <Animated.View
             key={index}
             entering={FadeInUp.delay(index * Durations.stagger).duration(Durations.normal).springify()}
-            style={[styles.findingPill, { borderColor: colors.border }]}
+            style={styles.findingRow}
           >
-            <View style={[styles.numberBadge, { backgroundColor: colors.primary }]}>
-              <Text style={[styles.number, { color: colors.textInverse }]}>{index + 1}</Text>
+            <View style={[styles.numberBadge, { backgroundColor: theme.colors.brand.primary }]}>
+              <Text variant="footnote" color="inverse" weight="bold">{index + 1}</Text>
             </View>
-            <Text style={[styles.finding, { color: colors.textSecondary }]} numberOfLines={2}>
+            <Text variant="body" weight="medium" style={styles.finding} numberOfLines={2}>
               {finding}
             </Text>
           </Animated.View>
@@ -54,43 +55,35 @@ export function FindingsCard({ findings, category }: FindingsCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: Radius.md,
-    padding: Spacing.md,
-    gap: Spacing.xs,
+    borderRadius: Radius.lg,
+    padding: Spacing.base,
+    gap: Spacing.sm,
+    borderWidth: 2,
+    borderBottomWidth: 4,
+  },
+  categoryContainer: {
+    alignItems: 'center',
   },
   category: {
-    ...Typography.tiny,
     letterSpacing: 1.2,
     textAlign: 'center',
-    marginBottom: Spacing.xs,
   },
-  findingsContainer: {
-    gap: Spacing.sm,
+  findingsList: {
+    gap: Spacing.md,
   },
-  findingPill: {
+  findingRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: Radius.sm,
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
-    gap: Spacing.sm,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    borderWidth: 1,
+    gap: Spacing.md,
   },
   numberBadge: {
-    width: 22,
-    height: 22,
+    width: 24,
+    height: 24,
     borderRadius: Radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  number: {
-    ...Typography.footnote,
-    fontWeight: '600',
-  },
   finding: {
-    ...Typography.footnote,
-    fontWeight: '500',
     flex: 1,
   },
 });
