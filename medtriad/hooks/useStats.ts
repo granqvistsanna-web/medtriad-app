@@ -1,22 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   StoredStats,
+  CategoryMasteryData,
+  DEFAULT_CATEGORY_MASTERY,
   loadStats,
   updateAfterQuiz,
   getAccuracy,
   checkHighScore as checkHighScoreStorage,
   clearPendingTierUp as clearPendingTierUpStorage,
 } from '@/services/stats-storage';
+import { TriadCategory } from '@/types/triad';
 import {
   calculateLevel,
   getProgressInLevel,
   getQuestionsToNextLevel,
   getLevelTitle,
-  // New tier system
+  // Points-based tier system
   TierDefinition,
-  getTierForGames,
+  getTierForPoints,
   getProgressToNextTier,
   getNextTier,
+  getPointsToNextTier,
 } from '@/services/mastery';
 
 export interface StatsData {
@@ -29,10 +33,12 @@ export interface StatsData {
   masteryProgress: number;
   questionsToNextLevel: number;
   levelTitle: string;
-  // New tier system (game-based)
+  // Points-based tier system
   tier: TierDefinition;
   tierProgress: number;
   nextTier: TierDefinition | null;
+  totalPoints: number;
+  pointsToNextTier: number;
   // Tier-up celebration
   pendingTierUp: { tier: number; name: string } | null;
   clearPendingTierUp: () => Promise<void>;
@@ -40,8 +46,17 @@ export interface StatsData {
   dailyStreak: number;
   highScore: number;
   refresh: () => Promise<void>;
-  recordQuizResult: (correct: number, total: number, streak: number, score: number) => Promise<void>;
+  recordQuizResult: (
+    correct: number,
+    total: number,
+    streak: number,
+    score: number,
+    categoryResults?: Record<TriadCategory, CategoryMasteryData>
+  ) => Promise<void>;
   checkHighScore: (score: number) => Promise<boolean>;
+  // Category mastery
+  categoryMastery: Record<TriadCategory, CategoryMasteryData>;
+  getCategoryPercent: (category: TriadCategory) => number;
 }
 
 export function useStats(): StatsData {
@@ -65,8 +80,14 @@ export function useStats(): StatsData {
   }, [fetchStats]);
 
   const recordQuizResult = useCallback(
-    async (correct: number, total: number, streak: number, score: number) => {
-      const updated = await updateAfterQuiz(correct, total, streak, score);
+    async (
+      correct: number,
+      total: number,
+      streak: number,
+      score: number,
+      categoryResults?: Record<TriadCategory, CategoryMasteryData>
+    ) => {
+      const updated = await updateAfterQuiz(correct, total, streak, score, categoryResults);
       setStats(updated);
     },
     []
@@ -99,14 +120,24 @@ export function useStats(): StatsData {
   const dailyStreak = stats?.dailyStreak ?? 0;
   const highScore = stats?.highScore ?? 0;
 
-  // Derived values - New tier system (game-based)
-  const gamesPlayed = stats?.gamesPlayed ?? 0;
-  const tier = getTierForGames(gamesPlayed);
-  const tierProgress = getProgressToNextTier(gamesPlayed);
+  // Derived values - Points-based tier system
+  const totalPoints = stats?.totalPoints ?? 0;
+  const tier = getTierForPoints(totalPoints);
+  const tierProgress = getProgressToNextTier(totalPoints);
   const nextTier = getNextTier(tier.tier);
+  const pointsToNextTier = getPointsToNextTier(totalPoints);
 
   // Tier-up celebration
   const pendingTierUp = stats?.pendingTierUp ?? null;
+
+  // Category mastery
+  const categoryMastery = stats?.categoryMastery ?? DEFAULT_CATEGORY_MASTERY;
+
+  const getCategoryPercent = useCallback((category: TriadCategory): number => {
+    const data = categoryMastery[category];
+    if (!data || data.total === 0) return 0;
+    return Math.round((data.correct / data.total) * 100);
+  }, [categoryMastery]);
 
   return {
     stats,
@@ -118,10 +149,12 @@ export function useStats(): StatsData {
     masteryProgress,
     questionsToNextLevel,
     levelTitle,
-    // New tier system
+    // Points-based tier system
     tier,
     tierProgress,
     nextTier,
+    totalPoints,
+    pointsToNextTier,
     // Tier-up celebration
     pendingTierUp,
     clearPendingTierUp: handleClearPendingTierUp,
@@ -131,5 +164,8 @@ export function useStats(): StatsData {
     refresh: fetchStats,
     recordQuizResult,
     checkHighScore,
+    // Category mastery
+    categoryMastery,
+    getCategoryPercent,
   };
 }
