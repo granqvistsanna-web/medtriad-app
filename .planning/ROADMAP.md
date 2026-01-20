@@ -3,7 +3,7 @@
 ## Milestones
 
 - [x] **v1.0 MVP** - Phases 1-8 (shipped 2026-01-18)
-- [ ] **v2.0 Polish & Progression** - Phases 9-20 (in progress)
+- [x] **v2.0 Polish & Progression** - Phases 9-20 (shipped 2026-01-20)
 - [ ] **v3.0 Engagement** - Future
 
 ## Phases
@@ -34,7 +34,7 @@ evolving mascot, smooth onboarding, and shareability.
 - [x] **Phase 17: Design System Audit** - Enhance docs, audit app alignment with design tokens
 - [x] **Phase 18: Developer Tools** - Debug onboarding and app states
 - [x] **Phase 19: Error Handling** - Graceful failures throughout the app
-- [ ] **Phase 20: Performance** - Smooth, responsive experience
+- [x] **Phase 20: Performance** - Smooth, responsive experience
 
 ---
 
@@ -341,8 +341,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 20-01-PLAN.md — Library screen virtualization with FlashList
-- [ ] 20-02-PLAN.md — Image preloading and loading UX improvements
+- [x] 20-01-PLAN.md — Library screen virtualization with FlashList
+- [x] 20-02-PLAN.md — Image preloading and loading UX improvements
 
 **Success Criteria**:
 1. Cold launch < 1.5s to interactive
@@ -382,10 +382,10 @@ Ideas parked for future development:
 | 17. Design System Audit | v2.0 | Complete | 2026-01-19 |
 | 18. Developer Tools | v2.0 | Complete | 2026-01-19 |
 | 19. Error Handling | v2.0 | Complete | 2026-01-19 |
-| 20. Performance | v2.0 | Not started | - |
+| 20. Performance | v2.0 | Complete | 2026-01-20 |
 
 ---
 
 *Created: 2026-01-18*
-*Last updated: 2026-01-19 - Phase 20 planned*
+*Last updated: 2026-01-20 - Phase 20 complete, v2.0 milestone done*
 *Current milestone: v2.0 Polish & Progression*
