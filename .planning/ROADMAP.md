@@ -56,7 +56,13 @@ See archived roadmap for details.
 - [ ] Button shows correct visual states (default, pressed, disabled, loading)
 - [ ] New components can be built using only primitives and tokens (no hardcoded values)
 
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 21-01-PLAN.md — Install dependencies and create three-layer token system
+- [ ] 21-02-PLAN.md — Font loading, Icon wrapper, Surface primitive
+- [ ] 21-03-PLAN.md — Text primitive and Button with loading state
+- [ ] 21-04-PLAN.md — Badge, Tag, and Card primitives
 
 ---
 
@@ -187,7 +193,7 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 21. Design System Foundation | 0/TBD | Not started | - |
+| 21. Design System Foundation | 0/4 | Ready for execution | - |
 | 22. Design System Application | 0/TBD | Not started | - |
 | 23. Study Mode | 0/TBD | Not started | - |
 | 24. Category Mastery | 0/TBD | Not started | - |
@@ -210,3 +216,4 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 
 ---
 *Roadmap created: 2026-01-20*
+*Phase 21 planned: 2026-01-20*
