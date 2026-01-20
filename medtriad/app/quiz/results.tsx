@@ -80,6 +80,9 @@ export default function ResultsScreen() {
         score,
         correct: correctCount,
         total: QUESTION_COUNT,
+      }).catch(() => {
+        // Reset flag so save can be retried on next render
+        historySaved.current = false;
       });
     }
   }, [score, correctCount]);
@@ -224,17 +227,23 @@ export default function ResultsScreen() {
         style={styles.buttons}
       >
         <Button label="Play Again" onPress={() => router.replace('/quiz')} />
-        <Button
-          label={isSharing ? 'Sharing...' : 'Share'}
-          variant="secondary"
-          onPress={share}
-          disabled={isSharing}
-        />
-        <Button
-          label="Home"
-          variant="secondary"
-          onPress={() => router.replace('/(tabs)')}
-        />
+        <View style={styles.secondaryButtons}>
+          <Button
+            label={isSharing ? 'Sharing...' : 'Share'}
+            variant="outline"
+            onPress={share}
+            disabled={isSharing}
+            fullWidth={false}
+            style={styles.secondaryButton}
+          />
+          <Button
+            label="Home"
+            variant="outline"
+            onPress={() => router.replace('/(tabs)')}
+            fullWidth={false}
+            style={styles.secondaryButton}
+          />
+        </View>
       </Animated.View>
 
       {/* Hidden share card for capture */}
@@ -257,7 +266,13 @@ export default function ResultsScreen() {
           fallSpeed={3500}
           fadeOut
           autoStart={false}
-          colors={['#3B82F6', '#22C55E', '#FACC15', '#F97316', '#EC4899']}
+          colors={[
+            theme.colors.brand.primary,
+            theme.colors.success.main,
+            theme.colors.gold.main,
+            theme.colors.brand.accent,
+            theme.colors.streak.main,
+          ]}
         />
       )}
     </SafeAreaView>
@@ -305,10 +320,17 @@ const styles = StyleSheet.create({
   buttons: {
     padding: Spacing.lg,
     paddingBottom: Spacing.xl,
-    gap: Spacing.md,
+    gap: Spacing.base,
     maxWidth: 400,
     alignSelf: 'center',
     width: '100%',
+  },
+  secondaryButtons: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+  },
+  secondaryButton: {
+    flex: 1,
   },
   offscreen: {
     position: 'absolute',
