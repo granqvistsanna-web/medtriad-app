@@ -1,6 +1,11 @@
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
+import { Restart } from '@solar-icons/react-native/Bold';
+import { UserPlus } from '@solar-icons/react-native/Bold';
+import { Star } from '@solar-icons/react-native/Bold';
+import { TrashBin2 } from '@solar-icons/react-native/Bold';
+import { Text } from '@/components/primitives';
+import { theme, Spacing, Radius, Durations } from '@/constants/theme';
 import { SettingsRow } from '@/components/settings/SettingsRow';
 import { TIERS } from '@/services/mastery';
 import {
@@ -15,8 +20,6 @@ interface DevSectionProps {
 }
 
 export function DevSection({ onRefresh }: DevSectionProps) {
-  const colors = Colors.light;
-
   const handleResetOnboarding = () => {
     Alert.alert(
       'Reset Onboarding',
@@ -98,34 +101,34 @@ export function DevSection({ onRefresh }: DevSectionProps) {
   return (
     <Animated.View entering={FadeInUp.delay(Durations.stagger * 4).duration(Durations.normal).springify()}>
       <View style={styles.sectionHeaderRow}>
-        <Text style={[styles.sectionHeaderText, { color: colors.error }]}>
+        <Text variant="tiny" color={theme.colors.danger.main} style={styles.sectionHeaderText}>
           DEVELOPER
         </Text>
-        <View style={[styles.sectionHeaderLine, { backgroundColor: colors.error }]} />
+        <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.danger.main }]} />
       </View>
-      <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
+      <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
         <SettingsRow
           label="Reset Onboarding"
           onPress={handleResetOnboarding}
-          icon="arrow.counterclockwise"
+          icon={Restart}
         />
-        <View style={[styles.separator, { backgroundColor: colors.border }]} />
+        <View style={[styles.separator, { backgroundColor: theme.colors.border.default }]} />
         <SettingsRow
           label="Set User Tier"
           onPress={handleSetTier}
-          icon="person.badge.plus"
+          icon={UserPlus}
         />
-        <View style={[styles.separator, { backgroundColor: colors.border }]} />
+        <View style={[styles.separator, { backgroundColor: theme.colors.border.default }]} />
         <SettingsRow
           label="Simulate Tier Up"
           onPress={handleSimulateTierUp}
-          icon="star.fill"
+          icon={Star}
         />
-        <View style={[styles.separator, { backgroundColor: colors.border }]} />
+        <View style={[styles.separator, { backgroundColor: theme.colors.border.default }]} />
         <SettingsRow
           label="Clear All Data"
           onPress={handleClearAllData}
-          icon="trash.fill"
+          icon={TrashBin2}
           destructive
         />
       </View>
@@ -142,7 +145,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   sectionHeaderText: {
-    ...Typography.tiny,
     letterSpacing: 1,
   },
   sectionHeaderLine: {

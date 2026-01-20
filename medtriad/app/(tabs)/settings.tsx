@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, Share, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Share, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Application from 'expo-application';
-import { Colors, Typography, Spacing, Radius, Durations } from '@/constants/theme';
+import { ShareCircle } from '@solar-icons/react-native/Bold';
+import { TrashBin2 } from '@solar-icons/react-native/Bold';
+import { Text } from '@/components/primitives';
+import { theme, Spacing, Radius, Durations } from '@/constants/theme';
 import { ToggleRow } from '@/components/settings/ToggleRow';
 import { SettingsRow } from '@/components/settings/SettingsRow';
 import { DevSection } from '@/components/settings/DevSection';
@@ -13,7 +16,6 @@ import { clearStats } from '@/services/stats-storage';
 import { useStats } from '@/hooks/useStats';
 
 export default function SettingsScreen() {
-  const colors = Colors.light;
   const { refresh: refreshStats } = useStats();
   const [settings, setSettings] = useState<UserSettings>({
     soundEnabled: true,
@@ -88,38 +90,38 @@ export default function SettingsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
         <View style={styles.loadingContainer} />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
         <Animated.View entering={FadeInUp.duration(Durations.normal).springify()}>
-          <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
+          <Text variant="title" color="primary" style={styles.title}>Settings</Text>
         </Animated.View>
 
         {/* PREFERENCES Section */}
         <Animated.View entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()}>
           <View style={[styles.sectionHeaderRow, { marginTop: 0 }]}>
-            <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+            <Text variant="tiny" color="muted" style={styles.sectionHeaderText}>
               PREFERENCES
             </Text>
-            <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+            <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.border.default }]} />
           </View>
-          <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
+          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
             <ToggleRow
               label="Sound Effects"
               value={settings.soundEnabled}
               onValueChange={handleSoundToggle}
             />
-            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <View style={[styles.separator, { backgroundColor: theme.colors.border.default }]} />
             <ToggleRow
               label="Haptic Feedback"
               value={settings.hapticsEnabled}
@@ -131,22 +133,22 @@ export default function SettingsScreen() {
         {/* ACTIONS Section */}
         <Animated.View entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}>
           <View style={styles.sectionHeaderRow}>
-            <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+            <Text variant="tiny" color="muted" style={styles.sectionHeaderText}>
               ACTIONS
             </Text>
-            <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+            <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.border.default }]} />
           </View>
-          <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
+          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
             <SettingsRow
               label="Share App"
               onPress={handleShare}
-              icon="square.and.arrow.up"
+              icon={ShareCircle}
             />
-            <View style={[styles.separator, { backgroundColor: colors.border }]} />
+            <View style={[styles.separator, { backgroundColor: theme.colors.border.default }]} />
             <SettingsRow
               label="Reset Statistics"
               onPress={handleResetStats}
-              icon="trash"
+              icon={TrashBin2}
               destructive
             />
           </View>
@@ -155,15 +157,15 @@ export default function SettingsScreen() {
         {/* ABOUT Section */}
         <Animated.View entering={FadeInUp.delay(Durations.stagger * 3).duration(Durations.normal).springify()}>
           <View style={styles.sectionHeaderRow}>
-            <Text style={[styles.sectionHeaderText, { color: colors.textMuted }]}>
+            <Text variant="tiny" color="muted" style={styles.sectionHeaderText}>
               ABOUT
             </Text>
-            <View style={[styles.sectionHeaderLine, { backgroundColor: colors.border }]} />
+            <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.border.default }]} />
           </View>
-          <View style={[styles.section, { backgroundColor: colors.backgroundCard, borderColor: colors.border }]}>
+          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
             <View style={styles.aboutRow}>
-              <Text style={[styles.aboutLabel, { color: colors.text }]}>Version</Text>
-              <Text style={[styles.aboutValue, { color: colors.textSecondary }]}>
+              <Text variant="body" color="primary">Version</Text>
+              <Text variant="caption" color="secondary">
                 {version} (Build {build})
               </Text>
             </View>
@@ -195,7 +197,6 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xxl,
   },
   title: {
-    ...Typography.title,
     marginBottom: Spacing.lg,
   },
   sectionHeaderRow: {
@@ -206,7 +207,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   sectionHeaderText: {
-    ...Typography.tiny,
     letterSpacing: 1,
   },
   sectionHeaderLine: {
@@ -229,11 +229,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.md,
     minHeight: 44,
-  },
-  aboutLabel: {
-    ...Typography.body,
-  },
-  aboutValue: {
-    ...Typography.caption,
   },
 });

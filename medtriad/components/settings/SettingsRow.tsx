@@ -1,44 +1,44 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors, Typography, Spacing } from '@/constants/theme';
-import { SymbolViewProps } from 'expo-symbols';
+import { ComponentType } from 'react';
+import { View, Pressable, StyleSheet } from 'react-native';
+import type { SvgProps } from 'react-native-svg';
+import { Text, Icon } from '@/components/primitives';
+import { theme, Spacing } from '@/constants/theme';
+
+// Solar Icon component type
+type SolarIconProps = SvgProps & {
+  size?: number;
+  color?: string;
+  mirrored?: boolean;
+  alt?: string;
+};
 
 interface SettingsRowProps {
   label: string;
   onPress: () => void;
-  icon?: SymbolViewProps['name'];
+  icon?: ComponentType<SolarIconProps>;
   destructive?: boolean;
 }
 
 export function SettingsRow({ label, onPress, icon, destructive = false }: SettingsRowProps) {
-  const colors = Colors.light;
-  const textColor = destructive ? colors.error : colors.text;
-  const iconColor = destructive ? colors.error : colors.icon;
+  const textColor = destructive ? theme.colors.danger.main : 'primary';
+  const iconColor = destructive ? theme.colors.danger.main : theme.colors.icon.default;
 
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
         styles.row,
-        pressed && { backgroundColor: colors.pressed },
+        pressed && { backgroundColor: theme.colors.surface.pressed },
       ]}
     >
       <View style={styles.leftContent}>
         {icon && (
-          <IconSymbol
-            name={icon}
-            size={22}
-            color={iconColor}
-            style={styles.icon}
-          />
+          <View style={styles.icon}>
+            <Icon icon={icon} size="md" color={iconColor} />
+          </View>
         )}
-        <Text style={[styles.label, { color: textColor }]}>{label}</Text>
+        <Text variant="body" color={textColor}>{label}</Text>
       </View>
-      <IconSymbol
-        name="chevron.right"
-        size={16}
-        color={colors.textMuted}
-      />
     </Pressable>
   );
 }
@@ -59,8 +59,5 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: Spacing.sm,
-  },
-  label: {
-    ...Typography.body,
   },
 });
