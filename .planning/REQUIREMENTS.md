@@ -130,10 +130,10 @@ Deferred to future release.
 | AS-10 | Phase 26 | Pending |
 
 **Coverage:**
-- v2.1 requirements: 33 total
-- Mapped to phases: 33
+- v2.1 requirements: 37 total
+- Mapped to phases: 37
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-20*
-*Last updated: 2026-01-20 after initial definition*
+*Last updated: 2026-01-20 — roadmap created*

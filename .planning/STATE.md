@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** Planning next milestone (v3.0 Engagement)
+**Current focus:** v2.1 Design System, Study Mode & App Store (Phase 21)
 
 ## Current Position
 
-Phase: 20 of 20 complete
-Plan: N/A — between milestones
-Status: v2.0 SHIPPED, ready for v3.0 planning
-Last activity: 2026-01-20 — v2.0 milestone archived
+Phase: 21 of 26 (Design System Foundation)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-01-20 — v2.1 roadmap created
 
-Progress: [##########] 100% (v1.0 + v2.0 complete)
+Progress: [##########..........] 50% (20/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -27,9 +27,14 @@ Progress: [##########] 100% (v1.0 + v2.0 complete)
 - Phases completed: 12 (9-20)
 - Requirements: 38 total, 38 complete
 
+**v2.1 Summary:**
+- Plans completed: 0
+- Phases: 6 (21-26)
+- Requirements: 37 total, 0 complete
+
 **Cumulative:**
-- Total phases: 20
-- Total plans: 46
+- Total phases: 26 (20 complete, 6 remaining)
+- Total plans: 46 complete
 - Total lines: 121,172 TypeScript
 
 ## Accumulated Context
@@ -39,7 +44,7 @@ Progress: [##########] 100% (v1.0 + v2.0 complete)
 All decisions logged in PROJECT.md Key Decisions table.
 
 Summary of key v2.0 decisions:
-- 6-tier game-based progression (Student → Chief)
+- 6-tier game-based progression (Student -> Chief)
 - Static mascot images per tier (not animated)
 - FlashList for lists > 20 items
 - expo-image for native caching/preloading
@@ -52,32 +57,24 @@ None.
 
 ### Blockers/Concerns
 
-None — app is production-ready.
+None.
 
 ## Session Continuity
 
 Last session: 2026-01-20
-Stopped at: v2.0 milestone archived
+Stopped at: v2.1 roadmap created
 Resume file: None
 
 ## Next Steps
 
-**v2.0 COMPLETE** — Both milestones shipped:
-- v1.0 MVP: 8 phases, 18 plans (shipped 2026-01-18)
-- v2.0 Polish & Progression: 12 phases, 28 plans (shipped 2026-01-20)
+**Ready for Phase 21 planning.**
 
-**Next milestone:** v3.0 Engagement
-
-To start v3.0:
+To start:
 ```
-/gsd:new-milestone
+/gsd:plan-phase 21
 ```
 
-This will:
-1. Gather context through questioning
-2. Research implementation approaches
-3. Define v3.0 requirements
-4. Create v3.0 roadmap phases
+This will create executable plans for Design System Foundation.
 
 ---
-*Updated: 2026-01-20 — v2.0 milestone archived, ready for v3.0*
+*Updated: 2026-01-20 — v2.1 roadmap created*
