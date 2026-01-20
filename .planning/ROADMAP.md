@@ -111,18 +111,18 @@ Plans:
 - SM-08: Tricky questions list accessible from Library or Progress
 
 **Success Criteria:**
-- [ ] User can tap Study Mode button on Home and start an untimed quiz session
-- [ ] User sees explanation text after answering each question (correct or incorrect)
-- [ ] User can mark any question as "tricky" during the session
-- [ ] User can view their tricky questions list from Library or Progress screen
-- [ ] Study Mode has a visually calm, distinct appearance from timed quiz mode
+- [x] User can tap Study Mode button on Home and start an untimed quiz session
+- [x] User sees explanation text after answering each question (correct or incorrect)
+- [x] User can mark any question as "tricky" during the session
+- [x] User can view their tricky questions list from Library or Progress screen
+- [x] Study Mode has a visually calm, distinct appearance from timed quiz mode
 
 **Plans:** 3 plans
 
 Plans:
-- [ ] 23-01-PLAN.md — Types, reducer, and storage service foundation
-- [ ] 23-02-PLAN.md — Study screen and components (ExplanationCard, TrickyButton, StudyHeader)
-- [ ] 23-03-PLAN.md — Results screen, tricky list, and entry point wiring
+- [x] 23-01-PLAN.md — Types, reducer, and storage service foundation
+- [x] 23-02-PLAN.md — Study screen and components (ExplanationCard, TrickyButton, StudyHeader)
+- [x] 23-03-PLAN.md — Results screen, tricky list, and entry point wiring
 
 ---
 
@@ -144,7 +144,11 @@ Plans:
 - [ ] Home screen displays category mastery cards showing progress for each category
 - [ ] Each category card shows a visual progress indicator (bar or percentage)
 
-**Plans:** TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 24-01-PLAN.md — Add categoryMastery to stats storage and useStats hook
+- [ ] 24-02-PLAN.md — Track categories in quiz and connect Home screen to real data
 
 ---
 
@@ -207,8 +211,8 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 |-------|----------------|--------|-----------|
 | 21. Design System Foundation | 4/4 | ✓ Complete | 2026-01-20 |
 | 22. Design System Application | 5/5 | ✓ Complete | 2026-01-20 |
-| 23. Study Mode | 0/3 | Planned | - |
-| 24. Category Mastery | 0/TBD | Not started | - |
+| 23. Study Mode | 3/3 | ✓ Complete | 2026-01-20 |
+| 24. Category Mastery | 0/2 | Planned | - |
 | 25. Challenge | 0/TBD | Not started | - |
 | 26. App Store Preparation | 0/TBD | Not started | - |
 
@@ -233,3 +237,5 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 *Phase 22 planned: 2026-01-20*
 *Phase 22 complete: 2026-01-20*
 *Phase 23 planned: 2026-01-20*
+*Phase 23 complete: 2026-01-20*
+*Phase 24 planned: 2026-01-20*
