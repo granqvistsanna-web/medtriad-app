@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 22 of 26 (Design System Application)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-20 - Completed 22-01-PLAN.md (Tokens and Tab Bar Icons)
+Last activity: 2026-01-20 - Completed 22-02-PLAN.md (Simple Screen Migration)
 
-Progress: [###########.........] 55% (22/40 phases across all milestones)
+Progress: [############........] 58% (23/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,13 +28,13 @@ Progress: [###########.........] 55% (22/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 5
+- Plans completed: 6
 - Phases: 6 (21-26)
-- Requirements: 37 total, 11 complete (DS-01 through DS-11)
+- Requirements: 37 total, 14 complete (DS-01 through DS-14)
 
 **Cumulative:**
 - Total phases: 26 (21 complete, 5 remaining)
-- Total plans: 51 complete
+- Total plans: 52 complete
 - Total lines: ~122,900 TypeScript
 
 ## Accumulated Context
@@ -80,6 +80,11 @@ Summary of key v2.0 decisions:
 - Tab bar uses raw Solar Icons (not Icon primitive) for color prop compatibility
 - Solar Icon import pattern: {IconName}Bold, {IconName}Linear
 
+**v2.1 Decisions (Phase 22-02):**
+- SettingsRow icon prop changed from string to ComponentType<SolarIconProps>
+- Text primitive color accepts raw color strings for cases like danger text
+- DevSection migrated as blocking dependency of SettingsRow changes
+
 ### Pending Todos
 
 None.
@@ -90,8 +95,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 09:45 UTC
-Stopped at: Completed 22-01-PLAN.md (Tokens and Tab Bar Icons)
+Last session: 2026-01-20 12:17 UTC
+Stopped at: Completed 22-02-PLAN.md (Simple Screen Migration)
 Resume file: None
 
 ## Design System Application Progress
@@ -103,7 +108,7 @@ Phase 22 migrates existing components to use the design system primitives and to
 | Plan | Name | Status |
 |------|------|--------|
 | 22-01 | Tokens and Tab Bar Icons | Complete |
-| 22-02 | Home Screen Migration | Pending |
+| 22-02 | Simple Screen Migration | Complete |
 | 22-03 | Quiz Screen Migration | Pending |
 | 22-04 | Library & Progress Migration | Pending |
 
@@ -117,15 +122,24 @@ Phase 22 migrates existing components to use the design system primitives and to
 - Progress: ChartSquareBold/ChartSquareLinear
 - Settings: SettingsBold/SettingsLinear
 
+**Simple Screens Migrated (22-02):**
+- Settings screen: Text primitive, Solar Icons (ShareCircle, TrashBin2)
+- SettingsRow: Icon primitive with component prop pattern
+- ToggleRow: Text primitive
+- DevSection: Solar Icons (Restart, UserPlus, Star, TrashBin2)
+- Onboarding: Text/Button primitives with Play icon
+- PaginationDots: theme.colors.brand.primary
+- Modal: Text primitive
+
 ## Next Steps
 
-**Continue with 22-02: Home Screen Migration**
+**Continue with 22-03: Quiz Screen Migration**
 
-Ready to migrate home screen components to use primitives:
-- HeroCard, ActionButtons, HomeHeader
+Ready to migrate quiz screen components to use primitives:
+- QuizScreen, AnswerCard, FindingsCard
 - Replace hardcoded colors with semantic tokens
 - Replace Text with Text primitive
-- Replace custom cards with Card primitive
+- Use Button primitive for quiz actions
 
 To continue:
 ```
@@ -133,4 +147,4 @@ To continue:
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 22-01-PLAN.md*
+*Updated: 2026-01-20 - Completed 22-02-PLAN.md*
