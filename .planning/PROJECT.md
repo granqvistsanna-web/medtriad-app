@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A timed multiple-choice quiz app that transforms medical triad memorization into an engaging, game-like experience. Users see three clinical findings and must identify the corresponding condition before time runs out. Features scoring with speed bonuses and combo multipliers, full progress tracking, and a library for studying triads. Built with React Native/Expo for iOS.
+A polished, progression-driven medical triad quiz app with 6-tier leveling, evolving mascot, and satisfying game-like feedback. Users see three clinical findings and must identify the corresponding condition before time runs out. Features scoring with speed bonuses and combo multipliers, tier-up celebrations, shareable result cards, new user onboarding, and a library for studying triads. Built with React Native/Expo for iOS.
 
 ## Core Value
 
@@ -12,6 +12,7 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 
 ### Validated
 
+**v1.0 — MVP**
 - ✓ Expo/React Native project structure — v1.0
 - ✓ File-based routing with expo-router — v1.0
 - ✓ Theme system (light/dark mode) — v1.0
@@ -35,39 +36,48 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 - ✓ Settings screen with sound/haptics toggles — v1.0
 - ✓ Share functionality via iOS share sheet — v1.0
 
+**v2.0 — Polish & Progression**
+- ✓ Visual polish: All screens match Home visual language (8pt grid, card styles) — v2.0
+- ✓ 6-tier progression system (Student → Chief) based on games played — v2.0
+- ✓ TierProgressBar and TierBadge components — v2.0
+- ✓ Tier-up celebrations with confetti and mascot transition — v2.0
+- ✓ New user onboarding (3-page tutorial, only shows for gamesPlayed = 0) — v2.0
+- ✓ Evolving mascot images per tier (6 unique images) — v2.0
+- ✓ Share quiz results as styled image card — v2.0
+- ✓ Quiz visual hierarchy (elevated symptoms, cleaner feedback) — v2.0
+- ✓ Design system audit (CardStyle, consistent tokens) — v2.0
+- ✓ Developer tools (__DEV__ only) for testing tier-ups and onboarding — v2.0
+- ✓ Error boundaries and defensive validation — v2.0
+- ✓ FlashList virtualization for Library — v2.0
+- ✓ Image preloading for instant mascot display — v2.0
+
 ### Active
 
-**v2.0 — Polish & Progression**
-
-- [ ] Visual polish: Library screen matches Home style
-- [ ] Visual polish: Progress screen matches Home style
-- [ ] Visual polish: Settings screen matches Home style
-- [ ] Visual polish: Quiz screen matches Home style
-- [ ] Level system: Engaging tier names (5-6 tiers)
-- [ ] Level system: Visual identity per tier
-- [ ] Mascot evolution: Different mascot image per level tier
-- [ ] Onboarding: 2-3 screens explaining triads and scoring
+(None — v3.0 requirements to be defined)
 
 ### Out of Scope
 
-- Category filtering / selection — defer to v3
-- Reverse quiz mode (condition → findings) — defer to v3
-- User accounts and cloud sync — defer to v3
-- Leaderboards — defer to v3
-- Achievements / badges — level system covers progression for v2
-- Daily challenges — defer to v3
+- Category filtering / selection — consider for v3.0 Engagement
+- Reverse quiz mode (condition → findings) — consider for v3.0
+- User accounts and cloud sync — consider for v3.0
+- Leaderboards — consider for v3.0
+- Achievements / badges — level system covers progression adequately
+- Daily challenges — consider for v3.0 Engagement
 - iPad / Mac support — iOS iPhone only
 - Android — iOS first, Android later
 - Monetization (ads, premium) — defer post-launch
+- Animated mascots (Rive) — static images work well, v2.0 validated
 
 ## Context
 
-**Current State (v1.0 shipped):**
-- 86,116 lines of TypeScript across 8 phases
+**Current State (v2.0 shipped):**
+- 121,172 lines of TypeScript across 20 phases
 - 45 medical triads across 10 categories
-- Tech stack: Expo SDK 54, React Native, expo-router, react-native-reanimated, expo-audio
-- All 44 v1 requirements satisfied
-- Tech debt addressed in Phase 8 (haptics integration, orphaned exports removed)
+- Tech stack: Expo SDK 54, React Native, expo-router, react-native-reanimated, expo-audio, expo-image, @shopify/flash-list, react-native-view-shot, expo-sharing
+- v1.0: 44 requirements, v2.0: 34 additional requirements (all satisfied)
+- 6-tier progression system with tier-up celebrations
+- FlashList virtualization for smooth scrolling
+- Error boundaries and defensive patterns throughout
 
 **Origin:** Boyfriend is a doctor, suggested the app idea. He can validate triad accuracy.
 
@@ -97,6 +107,12 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 | Combo tier at 3/6 correct | Achievable progression, not too easy | ✓ Good — engaging |
 | useHaptics hook pattern | Consistent with useSoundEffects, respects settings | ✓ Good — clean integration |
 | 50-entry quiz history limit | Prevents unbounded storage growth | ✓ Good — practical limit |
+| 6 game-based tiers | Simpler than question-based mastery, more tangible | ✓ Good — engaging progression |
+| Static mascot images | Rive animations added complexity, static works well | ✓ Good — reduced scope |
+| FlashList for Library | 45+ items needs virtualization | ✓ Good — smooth scrolling |
+| expo-image for mascot | Native caching, preloading support | ✓ Good — instant display |
+| Error boundaries | Prevents crashes from reaching user | ✓ Good — graceful failures |
+| __DEV__ dev tools | Test tier-ups without playing 200 games | ✓ Good — faster testing |
 
 ---
-*Last updated: 2026-01-18 after v2.0 milestone start*
+*Last updated: 2026-01-20 after v2.0 milestone complete*

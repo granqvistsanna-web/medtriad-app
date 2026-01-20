@@ -1,5 +1,33 @@
 # Project Milestones: MedTriads
 
+## v2.0 Polish & Progression (Shipped: 2026-01-20)
+
+**Delivered:** Polished, progression-driven experience with 6-tier level system, evolving mascot, onboarding, and share functionality
+
+**Phases completed:** 9-20 (28 plans total)
+
+**Key accomplishments:**
+
+- Visual consistency across all screens with 8pt grid spacing and unified card styles
+- 6-tier progression system (Student → Chief) based on games played
+- Tier-up celebrations with confetti, mascot transition animations, and catch-up handling
+- New user onboarding flow with 3-screen swipeable tutorial
+- Share quiz results as styled image cards via iOS native share sheet
+- Performance optimization: FlashList virtualization, expo-image preloading, error boundaries
+
+**Stats:**
+
+- 12 phases, 28 plans, ~100 tasks
+- 121,172 lines of TypeScript (+35,056 from v1.0)
+- 139 files changed, 23,051 insertions
+- 3 days from v1.0 to ship (2026-01-18 → 2026-01-20)
+
+**Git range:** `feat(09-01)` → `docs(20)`
+
+**What's next:** v3.0 Engagement — Category filtering, daily challenges, streak rewards, widgets
+
+---
+
 ## v1.0 MVP (Shipped: 2026-01-18)
 
 **Delivered:** Complete medical triad quiz app with scoring, persistence, and game-like polish
