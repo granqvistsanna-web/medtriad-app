@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 21 of 26 (Design System Foundation)
-Plan: 2 of TBD in current phase
+Plan: 3 of TBD in current phase
 Status: In progress
-Last activity: 2026-01-20 - Completed 21-02-PLAN.md (Font Loading & Primitives)
+Last activity: 2026-01-20 - Completed 21-03-PLAN.md (Text and Button Primitives)
 
 Progress: [##########..........] 50% (20/40 phases across all milestones)
 
@@ -28,14 +28,14 @@ Progress: [##########..........] 50% (20/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 2
+- Plans completed: 3
 - Phases: 6 (21-26)
-- Requirements: 37 total, 4 complete (DS-01, DS-02, DS-03, DS-05)
+- Requirements: 37 total, 6 complete (DS-01, DS-02, DS-03, DS-04, DS-05, DS-06)
 
 **Cumulative:**
 - Total phases: 26 (20 complete, 6 remaining)
-- Total plans: 48 complete
-- Total lines: ~122,200 TypeScript
+- Total plans: 49 complete
+- Total lines: ~122,600 TypeScript
 
 ## Accumulated Context
 
@@ -63,6 +63,12 @@ Summary of key v2.0 decisions:
 - Surface variants mirror theme.colors.surface keys exactly
 - Font loading integrated with existing splash screen flow
 
+**v2.1 Decisions (Phase 21-03):**
+- Text uses fontFamily tokens directly (not fontWeight prop) for custom fonts
+- Text color accepts semantic keys and raw color strings for flexibility
+- Button uses Text and Icon primitives internally (composable pattern)
+- Loading state replaces label with ActivityIndicator matching text color
+
 ### Pending Todos
 
 None.
@@ -73,18 +79,18 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 08:23 UTC
-Stopped at: Completed 21-02-PLAN.md (Font Loading & Primitives)
+Last session: 2026-01-20 08:26 UTC
+Stopped at: Completed 21-03-PLAN.md (Text and Button Primitives)
 Resume file: None
 
 ## Next Steps
 
-**Ready for Plan 21-03: Text and Button Primitives**
+**Ready for Plan 21-04: Badge and Tag Primitives**
 
-Font loading and base primitives are in place. Next plan will:
-- Create Text primitive with typography tokens
-- Create Button primitive with Duolingo-style press animation
-- Create Badge/Tag primitives
+Text and Button primitives are complete. Next plan will:
+- Create Badge primitive for status indicators
+- Create Tag primitive for category labels
+- Create Card primitive for content containers
 
 To continue:
 ```
@@ -92,4 +98,4 @@ To continue:
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 21-02-PLAN.md*
+*Updated: 2026-01-20 - Completed 21-03-PLAN.md*
