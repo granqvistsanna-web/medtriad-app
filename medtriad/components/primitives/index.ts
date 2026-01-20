@@ -16,3 +16,12 @@ export type { TextProps, TextVariant, TextColor } from './Text';
 
 export { Button } from './Button';
 export type { ButtonProps } from './Button';
+
+export { Badge } from './Badge';
+export type { BadgeProps, BadgeVariant } from './Badge';
+
+export { Tag } from './Tag';
+export type { TagProps, TagVariant } from './Tag';
+
+export { Card } from './Card';
+export type { CardProps, CardVariant } from './Card';
