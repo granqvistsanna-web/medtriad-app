@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-20)
 ## Current Position
 
 Phase: 21 of 26 (Design System Foundation)
-Plan: 3 of TBD in current phase
-Status: In progress
-Last activity: 2026-01-20 - Completed 21-03-PLAN.md (Text and Button Primitives)
+Plan: 4 of 4 in current phase (PHASE COMPLETE)
+Status: Phase 21 complete
+Last activity: 2026-01-20 - Completed 21-04-PLAN.md (Badge, Tag, and Card Primitives)
 
-Progress: [##########..........] 50% (20/40 phases across all milestones)
+Progress: [##########..........] 52% (21/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,14 +28,14 @@ Progress: [##########..........] 50% (20/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 3
+- Plans completed: 4
 - Phases: 6 (21-26)
-- Requirements: 37 total, 6 complete (DS-01, DS-02, DS-03, DS-04, DS-05, DS-06)
+- Requirements: 37 total, 9 complete (DS-01 through DS-09)
 
 **Cumulative:**
-- Total phases: 26 (20 complete, 6 remaining)
-- Total plans: 49 complete
-- Total lines: ~122,600 TypeScript
+- Total phases: 26 (21 complete, 5 remaining)
+- Total plans: 50 complete
+- Total lines: ~122,900 TypeScript
 
 ## Accumulated Context
 
@@ -69,6 +69,12 @@ Summary of key v2.0 decisions:
 - Button uses Text and Icon primitives internally (composable pattern)
 - Loading state replaces label with ActivityIndicator matching text color
 
+**v2.1 Decisions (Phase 21-04):**
+- Badge has 3D depth (borderBottomWidth: 3), Tag is flat - visual hierarchy distinction
+- Badge/Tag icon accepts Solar Icon component (same pattern as Button)
+- Card press animation only when interactive (onPress provided) and has 3D depth
+- All components use semantic color tokens - no hardcoded color values
+
 ### Pending Todos
 
 None.
@@ -79,23 +85,38 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 08:26 UTC
-Stopped at: Completed 21-03-PLAN.md (Text and Button Primitives)
+Last session: 2026-01-20 08:29 UTC
+Stopped at: Completed 21-04-PLAN.md (Badge, Tag, and Card Primitives)
 Resume file: None
+
+## Design System Foundation Complete
+
+All 7 primitives are now available:
+
+| Primitive | Purpose | File |
+|-----------|---------|------|
+| Icon | Icon wrapper | primitives/Icon.tsx |
+| Surface | Background containers | primitives/Surface.tsx |
+| Text | Typography | primitives/Text.tsx |
+| Button | Interactive buttons | primitives/Button.tsx |
+| Badge | Status indicators | primitives/Badge.tsx |
+| Tag | Labels/categories | primitives/Tag.tsx |
+| Card | Content containers | primitives/Card.tsx |
 
 ## Next Steps
 
-**Ready for Plan 21-04: Badge and Tag Primitives**
+**Ready for Phase 22: Home Screen Migration**
 
-Text and Button primitives are complete. Next plan will:
-- Create Badge primitive for status indicators
-- Create Tag primitive for category labels
-- Create Card primitive for content containers
+Design system foundation is complete. Phase 22 will migrate the home screen to use the new primitives:
+- Replace hardcoded colors with semantic tokens
+- Replace Text elements with Text primitive
+- Replace custom cards with Card primitive
+- Add Badge and Tag where appropriate
 
 To continue:
 ```
-/gsd:execute-phase 21
+/gsd:execute-phase 22
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 21-03-PLAN.md*
+*Updated: 2026-01-20 - Completed 21-04-PLAN.md (Phase 21 Complete)*
