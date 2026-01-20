@@ -139,16 +139,16 @@ Plans:
 - CM-04: Visual progress indicator per category
 
 **Success Criteria:**
-- [ ] Each quiz answer updates the corresponding category's correct/incorrect count
-- [ ] Category mastery data persists across app restarts
-- [ ] Home screen displays category mastery cards showing progress for each category
-- [ ] Each category card shows a visual progress indicator (bar or percentage)
+- [x] Each quiz answer updates the corresponding category's correct/incorrect count
+- [x] Category mastery data persists across app restarts
+- [x] Home screen displays category mastery cards showing progress for each category
+- [x] Each category card shows a visual progress indicator (bar or percentage)
 
 **Plans:** 2 plans
 
 Plans:
-- [ ] 24-01-PLAN.md — Add categoryMastery to stats storage and useStats hook
-- [ ] 24-02-PLAN.md — Track categories in quiz and connect Home screen to real data
+- [x] 24-01-PLAN.md — Add categoryMastery to stats storage and useStats hook
+- [x] 24-02-PLAN.md — Track categories in quiz and connect Home screen to real data
 
 ---
 
@@ -212,7 +212,7 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 | 21. Design System Foundation | 4/4 | ✓ Complete | 2026-01-20 |
 | 22. Design System Application | 5/5 | ✓ Complete | 2026-01-20 |
 | 23. Study Mode | 3/3 | ✓ Complete | 2026-01-20 |
-| 24. Category Mastery | 0/2 | Planned | - |
+| 24. Category Mastery | 2/2 | ✓ Complete | 2026-01-20 |
 | 25. Challenge | 0/TBD | Not started | - |
 | 26. App Store Preparation | 0/TBD | Not started | - |
 
@@ -239,3 +239,4 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 *Phase 23 planned: 2026-01-20*
 *Phase 23 complete: 2026-01-20*
 *Phase 24 planned: 2026-01-20*
+*Phase 24 complete: 2026-01-20*
