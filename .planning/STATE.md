@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-20)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 Category Mastery (Phase 24 COMPLETE)
+**Current focus:** v2.1 Challenge a Friend (Phase 25 Plan 01 COMPLETE)
 
 ## Current Position
 
-Phase: 24 of 26 (Category Mastery) - COMPLETE
-Plan: 2 of 2 in current phase (complete)
-Status: Phase 24 complete - ready for Phase 25
-Last activity: 2026-01-20 - Completed 24-02-PLAN.md (Category Mastery UI)
+Phase: 25 of 26 (Challenge a Friend)
+Plan: 1 of 1 in current phase (complete)
+Status: Phase 25 complete - ready for Phase 26
+Last activity: 2026-01-20 - Completed 25-01-PLAN.md (Challenge a Friend)
 
-Progress: [##################..] 78% (31/40 phases across all milestones)
+Progress: [###################.] 80% (32/40 phases across all milestones)
 
 ## Performance Metrics
 
@@ -28,14 +28,14 @@ Progress: [##################..] 78% (31/40 phases across all milestones)
 - Requirements: 38 total, 38 complete
 
 **v2.1 Summary:**
-- Plans completed: 15
-- Phases: 6 (21-26)
-- Requirements: 37 total, 31 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01 through CM-04)
+- Plans completed: 16
+- Phases: 7 (21-26)
+- Requirements: 40 total, 34 complete (DS-01 through DS-21, SM-01 through SM-05, CM-01 through CM-04, CH-01 through CH-03)
 
 **Cumulative:**
-- Total phases: 26 (24 complete, 2 remaining)
-- Total plans: 61 complete
-- Total lines: ~124,600 TypeScript
+- Total phases: 26 (25 complete, 1 remaining)
+- Total plans: 62 complete
+- Total lines: ~124,700 TypeScript
 
 ## Accumulated Context
 
@@ -126,6 +126,12 @@ Summary of key v2.0 decisions:
 - categoryResultsRef tracks both correct and incorrect answers per category
 - Home screen displays top 4 categories: cardiology, neurology, pulmonary, endocrine
 
+**v2.1 Decisions (Phase 25-01):**
+- ShareCard variant prop with 'share' default for backward compatibility
+- Challenge message rendered below headline with brand.primary color
+- getChallengeMessage returns score-based competitive text (5 tiers)
+- useShareCard share function accepts optional dialogTitle for Android
+
 ### Pending Todos
 
 None.
@@ -136,51 +142,48 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-20 19:15 UTC
-Stopped at: Completed 24-02-PLAN.md (Category Mastery UI)
+Last session: 2026-01-20 20:30 UTC
+Stopped at: Completed 25-01-PLAN.md (Challenge a Friend)
 Resume file: None
 
-## Category Mastery Progress
+## Challenge a Friend Progress
 
-Phase 24 (Category Mastery) is **COMPLETE**.
+Phase 25 (Challenge a Friend) is **COMPLETE**.
 
 **Completed Plans:**
 
 | Plan | Name | Status |
 |------|------|--------|
-| 24-01 | Category Mastery Data Foundation | Complete |
-| 24-02 | Category Mastery UI | Complete |
+| 25-01 | Challenge a Friend | Complete |
 
-**Artifacts Created:**
+**Artifacts Modified:**
 
 | File | Purpose |
 |------|---------|
-| medtriad/services/stats-storage.ts | CategoryMasteryData type, categoryMastery field, updateAfterQuiz with category results |
-| medtriad/hooks/useStats.ts | categoryMastery and getCategoryPercent exposed from hook |
-| medtriad/app/quiz/index.tsx | categoryResultsRef tracks per-answer category results |
-| medtriad/app/(tabs)/index.tsx | Real category percentages passed to CategoryMastery component |
+| medtriad/components/share/ShareCard.tsx | Share card with competitive messaging variant |
+| medtriad/hooks/useShareCard.ts | Share hook with dialogTitle support |
+| medtriad/app/quiz/results.tsx | Results screen with Challenge a Friend button |
 
 **Patterns Established:**
-- Category data: Record<TriadCategory, {correct, total}> pattern
-- Percentage helper: getCategoryPercent returns 0-100 rounded integer
-- Per-answer tracking: Update ref immediately after dispatch in handleAnswerSelect
+- ShareCard variant system: `'share' | 'challenge'` with default backward compatibility
+- Score-based messaging: 5-tier competitive text based on accuracy percentage
+- Optional hook parameters: dialogTitle passed through to native share API
 
 **Requirements Complete:**
-- CM-01: Each quiz answer updates the corresponding category's correct/total count
-- CM-02: Category mastery data persists across app restarts
-- CM-03: Home screen displays category mastery cards showing progress
-- CM-04: Each category card shows a visual progress indicator (percentage)
+- CH-01: Results screen shows "Challenge a Friend" button after completing quiz
+- CH-02: Tapping button generates share card with competitive message based on score
+- CH-03: System share sheet opens for sharing via Messages, social apps, etc.
 
 ## Next Steps
 
-**Phase 24 Complete - Category Mastery**
+**Phase 25 Complete - Challenge a Friend**
 
-Ready for Phase 25 (Achievements) or Phase 26 (Final Polish).
+Ready for Phase 26 (Final Polish).
 
 To continue:
 ```
-/gsd:plan-phase 25
+/gsd:plan-phase 26
 ```
 
 ---
-*Updated: 2026-01-20 - Completed 24-02-PLAN.md (Category Mastery UI)*
+*Updated: 2026-01-20 - Completed 25-01-PLAN.md (Challenge a Friend)*
