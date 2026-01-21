@@ -58,6 +58,11 @@ Plans:
 
 **Research flags:** None - Weighted random selection is well-documented
 
+**Plans:** 2 plans
+Plans:
+- [ ] 28-01-PLAN.md — Core adaptive selection service (difficulty classification, category weakness, weighted selection)
+- [ ] 28-02-PLAN.md — Quiz integration and verification
+
 ---
 
 ### Phase 29: Spaced Repetition
