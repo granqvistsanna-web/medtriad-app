@@ -20,6 +20,7 @@ import { generateQuestionSet } from '@/services/question-generator';
 import { isPerfectRound, getComboTier, SCORING } from '@/services/scoring';
 import { checkTierUp, getTierForPoints, getTimerForTier } from '@/services/mastery';
 import { useStats } from '@/hooks/useStats';
+import { recordTriadAnswer } from '@/services/triad-performance-storage';
 
 import { QuizOption, TriadCategory } from '@/types';
 import { QUESTION_COUNT } from '@/types/quiz-state';
@@ -89,6 +90,17 @@ export default function QuizScreen() {
   // Auto-advance after answer
   useEffect(() => {
     if (status !== 'answered') return;
+
+    // Handle timeout case - record as incorrect with full question time
+    if (selectedOptionId === null) {
+      recordTriadAnswer(
+        currentQuestion.triad.id,
+        false,
+        state.questionTime * 1000
+      ).catch((error) => {
+        console.error('Failed to record triad performance:', error);
+      });
+    }
 
     const timeout = setTimeout(async () => {
       if (currentIndex >= questions.length - 1) {
@@ -168,6 +180,13 @@ export default function QuizScreen() {
       optionId: option.id,
       isCorrect: option.isCorrect,
       timeRemaining: state.timeRemaining,
+    });
+
+    // Record triad performance (fire-and-forget)
+    const triadId = currentQuestion.triad.id;
+    const responseTimeMs = (state.questionTime - state.timeRemaining) * 1000;
+    recordTriadAnswer(triadId, option.isCorrect, responseTimeMs).catch((error) => {
+      console.error('Failed to record triad performance:', error);
     });
 
     // Track category result for mastery

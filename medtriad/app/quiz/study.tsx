@@ -16,6 +16,7 @@ import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useHaptics } from '@/hooks/useHaptics';
 import { generateQuestionSet, generateQuestionSetByCategories } from '@/services/question-generator';
 import { toggleTrickyQuestion, saveStudySession } from '@/services/study-storage';
+import { recordTriadAnswer } from '@/services/triad-performance-storage';
 
 import { QuizOption, TriadCategory } from '@/types';
 import { STUDY_QUESTION_COUNT } from '@/types/study-state';
@@ -76,6 +77,12 @@ export default function StudyScreen() {
         isCorrect: option.isCorrect,
       });
 
+      // Record triad performance (fire-and-forget)
+      // Study mode is untimed, so responseTimeMs = 0
+      recordTriadAnswer(currentQuestion.triad.id, option.isCorrect, 0).catch((error) => {
+        console.error('Failed to record triad performance:', error);
+      });
+
       // Play appropriate sound
       if (option.isCorrect) {
         playSound('correct');
@@ -83,7 +90,7 @@ export default function StudyScreen() {
         playSound('incorrect');
       }
     },
-    [status, dispatch, triggerHaptic, playSound]
+    [status, dispatch, triggerHaptic, playSound, currentQuestion.triad.id]
   );
 
   // Handle continue to next question
