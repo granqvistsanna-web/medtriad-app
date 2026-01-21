@@ -4,7 +4,6 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
   interpolateColor,
-  withTiming,
 } from 'react-native-reanimated';
 import { Magnifer, CloseCircle } from '@solar-icons/react-native/Bold';
 import { theme, Typography, Spacing, Radius } from '@/constants/theme';
@@ -27,20 +26,12 @@ export function SearchBar({ value, onChangeText, placeholder = 'Search triads...
       [0, 1],
       [theme.colors.border.default, theme.colors.brand.primary]
     );
-    const shadowOpacity = withTiming(focus.value * 0.15, { duration: 200 });
-    return {
-      borderColor,
-      shadowOpacity,
-    };
-  });
-
-  const iconStyle = useAnimatedStyle(() => {
-    const color = interpolateColor(
+    const borderBottomColor = interpolateColor(
       focus.value,
       [0, 1],
-      [theme.colors.text.secondary, theme.colors.brand.primary]
+      [theme.colors.border.strong, theme.colors.brand.primaryDark]
     );
-    return { color };
+    return { borderColor, borderBottomColor };
   });
 
   const handleFocus = () => {
@@ -55,13 +46,11 @@ export function SearchBar({ value, onChangeText, placeholder = 'Search triads...
     onChangeText('');
   };
 
-  const iconColor = focus.value ? theme.colors.brand.primary : theme.colors.text.secondary;
-
   return (
     <AnimatedView style={[styles.container, containerStyle]}>
-      <Animated.View style={styles.iconContainer}>
-        <Icon icon={Magnifer} size="md" color={theme.colors.text.secondary} />
-      </Animated.View>
+      <View style={styles.iconContainer}>
+        <Icon icon={Magnifer} size="md" color={theme.colors.text.muted} />
+      </View>
       <TextInput
         style={styles.input}
         value={value}
@@ -73,10 +62,18 @@ export function SearchBar({ value, onChangeText, placeholder = 'Search triads...
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
+        accessibilityLabel="Search triads"
+        accessibilityHint="Enter keywords to filter medical triads by condition or finding"
       />
       {value.length > 0 && (
-        <Pressable onPress={handleClear} style={styles.clearButton} hitSlop={8}>
-          <Icon icon={CloseCircle} size="md" color={theme.colors.brand.primary} />
+        <Pressable
+          onPress={handleClear}
+          style={styles.clearButton}
+          hitSlop={8}
+          accessibilityLabel="Clear search"
+          accessibilityRole="button"
+        >
+          <Icon icon={CloseCircle} size="sm" color={theme.colors.text.muted} />
         </Pressable>
       )}
     </AnimatedView>
@@ -88,23 +85,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: Radius.lg,
+    // Duolingo-style 3D border treatment
     borderWidth: 2,
-    borderBottomWidth: 3,
-    borderBottomColor: theme.colors.border.strong,
-    paddingHorizontal: Spacing.base,
-    height: 54,
+    borderBottomWidth: 4,
+    paddingHorizontal: Spacing.md,
+    height: 52,
     backgroundColor: theme.colors.surface.card,
-    shadowColor: theme.colors.brand.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 12,
-    elevation: 3,
   },
   iconContainer: {
-    marginRight: Spacing.md,
+    marginRight: Spacing.sm,
   },
   input: {
     flex: 1,
-    ...Typography.body,
+    ...Typography.caption,
     color: theme.colors.text.primary,
     paddingVertical: 0,
   },

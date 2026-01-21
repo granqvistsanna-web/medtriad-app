@@ -1,16 +1,16 @@
 import { useState, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
-import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
-import { Magnifer, BookBookmark } from '@solar-icons/react-native/Bold';
-import { theme, Spacing, Radius } from '@/constants/theme';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { theme, Spacing, Durations } from '@/constants/theme';
 import { getAllTriads, getTriadsByCategory } from '@/services/triads';
 import { TriadCategory } from '@/types';
 import { SearchBar } from '@/components/library/SearchBar';
 import { FilterChips } from '@/components/library/FilterChips';
 import { TriadCard } from '@/components/library/TriadCard';
-import { Text, Icon } from '@/components/primitives';
+import { Text } from '@/components/primitives';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 
 // All 10 medical categories in display order
 const CATEGORIES: TriadCategory[] = [
@@ -27,8 +27,11 @@ const CATEGORIES: TriadCategory[] = [
 ];
 
 export default function LibraryScreen() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<TriadCategory | null>(null);
+
+  // Debounce search to prevent lag on every keystroke
+  const searchQuery = useDebouncedValue(searchInput, 300);
 
   const allTriads = useMemo(() => getAllTriads(), []);
 
@@ -58,33 +61,21 @@ export default function LibraryScreen() {
   }, [allTriads, selectedCategory, searchQuery]);
 
   const showEmptyState = filteredTriads.length === 0;
-  const hasFilters = searchQuery.trim() || selectedCategory;
+  const hasFilters = searchInput.trim() || selectedCategory;
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]} edges={['top']}>
       {/* Fixed header with search and filters */}
       <View style={styles.header}>
-        <Animated.View entering={FadeIn.duration(250)} style={styles.titleRow}>
-          <View style={styles.titleLeft}>
-            <View style={styles.titleIcon}>
-              <Icon icon={BookBookmark} size="lg" color={theme.colors.brand.primary} />
-            </View>
-            <Text variant="title" color="primary">Library</Text>
-          </View>
-          <View style={styles.countBadge}>
-            <Text variant="label" color={theme.colors.brand.primary} weight="bold">
-              {allTriads.length}
-            </Text>
-            <Text variant="tiny" color="secondary">
-              triads
-            </Text>
-          </View>
+        <Animated.View entering={FadeInUp.duration(Durations.normal).springify()} style={styles.titleRow}>
+          <Text variant="titleLarge" color="primary">Library</Text>
+          <Text variant="footnote" color="muted">{allTriads.length} triads</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeIn.duration(250).delay(30)} style={styles.searchContainer}>
+        <Animated.View entering={FadeInUp.delay(Durations.stagger).duration(Durations.normal).springify()} style={styles.searchContainer}>
           <SearchBar
-            value={searchQuery}
-            onChangeText={setSearchQuery}
+            value={searchInput}
+            onChangeText={setSearchInput}
             placeholder="Search conditions or findings..."
           />
         </Animated.View>
@@ -107,7 +98,6 @@ export default function LibraryScreen() {
             searchQuery={searchQuery}
           />
         )}
-        estimatedItemSize={140}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
@@ -115,7 +105,7 @@ export default function LibraryScreen() {
         ListHeaderComponent={
           hasFilters && !showEmptyState ? (
             <Animated.View entering={FadeIn.duration(200)} style={styles.resultsHeader}>
-              <Text variant="footnote" color="secondary">
+              <Text variant="footnote" color="primary" weight="medium">
                 {filteredTriads.length} {filteredTriads.length === 1 ? 'result' : 'results'}
               </Text>
             </Animated.View>
@@ -123,22 +113,25 @@ export default function LibraryScreen() {
         }
         ListEmptyComponent={
           showEmptyState ? (
-            <Animated.View entering={FadeIn.duration(200)} style={styles.emptyState}>
-              <View style={[styles.emptyIcon, { backgroundColor: theme.colors.brand.accent }]}>
-                <Icon icon={Magnifer} size="lg" color={theme.colors.brand.primary} />
-              </View>
-              <Text variant="heading" color="primary" style={styles.emptyTitle}>
+            <Animated.View entering={FadeIn.duration(300)} style={styles.emptyState}>
+              <Image
+                source={require('@/assets/images/tri-thinking.png')}
+                style={styles.emptyMascot}
+                resizeMode="contain"
+              />
+              <Text variant="body" color="primary" weight="semibold" style={styles.emptyTitle}>
                 No triads found
               </Text>
-              <Text variant="caption" color="secondary" align="center">
-                {searchQuery
-                  ? `No results for "${searchQuery}"`
+              <Text variant="caption" color="muted" align="center">
+                {searchInput
+                  ? `No results for "${searchInput}"`
                   : 'Try adjusting your filters'}
               </Text>
             </Animated.View>
           ) : null
         }
         ItemSeparatorComponent={() => <View style={{ height: Spacing.md }} />}
+        estimatedItemSize={140}
       />
     </SafeAreaView>
   );
@@ -149,34 +142,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: Spacing.base,
-    gap: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border.default,
-    paddingBottom: Spacing.md,
-    backgroundColor: theme.colors.surface.primary,
+    paddingTop: Spacing.md,
+    gap: Spacing.lg, // Increased for better breathing room
+    paddingBottom: Spacing.base,
   },
   titleRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.lg,
-  },
-  titleLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-  },
-  titleIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: Radius.md,
-    backgroundColor: theme.colors.brand.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  countBadge: {
-    alignItems: 'flex-end',
   },
   searchContainer: {
     paddingHorizontal: Spacing.lg,
@@ -187,22 +161,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   resultsHeader: {
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.base,
   },
   emptyState: {
     alignItems: 'center',
-    paddingTop: Spacing.xxxl,
+    paddingTop: Spacing.xl,
     paddingHorizontal: Spacing.lg,
   },
-  emptyIcon: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
+  emptyMascot: {
+    width: 100,
+    height: 100,
     marginBottom: Spacing.lg,
-    borderWidth: 2,
-    borderColor: theme.colors.brand.primary,
   },
   emptyTitle: {
     marginBottom: Spacing.xs,

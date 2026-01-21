@@ -1,6 +1,3 @@
-// DESIGN SYSTEM EXCEPTION: Category colors are intentionally hardcoded
-// for visual differentiation. See 22-RESEARCH.md for rationale.
-
 import { ScrollView, Pressable, StyleSheet, View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -11,36 +8,7 @@ import Animated, {
 import { theme, Spacing, Radius } from '@/constants/theme';
 import { Text } from '@/components/primitives';
 import { TriadCategory } from '@/types';
-
-// Category colors - soft, medical-inspired palette
-// EXCEPTION: These 10 unique colors serve UX purpose (visual differentiation)
-// and are localized to this one component.
-const CATEGORY_COLORS: Record<TriadCategory, { bg: string; text: string; activeBg: string }> = {
-  cardiology: { bg: '#FEE2E2', text: '#DC2626', activeBg: '#DC2626' },
-  neurology: { bg: '#E0E7FF', text: '#4F46E5', activeBg: '#4F46E5' },
-  endocrine: { bg: '#FEF3C7', text: '#D97706', activeBg: '#D97706' },
-  pulmonary: { bg: '#DBEAFE', text: '#2563EB', activeBg: '#2563EB' },
-  gastroenterology: { bg: '#D1FAE5', text: '#059669', activeBg: '#059669' },
-  infectious: { bg: '#FCE7F3', text: '#DB2777', activeBg: '#DB2777' },
-  hematology: { bg: '#FEE2E2', text: '#B91C1C', activeBg: '#B91C1C' },
-  rheumatology: { bg: '#F3E8FF', text: '#7C3AED', activeBg: '#7C3AED' },
-  renal: { bg: '#CFFAFE', text: '#0891B2', activeBg: '#0891B2' },
-  obstetrics: { bg: '#FDF2F8', text: '#BE185D', activeBg: '#BE185D' },
-};
-
-// Display names for categories
-const CATEGORY_LABELS: Record<TriadCategory, string> = {
-  cardiology: 'Cardiology',
-  neurology: 'Neurology',
-  endocrine: 'Endocrine',
-  pulmonary: 'Pulmonary',
-  gastroenterology: 'GI',
-  infectious: 'Infectious',
-  hematology: 'Hematology',
-  rheumatology: 'Rheumatology',
-  renal: 'Renal',
-  obstetrics: 'OB/GYN',
-};
+import { CATEGORY_COLORS, CATEGORY_LABELS } from '@/constants/tokens/category-colors';
 
 interface FilterChipsProps {
   categories: TriadCategory[];
@@ -65,55 +33,60 @@ function FilterChip({
   index: number;
 }) {
   const scale = useSharedValue(1);
-  const borderBottom = useSharedValue(isSelected ? 3 : 2);
+  const translateY = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    borderBottomWidth: borderBottom.value,
+    transform: [
+      { scale: scale.value },
+      { translateY: translateY.value },
+    ],
   }));
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.96, { damping: 20, stiffness: 400 });
-    borderBottom.value = withSpring(1, { damping: 20, stiffness: 400 });
+    scale.value = withSpring(0.95, { damping: 20, stiffness: 400 });
+    translateY.value = withSpring(1, { damping: 20, stiffness: 400 });
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 20, stiffness: 400 });
-    borderBottom.value = withSpring(isSelected ? 3 : 2, { damping: 20, stiffness: 400 });
+    scale.value = withSpring(1, { damping: 15, stiffness: 350 });
+    translateY.value = withSpring(0, { damping: 15, stiffness: 350 });
   };
 
   const isAll = category === 'all';
   const categoryColor = isAll ? null : CATEGORY_COLORS[category];
 
+  // Colors based on selection state
   const backgroundColor = isSelected
     ? isAll
       ? theme.colors.brand.primary
-      : categoryColor!.activeBg
-    : isAll
-    ? theme.colors.surface.card
-    : categoryColor!.bg;
+      : categoryColor?.activeBg ?? theme.colors.brand.primary
+    : theme.colors.surface.card;
 
   const borderColor = isSelected
     ? isAll
       ? theme.colors.brand.primaryDark
-      : categoryColor!.activeBg
-    : isAll
-    ? theme.colors.border.default
-    : `${categoryColor!.activeBg}40`;
+      : categoryColor?.activeBg ?? theme.colors.brand.primaryDark
+    : theme.colors.border.default;
 
   const borderBottomColor = isSelected
     ? isAll
       ? theme.colors.brand.primaryDarker
-      : categoryColor!.text
-    : isAll
-    ? theme.colors.border.strong
-    : categoryColor!.activeBg;
+      : categoryColor?.text ?? theme.colors.brand.primaryDarker
+    : theme.colors.border.strong;
 
   const textColor = isSelected
     ? theme.colors.text.inverse
     : isAll
-    ? theme.colors.text.primary
-    : categoryColor!.text;
+      ? theme.colors.text.secondary
+      : categoryColor?.text ?? theme.colors.text.secondary;
+
+  const countBgColor = isSelected
+    ? 'rgba(255, 255, 255, 0.2)'
+    : isAll
+      ? theme.colors.surface.secondary
+      : categoryColor?.bg ?? theme.colors.surface.secondary;
+
+  const label = isAll ? 'All categories' : CATEGORY_LABELS[category];
 
   return (
     <AnimatedPressable
@@ -129,17 +102,23 @@ function FilterChip({
         },
         animatedStyle,
       ]}
+      accessibilityRole="button"
+      accessibilityLabel={`${label}, ${count} ${count === 1 ? 'triad' : 'triads'}`}
+      accessibilityState={{ selected: isSelected }}
     >
-      <Text variant="footnote" color={textColor} weight="semibold">
+      <Text
+        variant="footnote"
+        color={textColor}
+        weight={isSelected ? 'semibold' : 'medium'}
+      >
         {isAll ? 'All' : CATEGORY_LABELS[category]}
       </Text>
-      <View style={[
-        styles.countBadge,
-        {
-          backgroundColor: isSelected ? 'rgba(255,255,255,0.3)' : `${isAll ? theme.colors.text.secondary : categoryColor!.activeBg}18`,
-        }
-      ]}>
-        <Text variant="tiny" color={textColor} weight="bold">
+      <View style={[styles.countBadge, { backgroundColor: countBgColor }]}>
+        <Text
+          variant="tiny"
+          color={textColor}
+          weight="semibold"
+        >
           {count}
         </Text>
       </View>
@@ -197,16 +176,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
+    // Duolingo-style 3D border treatment
+    borderWidth: 2,
+    borderBottomWidth: 3,
     borderRadius: Radius.full,
     gap: Spacing.xs,
-    borderWidth: 1.5,
-    borderBottomWidth: 2,
   },
   countBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: Radius.full,
-    minWidth: 22,
+    minWidth: 20,
+    height: 18,
+    borderRadius: 9,
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 5,
   },
 });

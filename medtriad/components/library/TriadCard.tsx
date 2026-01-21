@@ -1,56 +1,61 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import Animated, {
+  FadeInUp,
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  FadeInUp,
 } from 'react-native-reanimated';
 import { theme, Spacing, Radius } from '@/constants/theme';
 import { Text } from '@/components/primitives';
 import { Triad } from '@/types';
-import { CATEGORY_COLORS, CATEGORY_LABELS } from './FilterChips';
+import { CATEGORY_COLORS, CATEGORY_LABELS } from '@/constants/tokens/category-colors';
 
 interface TriadCardProps {
   triad: Triad;
   index: number;
   searchQuery?: string;
+  onPress?: () => void;
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-function highlightText(text: string, query: string, color: string) {
-  if (!query.trim()) return <Text variant="caption" color={color} weight="medium">{text}</Text>;
-
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
-  return (
-    <>
-      {parts.map((part, i) =>
-        part.toLowerCase() === query.toLowerCase() ? (
-          <Text key={i} variant="caption" color={color} weight="medium" style={styles.highlight}>
-            {part}
-          </Text>
-        ) : (
-          <Text key={i} variant="caption" color={color} weight="medium">{part}</Text>
-        )
-      )}
-    </>
-  );
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function highlightCondition(text: string, query: string) {
-  if (!query.trim()) return <Text variant="body" color="primary" weight="bold">{text}</Text>;
+function HighlightedText({
+  text,
+  query,
+  variant,
+  color,
+  weight,
+}: {
+  text: string;
+  query: string;
+  variant: 'body' | 'caption';
+  color: 'primary' | 'secondary';
+  weight?: 'semibold' | 'medium';
+}) {
+  const parts = useMemo(() => {
+    if (!query.trim()) return null;
+    const escaped = escapeRegex(query);
+    return text.split(new RegExp(`(${escaped})`, 'gi'));
+  }, [text, query]);
 
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  if (!parts) {
+    return <Text variant={variant} color={color} weight={weight}>{text}</Text>;
+  }
+
   return (
     <>
       {parts.map((part, i) =>
         part.toLowerCase() === query.toLowerCase() ? (
-          <Text key={i} variant="body" color="primary" weight="bold" style={styles.highlight}>
+          <Text key={`${text}-${i}`} variant={variant} color={color} weight={weight} style={styles.highlight}>
             {part}
           </Text>
         ) : (
-          <Text key={i} variant="body" color="primary" weight="bold">{part}</Text>
+          <Text key={`${text}-${i}`} variant={variant} color={color} weight={weight}>{part}</Text>
         )
       )}
     </>
@@ -61,110 +66,126 @@ export const TriadCard = React.memo(function TriadCard({
   triad,
   index,
   searchQuery = '',
+  onPress,
 }: TriadCardProps) {
   const categoryColor = CATEGORY_COLORS[triad.category];
+  const categoryLabel = CATEGORY_LABELS[triad.category];
+  const findingsText = triad.findings.join(', ');
+
+  // Press animation
   const scale = useSharedValue(1);
-  const borderBottom = useSharedValue(4);
+  const translateY = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    borderBottomWidth: borderBottom.value,
+    transform: [
+      { scale: scale.value },
+      { translateY: translateY.value },
+    ],
   }));
 
   const handlePressIn = () => {
     scale.value = withSpring(0.98, { damping: 20, stiffness: 400 });
-    borderBottom.value = withSpring(2, { damping: 20, stiffness: 400 });
+    translateY.value = withSpring(2, { damping: 20, stiffness: 400 });
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 20, stiffness: 400 });
-    borderBottom.value = withSpring(4, { damping: 20, stiffness: 400 });
+    scale.value = withSpring(1, { damping: 15, stiffness: 350 });
+    translateY.value = withSpring(0, { damping: 15, stiffness: 350 });
   };
 
-  // Subtle fade-in with minimal stagger
   return (
-    <Animated.View
-      entering={FadeInUp.delay(Math.min(index * 25, 200))
-        .duration(250)
-        .damping(20)
-        .stiffness(200)}
+    <AnimatedPressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[animatedStyle]}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`${triad.condition}, ${categoryLabel}. Findings: ${findingsText}`}
     >
-      <AnimatedPressable
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        style={[
-          styles.card,
-          {
-            borderColor: categoryColor.bg,
-            borderBottomColor: categoryColor.activeBg,
-          },
-          animatedStyle,
-        ]}
+      <Animated.View
+        entering={FadeInUp.delay(Math.min(index * 25, 200))
+          .duration(250)
+          .damping(18)
+          .stiffness(180)}
       >
-        {/* Top accent bar with category color */}
-        <View style={[styles.accentBar, { backgroundColor: categoryColor.activeBg }]} />
+        <View style={[styles.card, { borderBottomColor: theme.colors.border.strong }]}>
+          {/* Left accent strip - wider for better visual presence */}
+          <View style={[styles.accentStrip, { backgroundColor: categoryColor.activeBg }]} />
 
-        <View style={styles.content}>
-          {/* Header row with condition and category badge */}
-          <View style={styles.header}>
-            <View style={styles.conditionContainer}>
-              {highlightCondition(triad.condition, searchQuery)}
-            </View>
-            <View style={[
-              styles.categoryBadge,
-              {
-                backgroundColor: categoryColor.bg,
-                borderColor: categoryColor.activeBg,
-              }
-            ]}>
-              <Text variant="tiny" color={categoryColor.text} weight="bold">
-                {CATEGORY_LABELS[triad.category]}
-              </Text>
-            </View>
-          </View>
-
-          {/* Findings - displayed as a visual triad with numbers */}
-          <View style={styles.findingsContainer}>
-            {triad.findings.map((finding, i) => (
-              <View
-                key={i}
-                style={[
-                  styles.findingPill,
-                  {
-                    backgroundColor: categoryColor.bg,
-                    borderColor: `${categoryColor.activeBg}20`,
-                  },
-                ]}
-              >
-                <View style={[styles.findingNumber, { backgroundColor: categoryColor.activeBg }]}>
-                  <Text variant="tiny" color={theme.colors.text.inverse} weight="bold">
-                    {i + 1}
-                  </Text>
-                </View>
-                <View style={styles.findingTextContainer}>
-                  {highlightText(finding, searchQuery, categoryColor.text)}
-                </View>
+          <View style={styles.content}>
+            {/* Header row with condition and category badge */}
+            <View style={styles.header}>
+              <View style={styles.conditionContainer}>
+                <HighlightedText
+                  text={triad.condition}
+                  query={searchQuery}
+                  variant="body"
+                  color="primary"
+                  weight="semibold"
+                />
               </View>
-            ))}
+              <View style={[
+                styles.categoryBadge,
+                {
+                  backgroundColor: categoryColor.bg,
+                  borderColor: categoryColor.activeBg,
+                }
+              ]}>
+                <Text variant="tiny" color={categoryColor.text} weight="semibold">
+                  {categoryLabel}
+                </Text>
+              </View>
+            </View>
+
+            {/* Findings - refined numbered list with circular badges */}
+            <View style={styles.findingsContainer}>
+              {triad.findings.map((finding, i) => (
+                <View key={`${triad.id}-finding-${i}`} style={styles.findingRow}>
+                  <View style={[styles.numberBadge, { backgroundColor: categoryColor.bg }]}>
+                    <Text
+                      variant="tiny"
+                      color={categoryColor.activeBg}
+                      weight="semibold"
+                      style={styles.numberText}
+                    >
+                      {i + 1}
+                    </Text>
+                  </View>
+                  <View style={styles.findingTextContainer}>
+                    <HighlightedText
+                      text={finding}
+                      query={searchQuery}
+                      variant="caption"
+                      color="secondary"
+                      weight="medium"
+                    />
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
         </View>
-      </AnimatedPressable>
-    </Animated.View>
+      </Animated.View>
+    </AnimatedPressable>
   );
 });
 
 const styles = StyleSheet.create({
   card: {
     overflow: 'hidden',
+    flexDirection: 'row',
     backgroundColor: theme.colors.surface.card,
+    // Duolingo-style 3D border treatment
     borderWidth: 2,
+    borderColor: theme.colors.border.default,
     borderBottomWidth: 4,
     borderRadius: Radius.lg,
+    // Subtle shadow for depth
     ...theme.shadows.sm,
   },
-  accentBar: {
-    height: 4,
-    width: '100%',
+  accentStrip: {
+    width: 6, // Wider for better visual presence
   },
   content: {
     flex: 1,
@@ -179,40 +200,45 @@ const styles = StyleSheet.create({
   },
   conditionContainer: {
     flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   highlight: {
     backgroundColor: theme.colors.warning.light,
-    borderRadius: 2,
+    borderRadius: 3,
+    paddingHorizontal: 2,
   },
   categoryBadge: {
     paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: Radius.full,
-    borderWidth: 1.5,
+    paddingVertical: 4,
+    borderRadius: Radius.sm,
+    borderWidth: 1,
     flexShrink: 0,
   },
   findingsContainer: {
     gap: Spacing.sm,
   },
-  findingPill: {
+  findingRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderRadius: Radius.md,
-    gap: Spacing.md,
-    borderWidth: 1,
+    alignItems: 'flex-start',
+    gap: Spacing.sm,
   },
-  findingNumber: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+  numberBadge: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
+  },
+  numberText: {
+    lineHeight: 20,
+    textAlign: 'center',
   },
   findingTextContainer: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingTop: 1, // Align text with number badge center
   },
 });
