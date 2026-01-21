@@ -24,12 +24,13 @@ export const palette = {
     200: '#FFD1DD',  // Slightly stronger
   },
 
-  // Yellow/gold family (achievements, XP)
+  // Teal XP badge family (achievements, XP)
   yellow: {
-    100: '#FFF8E1',  // Light gold background
-    500: '#F5B800',  // Gold accent
-    600: '#D4A000',  // Dark gold
-    700: '#996600',  // Gold text
+    50: '#EAFBFA',   // Ultra light mint for badge background
+    100: '#CDF0F0',  // Light teal background
+    500: '#2E7D7A',  // Teal main (darker for border/icon)
+    600: '#256663',  // Teal dark
+    700: '#2E7D7A',  // Teal text
   },
 
   // Neutral grays
@@ -38,34 +39,36 @@ export const palette = {
     50: '#F7F7F7',   // Background secondary
     200: '#E5E5E5',  // Border default
     300: '#CDCDCD',  // Border strong
+    400: '#A8A8A8',  // Border strongest (3D depth on elevated cards)
     500: '#777777',  // Text secondary
     600: '#3C3C3C',  // Text primary
     700: '#AFAFAF',  // Text muted
   },
 
-  // Success/correct answer family
+  // Success/correct answer family - muted sage green
   success: {
-    100: '#E5F9DB',  // Light background
-    500: '#58CC02',  // Main success
-    600: '#46A302',  // Dark success
-    700: '#3D8B00',  // Success text
-    800: '#16A34A',  // Darker green for 3D depth borders
+    100: '#E8F3EC',  // Soft sage light background
+    500: '#4D9168',  // Muted sage main
+    600: '#3E7854',  // Dark sage
+    700: '#356A49',  // Sage text
+    800: '#2D5A3E',  // Darker sage for 3D depth borders
   },
 
-  // Error/wrong answer family
+  // Error/wrong answer family - muted dusty coral
   error: {
-    100: '#FFE5E5',  // Light background
-    500: '#FF4B4B',  // Main error
-    600: '#EA2B2B',  // Dark error
-    700: '#DC2626',  // Darker red for 3D depth borders
+    100: '#F9EBEB',  // Soft dusty rose light background
+    500: '#C25B5B',  // Muted dusty coral main
+    600: '#A84D4D',  // Dark coral
+    700: '#944343',  // Darker coral for 3D depth borders
   },
 
-  // Streak/fire badge family
+  // Streak/fire badge family - soft pink with plum accent
   streak: {
-    100: '#FFE8E8',  // Light background
-    500: '#FF6B6B',  // Main streak
-    600: '#E85555',  // Dark streak
-    700: '#C44545',  // Streak text
+    50: '#FAE3F0',   // Ultra light pink for badge background
+    100: '#FCCAE6',  // Light pink background
+    500: '#8B3A62',  // Plum/wine main (darker for border/icon)
+    600: '#6B2D4C',  // Plum dark
+    700: '#8B3A62',  // Plum text
   },
 
   // Teal family (info/category) - muted, sophisticated
@@ -88,7 +91,7 @@ export const palette = {
   timer: {
     normal: '#8B2252',   // Wine primary
     warning: '#FF9500',  // Orange warning
-    danger: '#FF4B4B',   // Error red
+    danger: '#C25B5B',   // Muted dusty coral (matches error)
   },
 } as const;
 

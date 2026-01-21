@@ -87,21 +87,24 @@ export const theme = {
     border: {
       default: palette.neutral[200],     // Light border
       strong: palette.neutral[300],      // Strong border (3D depth)
+      strongest: palette.neutral[400],   // Strongest border (elevated modal 3D depth)
     },
 
-    // Achievement/gold colors
+    // Achievement/gold colors (teal for XP badges)
     gold: {
       main: palette.yellow[500],
       dark: palette.yellow[600],
       light: palette.yellow[100],
+      lighter: palette.yellow[50],  // #EAFBFA - softest badge bg
       text: palette.yellow[700],
     },
 
-    // Streak/fire colors
+    // Streak/fire colors (plum/pink for streak badges)
     streak: {
       main: palette.streak[500],
       dark: palette.streak[600],
       light: palette.streak[100],
+      lighter: palette.streak[50],  // #FAE3F0 - softest badge bg
       text: palette.streak[700],
     },
 
@@ -344,9 +347,9 @@ export const FrameCardStyle = {
 
 // Badge styling - pill with 3D border-bottom
 export const BadgeStyle = {
-  borderRadius: theme.radius.md,
+  borderRadius: theme.radius.sm,
   borderWidth: 2,
-  borderBottomWidth: 3,
+  borderBottomWidth: 4,
 } as const;
 
 export const FrameCardInnerStyle = {

@@ -1,4 +1,4 @@
-import { StyleSheet, View, Pressable, useWindowDimensions } from 'react-native';
+import { StyleSheet, View, Pressable, useWindowDimensions, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   FadeIn,
@@ -151,12 +151,24 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
     borderRadius: Radius.xl,
     overflow: 'hidden',
-    // Elegant shadow
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
-    elevation: 12,
+    // Enhanced 3D border effect - clear visual separation on white backgrounds
+    borderWidth: 2.5,
+    borderColor: theme.colors.border.strong,
+    borderBottomWidth: 5,
+    borderBottomColor: theme.colors.border.strongest, // Darker bottom edge for 3D depth
+    // Enhanced shadow for modal cards requiring more lift
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 6px 20px rgba(0, 0, 0, 0.15)',
+      },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.15,
+        shadowRadius: 16,
+        elevation: 12,
+      },
+    }),
     backgroundColor: theme.colors.surface.primary,
   },
   cardScaler: {
