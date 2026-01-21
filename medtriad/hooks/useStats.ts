@@ -26,6 +26,7 @@ import {
 export interface StatsData {
   stats: StoredStats | null;
   loading: boolean;
+  error: Error | null;
   isNewUser: boolean;
   accuracy: number;
   // Legacy (question-based) - kept for backward compatibility
@@ -57,19 +58,25 @@ export interface StatsData {
   // Category mastery
   categoryMastery: Record<TriadCategory, CategoryMasteryData>;
   getCategoryPercent: (category: TriadCategory) => number;
+  // User personalization
+  userName: string | null;
 }
 
 export function useStats(): StatsData {
   const [stats, setStats] = useState<StoredStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const loaded = await loadStats();
       setStats(loaded);
-    } catch (error) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Failed to load stats');
       console.error('Failed to load stats:', error);
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -119,6 +126,7 @@ export function useStats(): StatsData {
   const levelTitle = getLevelTitle(masteryLevel);
   const dailyStreak = stats?.dailyStreak ?? 0;
   const highScore = stats?.highScore ?? 0;
+  const userName = stats?.userName ?? null;
 
   // Derived values - Points-based tier system
   const totalPoints = stats?.totalPoints ?? 0;
@@ -142,6 +150,7 @@ export function useStats(): StatsData {
   return {
     stats,
     loading,
+    error,
     isNewUser,
     accuracy,
     // Legacy
@@ -167,5 +176,7 @@ export function useStats(): StatsData {
     // Category mastery
     categoryMastery,
     getCategoryPercent,
+    // User personalization
+    userName,
   };
 }

@@ -5,30 +5,44 @@ import { theme, Spacing, Durations } from '@/constants/theme';
 import { Text, Badge } from '@/components/primitives';
 
 /**
- * Get time-based greeting
+ * Get time-based greeting with optional name personalization
  */
-function getGreeting(): string {
+function getGreeting(userName?: string | null): string {
   const hour = new Date().getHours();
-  if (hour < 12) return 'Good morning';
-  if (hour < 17) return 'Good afternoon';
-  return 'Good evening';
+  let timeGreeting: string;
+
+  if (hour < 12) {
+    timeGreeting = 'Good morning';
+  } else if (hour < 17) {
+    timeGreeting = 'Good afternoon';
+  } else {
+    timeGreeting = 'Good evening';
+  }
+
+  // Add name if available
+  if (userName && userName.trim()) {
+    return `${timeGreeting}, ${userName}`;
+  }
+
+  return timeGreeting;
 }
 
 type HomeHeaderProps = {
   delay?: number;
   totalPoints?: number;
   dailyStreak?: number;
+  userName?: string | null;
 };
 
-export function HomeHeader({ delay = 0, totalPoints = 0, dailyStreak = 0 }: HomeHeaderProps) {
-  const greeting = getGreeting();
+export function HomeHeader({ delay = 0, totalPoints = 0, dailyStreak = 0, userName }: HomeHeaderProps) {
+  const greeting = getGreeting(userName);
 
   return (
     <Animated.View
       entering={FadeInUp.delay(delay).duration(Durations.normal).springify()}
       style={styles.container}
     >
-      <Text variant="titleLarge" color="primary">
+      <Text variant="titleLarge" color="primary" numberOfLines={1} style={styles.greeting}>
         {greeting}
       </Text>
 
@@ -63,8 +77,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing.sm,
   },
+  greeting: {
+    flex: 1,
+    marginRight: Spacing.sm,
+  },
   badges: {
     flexDirection: 'row',
     gap: Spacing.sm,
+    flexShrink: 0,
   },
 });

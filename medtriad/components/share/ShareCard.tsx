@@ -1,7 +1,6 @@
 import { StyleSheet, View, Image } from 'react-native';
 import { Text } from '@/components/primitives';
 import { theme, Spacing, Radius } from '@/constants/theme';
-import { QUESTION_COUNT } from '@/types/quiz-state';
 
 const triShare = require('@/assets/images/tri-share.png');
 
@@ -10,6 +9,7 @@ type ShareCardProps = {
   correctCount?: number;
   totalQuestions?: number;
   variant?: 'share' | 'challenge' | 'highscore';
+  userName?: string | null;
 };
 
 /**
@@ -25,25 +25,45 @@ function getHeadline(correctCount: number, total: number): string {
 }
 
 /**
- * Get competitive challenge message based on accuracy
+ * Get competitive challenge message based on accuracy and name
  */
-function getChallengeMessage(correctCount: number, total: number): string {
+function getChallengeMessage(correctCount: number, total: number, userName?: string | null): string {
   const accuracy = (correctCount / total) * 100;
-  if (accuracy === 100) return 'Beat my perfect score!';
-  if (accuracy >= 90) return 'Think you can beat this?';
-  if (accuracy >= 70) return 'Challenge accepted?';
-  if (accuracy >= 50) return 'Can you do better?';
-  return "Let's see what you've got!";
+  const namePrefix = userName ? `${userName}'s challenge: ` : '';
+
+  if (accuracy === 100) return `${namePrefix}Beat my perfect score!`;
+  if (accuracy >= 90) return `${namePrefix}Think you can beat this?`;
+  if (accuracy >= 70) return `${namePrefix}Challenge accepted?`;
+  if (accuracy >= 50) return `${namePrefix}Can you do better?`;
+  return `${namePrefix}Let's see what you've got!`;
+}
+
+/**
+ * Get headline for high score sharing - competitive and score-aware
+ */
+function getHighScoreHeadline(score: number, userName?: string | null): string {
+  if (userName) {
+    if (score >= 10000) return `${userName}'s Record`;
+    if (score >= 5000) return `${userName}'s Score`;
+    return `${userName}'s Score`;
+  }
+
+  if (score >= 10000) return 'Triads Master';
+  if (score >= 5000) return 'Triads Expert';
+  if (score >= 1000) return 'Know Your Triads?';
+  return 'Know Your Triads?';
 }
 
 /**
  * Get challenge message for high score sharing
  */
-function getHighScoreMessage(score: number): string {
-  if (score >= 10000) return 'Beat my high score!';
-  if (score >= 5000) return 'Think you can top this?';
-  if (score >= 1000) return 'Can you beat my score?';
-  return 'Challenge me on MedTriads!';
+function getHighScoreMessage(score: number, userName?: string | null): string {
+  const challengeIntro = userName ? '' : '';
+
+  if (score >= 10000) return 'Think you can beat this?';
+  if (score >= 5000) return 'Can you top my score?';
+  if (score >= 1000) return 'Beat my high score!';
+  return 'Can you beat my score?';
 }
 
 /**
@@ -52,38 +72,46 @@ function getHighScoreMessage(score: number): string {
  * Fixed dimensions for consistent image capture.
  * Uses solid background and collapsable={false} for reliable view-shot capture.
  */
-export function ShareCard({ score, correctCount, totalQuestions, variant = 'share' }: ShareCardProps) {
+export function ShareCard({ score, correctCount, totalQuestions, variant = 'share', userName }: ShareCardProps) {
   const isHighScore = variant === 'highscore';
-  const headline = isHighScore ? 'My High Score' : getHeadline(correctCount!, totalQuestions!);
+
+  // Safe headline computation - use defaults for missing values in non-highscore variants
+  const safeCorrectCount = correctCount ?? 0;
+  const safeTotalQuestions = totalQuestions ?? 1; // Avoid division by zero
+
+  const headline = isHighScore
+    ? getHighScoreHeadline(score, userName)
+    : getHeadline(safeCorrectCount, safeTotalQuestions);
+
   const challengeMessage = isHighScore
-    ? getHighScoreMessage(score)
+    ? getHighScoreMessage(score, userName)
     : variant === 'challenge'
-      ? getChallengeMessage(correctCount!, totalQuestions!)
+      ? getChallengeMessage(safeCorrectCount, safeTotalQuestions, userName)
       : null;
 
   return (
     <View style={styles.card} collapsable={false}>
-      {/* Performance Headline */}
-      <Text variant="titleLarge" style={styles.headline}>
+      {/* Headline */}
+      <Text variant="titleLarge" weight="bold" style={styles.headline}>
         {headline}
       </Text>
 
-      {/* Challenge Message (when variant='challenge') */}
-      {challengeMessage && (
-        <Text variant="body" color={theme.colors.brand.primary} style={styles.challengeMessage}>
-          {challengeMessage}
-        </Text>
-      )}
-
-      {/* Mascot Hero */}
+      {/* Mascot */}
       <View style={styles.mascotContainer}>
         <Image source={triShare} style={styles.mascot} resizeMode="contain" />
       </View>
 
-      {/* Score */}
+      {/* Score - the hero */}
       <Text variant="display" color={theme.colors.brand.primary} style={styles.score}>
         {score.toLocaleString()}
       </Text>
+
+      {/* Challenge Message - prominent call to action */}
+      {challengeMessage && (
+        <Text variant="heading" color={theme.colors.brand.primary} weight="semibold" style={styles.challengeMessage}>
+          {challengeMessage}
+        </Text>
+      )}
 
       {/* Correct Count (hidden for highscore variant) */}
       {!isHighScore && correctCount !== undefined && totalQuestions !== undefined && (
@@ -115,29 +143,29 @@ const styles = StyleSheet.create({
   },
   headline: {
     textAlign: 'center',
-    marginBottom: Spacing.xs,
+    marginBottom: Spacing.sm,
+  },
+  mascotContainer: {
+    width: 140,
+    height: 140,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
+  mascot: {
+    width: 140,
+    height: 140,
+  },
+  score: {
+    fontSize: 64,
+    lineHeight: 72,
+    letterSpacing: -2,
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
   },
   challengeMessage: {
     textAlign: 'center',
-    marginBottom: Spacing.base,
-    fontWeight: '600',
-  },
-  mascotContainer: {
-    width: 160,
-    height: 160,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: Spacing.base,
-  },
-  mascot: {
-    width: 160,
-    height: 160,
-  },
-  score: {
-    fontSize: 56,
-    lineHeight: 64,
-    letterSpacing: -2,
-    textAlign: 'center',
+    marginBottom: Spacing.md,
   },
   correctCount: {
     textAlign: 'center',

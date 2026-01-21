@@ -22,6 +22,9 @@ export interface StoredStats {
   pendingTierUp: { tier: number; name: string } | null;
   // Category mastery tracking
   categoryMastery: Record<TriadCategory, CategoryMasteryData>;
+  // User personalization
+  userName: string | null;
+  hasCompletedOnboarding: boolean;
 }
 
 export interface QuizHistoryEntry {
@@ -61,6 +64,8 @@ const DEFAULT_STATS: StoredStats = {
   totalPoints: 0,
   pendingTierUp: null,
   categoryMastery: DEFAULT_CATEGORY_MASTERY,
+  userName: null,
+  hasCompletedOnboarding: false,
 };
 
 /**
@@ -125,16 +130,18 @@ export function calculateStreak(
 }
 
 /**
- * Check if new score is a high score and update if so
- * Returns whether it was a new high score
+ * Check if new score is a high score (without saving)
+ * Returns whether it would be a new high score
+ *
+ * Note: This function only checks - it does NOT save.
+ * The actual highScore update happens in updateAfterQuiz() which
+ * uses Math.max to ensure the highest score is preserved.
+ * This avoids race conditions when checkHighScore and updateAfterQuiz
+ * are called in sequence.
  */
 export async function checkHighScore(newScore: number): Promise<boolean> {
   const stats = await loadStats();
-  if (newScore > stats.highScore) {
-    await saveStats({ ...stats, highScore: newScore });
-    return true;
-  }
-  return false;
+  return newScore > stats.highScore;
 }
 
 /**
@@ -192,6 +199,9 @@ export async function updateAfterQuiz(
       : currentStats.pendingTierUp,
     // Category mastery
     categoryMastery: mergedCategoryMastery,
+    // User personalization (preserve from current)
+    userName: currentStats.userName,
+    hasCompletedOnboarding: currentStats.hasCompletedOnboarding,
   };
 
   await saveStats(updatedStats);
@@ -252,6 +262,38 @@ export async function saveQuizHistory(entry: QuizHistoryEntry): Promise<void> {
   } catch (error) {
     console.error('Failed to save quiz history:', error);
   }
+}
+
+/**
+ * Save user name (from onboarding)
+ */
+export async function saveUserName(name: string): Promise<void> {
+  const stats = await loadStats();
+  await saveStats({ ...stats, userName: name });
+}
+
+/**
+ * Get user name
+ */
+export async function getUserName(): Promise<string | null> {
+  const stats = await loadStats();
+  return stats.userName;
+}
+
+/**
+ * Mark onboarding as completed
+ */
+export async function completeOnboarding(): Promise<void> {
+  const stats = await loadStats();
+  await saveStats({ ...stats, hasCompletedOnboarding: true });
+}
+
+/**
+ * Check if onboarding has been completed
+ */
+export async function hasCompletedOnboarding(): Promise<boolean> {
+  const stats = await loadStats();
+  return stats.hasCompletedOnboarding;
 }
 
 export { DEFAULT_CATEGORY_MASTERY };
