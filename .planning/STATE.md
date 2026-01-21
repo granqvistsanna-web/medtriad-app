@@ -5,16 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-01-21)
 
 **Core value:** Users can quickly test and reinforce their knowledge of medical triads through satisfying, game-like quiz sessions
-**Current focus:** v2.1 milestone complete - Ready for App Store submission or next milestone planning
+**Current focus:** v3.0 Engagement & Polish — Adaptive difficulty, spaced repetition, daily challenges, tech debt cleanup
 
 ## Current Position
 
-Phase: 26 of 26 complete (v2.1 milestone shipped)
-Plan: N/A - milestone complete
-Status: Ready to plan next milestone
-Last activity: 2026-01-21 - v2.1 milestone archived
-
-Progress: [####################] 100% (65/65 plans complete across all milestones)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-21 — Milestone v3.0 started
 
 ## Milestones
 
@@ -23,6 +21,7 @@ Progress: [####################] 100% (65/65 plans complete across all milestone
 | v1.0 MVP | 1-8 | Shipped | 2026-01-18 |
 | v2.0 Polish & Progression | 9-20 | Shipped | 2026-01-20 |
 | v2.1 Design System, Study Mode & App Store | 21-26 | Shipped | 2026-01-21 |
+| v3.0 Engagement & Polish | 27+ | Active | — |
 
 ## Performance Metrics
 
@@ -59,35 +58,5 @@ None.
 
 None.
 
-## App Store Submission
-
-**User action required for submission:**
-
-1. **Customize placeholders:**
-   - Bundle ID: Replace `com.YOURNAME.medtriad` in app.json
-   - Privacy URL: Host policy and update URL in settings.tsx
-   - ascAppId: Update in eas.json after creating App Store Connect app
-
-2. **Create App Store Connect listing**
-
-3. **Capture screenshots** (see .planning/phases/26-app-store-preparation/SCREENSHOT_PLAN.md)
-
-4. **Complete manual verification** (see .planning/phases/26-app-store-preparation/RELEASE_CHECKLIST.md)
-
-5. **Submit:**
-   ```bash
-   eas build --platform ios --profile production --auto-submit
-   ```
-
-## Next Steps
-
-**Option A: Submit to App Store**
-- Complete user actions above
-- Submit via EAS
-
-**Option B: Start Next Milestone**
-- Run `/gsd:new-milestone` to define v3.0 scope
-- Potential features: adaptive difficulty, daily challenges, deep link challenges
-
 ---
-*Updated: 2026-01-21 - v2.1 milestone complete*
+*Updated: 2026-01-21 — v3.0 milestone started*

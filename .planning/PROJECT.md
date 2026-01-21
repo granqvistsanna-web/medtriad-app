@@ -72,23 +72,22 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 
 **v3.0 — Engagement & Polish**
 
-*Deferred from v2.1:*
+**Goal:** Make the quiz experience smarter and more engaging with adaptive difficulty, spaced repetition, and daily challenges, while cleaning up accumulated technical debt.
+
+**Target features:**
 - [ ] Adaptive difficulty algorithm based on user performance
-- [ ] Spaced repetition prompts for review
-- [ ] Deep link challenge URLs (requires app live on App Store)
-- [ ] Daily challenges with streak rewards
+- [ ] Spaced repetition prompts for review at optimal intervals
+- [ ] Daily challenges with streak rewards and special UI
+- [ ] Technical debt cleanup (code quality, unused code, consistency)
 
 ### Out of Scope
 
 - Deep link challenge URLs — app not live yet, defer until post-launch
 - Challenge tracking/persistence — simple share card is enough for v2.1
-- Adaptive difficulty algorithm — consider for v3.0
-- Spaced repetition system — consider for v3.0
-- Reverse quiz mode (condition → findings) — consider for v3.0
+- Reverse quiz mode (condition → findings) — consider for future
 - User accounts and cloud sync — no backend
 - Leaderboards — no backend
 - Achievements / badges — level system covers progression adequately
-- Daily challenges — consider for v3.0 Engagement
 - iPad / Mac support — iOS iPhone only
 - Android — iOS first, Android later
 - Monetization (ads, premium) — defer post-launch
@@ -153,4 +152,4 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 | __DEV__ dev tools | Test tier-ups without playing 200 games | ✓ Good — faster testing |
 
 ---
-*Last updated: 2026-01-21 after v2.1 milestone complete*
+*Last updated: 2026-01-21 after v3.0 milestone started*
