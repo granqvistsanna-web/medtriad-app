@@ -51,37 +51,32 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 - ✓ FlashList virtualization for Library — v2.0
 - ✓ Image preloading for instant mascot display — v2.0
 
+**v2.1 — Design System, Study Mode & App Store**
+- ✓ Tokenized design system (colors, typography, spacing, radius, shadows, motion) — v2.1
+- ✓ 7 UI primitives (Icon, Text, Surface, Button, Badge, Tag, Card) — v2.1
+- ✓ Solar Icons via wrapper component with standardized sizes (16, 20, 24) — v2.1
+- ✓ All screens migrated to design tokens exclusively — v2.1
+- ✓ DESIGN_SYSTEM.md documentation (741 lines) — v2.1
+- ✓ Study Mode with untimed quiz flow and calm blue theme — v2.1
+- ✓ Explanations shown after each answer in Study Mode — v2.1
+- ✓ "Mark as tricky" feature with list on Progress screen — v2.1
+- ✓ Category mastery tracking per medical category — v2.1
+- ✓ Category mastery cards displayed on Home screen — v2.1
+- ✓ Challenge feature with competitive share cards — v2.1
+- ✓ App Store configuration (app.json, eas.json) — v2.1
+- ✓ Privacy policy and App Privacy questionnaire documented — v2.1
+- ✓ App Store metadata (description, keywords, category, age rating) — v2.1
+- ✓ Screenshot plan and release checklist created — v2.1
+
 ### Active
 
-**v2.1 — Design System, Modes & App Store**
+**v3.0 — Engagement & Polish**
 
-*Design System Consolidation:*
-- [ ] Tokenized design system (colors, typography, spacing, radius, shadows, motion)
-- [ ] Core UI primitives (Text, Surface, Button, Icon, Badge, Tag, Card, Input, Toast, Modal)
-- [ ] Quiz-specific components matching Figma specs
-- [ ] Solar Icons via single wrapper component with standardized sizes
-- [ ] All component states implemented (default, pressed, disabled, loading, error, success)
-- [ ] Category mastery tracking and display on Home screen
-
-*Study Mode:*
-- [ ] Untimed quiz flow with calm, instructional UI
-- [ ] Immediate feedback with explanations shown after answer
-- [ ] Optional "mark as tricky" for local review lists
-- [ ] Per-topic session summaries stored locally
-- [ ] Clear visual distinction from timed mode
-
-*Challenge Feature:*
-- [ ] Share challenge via styled card with score and competitive messaging
-- [ ] Simple share sheet integration (no deep links for now — app not live yet)
-- [ ] Challenge framing on existing share infrastructure
-
-*App Store Preparation:*
-- [ ] Bundle ID, app name, versioning finalized
-- [ ] App icons at all required sizes (including 1024x1024)
-- [ ] Screenshots for required iPhone device sizes
-- [ ] Privacy policy URL and App Privacy questionnaire answers
-- [ ] App Store metadata (description, keywords, category, age rating)
-- [ ] Release checklist (no placeholders, no debug menus, crash-free)
+*Deferred from v2.1:*
+- [ ] Adaptive difficulty algorithm based on user performance
+- [ ] Spaced repetition prompts for review
+- [ ] Deep link challenge URLs (requires app live on App Store)
+- [ ] Daily challenges with streak rewards
 
 ### Out of Scope
 
@@ -101,21 +96,23 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 
 ## Context
 
-**Current State (v2.0 shipped):**
-- 121,172 lines of TypeScript across 20 phases
+**Current State (v2.1 shipped):**
+- 124,012 lines of TypeScript across 26 phases (3 milestones)
 - 45 medical triads across 10 categories
-- Tech stack: Expo SDK 54, React Native, expo-router, react-native-reanimated, expo-audio, expo-image, @shopify/flash-list, react-native-view-shot, expo-sharing
-- v1.0: 44 requirements, v2.0: 34 additional requirements (all satisfied)
-- 6-tier progression system with tier-up celebrations
-- FlashList virtualization for smooth scrolling
-- Error boundaries and defensive patterns throughout
+- Tech stack: Expo SDK 54, React Native, expo-router, react-native-reanimated, expo-audio, expo-image, @shopify/flash-list, react-native-view-shot, expo-sharing, @solar-icons/react-native
+- 7 UI primitives with 3-layer design token architecture
+- Study Mode with explanations and tricky question marking
+- Category mastery tracking per medical category
+- Challenge feature with competitive share cards
+- App Store ready: privacy policy, metadata, screenshots documented
+- **Ready for App Store submission** (user action: capture screenshots, host privacy policy, submit)
 
-**v2.1 Design Direction:**
-- Figma as source of truth (partial designs: Home, Library, Progress, Settings)
-- Quiz flow designs to be created during implementation
-- Solar Icons for unified iconography
-- Design tokens for all visual values (no hardcoded colors/spacing)
-- Component states: default, pressed, disabled, loading, error, success
+**Design System:**
+- 3-layer token architecture: raw tokens → semantic theme → components
+- 7 primitives: Icon, Text, Surface, Button, Badge, Tag, Card
+- Solar Icons for unified iconography (21 files use Solar Icons)
+- All screens use design tokens exclusively
+- DESIGN_SYSTEM.md documentation (741 lines)
 
 **Origin:** Boyfriend is a doctor, suggested the app idea. He can validate triad accuracy.
 
@@ -156,4 +153,4 @@ Users can quickly test and reinforce their knowledge of medical triads through s
 | __DEV__ dev tools | Test tier-ups without playing 200 games | ✓ Good — faster testing |
 
 ---
-*Last updated: 2026-01-20 after v2.1 milestone start*
+*Last updated: 2026-01-21 after v2.1 milestone complete*

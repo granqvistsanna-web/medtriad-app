@@ -1,5 +1,33 @@
 # Project Milestones: MedTriads
 
+## v2.1 Design System, Study Mode & App Store (Shipped: 2026-01-21)
+
+**Delivered:** Complete design system with 7 primitives, relaxed Study Mode for learning, category mastery tracking, challenge share feature, and full App Store preparation
+
+**Phases completed:** 21-26 (18 plans total)
+
+**Key accomplishments:**
+
+- Complete design system with 7 primitives (Icon, Text, Surface, Button, Badge, Tag, Card) and 3-layer token architecture
+- All screens migrated to use design tokens exclusively with Solar Icons throughout
+- Study Mode with untimed quiz flow, explanations after each answer, and "mark as tricky" feature
+- Category Mastery tracking per medical category displayed on Home screen
+- Challenge feature with competitive share cards and score-based messaging
+- App Store ready: privacy policy, metadata, screenshots plan, and release checklist
+
+**Stats:**
+
+- 6 phases, 18 plans, ~60 tasks
+- 124,012 lines of TypeScript (+15,443 net from v2.0)
+- 121 files changed, 16,883 insertions
+- 2 days from v2.0 to ship (2026-01-20 → 2026-01-21)
+
+**Git range:** `docs(21)` → `docs(26)`
+
+**What's next:** App Store submission (user action: capture screenshots, host privacy policy, submit via EAS)
+
+---
+
 ## v2.0 Polish & Progression (Shipped: 2026-01-20)
 
 **Delivered:** Polished, progression-driven experience with 6-tier level system, evolving mascot, onboarding, and share functionality
