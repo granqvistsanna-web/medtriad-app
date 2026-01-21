@@ -8,7 +8,7 @@
 
 - v1.0 MVP - Phases 1-8 (shipped 2026-01-18)
 - v2.0 Polish & Progression - Phases 9-20 (shipped 2026-01-20)
-- v2.1 Design System, Study Mode & App Store - Phases 21-26 (in progress)
+- v2.1 Design System, Study Mode & App Store - Phases 21-26 (shipped 2026-01-21)
 
 ## Phases
 
@@ -194,18 +194,18 @@ Plans:
 - AS-10: SCREENSHOT_PLAN.md listing screens and device sizes
 
 **Success Criteria:**
-- [ ] App icon displays correctly at all sizes (including 1024x1024 for App Store)
-- [ ] Screenshots exist for all required iPhone sizes and show key app features
-- [ ] Privacy policy is accessible via URL and PRIVACY_SUMMARY.md documents all data practices
-- [ ] App Store Connect metadata (description, keywords, category, age rating) is finalized
-- [ ] Release checklist confirms: no placeholders, no debug menus, crash-free startup
+- [x] App icon displays correctly at all sizes (including 1024x1024 for App Store)
+- [x] Screenshots exist for all required iPhone sizes and show key app features
+- [x] Privacy policy is accessible via URL and PRIVACY_SUMMARY.md documents all data practices
+- [x] App Store Connect metadata (description, keywords, category, age rating) is finalized
+- [x] Release checklist confirms: no placeholders, no debug menus, crash-free startup
 
 **Plans:** 3 plans
 
 Plans:
-- [ ] 26-01-PLAN.md — Configure app.json and eas.json for App Store submission
-- [ ] 26-02-PLAN.md — Create PRIVACY_SUMMARY.md and APP_STORE_METADATA.md
-- [ ] 26-03-PLAN.md — Add Privacy Policy link, SCREENSHOT_PLAN.md, and RELEASE_CHECKLIST.md
+- [x] 26-01-PLAN.md — Configure app.json and eas.json for App Store submission
+- [x] 26-02-PLAN.md — Create PRIVACY_SUMMARY.md and APP_STORE_METADATA.md
+- [x] 26-03-PLAN.md — Add Privacy Policy link, SCREENSHOT_PLAN.md, and RELEASE_CHECKLIST.md
 
 ---
 
@@ -222,7 +222,7 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 | 23. Study Mode | 3/3 | ✓ Complete | 2026-01-20 |
 | 24. Category Mastery | 2/2 | ✓ Complete | 2026-01-20 |
 | 25. Challenge | 1/1 | ✓ Complete | 2026-01-20 |
-| 26. App Store Preparation | 0/3 | Not started | - |
+| 26. App Store Preparation | 3/3 | ✓ Complete | 2026-01-21 |
 
 ## Coverage
 
@@ -251,3 +251,4 @@ Note: Phases 23 and 24 can run in parallel after Phase 22 completes (both depend
 *Phase 25 planned: 2026-01-20*
 *Phase 25 complete: 2026-01-20*
 *Phase 26 planned: 2026-01-20*
+*Phase 26 complete: 2026-01-21*
