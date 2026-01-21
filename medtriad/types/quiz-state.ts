@@ -58,6 +58,12 @@ export interface QuizState {
 
   /** ID of selected answer option, null if none selected */
   selectedOptionId: string | null;
+
+  /** Timestamp when current question started (for response time) */
+  questionStartedAt: number;
+
+  /** Response time for the last answered question in milliseconds */
+  lastResponseTimeMs: number;
 }
 
 /**

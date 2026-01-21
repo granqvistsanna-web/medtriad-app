@@ -23,6 +23,8 @@ const initialState: QuizState = {
   timeRemaining: DEFAULT_QUESTION_TIME,
   questionTime: DEFAULT_QUESTION_TIME,
   selectedOptionId: null,
+  questionStartedAt: 0,
+  lastResponseTimeMs: 0,
 };
 
 /**
@@ -45,12 +47,16 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         questions: action.questions,
         timeRemaining: questionTime,
         questionTime: questionTime,
+        questionStartedAt: Date.now(),
       };
     }
 
     case 'SELECT_ANSWER': {
       // Only allow selection when playing
       if (state.status !== 'playing') return state;
+
+      // Calculate response time: questionTime - timeRemaining (in seconds), convert to ms
+      const responseTimeMs = (state.questionTime - action.timeRemaining) * 1000;
 
       if (action.isCorrect) {
         // Calculate new streak FIRST, then use it for combo tier
@@ -72,6 +78,7 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
           consecutiveCorrect: newConsecutiveCorrect,
           combo: comboTier,
           lastPointsEarned: points.total,
+          lastResponseTimeMs: responseTimeMs,
         };
       } else {
         // Incorrect answer: no points, reset combo
@@ -82,6 +89,7 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
           consecutiveCorrect: 0,
           combo: 1,
           lastPointsEarned: 0,
+          lastResponseTimeMs: responseTimeMs,
         };
       }
     }
@@ -93,6 +101,7 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
       const newTime = Math.max(0, state.timeRemaining - 1);
       if (newTime <= 0) {
         // Time expired - treat as incorrect answer
+        // Response time = full question time (slowest possible)
         return {
           ...state,
           status: 'answered',
@@ -101,6 +110,7 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
           consecutiveCorrect: 0,
           combo: 1,
           lastPointsEarned: 0,
+          lastResponseTimeMs: state.questionTime * 1000,
         };
       }
       return {
@@ -126,6 +136,7 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         timeRemaining: state.questionTime,
         selectedOptionId: null,
         lastPointsEarned: 0,
+        questionStartedAt: Date.now(),
       };
     }
 
