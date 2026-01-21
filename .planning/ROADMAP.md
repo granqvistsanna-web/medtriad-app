@@ -30,6 +30,10 @@ This milestone makes the quiz experience smarter and more engaging. Users get ad
 
 **Research flags:** None - AsyncStorage patterns already established in codebase
 
+**Plans:** 1 plan
+Plans:
+- [ ] 27-01-PLAN.md — Per-triad performance tracking types, storage service, and quiz integration
+
 ---
 
 ### Phase 28: Adaptive Difficulty
@@ -137,7 +141,7 @@ This milestone makes the quiz experience smarter and more engaging. Users get ad
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 27 | Data Foundation | DATA-01, DATA-02, DATA-03 | Pending |
+| 27 | Data Foundation | DATA-01, DATA-02, DATA-03 | Planned |
 | 28 | Adaptive Difficulty | ADPT-01, ADPT-02, ADPT-03, ADPT-04, ADPT-05 | Pending |
 | 29 | Spaced Repetition | SR-01, SR-02, SR-03, SR-04, SR-05, SR-06, SR-07 | Pending |
 | 30 | Daily Challenges | DAILY-01, DAILY-02, DAILY-03, DAILY-04, DAILY-05, DAILY-06, DAILY-07 | Pending |
