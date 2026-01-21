@@ -9,9 +9,9 @@ Requirements for v3.0 Engagement & Polish milestone. Each maps to roadmap phases
 
 ### Data Foundation
 
-- [ ] **DATA-01**: App tracks per-triad performance (correct/incorrect count, last seen date)
-- [ ] **DATA-02**: App tracks response time for each answer
-- [ ] **DATA-03**: Storage schema supports new fields without breaking existing user data
+- [x] **DATA-01**: App tracks per-triad performance (correct/incorrect count, last seen date)
+- [x] **DATA-02**: App tracks response time for each answer
+- [x] **DATA-03**: Storage schema supports new fields without breaking existing user data
 
 ### Adaptive Difficulty
 
@@ -83,9 +83,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 27 | Pending |
-| DATA-02 | Phase 27 | Pending |
-| DATA-03 | Phase 27 | Pending |
+| DATA-01 | Phase 27 | Complete |
+| DATA-02 | Phase 27 | Complete |
+| DATA-03 | Phase 27 | Complete |
 | ADPT-01 | Phase 28 | Pending |
 | ADPT-02 | Phase 28 | Pending |
 | ADPT-03 | Phase 28 | Pending |
