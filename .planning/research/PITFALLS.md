@@ -1,641 +1,505 @@
-# Pitfalls Research: v2.0 Polish & Progression
+# Pitfalls Research: v3.0 Engagement Features Risks
 
 **Project:** MedTriads
-**Researched:** 2026-01-18
-**Focus:** Onboarding, level systems, mascot evolution, UI polish
-**Confidence:** MEDIUM (WebSearch verified against existing codebase patterns)
-
----
-
-## Onboarding Pitfalls
-
-### Critical: Failing to Persist Onboarding Completion State
-
-**What goes wrong:** Onboarding shows every app launch instead of just once.
-
-**Why it happens:** Developers forget to save completion state to AsyncStorage, or the state is saved but not checked before showing onboarding.
-
-**Warning signs:**
-- Onboarding screen appears in navigation stack without conditional logic
-- No `hasCompletedOnboarding` flag in storage schema
-- Onboarding routes not gated by state check
-
-**Prevention:**
-```typescript
-// In app/_layout.tsx or equivalent
-const hasOnboarded = await AsyncStorage.getItem('@onboarding_complete');
-if (!hasOnboarded) {
-  // Show onboarding
-}
-```
-- Save completion state immediately when user finishes or skips
-- Test by killing and relaunching app after completing onboarding
-- Consider migration for existing users (they should NOT see onboarding)
-
-**Phase impact:** Address in onboarding phase. Existing user migration is essential.
-
-**Sources:** [React Native Onboarding Tutorial](https://blog.openreplay.com/setting-up-onboarding-screens-in-react-native/), [Expo Store Data Docs](https://docs.expo.dev/develop/user-interface/store-data/)
-
----
-
-### Critical: Showing Onboarding to Existing Users After Update
-
-**What goes wrong:** After app update, existing users (who have already been using the app) see onboarding meant for new users.
-
-**Why it happens:** Onboarding flag doesn't exist for users who installed before onboarding was added. The check `!hasOnboarded` returns true because the key was never set.
-
-**Warning signs:**
-- No migration logic for existing users
-- Only checking for onboarding flag, not checking if user has existing data
-
-**Prevention:**
-```typescript
-// Check for existing user data, not just onboarding flag
-const hasOnboarded = await AsyncStorage.getItem('@onboarding_complete');
-const existingStats = await loadStats();
-
-// Skip onboarding if user has played before (existing user)
-if (hasOnboarded || existingStats.gamesPlayed > 0) {
-  // Skip onboarding
-}
-```
-- Use `gamesPlayed > 0` or `totalAnswered > 0` as proxy for "existing user"
-- Mark existing users as onboarded during first launch after update
-
-**Phase impact:** Critical to address when implementing onboarding. Must test with simulated existing user data.
-
----
-
-### Moderate: Onboarding Content Overload
-
-**What goes wrong:** Users skip or abandon onboarding because it's too long or information-dense.
-
-**Why it happens:** Desire to explain everything upfront. Each feature team wants their feature mentioned.
-
-**Warning signs:**
-- More than 3-4 onboarding screens
-- Dense text paragraphs on screens
-- No skip option
-- Time to complete exceeds 60 seconds
-
-**Prevention:**
-- Keep to 2-3 screens maximum (PROJECT.md specifies 2-3)
-- One concept per screen
-- Large visuals, minimal text
-- Always provide skip option
-- Focus on "what makes this app special" not "how to use buttons"
-
-**Phase impact:** Design onboarding content carefully. Test with real users for drop-off.
-
-**Sources:** [NN/g Mobile App Onboarding](https://www.nngroup.com/articles/mobile-app-onboarding/), [Clutch Survey on Onboarding](https://www.smartlook.com/blog/mobile-app-onboarding/)
-
----
-
-### Moderate: Onboarding Explains Features Users Don't Care About Yet
-
-**What goes wrong:** New users don't understand or value feature explanations because they haven't experienced the problem yet.
-
-**Why it happens:** Explaining scoring system before user has taken a quiz means nothing to them.
-
-**Warning signs:**
-- Onboarding explains combo multipliers, speed bonuses
-- Details about level system before user has earned any XP
-- Feature-focused rather than value-focused content
-
-**Prevention:**
-- Focus onboarding on value proposition: "Learn medical triads through quick quizzes"
-- Explain mechanics contextually (tooltip on first combo, not during onboarding)
-- Let users discover features through use
-
-**Phase impact:** Consider progressive disclosure - brief onboarding upfront, contextual hints during play.
-
----
-
-### Minor: Onboarding Visual Style Mismatch
-
-**What goes wrong:** Onboarding screens feel disconnected from rest of app, creating jarring transition.
-
-**Why it happens:** Onboarding designed separately, different designer, or using third-party library with default styling.
-
-**Warning signs:**
-- Different color palette in onboarding
-- Different typography or spacing
-- Onboarding images don't match app's visual language
-
-**Prevention:**
-- Use same theme tokens (Colors, Typography, Spacing from theme.ts)
-- Feature the mascot (Tri) in onboarding screens
-- Test transition from final onboarding screen to home screen
-
-**Phase impact:** Build onboarding with existing design system, not third-party library defaults.
-
----
-
-## Level System Pitfalls
-
-### Critical: Meaningless Progression That Doesn't Motivate
-
-**What goes wrong:** Users level up but don't feel accomplished. Levels feel like arbitrary numbers.
-
-**Why it happens:** Levels unlock nothing, have no visual identity, and thresholds are too easy or too hard.
-
-**Warning signs:**
-- All levels look the same (just a number change)
-- Level names are generic (Level 1, Level 2, etc.)
-- No celebration on level-up
-- Levels unlock nothing tangible
-
-**Prevention:**
-- Each tier has distinct visual identity (PROJECT.md specifies this)
-- Engaging tier names (current: Beginner -> Grandmaster is good)
-- Level-up celebration animation and haptic
-- Mascot evolves with level (planned feature)
-- Consider what each level unlocks (even if just bragging rights)
-
-**Phase impact:** Visual identity per tier is in scope. Ensure celebration moments are memorable.
-
-**Sources:** [Gamification Mistakes](https://www.talentlms.com/blog/common-gamification-mistakes-avoid/), [RevenueCat Gamification Guide](https://www.revenuecat.com/blog/growth/gamification-in-apps-complete-guide/)
-
----
-
-### Critical: Existing User Level Calculation Confusion
-
-**What goes wrong:** After adding level system, existing users don't understand their level or feel cheated.
-
-**Why it happens:** User has 500 questions answered, suddenly shows as "Level 10" without context of what happened.
-
-**Warning signs:**
-- No communication to existing users about new system
-- Level appears without explanation
-- Users don't know what they did to earn current level
-
-**Prevention:**
-- Show level-up celebration on first launch after update (if user earned levels)
-- Consider "You've already mastered X questions! You're a [Level Name]!" message
-- Ensure existing progress is honored, not reset
-
-**Phase impact:** Migration UX is important. Consider showing accumulated progress proudly.
-
----
-
-### Moderate: Progression Curve Too Fast or Too Slow
-
-**What goes wrong:** Users max out too quickly (no more goals) or feel stuck (can't see progress).
-
-**Why it happens:** Poor XP curve design, not accounting for typical usage patterns.
-
-**Warning signs:**
-- Current system: 10 questions per level, max at 100 questions total
-- At 10 questions/quiz, users max out in 10 sessions
-- Power users hit max in one sitting
-
-**Prevention:**
-- Current curve may be too fast for engaged users
-- Consider: Does max level at 100 questions provide enough runway?
-- If adding more tiers, ensure late tiers require meaningful effort
-- Early levels should feel quick (motivation), later levels slower (aspiration)
-
-**Phase impact:** Review current mastery.ts curve. PROJECT.md mentions 5-6 tiers - reconcile with current 11 levels (0-10).
-
-**Sources:** [Game Developer XP Thresholds](https://www.gamedeveloper.com/design/quantitative-design---how-to-define-xp-thresholds-)
-
----
-
-### Moderate: Gamification Disconnected from Core Value
-
-**What goes wrong:** Users focus on earning points/levels rather than learning medical triads.
-
-**Why it happens:** Gamification mechanics become the goal rather than supporting the learning goal.
-
-**Warning signs:**
-- Users gaming the system (answering randomly to farm XP)
-- Level progress not correlated with actual knowledge
-- XP earned regardless of correct/incorrect answers
-
-**Prevention:**
-- Current system counts total answered, not total correct - consider implications
-- Ensure XP rewards align with learning (correct answers should be more valuable)
-- Level should feel earned through mastery, not grinding
-
-**Phase impact:** Evaluate if current "questions answered" metric is the right progression basis. Consider weighting correct answers.
-
----
-
-### Minor: Too Many Competing Systems
-
-**What goes wrong:** Users overwhelmed by points, streaks, levels, badges, leaderboards.
-
-**Why it happens:** Each feature added independently without holistic view.
-
-**Warning signs:**
-- Home screen shows: score, streak, level, accuracy, games played
-- User doesn't know what to focus on
-- Different mechanics compete for attention
-
-**Prevention:**
-- MedTriads currently has: high score, daily streak, mastery level, accuracy
-- This is reasonable if hierarchy is clear
-- Primary metric should be obvious (level? streak?)
-- Secondary metrics support but don't compete
-
-**Phase impact:** When adding level system prominence, ensure visual hierarchy is clear.
-
-**Sources:** [Trio Gamification Role](https://trio.dev/the-role-of-gamification-in-mobile-apps/)
-
----
-
-## Mascot Pitfalls
-
-### Critical: Mascot Evolution Not Tied to Meaningful Milestones
-
-**What goes wrong:** Mascot changes but users don't notice or care.
-
-**Why it happens:** Evolution happens at arbitrary points, without celebration, or changes are too subtle.
-
-**Warning signs:**
-- Mascot changes without user being told
-- Visual differences between evolutions too subtle
-- No celebration moment when mascot evolves
-
-**Prevention:**
-- Tie evolution to level tiers (current: level 7 = Master, level 10 = Supermaster)
-- Make visual differences obvious (not just color tweaks)
-- Celebrate evolution with animation, sound, message
-- Consider showing "Tri evolved!" moment on level-up
-
-**Phase impact:** When expanding mascot tiers, ensure each evolution is visually distinct and celebrated.
-
----
-
-### Moderate: Mascot Overload in Interface
-
-**What goes wrong:** Mascot appears everywhere, feels gimmicky rather than endearing.
-
-**Why it happens:** Desire to maximize mascot "value" by showing it constantly.
-
-**Warning signs:**
-- Mascot on every screen
-- Mascot animations distract from primary task (quiz)
-- Mascot commentary on every action
-
-**Prevention:**
-- Mascot has a "home" (home screen hero card)
-- Appear at key moments: home, results, level-up
-- During quiz: minimal or no mascot (focus on questions)
-- Less is more - preserve specialness
-
-**Phase impact:** Current placement (home screen) is appropriate. Be selective about adding more.
-
-**Sources:** [Broworks Mascots in UI/UX](https://www.broworks.net/blog/mascots-and-memes-in-ui-ux-elements-of-personalized-design)
-
----
-
-### Moderate: Mascot Asset Management Complexity
-
-**What goes wrong:** Multiple mascot variants create asset management headache, inconsistent quality, bloated app size.
-
-**Why it happens:** Each tier needs different mascot, each mood needs variant, combinations explode.
-
-**Warning signs:**
-- Current: 4 mascot images (neutral, happy, master, supermaster)
-- Expanding to 5-6 tiers with moods = many more assets
-- Different image sizes, qualities, formats
-
-**Prevention:**
-- Plan asset matrix before creating art
-- Consistent dimensions and format
-- Consider: Do all tiers need all moods? Or can moods be overlay effects?
-- Audit bundle size impact
-
-**Phase impact:** Plan mascot asset strategy before commissioning art. Matrix of tier x mood.
-
----
-
-### Minor: Mascot Animation Performance
-
-**What goes wrong:** Mascot animations cause frame drops, especially on older devices.
-
-**Why it happens:** Complex animations, running continuously, not optimized.
-
-**Warning signs:**
-- Multiple simultaneous animations (breathe, float, glow in current TriMascot)
-- Animations run even when not visible
-- Using layout-affecting properties
-
-**Prevention:**
-- Current implementation uses transform (good) and opacity (good)
-- Avoid animating layout properties (width, height, margin)
-- Use `animate` prop to disable when not needed (already implemented)
-- Test on older iPhone models
-
-**Phase impact:** Current animation approach is sound. Maintain discipline when adding new animations.
-
-**Sources:** [Reanimated Performance Docs](https://docs.swmansion.com/react-native-reanimated/docs/guides/performance/)
-
----
-
-## UI Polish Pitfalls
-
-### Critical: Inconsistent Component Styling Across Screens
-
-**What goes wrong:** Each screen looks slightly different - different spacing, different card styles, different button variants.
-
-**Why it happens:** Screens built at different times, by different people, or copy-paste with modifications.
-
-**Warning signs:**
-- PROJECT.md lists: Library, Progress, Settings screens need to match Home style
-- Buttons have different padding or colors on different screens
-- Cards have different border radius or shadows
-
-**Prevention:**
-- Audit all screens against design system tokens (Colors, Typography, Spacing, Radius, Shadows)
-- Create shared components (Card, Button already exist)
-- Don't inline styles - use StyleSheet.create with theme tokens
-- Create visual inventory showing every screen side-by-side
-
-**Phase impact:** This is the core of v2.0 polish. Systematic audit before changes.
-
-**Sources:** [UI Consistency Principles](https://www.figma.com/resource-library/consistency-in-design/)
-
----
-
-### Critical: Polish Breaks Functionality
-
-**What goes wrong:** Visual changes inadvertently break interactions, animations, or layout.
-
-**Why it happens:** CSS/style changes have unintended side effects. Not testing after visual changes.
-
-**Warning signs:**
-- Changing padding breaks touch targets
-- Changing container styles breaks child layout
-- Animation timing changes feel wrong
-
-**Prevention:**
-- Test every interaction after visual changes
-- Keep style changes atomic - one component at a time
-- Verify on multiple screen sizes
-- Check both light mode (and dark mode if supported)
-
-**Phase impact:** Test rigorously after each polish phase. Don't batch too many changes.
-
----
-
-### Moderate: Platform-Specific UI Inconsistencies
-
-**What goes wrong:** App looks good on one device, broken on another.
-
-**Why it happens:** Testing only on simulator or single device size. iOS version differences.
-
-**Warning signs:**
-- Only testing on iPhone 15 Pro
-- Not testing on SE (small screen)
-- Not testing on older iOS versions
-
-**Prevention:**
-- Test on small (SE), medium (regular), large (Pro Max) screens
-- Verify safe area handling
-- Check on iOS 16, 17, and 18
-- Current constraint: iOS 16+ iPhone only - but test range within that
-
-**Phase impact:** Build device testing matrix for polish validation.
-
-**Sources:** [React Native Platform Guidelines](https://www.infoq.com/articles/ios-android-react-native-design-patterns/)
-
----
-
-### Moderate: Over-Polishing at Expense of Consistency
-
-**What goes wrong:** Individual screens get unique styling that breaks system coherence.
-
-**Why it happens:** Designer wants each screen to feel "special" or solves local problems without system thinking.
-
-**Warning signs:**
-- Home screen has card style A, Progress screen has card style B
-- Custom one-off components instead of reusable ones
-- Design debt accumulates
-
-**Prevention:**
-- If a screen needs something different, extend the design system, don't bypass it
-- Every style decision should be: "Is this a new token, or should I use existing?"
-- Document exceptions with rationale
-
-**Phase impact:** Polish should unify, not diversify. Add tokens to theme.ts if needed.
-
----
-
-### Minor: Animation Polish Overdone
-
-**What goes wrong:** Too many animations make app feel sluggish or distracting.
-
-**Why it happens:** Animations are fun to add, each seems small, cumulative effect is overwhelming.
-
-**Warning signs:**
-- Everything bounces, fades, slides
-- User has to wait for animations to complete
-- Animations on routine actions (not just celebrations)
-
-**Prevention:**
-- Reserve animation for meaningful moments: success, level-up, combo
-- Keep routine interactions snappy (< 200ms)
-- Test with animations disabled to ensure app is still usable
-- Provide settings toggle for reduced motion (accessibility)
-
-**Phase impact:** Current animations are purposeful. Maintain restraint when adding more.
-
----
-
-## Cross-Cutting Pitfalls
-
-### Critical: State Schema Migration Missing
-
-**What goes wrong:** New features require new stored data, but existing users have old schema.
-
-**Why it happens:** Adding new fields to StoredStats without migration logic.
-
-**Warning signs:**
-- Current StoredStats has defined fields
-- New level system might need new fields
-- Onboarding completion flag is new data
-
-**Prevention:**
-```typescript
-// When loading stats, merge with defaults
-const loaded = await loadStats();
-return { ...DEFAULT_STATS, ...loaded };
-```
-- Current loadStats() already does this (good)
-- Ensure DEFAULT_STATS includes all new fields
-- Test with empty storage, partial storage, full storage
-
-**Phase impact:** Every new feature should update DEFAULT_STATS and test migration.
-
-**Sources:** [Expo AsyncStorage Docs](https://docs.expo.dev/versions/latest/sdk/async-storage/)
-
----
-
-### Critical: Not Testing Update Path
-
-**What goes wrong:** Fresh installs work fine, but updates from v1 to v2 break things.
-
-**Why it happens:** Development always uses fresh installs. Real users have existing data.
-
-**Warning signs:**
-- Never testing with pre-existing AsyncStorage data
-- Not simulating "existing user" scenarios
-- Only testing happy path (new user flow)
-
-**Prevention:**
-- Create test data representing v1 user state
-- Load this data before testing v2 features
-- Test: existing user sees level correctly, doesn't see onboarding, mascot reflects progress
-
-**Phase impact:** Create "migration testing" checklist for each feature.
-
----
-
-### Moderate: Feature Flag Absence
-
-**What goes wrong:** Shipping broken feature to all users with no way to disable.
-
-**Why it happens:** No feature flag infrastructure, shipping all-or-nothing.
-
-**Warning signs:**
-- No way to roll back specific features
-- No way to A/B test
-- Bug in new feature affects all users
-
-**Prevention:**
-- Simple feature flags via AsyncStorage or config
-- Not essential for v2.0 but valuable if issues arise
-- At minimum, have "kill switch" strategy
-
-**Phase impact:** Consider simple feature flag approach if scope expands.
-
----
-
-### Moderate: Scope Creep During Polish
-
-**What goes wrong:** "Polish" becomes "redesign" becomes "rebuild."
-
-**Why it happens:** While polishing, notice other things that could be better. Each leads to another.
-
-**Warning signs:**
-- Polish phase timeline expanding
-- "While we're here, let's also..." conversations
-- Original screens become unrecognizable
-
-**Prevention:**
-- Clear definition of "done" for each screen
-- Polish means: applying existing tokens, fixing inconsistencies
-- Polish does not mean: new layouts, new components, new features
-- Log "nice to have" items for future, don't do now
-
-**Phase impact:** Define polish scope precisely. Resist scope creep.
-
----
-
-### Minor: Bundle Size Growth
-
-**What goes wrong:** New mascot images, animations, and features increase app size significantly.
-
-**Why it happens:** Each asset seems small, but they accumulate.
-
-**Warning signs:**
-- Multiple mascot PNG files at high resolution
-- Unused assets not cleaned up
-- Not optimizing images
-
-**Prevention:**
-- Audit bundle size before and after changes
-- Compress mascot images appropriately
-- Consider vector formats if applicable
-- Remove unused assets
-
-**Phase impact:** Track bundle size as part of acceptance criteria.
-
----
-
-## Reanimated-Specific Pitfalls
-
-### Moderate: Shared Value Access on JS Thread
-
-**What goes wrong:** Animations stutter or app hangs when reading shared values incorrectly.
-
-**Why it happens:** Accessing `.value` property on JS thread instead of in worklet.
-
-**Warning signs:**
-- Using `sharedValue.value` in regular React code
-- Not using `useAnimatedStyle` for style updates
-- Mixing JS thread and UI thread logic
-
-**Prevention:**
-- Current TriMascot implementation is correct (uses useAnimatedStyle)
-- Always access shared values in worklets or animated styles
-- Review any new animation code for this pattern
-
-**Phase impact:** Code review animation implementations for this anti-pattern.
-
-**Sources:** [Reanimated Performance Guide](https://dev.to/erenelagz/react-native-reanimated-3-the-ultimate-guide-to-high-performance-animations-in-2025-4ae4)
-
----
-
-### Moderate: New Architecture Performance Regression
-
-**What goes wrong:** Animations that worked smoothly break after enabling New Architecture.
-
-**Why it happens:** React Native's New Architecture has different performance characteristics with Reanimated.
-
-**Warning signs:**
-- Expo SDK 53+ enables New Architecture by default
-- Animations jitter or drop frames
-- Especially visible in scrolling scenarios
-
-**Prevention:**
-- Current Expo SDK 54 may be affected
-- Test animations thoroughly
-- If issues arise, check Reanimated version compatibility
-- Some issues require React Native 0.81+ fixes
-
-**Phase impact:** Monitor animation performance. Have fallback plan if New Architecture causes issues.
-
-**Sources:** [Reanimated Performance Docs](https://docs.swmansion.com/react-native-reanimated/docs/guides/performance/)
-
----
+**Features:** Adaptive Difficulty, Spaced Repetition, Daily Challenges
+**Researched:** 2026-01-21
+**Overall Confidence:** MEDIUM-HIGH
 
 ## Summary
 
-### Top 5 Pitfalls to Prevent in v2.0
+Adding engagement features to MedTriads carries significant risks due to three interacting constraints: (1) a small content pool of 45 triads, (2) local-only storage that cannot sync or recover, (3) existing systems (streak, tier progression) that new features must not break. The most critical pitfalls involve content exhaustion from spaced repetition in a small pool, difficulty calibration without sufficient data, and data schema changes that corrupt existing user progress. This research identifies 16 specific pitfalls across four categories, with prevention strategies tailored to MedTriads' constraints.
 
-| Priority | Pitfall | Prevention | Phase |
-|----------|---------|------------|-------|
-| 1 | Existing users see onboarding after update | Check for existing data, not just flag | Onboarding |
-| 2 | Inconsistent UI across screens | Systematic audit against theme tokens | Polish |
-| 3 | Level system feels meaningless | Distinct visual identity, celebration moments | Level System |
-| 4 | Mascot evolution not celebrated | Tie to milestones, show evolution moment | Mascot |
-| 5 | Breaking functionality during polish | Atomic changes, test every interaction | All phases |
+---
 
-### Phase-Specific Warnings
+## Adaptive Difficulty Pitfalls
 
-| Phase | Critical Pitfalls to Watch |
-|-------|---------------------------|
-| Onboarding | Existing user migration, completion state persistence |
-| Level System | Meaningful progression, curve balancing |
-| Mascot | Asset management, evolution celebration |
-| UI Polish | Cross-screen consistency, not breaking functionality |
+### AD-1: Premature Difficulty Adjustment
 
-### Testing Checklist for Each Feature
+**What:** System adjusts difficulty after too few data points, creating random-feeling difficulty swings.
 
-- [ ] Fresh install works
-- [ ] Update from v1 works (simulate existing user)
-- [ ] Multiple device sizes tested
-- [ ] Animations perform well
-- [ ] State persists across app restart
-- [ ] Theme tokens used consistently
+**Why This Matters for MedTriads:** With only 45 triads and 10-question rounds, a user might complete 4-5 games before seeing all content. Adjusting difficulty after 1-2 games bases decisions on 10-20 data points spread across potentially 40+ unique triads.
 
-### Key Sources
+**Warning Signs:**
+- Users experience difficulty swings between sessions
+- Same triad appears "easy" one session, "hard" the next
+- Difficulty feels random rather than personalized
 
-- [NN/g Mobile App Onboarding](https://www.nngroup.com/articles/mobile-app-onboarding/) - Onboarding best practices
-- [RevenueCat Gamification Guide](https://www.revenuecat.com/blog/growth/gamification-in-apps-complete-guide/) - Level system design
-- [Reanimated Performance Docs](https://docs.swmansion.com/react-native-reanimated/docs/guides/performance/) - Animation pitfalls
-- [Expo Store Data Docs](https://docs.expo.dev/develop/user-interface/store-data/) - Persistence patterns
-- [Figma Design Consistency](https://www.figma.com/resource-library/consistency-in-design/) - UI polish principles
+**Prevention:**
+- Require minimum 3-5 responses per triad before assigning difficulty rating
+- Use conservative defaults (medium difficulty) until data threshold met
+- Track confidence level per triad: `{ triadId, correctCount, totalSeen, confidence: 'low' | 'medium' | 'high' }`
+
+**Phase Impact:** Phase implementing adaptive difficulty must include cold-start handling and confidence thresholds.
+
+---
+
+### AD-2: Single-Metric Difficulty (Accuracy-Only Trap)
+
+**What:** Using only accuracy (correct/incorrect) to determine difficulty, ignoring response time and consistency.
+
+**Why This Matters for MedTriads:** The existing tier system already reduces timer per tier (15s -> 8s). A triad a user gets correct in 14 seconds is different from one they nail in 2 seconds. Accuracy-only metrics miss this nuance.
+
+**Warning Signs:**
+- Users feel stuck at a plateau
+- High-accuracy users still struggle with time pressure
+- No differentiation between "barely knew it" and "mastered it"
+
+**Prevention:**
+- Combine accuracy + response time into difficulty calculation
+- Define "mastery" as correct + fast (e.g., under 5 seconds)
+- Existing `timeRemaining` in quiz state already captures this data
+
+**Phase Impact:** Design difficulty formula during research; don't retrofit after implementation.
+
+---
+
+### AD-3: Rubber-Banding Frustration
+
+**What:** System constantly adjusts to keep user at ~70-80% success rate, making them feel they never improve.
+
+**Warning Signs:**
+- Users complain they "can't get ahead"
+- Metrics show steady 75% accuracy over months
+- No sense of mastery or progression
+
+**Prevention:**
+- Include "mastered" triads that stay easy (reward for learning)
+- Use asymmetric adjustment: harder to increase difficulty, easier to decrease
+- Show users their improvement over time, not just current performance
+
+**Phase Impact:** Tie to existing tier system so users see progression via tier-ups, not difficulty labels.
+
+---
+
+### AD-4: Difficulty Without Transparency
+
+**What:** Users don't understand why questions feel harder/easier, leading to distrust of the system.
+
+**Warning Signs:**
+- Users feel the app is "cheating" or "broken"
+- App store reviews mention unfair difficulty
+- Users try to game the system by intentionally failing
+
+**Prevention:**
+- Never show raw difficulty ratings to users
+- Frame as "personalized practice" not "adaptive testing"
+- Use the existing tier timer reduction as the primary visible difficulty lever
+
+**Phase Impact:** UX design phase must address transparency without revealing algorithm details.
+
+---
+
+## Spaced Repetition Pitfalls
+
+### SR-1: Content Exhaustion in Small Pool
+
+**What:** With only 45 triads, spaced repetition quickly schedules all items for review at similar times, creating feast-or-famine review sessions.
+
+**Why This Matters for MedTriads:** Traditional SRS like SM-2/FSRS assume hundreds or thousands of items. With 45 items that users see 10 per session, the entire pool cycles through in 4-5 games. After initial learning, all items will have similar "next review" dates.
+
+**Warning Signs:**
+- Daily review counts swing wildly (0 items one day, 30 the next)
+- Users hit "nothing to review" states
+- Algorithm schedules more reviews than the daily challenge can accommodate
+
+**Prevention:**
+- Use "spaced repetition light" approach: priority weighting, not strict scheduling
+- Focus on "weakest triads first" rather than "due items only"
+- Always have fallback to show any content rather than "come back tomorrow"
+- Cap review intervals at 7-14 days max given pool size
+
+**Phase Impact:** Research phase must validate algorithm choice against 45-item constraint. Standard SRS may not be appropriate.
+
+---
+
+### SR-2: Review Interval Hell
+
+**What:** Items stuck at short intervals (1-2 days) that users keep failing, dominating review sessions.
+
+**Warning Signs:**
+- Same 5-10 triads appear every session
+- Users never see certain triads because "problem" triads consume all slots
+- Frustration with repetitive content
+
+**Prevention:**
+- Implement "graduated failure" - after N consecutive failures, show explanation/mnemonic, then retire temporarily
+- Mix "struggling" and "comfortable" items in each session
+- Limit any single triad to max 2 appearances per session
+
+**Phase Impact:** Phase implementing SRS must include failure handling, not just standard interval calculation.
+
+---
+
+### SR-3: Orphaned Spaced Repetition Data
+
+**What:** User's SRS data references triads that no longer exist after a content update.
+
+**Why This Matters for MedTriads:** Content is bundled in the app. If triads.json is updated (adding/removing/changing triads), the SRS data in AsyncStorage may reference stale IDs.
+
+**Warning Signs:**
+- Errors when loading review sessions
+- Missing triads in review queue
+- Data corruption after app updates
+
+**Prevention:**
+- Validate SRS data against current triad set on app load
+- Clean orphaned records silently (don't error)
+- Include triad version/hash in SRS data to detect staleness
+
+**Phase Impact:** Must implement data validation in same phase as SRS feature.
+
+---
+
+### SR-4: Treating Cards in Isolation
+
+**What:** SRS schedules each triad independently, missing that related triads reinforce each other.
+
+**Why This Matters for MedTriads:** Cardiology triads (Beck's, Virchow's, etc.) share conceptual overlap. Reviewing one cardiac triad may reinforce memory of others.
+
+**Warning Signs:**
+- Over-scheduling of related items
+- Users reviewing similar content back-to-back
+- Redundant reviews that don't add learning value
+
+**Prevention:**
+- Consider category-level scheduling: "reviewed cardiology recently"
+- When selecting review items, spread across categories
+- Existing `category` field on triads enables this
+
+**Phase Impact:** Algorithm design must consider category relationships, not pure per-item scheduling.
+
+---
+
+### SR-5: Wrong Initial Ease Assumptions
+
+**What:** All triads start with same ease factor (e.g., 2.5 in SM-2), but some triads are objectively harder than others.
+
+**Why This Matters for MedTriads:** "Beck's Triad" (common, memorable) is fundamentally easier than "Gradenigo Syndrome" (rare, obscure). Starting both at same difficulty wastes early sessions.
+
+**Warning Signs:**
+- Users fail consistently on certain triads
+- Easy triads over-scheduled early on
+- Learning curve feels flat
+
+**Prevention:**
+- Pre-seed difficulty ratings based on content analysis or aggregate user data
+- Track which triads have high failure rates globally (not just per-user)
+- Allow difficulty to adjust faster in first few exposures
+
+**Phase Impact:** Consider whether to ship with pre-calibrated difficulty or cold-start everyone equally.
+
+---
+
+## Daily Challenges Pitfalls
+
+### DC-1: Challenge Impossible for Casual Users
+
+**What:** Daily challenge goals achievable only by power users, alienating 80% of user base.
+
+**Warning Signs:**
+- Low completion rates on daily challenges
+- Users stop attempting after failing repeatedly
+- Only high-tier users complete challenges
+
+**Prevention:**
+- Scale challenge difficulty to user's tier/ability
+- Provide tiered rewards (partial credit for partial completion)
+- "Beginner" challenges that any user can complete with effort
+
+**Phase Impact:** Challenge design phase must segment by user tier.
+
+---
+
+### DC-2: Streak Anxiety (Breaking Existing Streak System)
+
+**What:** Adding daily challenges creates a second streak system that conflicts with existing daily login streak.
+
+**Why This Matters for MedTriads:** MedTriads already has `dailyStreak` tracking consecutive play days. Adding a separate "challenge streak" creates cognitive overhead and potential anxiety.
+
+**Warning Signs:**
+- Users confused about which streak matters
+- Anxiety about maintaining multiple streaks
+- One streak cannibalizes engagement from the other
+
+**Prevention:**
+- Integrate daily challenges INTO existing streak (complete = play today)
+- Single "streak" concept, multiple ways to maintain it
+- Challenge completion as bonus, not requirement
+
+**Phase Impact:** Must audit existing streak logic before adding challenges; plan integration not addition.
+
+---
+
+### DC-3: Post-Event Engagement Cliff
+
+**What:** Engagement crashes after daily challenge ends, creating boom-bust patterns.
+
+**Warning Signs:**
+- Usage spikes during challenge, drops sharply after
+- Users only engage when challenge is active
+- No sustained engagement between challenges
+
+**Prevention:**
+- Immediate visibility of next day's challenge
+- Carry-over benefits (streak bonuses, banked rewards)
+- Challenge completion feeds into progression (points toward tier)
+
+**Phase Impact:** Plan the "day after" experience in same phase as challenge design.
+
+---
+
+### DC-4: Notification Fatigue
+
+**What:** Push notifications for daily challenges become annoying, leading to notification disable or app deletion.
+
+**Warning Signs:**
+- High notification opt-out rates
+- Decreased engagement after notification campaign
+- App uninstalls correlated with notification frequency
+
+**Prevention:**
+- Start with NO push notifications for challenges
+- Let challenge visibility in-app drive engagement first
+- If adding notifications: max 1/day, respect quiet hours, allow granular control
+
+**Phase Impact:** If implementing notifications, requires separate design phase with A/B testing.
+
+---
+
+## Integration Pitfalls (Adding to Existing System)
+
+### INT-1: AsyncStorage Schema Migration Failure
+
+**What:** New features require schema changes to `StoredStats`; existing user data is corrupted or lost during upgrade.
+
+**Why This Matters for MedTriads:** All user progress (points, tier, streak, category mastery) lives in AsyncStorage. The existing `StoredStats` interface has 12+ fields. Adding SRS and challenge data requires schema extension.
+
+**Warning Signs:**
+- Users lose progress after app update
+- `loadStats()` returns `DEFAULT_STATS` for existing users
+- TypeScript errors from missing fields on loaded data
+
+**Prevention:**
+- Always spread existing data: `{ ...DEFAULT_STATS, ...JSON.parse(json) }`
+- Never remove fields, only add (backward compatibility)
+- Add schema version field to detect and migrate old data
+- Test migration with production-like data
+
+**Current Code Already Does This Well:**
+```typescript
+// From stats-storage.ts line 78-79
+return { ...DEFAULT_STATS, ...JSON.parse(json) };
+```
+This pattern handles new fields gracefully. Maintain it.
+
+**Phase Impact:** EVERY phase adding storage must follow existing migration pattern.
+
+---
+
+### INT-2: Breaking Tier Timer Integration
+
+**What:** New adaptive difficulty conflicts with existing tier-based timers (15s -> 8s progression).
+
+**Why This Matters for MedTriads:** The mastery system already implements difficulty scaling via reduced timers per tier. Adding item-level difficulty could conflict.
+
+**Warning Signs:**
+- Two difficulty systems fighting each other
+- Timer feels wrong for tier
+- Confusion about what determines difficulty
+
+**Prevention:**
+- Keep tier timer as THE visible difficulty lever
+- Use adaptive difficulty for question SELECTION, not question PRESENTATION
+- Harder triads = appear more often in practice, not "get less time"
+
+**Phase Impact:** Research phase must define how adaptive difficulty complements (not replaces) tier timers.
+
+---
+
+### INT-3: Regression in Question Generation
+
+**What:** Changes to question selection logic break existing functionality like category filtering.
+
+**Why This Matters for MedTriads:** The existing `generateQuestionSetByCategories()` handles category filtering for study mode. New SRS/adaptive logic must not break this.
+
+**Warning Signs:**
+- Category filter no longer works
+- Study mode shows wrong triads
+- Questions don't respect user preferences
+
+**Prevention:**
+- New selection logic as separate function, not modification
+- Compose: `prioritySelection(adaptiveFilter(categoryFilter(allTriads)))`
+- Comprehensive tests for question generation with all filter combinations
+
+**Phase Impact:** Add tests for existing functionality BEFORE modifying question generation.
+
+---
+
+### INT-4: Points System Inflation
+
+**What:** Daily challenges award extra points, inflating progression and trivializing tier-ups.
+
+**Why This Matters for MedTriads:** Tier thresholds are fixed (300, 1000, 2500, 5000, 10000 points). If daily challenges award significant bonus points, users tier up faster than intended, reducing sense of achievement.
+
+**Warning Signs:**
+- Users reach Chief tier too quickly
+- Tier-up celebrations feel unearned
+- Points become meaningless
+
+**Prevention:**
+- Daily challenge rewards should be recognition (badges), not points
+- Or: bonus points are small (10-50), not game-changing
+- Calculate: at current rate, how fast do users tier up? Don't accelerate more than 20%
+
+**Phase Impact:** Challenge reward design must model impact on tier progression timeline.
+
+---
+
+## Content Limitations Pitfalls
+
+### CL-1: 45 Triads x 10 Questions = Content Seen in 5 Games
+
+**What:** Users experience all content quickly, reducing novelty and engagement.
+
+**Math:**
+- 45 triads total
+- 10 questions per game
+- 4.5 games to see every triad once
+- Active user plays 1-2 games/day = sees everything in 3-7 days
+
+**Warning Signs:**
+- Users complain of repetition after first week
+- Engagement drops sharply after day 5-7
+- "I've seen this before" fatigue
+
+**Prevention:**
+- Maximize variety in distractor selection (already done: same-category preference)
+- Make the LEARNING the value, not novelty
+- Frame app as "mastery tool" not "endless content"
+- Track which triads haven't been seen and prioritize them
+
+**Phase Impact:** Set expectations in onboarding; UX should emphasize mastery over discovery.
+
+---
+
+### CL-2: Statistical Significance Impossible
+
+**What:** Adaptive algorithms require statistically significant data per item; 45 items x few users = insufficient data.
+
+**Why This Matters for MedTriads:** IRT (Item Response Theory) typically needs 150+ responses per item for calibration. A solo user playing 2 games/day generates ~140 responses/week spread across 45 items = ~3 responses per item per week.
+
+**Warning Signs:**
+- Difficulty ratings fluctuate wildly
+- Algorithm "confident" about difficulty with 5 data points
+- Users with different abilities rated as similar
+
+**Prevention:**
+- Don't claim "adaptive" if you mean "responsive to last session"
+- Use simpler heuristics: correct/incorrect + fast/slow = 4-bucket classification
+- Reserve true adaptive algorithms for when/if user base grows large enough
+
+**Phase Impact:** Algorithm complexity should match data availability; start simple.
+
+---
+
+### CL-3: Category Imbalance
+
+**What:** Some categories have 5 triads, others have 4; spaced repetition over-weights larger categories.
+
+**Current Distribution:**
+- Cardiology: 5
+- Neurology: 6
+- Endocrine: 5
+- Pulmonary: 4
+- Gastroenterology: 5
+- Infectious: 4
+- Hematology: 4
+- Rheumatology: 4
+- Renal: 4
+- Obstetrics: 4
+
+**Warning Signs:**
+- Users master small categories faster
+- Large categories feel like "more work"
+- Mastery percentages misleading
+
+**Prevention:**
+- Balance review sessions across categories, not just triads
+- Show category mastery as percentage, not absolute count
+- Weight daily challenges to include under-practiced categories
+
+**Phase Impact:** Question selection logic must consider category balance.
+
+---
+
+## Pitfall Severity Summary
+
+| Pitfall | Severity | Likelihood | Phase to Address |
+|---------|----------|------------|------------------|
+| SR-1: Content Exhaustion | CRITICAL | HIGH | Algorithm Design |
+| INT-1: Schema Migration | CRITICAL | MEDIUM | Every Storage Phase |
+| INT-2: Tier Timer Conflict | HIGH | HIGH | Adaptive Design |
+| DC-2: Streak Conflict | HIGH | MEDIUM | Challenge Design |
+| SR-2: Interval Hell | HIGH | MEDIUM | SRS Implementation |
+| AD-1: Premature Adjustment | MEDIUM | HIGH | Adaptive Implementation |
+| CL-1: Content Seen Quickly | MEDIUM | CERTAIN | UX/Onboarding |
+| DC-1: Impossible Challenges | MEDIUM | MEDIUM | Challenge Design |
+| INT-4: Points Inflation | MEDIUM | MEDIUM | Reward Design |
+| Others | LOW-MEDIUM | VARIES | As Indicated |
+
+---
+
+## Recommended Mitigations by Phase
+
+### Phase: Algorithm Research (Before Implementation)
+- Validate SRS choice against 45-item constraint
+- Define adaptive difficulty formula combining accuracy + time
+- Model tier progression impact from challenge rewards
+
+### Phase: Storage/Data Schema
+- Add schema version field
+- Plan migration path for SRS data structure
+- Add triad-level performance tracking
+
+### Phase: Adaptive Difficulty
+- Implement cold-start handling with confidence thresholds
+- Design selection algorithm that complements tier timers
+- Add comprehensive tests for question generation
+
+### Phase: Spaced Repetition
+- Cap intervals at 14 days maximum
+- Implement failure handling (not just standard SM-2)
+- Add data validation against current triad set
+
+### Phase: Daily Challenges
+- Integrate with existing streak, don't add parallel streak
+- Scale difficulty by user tier
+- Design rewards that don't inflate point economy
+
+---
+
+## Sources
+
+**Adaptive Difficulty:**
+- [Dynamic Difficulty Adjustment - Wayline](https://www.wayline.io/blog/dynamic-difficulty-adjustment-participation-trophy)
+- [Adaptive Difficulty in Games 2025](https://www.drozcanozturk.com/en/how-adaptive-difficulty-enhances-player-engagement-in-casual-games-2025/)
+
+**Spaced Repetition:**
+- [Content-aware Spaced Repetition](https://www.giacomoran.com/blog/content-aware-sr/)
+- [FSRS vs SM-2 Issues](https://github.com/open-spaced-repetition/fsrs4anki/issues/582)
+- [Spaced Repetition - Gwern](https://gwern.net/spaced-repetition)
+- [Small Deck Issues - Flashcards Deluxe Forum](https://orangeorapple.com/forum/viewtopic.php?f=2&t=3940)
+
+**Daily Challenges & Gamification:**
+- [Dark Side of Gamification - Medium](https://medium.com/@jgruver/the-dark-side-of-gamification-ethical-challenges-in-ux-ui-design-576965010dba)
+- [Mobile App Engagement Pitfalls - Appetiser](https://appetiser.com.au/blog/app-engagement/)
+- [Mobile App Engagement Strategies - Trophy](https://trophy.so/blog/mobile-app-engagement-strategies)
+
+**Data Migration:**
+- [AsyncStorage Migration - React Native School](https://www.reactnativeschool.com/migrating-data-in-asyncstorage/)
+- [Versioned Migration - LinkedIn](https://www.linkedin.com/pulse/versioned-migration-local-data-react-native-amal-jose-)
+
+**Educational Assessment:**
+- [Item Response Theory - Wikipedia](https://en.wikipedia.org/wiki/Item_response_theory)
+- [IRT Item Difficulty - Assessment Systems](https://assess.com/irt-item-difficulty-parameter/)

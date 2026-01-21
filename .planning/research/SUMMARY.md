@@ -1,259 +1,221 @@
-# Research Summary: v2.0 Polish & Progression
+# Research Summary: v3.0 Engagement Features
 
-**Synthesized:** 2026-01-18
-**Research Files:** STACK.md, FEATURES.md, ARCHITECTURE.md, PITFALLS.md
-
----
+**Project:** MedTriads
+**Domain:** Medical education quiz app with gamification
+**Researched:** 2026-01-21
+**Confidence:** MEDIUM-HIGH
 
 ## Executive Summary
 
-MedTriads v2.0 adds onboarding, level system enhancements, mascot evolution, and UI polish. The research confirms that **no new libraries are needed** - the existing stack (Expo SDK 54, react-native-reanimated 4.1.1, expo-image 3.0.11, AsyncStorage 2.2.0) fully supports all planned features. This is primarily a **refinement release** that extends existing infrastructure rather than introducing new patterns.
+MedTriads v3.0 engagement features (adaptive difficulty, spaced repetition, daily challenges) can be built entirely with the existing stack. No new dependencies are required. The current architecture with its service layer pattern (`mastery.ts`, `stats-storage.ts`, `question-generator.ts`) provides natural integration points. The key insight across all research is that the 45-triad content pool is both a constraint and a simplifier: standard algorithms designed for thousands of items need modification, but the small scope makes implementation straightforward.
 
-The existing architecture is well-suited for these additions. The app already has a working 11-tier mastery system (0-10 levels) and level-based mascot switching. v2.0 extends rather than replaces. The key architectural insight is that onboarding uses expo-router route groups with conditional rendering, level tiers extend the existing mastery service, and mascot evolution refines existing TriMascot thresholds.
+The recommended approach is to build a shared foundation first (per-triad performance tracking), then layer features on top. Adaptive difficulty should work through question SELECTION (not timing changes, which the tier system already handles). Spaced repetition should use a lightweight priority-weighting approach rather than strict SM-2 scheduling. Daily challenges should integrate with the existing streak system rather than creating a parallel engagement loop.
 
-The highest risk areas are **existing user migration** (users who installed before v2.0 must not see onboarding and should see their earned level proudly) and **UI consistency** (polish means applying existing theme tokens systematically, not redesigning). Both are preventable with careful implementation and testing.
-
----
+The critical risk is content exhaustion. With 45 triads shown 10 per quiz, users experience all content in 4-5 games. Traditional SRS algorithms will schedule everything for review at similar times, creating feast-or-famine sessions. The mitigation is to frame the app as a mastery tool (not endless content), cap review intervals at 7-14 days, and use "weakest first" prioritization rather than strict due dates.
 
 ## Key Findings
 
 ### Stack
 
-**Zero new dependencies required.** The existing stack handles all v2.0 features:
-- Onboarding: ScrollView with `pagingEnabled` + reanimated animations + AsyncStorage for first-launch detection
-- Level System: Extend existing `mastery.ts` with tier metadata (colors, mascot keys)
-- Mascot Images: Static require map with expo-image (already has transition prop for smooth evolution)
-- UI Polish: Leverage reanimated entering/exiting animations (FadeIn, SlideInRight, etc.) throughout
+**No new dependencies required.** All three features are algorithm-driven and integrate with existing infrastructure.
 
-**One verification needed:** Reanimated v4 Babel plugin location changed from `react-native-reanimated/plugin` to `react-native-worklets/plugin`. Verify babel.config.js if animations break.
+- **AsyncStorage**: Already handles all persistence; extend with per-triad tracking and daily challenge state
+- **Existing services**: `question-generator.ts` supports category filtering (extend with weighted selection); `stats-storage.ts` has migration-safe pattern already implemented
+- **SM-2 over FSRS**: For 45 items, the simpler SM-2 algorithm (~50 lines) is sufficient; FSRS is designed for 10,000+ card decks
+
+Libraries considered but rejected: `ts-fsrs` (overkill), `supermemo` (unnecessary dependency for simple algorithm), `expo-notifications` (defer to future "reminders" enhancement).
 
 ### Features
 
-**Table Stakes (must have):**
-- Onboarding: 2-3 swipeable screens, skip option, progress dots, value proposition
-- Level System: 5-6 tiers with medical-themed names, clear progress indicator, level-up celebration
-- Mascot Evolution: Distinct static image per tier, evolution celebration, visible on home screen
-- UI Polish: Library/Progress/Settings screens match Home style, consistent spacing/typography
+**Adaptive Difficulty:**
+- Table stakes: Prioritize weak categories, performance-aware question selection
+- Differentiator: Leverage existing "tricky" marking for weighted selection
+- Anti-feature: Do NOT add separate Easy/Medium/Hard modes; use adaptive selection automatically
+- Key insight: Tier timer system (15s -> 8s) already provides difficulty progression; adaptive should affect question SELECTION not presentation
 
-**Differentiators (should have for v2):**
-- Level-up confetti celebration
-- Preview of next mascot evolution ("At Level X, your mascot will evolve!")
-- Micro-interactions on buttons (subtle scale on press)
-- Medical-themed tier names (Intern -> Chief)
+**Spaced Repetition:**
+- Table stakes: "Review due" indicator, prioritize forgotten items, increasing intervals for mastered items
+- Differentiator: Integrate with existing "mark as tricky" feature
+- Anti-feature: Do NOT implement full FSRS or self-rating; binary correct/incorrect is sufficient
+- Key insight: Simple Leitner-inspired system (5 levels, 1/3/7/14/30 day intervals) is ideal for small pool
 
-**Defer to v3:**
-- Animated Rive mascot with reactions
-- Unlockable content per tier
-- Leaderboards/social features
-- Complex personalization
+**Daily Challenges:**
+- Table stakes: Already has daily streak tracking and visibility
+- Differentiator: Daily Challenge Question (same for all users via date-seeded selection), streak milestones (7/30/100 days), streak freeze (1 per week)
+- Anti-feature: Do NOT add separate challenge streak; integrate into existing streak system
 
 ### Architecture
 
-**Integration approach is low-risk:**
+All three features share a common need: per-triad performance history. The architecture should add a new `TriadPerformanceStore` as the foundation, then build features on top.
 
-| Feature | Integration Type | Risk |
-|---------|-----------------|------|
-| Onboarding | New route group + storage service | LOW - isolated from existing code |
-| Level System | Extend existing mastery service | LOW - additive changes only |
-| Mascot Evolution | Extend existing TriMascot | LOW - already has level-based logic |
-| UI Polish | Apply existing theme system | LOW - visual changes only |
+**New services required:**
+1. `triad-performance.ts` - Core per-triad tracking (attempts, accuracy, response time, SR data)
+2. `spaced-repetition.ts` - SM-2 algorithm implementation
+3. `daily-challenge.ts` - Challenge generation and state management
 
-**New files needed (6):**
-- `services/onboarding-storage.ts`
-- `app/(onboarding)/_layout.tsx`
-- `app/(onboarding)/welcome.tsx`
-- `app/(onboarding)/ready.tsx`
-- `components/onboarding/OnboardingPage.tsx`
-- `components/ui/LevelBadge.tsx`
+**New storage keys:**
+- `@medtriad_triad_performance` - Per-triad performance data
+- `@medtriad_daily_challenge` - Daily challenge state
 
-**Modified files (8+):**
-- `app/_layout.tsx` - Onboarding routing
-- `services/mastery.ts` - Level tiers
-- `hooks/useStats.ts` - Level tier derived value
-- `components/home/TriMascot.tsx` - Tier-based mascot
-- `components/home/HeroCard.tsx` - Level badge
-- `app/(tabs)/library.tsx` - UI polish
-- `app/(tabs)/progress.tsx` - UI polish + level section
-- `app/(tabs)/settings.tsx` - UI polish
+**Data migration strategy:** No breaking changes. New fields are additive. Existing `{ ...DEFAULT_STATS, ...JSON.parse(json) }` pattern handles backward compatibility.
 
-### Pitfalls
+### Critical Pitfalls
 
-**Top 5 Critical Pitfalls:**
+1. **SR-1: Content Exhaustion** (CRITICAL) - With 45 triads, standard SRS schedules everything at similar times. Prevention: Use priority weighting not strict scheduling; cap intervals at 7-14 days; always have fallback content.
 
-1. **Existing users see onboarding after update** - Check for existing data (`gamesPlayed > 0`), not just onboarding flag. Existing users should skip onboarding automatically.
+2. **INT-1: Schema Migration Failure** (CRITICAL) - Storage changes could corrupt existing user data. Prevention: Maintain existing spread pattern; never remove fields; add schema version.
 
-2. **Inconsistent UI across screens** - Systematic audit against theme tokens before changes. Polish means unifying, not diversifying.
+3. **INT-2: Tier Timer Conflict** (HIGH) - Adaptive difficulty could fight with existing tier timers. Prevention: Adaptive affects question SELECTION; tier affects PRESENTATION (time limits).
 
-3. **Level system feels meaningless** - Each tier needs distinct visual identity (color, mascot), celebration moment on level-up.
+4. **DC-2: Streak Anxiety** (HIGH) - Adding challenge streak creates cognitive overhead. Prevention: Integrate challenges INTO existing streak; challenge completion counts as daily play.
 
-4. **Mascot evolution not celebrated** - Show "Tri evolved!" moment with animation/sound when tier changes.
+5. **AD-1: Premature Adjustment** (MEDIUM) - Adjusting difficulty with too few data points. Prevention: Require 3-5 responses per triad before classifying; use confidence thresholds.
 
-5. **Breaking functionality during polish** - Atomic style changes, test every interaction after visual changes.
+## Recommendations
 
-**Phase-specific warnings:**
-- Onboarding: Existing user migration is CRITICAL - test with simulated v1 user data
-- Level System: Current curve (100 questions to max) may be too fast for engaged users
-- UI Polish: Define "done" precisely to prevent scope creep
+### Must Do
 
----
+1. **Build per-triad tracking first** - All three features depend on this data layer
+2. **Use "weakest first" prioritization** - Not strict SRS scheduling for the small content pool
+3. **Integrate daily challenges with existing streak** - Single engagement loop, not parallel systems
+4. **Maintain storage migration pattern** - The existing `{ ...DEFAULT_STATS, ...JSON.parse(json) }` pattern is correct
+5. **Cap review intervals at 7-14 days** - Prevents the "nothing to review" problem
 
-## Recommended Build Order
+### Should Consider
 
-Based on dependencies and risk analysis from ARCHITECTURE.md:
+1. **Streak freeze (1 per week)** - Reduces churn from broken streaks
+2. **Streak milestones (7/30/100 days)** - Reuse tier-up celebration UI
+3. **Category-of-the-day bonus** - Simple engagement driver with minimal complexity
+4. **"Tricky" integration with SRS** - Tricky-marked items get shorter review intervals
 
-### Phase 1: UI Polish Foundation
-**Why first:** Establishes consistent patterns before adding new features. Low risk, high visual impact.
+### Avoid
 
-1. Audit theme usage across Library, Progress, Settings screens
-2. Polish Library screen - apply card patterns, spacing from theme.ts
-3. Polish Progress screen - apply card patterns, add section structure
-4. Polish Settings screen - apply row patterns
-5. Polish Quiz screen - timer, findings card consistency
+1. **FSRS or complex SRS algorithms** - Overkill for 45 items
+2. **Separate difficulty modes (Easy/Medium/Hard)** - Creates choice friction
+3. **Separate challenge streak** - Conflicts with existing streak
+4. **Push notifications** - Start without; add later with A/B testing if needed
+5. **Self-rating (Again/Hard/Good/Easy)** - Binary correct/incorrect is sufficient
+6. **Mid-quiz difficulty adjustment** - Feels unfair; adjust between sessions only
 
-**Delivers:** Consistent visual language across all screens
-**Features from FEATURES.md:** UI consistency (table stakes)
-**Pitfalls to avoid:** Breaking functionality, over-polishing, scope creep
+## Build Order
 
-### Phase 2: Level System Enhancement
-**Why second:** Builds on existing mastery system, needed for mascot evolution triggers.
+### Phase 1: Per-Triad Performance Foundation
 
-1. Extend `mastery.ts` - add LEVEL_TIERS constant with color, mascotKey per tier
-2. Extend `useStats` - add levelTier derived value
-3. Create LevelBadge component
-4. Add level badge to HeroCard
-5. Add level progress visualization to Progress screen
-6. Implement level-up celebration animation + haptic
+**Rationale:** All three features depend on per-triad performance history. Build this invisibly first.
 
-**Delivers:** Visual level identity, progress visibility, celebration moments
-**Features from FEATURES.md:** Clear level indicator, progress to next level, level-up celebration, tier naming
-**Pitfalls to avoid:** Meaningless progression, disconnected gamification
+**Delivers:**
+- `triad-performance-storage.ts` with load/save
+- `useTriadPerformance` hook
+- Response time tracking in QuizScreen
+- Automatic recording of per-triad attempts
 
-### Phase 3: Mascot Evolution
-**Why third:** Depends on level tier system for mascot-to-tier mapping.
+**Addresses:** Foundation for adaptive difficulty, spaced repetition, and difficulty classification
 
-1. Define mascot-to-tier mapping in LEVEL_TIERS
-2. Refine TriMascot to use tier.mascotKey instead of hardcoded thresholds
-3. Implement mascot evolution celebration ("Tri evolved!")
-4. Verify mascot display on Home, Results screens
-5. (Optional) Add intermediate mascot assets if design available
+**Avoids:** AD-1 (premature adjustment) by collecting data before using it
 
-**Delivers:** Mascot reflects progression, evolution feels rewarding
-**Features from FEATURES.md:** Distinct visual per tier, evolution celebration
-**Pitfalls to avoid:** Evolution not celebrated, asset management complexity
+### Phase 2: Adaptive Difficulty
 
-### Phase 4: Onboarding Flow
-**Why last:** Can showcase polished UI and mascot. Isolated from existing screens.
+**Rationale:** Builds directly on Phase 1 data. Modifies existing quiz flow rather than adding new screens.
 
-1. Create `onboarding-storage.ts` with first-launch detection
-2. Add existing user check (`gamesPlayed > 0` = skip onboarding)
-3. Create (onboarding) route group with layout
-4. Create OnboardingPage shared component
-5. Create welcome.tsx ("What are triads?")
-6. Create ready.tsx (mark complete + navigate to home)
-7. Modify `app/_layout.tsx` for conditional routing
+**Delivers:**
+- Difficulty classification per triad (easy/medium/hard/unclassified)
+- `generateAdaptiveQuestionSet()` function
+- Weak category prioritization
+- "Tricky" question weighting
 
-**Delivers:** First-run experience for new users
-**Features from FEATURES.md:** Value proposition, skip option, progress dots
-**Pitfalls to avoid:** Existing users see onboarding, content overload, visual mismatch
+**Implements:** Weighted question selection in `question-generator.ts`
 
----
+**Avoids:** INT-2 (tier conflict) by affecting selection not presentation
 
-## Critical Decisions Needed
+### Phase 3: Spaced Repetition
 
-### 1. Level Tier Structure
-Current system has 11 levels (0-10) with 10 questions per level.
-FEATURES.md recommends 5-6 tiers for better spacing.
-**Decision needed:** Keep 11 levels with visual groupings, OR consolidate to 5-6 tiers?
+**Rationale:** Requires new screens but builds on Phase 1/2 infrastructure.
 
-**Recommendation:** Keep 11 levels internally but group into 5-6 visual tiers:
-- Tiers 0-2: Novice tier (neutral mascot)
-- Tiers 3-4: Practitioner tier (neutral mascot)
-- Tiers 5-6: Specialist tier (happy mascot)
-- Tiers 7-8: Master tier (master mascot)
-- Tiers 9-10: Grandmaster tier (supermaster mascot)
+**Delivers:**
+- SM-2 algorithm in `spaced-repetition.ts`
+- "Review due" badge on home screen
+- Review mode screens (`app/review/`)
+- Untimed review experience
 
-### 2. Progression Curve
-At 10 questions/quiz, users max out in 10 sessions.
-**Decision needed:** Is this too fast for retention?
+**Addresses:** SRS table stakes (due indicator, prioritized reviews, increasing intervals)
 
-**Recommendation:** Consider for v3. Current curve works for MVP. Can extend later with XP weighting for accuracy.
+**Avoids:** SR-1 (content exhaustion) by using priority weighting and capped intervals
 
-### 3. Medical-Themed vs Generic Tier Names
-FEATURES.md suggests medical names (Intern -> Chief).
-Current names are generic (Beginner -> Grandmaster).
+### Phase 4: Daily Challenges
 
-**Decision needed:** Which naming convention?
+**Rationale:** Most complex feature. Requires all prior infrastructure plus new screens and challenge types.
 
-**Recommendation:** Stick with current generic names for v2. Medical names add design complexity (icon assets) and may feel forced. Revisit for v3.
+**Delivers:**
+- `daily-challenge.ts` service
+- Daily challenge card on home screen
+- Challenge screens (`app/daily-challenge/`)
+- Challenge type variants (speed round, category focus, etc.)
+- Streak freeze and milestones
 
----
+**Addresses:** Daily challenge features plus enhanced streak system
 
-## Research Flags
+**Avoids:** DC-2 (streak conflict) by integrating with existing streak
 
-### Phases Needing Additional Research During Planning
-- **None** - All v2.0 features use well-documented patterns
+### Phase Ordering Rationale
 
-### Standard Patterns (Skip Research)
-- UI Polish - Standard theme token application
-- Level System - Extends existing working code
-- Mascot Evolution - Refines existing TriMascot
-- Onboarding - Official expo-router pattern documented
+1. **Data first, features second:** Per-triad tracking is invisible to users but enables everything else
+2. **Modify before add:** Adaptive difficulty modifies existing quiz flow; new screens come later
+3. **Simple to complex:** Each phase adds complexity; daily challenges with multiple types is most complex
+4. **Risk mitigation:** Most critical pitfalls (schema migration, content exhaustion) are addressed in Phase 1
 
----
+### Research Flags
+
+**Phases likely needing deeper research:**
+- **Phase 3 (Spaced Repetition):** SM-2 edge cases, quality score mapping, review session UX
+
+**Phases with standard patterns:**
+- **Phase 1:** AsyncStorage patterns already established in codebase
+- **Phase 2:** Weighted random selection is well-documented
+- **Phase 4:** Streak mechanics well-documented from Duolingo studies
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Verified existing package.json has all required capabilities |
-| Features | HIGH | Multiple authoritative sources agree on best practices |
-| Architecture | HIGH | Extends existing working code; expo-router patterns documented |
-| Pitfalls | MEDIUM | Patterns clear, but migration testing is app-specific |
+| Stack | HIGH | Existing codebase analysis confirms no new dependencies needed |
+| Features | HIGH | Multiple sources agree on table stakes vs differentiators |
+| Architecture | HIGH | Clear service boundaries match existing patterns |
+| Pitfalls | MEDIUM-HIGH | Content exhaustion risk well-documented; specific mitigations need validation |
 
-### Gaps to Address During Planning
+**Overall confidence:** MEDIUM-HIGH
 
-1. **Mascot asset strategy** - How many intermediate mascot images? Current 4 or expand?
-2. **Onboarding content** - Exact copy and visuals for 2-3 screens
-3. **Level-up celebration** - Confetti particle count, sound design, duration
-4. **Testing matrix** - Which device sizes and iOS versions to validate
+### Gaps to Address
 
----
+- **SM-2 quality mapping:** Research shows correct/incorrect, but mapping response time to SM-2 quality (0-5) needs experimentation
+- **Optimal interval caps:** 7-14 days suggested, but may need tuning based on user testing
+- **Challenge difficulty scaling:** How to make challenges achievable for Student tier while challenging for Chief tier needs design iteration
+
+## Open Questions
+
+1. **Should difficulty classification be visible to users?** Research suggests transparency builds trust, but showing "hard" labels might discourage struggling users.
+
+2. **How many review items per session?** Research suggests capping at 20, but for 45 triads this may feel arbitrary.
+
+3. **Streak freeze economics:** Should streak freeze be free (1/week), earned (via challenge completion), or both?
+
+4. **Daily challenge reward structure:** Points vs badges vs both? Impact on tier progression timeline needs modeling.
 
 ## Sources
 
-### From STACK.md
-- [Expo AsyncStorage docs](https://docs.expo.dev/versions/latest/sdk/async-storage/)
-- [Expo Image documentation](https://docs.expo.dev/versions/latest/sdk/image/)
-- [Reanimated entering/exiting docs](https://docs.swmansion.com/react-native-reanimated/docs/layout-animations/entering-exiting-animations/)
+### Primary (HIGH confidence)
+- Existing MedTriads codebase - Architecture patterns, existing services
+- SM-2 Algorithm documentation (Anki, SuperMemo) - SRS implementation
+- Duolingo case studies - Streak and gamification effectiveness
 
-### From FEATURES.md
-- [UXCam - App Onboarding Guide](https://uxcam.com/blog/10-apps-with-great-user-onboarding/)
-- [Plotline - Streaks and Milestones](https://www.plotline.so/blog/streaks-for-gamification-in-mobile-apps)
-- [Apple Developer - Evolution of Duolingo Owl](https://developer.apple.com/news/?id=e2e1faj4)
-- [Pixelmatters - UI Design Trends 2025](https://www.pixelmatters.com/insights/8-ui-design-trends-2025)
+### Secondary (MEDIUM confidence)
+- ts-fsrs documentation - FSRS vs SM-2 comparison
+- BoardVitals/MedMatrix - Medical quiz app patterns
+- Leitner system guides - Simple SRS alternative
 
-### From ARCHITECTURE.md
-- [Expo Router Introduction](https://docs.expo.dev/router/introduction/)
-- [Expo Router Authentication Redirects](https://docs.expo.dev/router/advanced/authentication-rewrites/)
-
-### From PITFALLS.md
-- [NN/g Mobile App Onboarding](https://www.nngroup.com/articles/mobile-app-onboarding/)
-- [RevenueCat Gamification Guide](https://www.revenuecat.com/blog/growth/gamification-in-apps-complete-guide/)
-- [Reanimated Performance Docs](https://docs.swmansion.com/react-native-reanimated/docs/guides/performance/)
+### Tertiary (LOW confidence, needs validation)
+- General adaptive difficulty patterns - May not apply to 45-item pools
+- IRT (Item Response Theory) - Requires more data than available
 
 ---
-
-## Ready for Requirements
-
-Research is complete. All four research files have been synthesized:
-
-- **STACK.md** - Confirms zero new dependencies needed
-- **FEATURES.md** - Defines table stakes vs differentiators vs anti-features
-- **ARCHITECTURE.md** - Maps integration points and build order
-- **PITFALLS.md** - Identifies critical risks with prevention strategies
-
-The roadmapper can proceed to create the v2.0 roadmap with confidence that:
-1. The existing stack supports all planned features
-2. Build order is clear (Polish -> Levels -> Mascot -> Onboarding)
-3. Critical risks are identified (existing user migration, UI consistency)
-4. Scope is well-defined (what to build, what to defer)
+*Research completed: 2026-01-21*
+*Ready for roadmap: yes*

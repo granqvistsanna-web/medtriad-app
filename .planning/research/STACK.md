@@ -1,312 +1,314 @@
-# Stack Research: v2.0 Polish & Progression
+# Stack Research: v3.0 Engagement Features
 
 **Project:** MedTriads
-**Researched:** 2026-01-18
-**Focus:** Onboarding, level systems, mascot images, UI polish
-
-## Executive Summary
-
-The existing stack (Expo SDK 54, react-native-reanimated 4.1.1, expo-image 3.0.11, AsyncStorage 2.2.0) already provides everything needed for v2.0. **No new libraries required.** The focus should be on leveraging existing capabilities more fully.
-
----
-
-## Recommended Stack Additions
-
-### Onboarding Flow
-
-**No new libraries needed.**
-
-| Component | Existing Solution | Why |
-|-----------|-------------------|-----|
-| First-launch detection | AsyncStorage | Already using it for settings/stats |
-| Screen pagination | react-native-pager-view OR custom | Already in Expo Go, or use ScrollView with pagingEnabled |
-| Animations | react-native-reanimated | Already installed (v4.1.1) |
-
-**Recommendation: Use ScrollView with pagingEnabled + reanimated**
-
-Why avoid react-native-pager-view for this use case:
-- Onboarding is 2-3 static screens, not a complex carousel
-- ScrollView with `pagingEnabled={true}` and `horizontal={true}` is simpler
-- Already have reanimated for enter/exit animations
-- Zero additional dependencies
-
-**First-launch pattern (using existing AsyncStorage):**
-```typescript
-// services/onboarding-storage.ts
-const ONBOARDING_KEY = '@medtriad_onboarding_complete';
-
-export async function hasCompletedOnboarding(): Promise<boolean> {
-  const value = await AsyncStorage.getItem(ONBOARDING_KEY);
-  return value === 'true';
-}
-
-export async function markOnboardingComplete(): Promise<void> {
-  await AsyncStorage.setItem(ONBOARDING_KEY, 'true');
-}
-```
-
-**Sources:**
-- [Expo AsyncStorage docs](https://docs.expo.dev/versions/latest/sdk/async-storage/)
-- [Expo ViewPager docs](https://docs.expo.dev/versions/latest/sdk/view-pager/)
-
----
-
-### Level/Progression System
-
-**No new libraries needed.**
-
-| Component | Existing Solution | Why |
-|-----------|-------------------|-----|
-| State storage | AsyncStorage | Already storing stats |
-| Level calculation | Pure functions | Already have mastery.ts |
-| UI updates | React state + reanimated | Standard pattern |
-
-**Current mastery.ts analysis:**
-
-The existing system has:
-- 10 levels (0-10) with 10 questions per level
-- Level titles from "Beginner" to "Grandmaster"
-- Progress tracking functions
-
-**Recommended v2.0 changes (code, not libraries):**
-
-1. **Consolidate to 5-6 tiers** instead of 11 levels:
-   ```typescript
-   // Example tier structure
-   const TIERS = [
-     { name: 'Novice', minQuestions: 0, mascot: 'neutral' },
-     { name: 'Student', minQuestions: 20, mascot: 'student' },
-     { name: 'Practitioner', minQuestions: 50, mascot: 'practitioner' },
-     { name: 'Specialist', minQuestions: 100, mascot: 'specialist' },
-     { name: 'Master', minQuestions: 200, mascot: 'master' },
-     { name: 'Grandmaster', minQuestions: 500, mascot: 'supermaster' },
-   ];
-   ```
-
-2. **Track XP/points separately from questions answered** (optional):
-   - Could add `totalXP` to StoredStats
-   - Award variable XP based on difficulty, streak, speed
-
-**Storage pattern (extends existing):**
-```typescript
-// Extend StoredStats interface
-interface StoredStats {
-  // ... existing fields
-  currentTier: number;  // 0-5 index
-  totalXP: number;      // Optional: for more granular progression
-}
-```
-
-**Sources:**
-- Existing codebase: `/medtriad/services/mastery.ts`
-- Existing codebase: `/medtriad/services/stats-storage.ts`
-
----
-
-### Mascot Image System
-
-**No new libraries needed.**
-
-| Component | Existing Solution | Why |
-|-----------|-------------------|-----|
-| Image display | expo-image | Already installed (v3.0.11) |
-| Asset bundling | Metro bundler | Standard Expo pattern |
-| Transitions | expo-image transition prop | Built-in cross-dissolve |
-
-**Current mascot assets:**
-```
-assets/images/
-  tri-neutral.png
-  tri-success.png
-  tri-master.png
-  tri-supermaster.png
-```
-
-**Recommended pattern for tier-based mascots:**
-
-1. **Static import map** (best for small asset sets):
-   ```typescript
-   // constants/mascots.ts
-   export const MASCOT_IMAGES = {
-     novice: require('@/assets/images/tri-neutral.png'),
-     student: require('@/assets/images/tri-student.png'),
-     practitioner: require('@/assets/images/tri-practitioner.png'),
-     specialist: require('@/assets/images/tri-specialist.png'),
-     master: require('@/assets/images/tri-master.png'),
-     grandmaster: require('@/assets/images/tri-supermaster.png'),
-   } as const;
-
-   export type MascotTier = keyof typeof MASCOT_IMAGES;
-   ```
-
-2. **Use expo-image for display:**
-   ```tsx
-   import { Image } from 'expo-image';
-   import { MASCOT_IMAGES } from '@/constants/mascots';
-
-   <Image
-     source={MASCOT_IMAGES[currentTier]}
-     style={{ width: 112, height: 112 }}
-     contentFit="contain"
-     transition={300}
-   />
-   ```
-
-**Why expo-image over React Native Image:**
-- Already installed and used in the project
-- Built-in transition animations (no flicker on source change)
-- Memory/disk caching
-- Better performance with SDWebImage/Glide backends
-
-**Asset preparation notes:**
-- Provide @2x and @3x versions for crisp display
-- Use PNG for mascots (transparency support)
-- Keep files reasonably sized (<100KB each)
-
-**Sources:**
-- [Expo Image documentation](https://docs.expo.dev/versions/latest/sdk/image/)
-- Existing codebase: `/medtriad/assets/images/`
-
----
-
-### UI Polish Patterns
-
-**No new libraries needed.**
-
-| Component | Existing Solution | Why |
-|-----------|-------------------|-----|
-| Animations | react-native-reanimated 4.1.1 | Already installed, powerful |
-| Haptics | expo-haptics | Already installed |
-| Gradients | expo-linear-gradient | Already installed |
-| Shadows | theme.ts Shadows | Already defined |
-
-**Reanimated entering/exiting animations (already available):**
-
-```tsx
-import Animated, { FadeIn, FadeOut, SlideInRight } from 'react-native-reanimated';
-
-// Screen enter animation
-<Animated.View entering={FadeIn.duration(300)}>
-
-// List item stagger
-<Animated.View entering={FadeIn.delay(index * 50)}>
-
-// Card appear
-<Animated.View entering={SlideInRight.springify().damping(15)}>
-```
-
-**Available animations (no additional libraries):**
-- Fade: FadeIn, FadeOut, FadeInRight, FadeInDown, etc.
-- Slide: SlideInLeft, SlideInRight, SlideInUp, SlideInDown
-- Zoom: ZoomIn, ZoomOut
-- Bounce: BounceIn, BounceOut
-- Flip: FlipInXUp, FlipInYLeft, etc.
-
-**Modifiers:**
-- `.duration(ms)` - animation length
-- `.delay(ms)` - delay before start
-- `.springify()` - spring physics
-- `.damping(value)` - spring damping
-
-**Polish patterns to implement:**
-
-1. **Screen transitions:** Use entering/exiting on main content
-2. **List item stagger:** `entering={FadeIn.delay(index * 50)}`
-3. **Button press feedback:** Scale animation + haptics (already have useHaptics)
-4. **Progress bar animation:** Interpolate width with reanimated
-5. **Mascot evolution:** Cross-dissolve via expo-image transition prop
-
-**Existing theme system is solid:**
-- Typography scale defined
-- Spacing scale (8px base)
-- Shadows defined
-- Border radius scale
-- Colors defined
-
-**Sources:**
-- [Reanimated entering/exiting docs](https://docs.swmansion.com/react-native-reanimated/docs/layout-animations/entering-exiting-animations/)
-- Existing codebase: `/medtriad/constants/theme.ts`
-
----
-
-## Not Recommended
-
-### Libraries to Avoid
-
-| Library | Why Avoid |
-|---------|-----------|
-| react-native-onboarding-swiper | Overkill for 2-3 screens; adds dependency for simple use case |
-| react-native-app-intro-slider | Same reason; ScrollView + reanimated is simpler |
-| redux / zustand / jotai | AsyncStorage + React state is sufficient for this app's scale |
-| styled-components / emotion | Already have solid theme.ts; StyleSheet is fine |
-| react-native-fast-image | expo-image is equivalent and already installed |
-| lottie-react-native | Nice but unnecessary; reanimated handles needed animations |
-
-### Patterns to Avoid
-
-| Pattern | Why Avoid | Do Instead |
-|---------|-----------|------------|
-| Dynamic require paths | Metro can't resolve at build time | Use static import map |
-| Multiple image libraries | Inconsistent API, bundle bloat | Stick with expo-image |
-| Over-engineered state | This is a quiz app, not a social network | Keep using AsyncStorage |
-| Complex onboarding library | Maintenance burden for simple feature | Build with ScrollView + reanimated |
-
----
-
-## Version Compatibility Matrix
-
-| Package | Current Version | Notes |
-|---------|-----------------|-------|
-| expo | ~54.0.31 | SDK 54 stable |
-| react-native-reanimated | ~4.1.1 | v4 with new Babel plugin location |
-| expo-image | ~3.0.11 | Full feature set available |
-| @react-native-async-storage/async-storage | ^2.2.0 | Latest, works with SDK 54 |
-| expo-haptics | ~15.0.8 | No changes needed |
-| expo-linear-gradient | ~15.0.8 | No changes needed |
-
-**Babel configuration note (Expo SDK 54):**
-The Babel plugin moved from `react-native-reanimated/plugin` to `react-native-worklets/plugin`. Verify babel.config.js uses the correct plugin if animations stop working.
-
----
+**Researched:** 2026-01-21
+**Scope:** Adaptive difficulty, spaced repetition, daily challenges
 
 ## Summary
 
-### Key Takeaways for Roadmap
+The existing MedTriads stack is **sufficient for all v3.0 engagement features**. No new dependencies are required. The three core features (adaptive difficulty, spaced repetition, daily challenges) are algorithm-driven and integrate naturally with the existing AsyncStorage persistence, React state management, and service layer patterns already in place.
 
-1. **Zero new dependencies required.** The existing stack handles all v2.0 features.
+Spaced repetition libraries like `ts-fsrs` exist, but for a finite 45-triad quiz app, the simpler SM-2 algorithm is sufficient and can be implemented in ~50 lines of TypeScript. Adding a library would be over-engineering for this use case. Similarly, adaptive difficulty and daily challenges are pure logic implementations that leverage existing infrastructure.
 
-2. **Onboarding:** Build with ScrollView (pagingEnabled) + reanimated animations + AsyncStorage for first-launch flag. ~2-3 screens, simple.
+## New Dependencies Required
 
-3. **Level system:** Extend existing mastery.ts to use 5-6 tiers instead of 10 levels. Pure TypeScript refactor.
+**None.** All three features can be implemented with the existing stack.
 
-4. **Mascot images:** Create static import map, use expo-image with transition prop. Add 2-4 new PNG assets.
+| Feature | Why No Library Needed |
+|---------|----------------------|
+| Adaptive Difficulty | Pure algorithm - uses existing scoring/mastery service patterns |
+| Spaced Repetition | SM-2 algorithm is ~50 lines; 45 triads don't need FSRS sophistication |
+| Daily Challenges | Date logic + existing question generator + AsyncStorage |
 
-5. **UI polish:** Leverage reanimated entering/exiting animations throughout. Focus areas:
-   - Screen enter animations
-   - List item stagger
-   - Progress bar animations
-   - Button feedback (already have haptics hook)
+### Libraries Considered But Not Recommended
 
-6. **Risk areas:**
-   - Reanimated v4 Babel plugin location (verify babel.config.js)
-   - Blurhash placeholder sizing with contentFit (minor visual issue, use thumbhash or solid color instead)
+| Library | Version | Why Not |
+|---------|---------|---------|
+| `ts-fsrs` | 5.2.3 | Overkill for 45-item dataset. FSRS is designed for 10,000+ card decks with complex scheduling. SM-2 is simpler, battle-tested (used by Anki/Duolingo), and sufficient for medical triads. |
+| `supermemo` | 2.0.23 | Adds dependency for what is ~50 lines of code. SM-2 algorithm is well-documented and stable - no library maintenance risk. |
+| `expo-notifications` | - | Already available in Expo SDK 54 if needed for review reminders, but not required for core features. Consider for future "reminder" enhancement. |
 
-### Implementation Order Suggestion
+## Existing Stack Sufficient
 
-1. First: Mascot image system (quick win, visual impact)
-2. Second: Level/tier refactor (enables progression UI)
-3. Third: UI polish passes (animations throughout)
-4. Fourth: Onboarding flow (depends on mascots and polished UI to showcase)
+The current architecture supports v3.0 features directly:
 
----
+### For Adaptive Difficulty
+
+| Existing Asset | How It Enables Feature |
+|---------------|----------------------|
+| `services/mastery.ts` | Already has tier system (Student to Chief) with timer scaling (15s down to 8s). Extend to question selection. |
+| `services/stats-storage.ts` | Already tracks `categoryMastery` per category with correct/total counts. Add per-triad tracking. |
+| `services/question-generator.ts` | Already supports category filtering. Extend with difficulty weighting. |
+| `hooks/useStats.ts` | Already exposes `getCategoryPercent()`. Add difficulty-aware question hooks. |
+
+### For Spaced Repetition
+
+| Existing Asset | How It Enables Feature |
+|---------------|----------------------|
+| `@react-native-async-storage/async-storage` | Already handles all persistence. Add `triadReviewData` storage key. |
+| `services/stats-storage.ts` | Pattern for loading/saving typed data. Add SR card state storage. |
+| Question types in `types/triad.ts` | 45 triads with IDs - perfect for SR card mapping. |
+
+### For Daily Challenges
+
+| Existing Asset | How It Enables Feature |
+|---------------|----------------------|
+| `services/stats-storage.ts` | Already has `dailyStreak`, `lastPlayedDate`, `calculateStreak()`. Extend for daily challenge completion. |
+| `services/question-generator.ts` | `generateQuestionSet()` already creates random 10-question rounds. |
+| Seeded randomness | Use date string as seed for deterministic daily questions. |
+
+## Integration Points
+
+### Adaptive Difficulty Integration
+
+```
+                    +-------------------+
+                    |  services/        |
+                    |  adaptive.ts      |  <-- NEW SERVICE
+                    +-------------------+
+                           |
+         +----------------+|+----------------+
+         |                 v                 |
++--------+-------+  +------+------+  +-------+-------+
+| mastery.ts     |  | stats-      |  | question-     |
+| (tier data)    |  | storage.ts  |  | generator.ts  |
+|                |  | (per-triad  |  | (weighted     |
+|                |  |  accuracy)  |  |  selection)   |
++----------------+  +-------------+  +---------------+
+```
+
+**Data needed:** Per-triad accuracy (correct/total/lastSeen) stored alongside categoryMastery.
+
+**Algorithm approach:**
+- Calculate difficulty score per triad: `difficulty = 1 - (correct / total)`
+- Weight question selection toward triads with higher difficulty
+- Apply tier modifier: higher tiers see more difficult triads
+
+### Spaced Repetition Integration
+
+```
+                    +-------------------+
+                    |  services/        |
+                    |  spaced-rep.ts    |  <-- NEW SERVICE
+                    +-------------------+
+                           |
+         +----------------+|+----------------+
+         |                 v                 |
++--------+-------+  +------+------+  +-------+-------+
+| triads.ts      |  | stats-      |  | hooks/        |
+| (45 items)     |  | storage.ts  |  | useReviewDue  |
+|                |  | (card state)|  | .ts           |
++----------------+  +-------------+  +---------------+
+```
+
+**Data schema per triad:**
+```typescript
+interface TriadSRCard {
+  triadId: string;
+  interval: number;      // Days until next review
+  repetitions: number;   // Consecutive correct recalls
+  easeFactor: number;    // 1.3 - 2.5, affects interval growth
+  nextReviewDate: string; // ISO date string
+  lastGrade: number;     // 0-5 (SM-2 quality rating)
+}
+```
+
+**SM-2 algorithm (simplified):**
+```typescript
+function calculateNextReview(card: TriadSRCard, grade: number): TriadSRCard {
+  // Grade 0-2: Reset (incorrect)
+  // Grade 3-5: Progress (correct with varying ease)
+
+  if (grade < 3) {
+    return { ...card, repetitions: 0, interval: 1 };
+  }
+
+  const newEF = Math.max(1.3, card.easeFactor + (0.1 - (5 - grade) * 0.08));
+  const newInterval = card.repetitions === 0 ? 1
+                    : card.repetitions === 1 ? 6
+                    : Math.round(card.interval * card.easeFactor);
+
+  return {
+    ...card,
+    repetitions: card.repetitions + 1,
+    interval: newInterval,
+    easeFactor: newEF,
+    nextReviewDate: addDays(new Date(), newInterval).toISOString(),
+  };
+}
+```
+
+### Daily Challenge Integration
+
+```
+                    +-------------------+
+                    |  services/        |
+                    |  daily-          |
+                    |  challenge.ts    |  <-- NEW SERVICE
+                    +-------------------+
+                           |
+         +----------------+|+----------------+
+         |                 v                 |
++--------+-------+  +------+------+  +-------+-------+
+| question-      |  | stats-      |  | hooks/        |
+| generator.ts   |  | storage.ts  |  | useDaily      |
+| (seeded rand)  |  | (completion)|  | Challenge.ts  |
++----------------+  +-------------+  +---------------+
+```
+
+**Data schema:**
+```typescript
+interface DailyChallengeState {
+  date: string;           // "2026-01-21"
+  completed: boolean;
+  score: number | null;
+  questionIds: string[];  // Seeded for the day
+}
+```
+
+**Seeded randomness for consistent daily questions:**
+```typescript
+function getDailySeed(date: Date): number {
+  return date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
+}
+
+function seededShuffle<T>(array: T[], seed: number): T[] {
+  const random = mulberry32(seed); // Simple seeded PRNG
+  return [...array].sort(() => random() - 0.5);
+}
+```
+
+## Not Recommended
+
+### Over-Engineering Traps
+
+| Approach | Why Avoid |
+|----------|-----------|
+| Full FSRS implementation | Designed for flashcard apps with 10,000+ cards. MedTriads has 45 triads - SM-2 is perfectly adequate. |
+| Backend/cloud sync | Adds complexity without clear user value. AsyncStorage is sufficient for single-device learning. |
+| Complex ML-based difficulty | K-means clustering, neural networks, etc. are overkill. Simple performance-based weighting works. |
+| Real-time difficulty adjustment | Mid-quiz difficulty changes feel unfair. Adjust between quiz sessions, not during. |
+
+### Patterns to Avoid
+
+| Pattern | Problem | Better Approach |
+|---------|---------|-----------------|
+| Storing review data in RAM | Lost on app close | Persist to AsyncStorage immediately |
+| Complex difficulty buckets | Hard to tune, feels arbitrary | Continuous difficulty score 0-1 |
+| Global SR state | Couples Study Mode to Quiz Mode | Independent SR service with clear API |
+| Streak freeze as default | Reduces engagement value | Make it a reward/purchasable item |
+
+## Technical Approach
+
+### Phase 1: Data Foundation
+
+Extend `StoredStats` in `stats-storage.ts`:
+
+```typescript
+interface StoredStats {
+  // ... existing fields ...
+
+  // Per-triad tracking (for adaptive difficulty)
+  triadAccuracy: Record<string, { correct: number; total: number; lastSeen: string }>;
+
+  // Spaced repetition cards
+  srCards: Record<string, TriadSRCard>;
+
+  // Daily challenge
+  dailyChallenge: DailyChallengeState | null;
+  dailyChallengeStreak: number;
+}
+```
+
+### Phase 2: Adaptive Difficulty Service
+
+New file: `services/adaptive.ts`
+
+```typescript
+export function getWeightedTriads(
+  allTriads: Triad[],
+  accuracy: Record<string, TriadAccuracy>,
+  tier: number
+): Triad[] {
+  // Calculate weights: prioritize low-accuracy triads
+  // Apply tier modifier: harder questions for higher tiers
+  // Return shuffled array with weighted probability
+}
+
+export function generateAdaptiveQuestionSet(
+  count: number,
+  stats: StoredStats
+): QuizQuestion[] {
+  // Use weighted selection instead of pure random
+}
+```
+
+### Phase 3: Spaced Repetition Service
+
+New file: `services/spaced-rep.ts`
+
+```typescript
+export function initializeSRCard(triadId: string): TriadSRCard;
+export function calculateNextReview(card: TriadSRCard, grade: number): TriadSRCard;
+export function getTriadsDueForReview(cards: Record<string, TriadSRCard>): string[];
+export function gradeToQuality(isCorrect: boolean, responseTime: number): number;
+```
+
+### Phase 4: Daily Challenge Service
+
+New file: `services/daily-challenge.ts`
+
+```typescript
+export function getDailyChallenge(date: Date): DailyChallengeState;
+export function completeDailyChallenge(score: number): Promise<void>;
+export function getDailyChallengeStreak(): number;
+export function canPlayDailyChallenge(): boolean;
+```
+
+### Notifications (Optional Future Enhancement)
+
+If review reminders are desired, `expo-notifications` is already available in SDK 54:
+
+```typescript
+import * as Notifications from 'expo-notifications';
+
+// Schedule review reminder
+await Notifications.scheduleNotificationAsync({
+  content: {
+    title: "Time to review!",
+    body: "You have 5 triads due for review",
+  },
+  trigger: { hour: 9, minute: 0, repeats: true },
+});
+```
+
+Note: Requires `SCHEDULE_EXACT_ALARM` permission on Android 12+.
 
 ## Confidence Assessment
 
-| Area | Confidence | Reason |
-|------|------------|--------|
-| No new libraries needed | HIGH | Verified existing package.json has all required capabilities |
-| AsyncStorage for first-launch | HIGH | Standard pattern, already using AsyncStorage |
-| expo-image for mascots | HIGH | Already in project, verified docs |
-| reanimated entering/exiting | HIGH | Official documentation verified |
-| Reanimated v4 Babel plugin | MEDIUM | Known migration issue, need to verify babel.config.js |
-| ScrollView vs pager-view | MEDIUM | Both work; ScrollView simpler for 2-3 screens |
+| Area | Confidence | Reasoning |
+|------|------------|-----------|
+| No new dependencies needed | HIGH | Reviewed existing codebase - all patterns/infrastructure present |
+| SM-2 over FSRS | HIGH | Standard recommendation for small datasets; used by Anki/Duolingo |
+| Data schema design | MEDIUM | Proposed structure follows existing patterns; may need iteration |
+| Integration points | HIGH | Clear service boundaries match existing architecture |
+
+## Sources
+
+### Spaced Repetition
+- [ts-fsrs on GitHub](https://github.com/open-spaced-repetition/ts-fsrs) - Most actively maintained FSRS implementation
+- [supermemo npm package](https://www.npmjs.com/package/supermemo) - SM-2 implementation reference
+- [SM-2 Algorithm Explained](https://tegaru.app/en/blog/sm2-algorithm-explained) - Clear SM-2 walkthrough
+- [cnnrhill/sm-2 on GitHub](https://github.com/cnnrhill/sm-2) - ES6 SM-2 reference implementation
+
+### Adaptive Difficulty
+- [Adaptive Difficulty in Casual Games 2025](https://www.drozcanozturk.com/en/how-adaptive-difficulty-enhances-player-engagement-in-casual-games-2025/) - Performance-based adjustment patterns
+- [Dynamic Difficulty Adjustment](https://www.wayline.io/blog/dynamic-difficulty-adjustment-personalized-gaming) - Categories of adaptive systems
+
+### Daily Challenges & Streaks
+- [Streaks and Milestones for Gamification](https://www.plotline.so/blog/streaks-for-gamification-in-mobile-apps) - Best practices
+- [Implementing a Daily Streak System](https://tigerabrodi.blog/implementing-a-daily-streak-system-a-practical-guide) - Practical guide
+- [Duolingo's Gamification Secrets](https://www.orizon.co/blog/duolingos-gamification-secrets) - Streak effectiveness data
+
+### Expo Notifications
+- [Expo Notifications Documentation](https://docs.expo.dev/versions/latest/sdk/notifications/) - SDK 54 local notifications

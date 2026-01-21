@@ -1,635 +1,606 @@
-# Architecture Research: v2.0 Polish & Progression
+# Architecture Research: v3.0 Integration
 
-**Project:** MedTriads
-**Researched:** 2026-01-18
-**Confidence:** HIGH (based on existing codebase analysis + official documentation)
+**Domain:** Medical quiz app engagement features
+**Researched:** 2026-01-21
+**Confidence:** HIGH (based on existing codebase analysis + established algorithms)
 
-## Executive Summary
+## Summary
 
-MedTriads v2.0 adds four features that integrate cleanly with the existing architecture:
-1. **Onboarding flow** - Route group with AsyncStorage first-launch detection
-2. **Level system** - Extend existing mastery service + useStats hook
-3. **Mascot evolution** - Extend existing TriMascot component with asset mapping
-4. **UI polish** - Apply existing design system (theme.ts) consistently across screens
+The MedTriads app has a clean, well-structured architecture that provides natural integration points for adaptive difficulty, spaced repetition, and daily challenges. The existing service layer (`question-generator.ts`, `mastery.ts`, `scoring.ts`) handles quiz logic separately from persistence (`stats-storage.ts`, `study-storage.ts`), making it straightforward to add new features without disrupting the core quiz flow.
 
-The existing architecture is well-suited for these additions. Key insight: the app already has mastery levels (0-10) and mascot level-switching infrastructure. v2.0 extends rather than replaces.
+**Key insight:** All three features share a common need - tracking per-question performance history. The existing `categoryMastery` tracking in `stats-storage.ts` provides a pattern to follow, but needs extension to track individual triad performance rather than just category aggregates.
 
----
+## Data Model Changes
 
-## Integration Points
-
-### 1. Onboarding Integration
-
-**Pattern:** Route group with conditional redirect (expo-router standard pattern)
-
-**Existing architecture:**
-```
-app/
-  _layout.tsx          # Root Stack with ThemeProvider
-  (tabs)/              # Tab navigation (Home, Library, Progress, Settings)
-  quiz/                # Quiz flow (index, results)
-  modal.tsx
-```
-
-**Proposed addition:**
-```
-app/
-  _layout.tsx          # Root Stack - ADD loading state + redirect logic
-  (onboarding)/        # NEW route group
-    _layout.tsx        # Onboarding stack
-    welcome.tsx        # Screen 1: "What are triads?"
-    scoring.tsx        # Screen 2: "How scoring works" (optional)
-    ready.tsx          # Screen 3: "Ready to start!" -> mark complete
-  (tabs)/              # Existing - no changes
-  quiz/                # Existing - no changes
-```
-
-**First-launch detection:**
+### Current Data Model
 
 ```typescript
-// services/onboarding-storage.ts (NEW)
-const ONBOARDING_KEY = '@medtriad_onboarding';
-
-export async function hasCompletedOnboarding(): Promise<boolean> {
-  const value = await AsyncStorage.getItem(ONBOARDING_KEY);
-  return value === 'complete';
-}
-
-export async function markOnboardingComplete(): Promise<void> {
-  await AsyncStorage.setItem(ONBOARDING_KEY, 'complete');
+// stats-storage.ts - Current StoredStats
+interface StoredStats {
+  totalAnswered: number;
+  totalCorrect: number;
+  bestStreak: number;
+  gamesPlayed: number;
+  lastPlayedAt: string | null;
+  highScore: number;
+  dailyStreak: number;
+  lastPlayedDate: string | null;
+  totalPoints: number;
+  pendingTierUp: { tier: number; name: string } | null;
+  categoryMastery: Record<TriadCategory, CategoryMasteryData>;
+  userName: string | null;
+  hasCompletedOnboarding: boolean;
 }
 ```
 
-**Root layout modification:**
+### New Data Entities Required
+
+#### 1. Per-Triad Performance History (Core - All Features Need This)
 
 ```typescript
-// app/_layout.tsx
-export default function RootLayout() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [needsOnboarding, setNeedsOnboarding] = useState(false);
+// New: triad-performance-storage.ts
+interface TriadPerformance {
+  triadId: string;
+  category: TriadCategory;
+
+  // Adaptive difficulty data
+  attempts: number;
+  correct: number;
+  avgResponseTimeMs: number;
+  lastAttemptDate: string;
+
+  // Spaced repetition data (SM-2 algorithm)
+  easeFactor: number;        // Default 2.5, range 1.3-2.5
+  interval: number;          // Days until next review
+  repetitions: number;       // Consecutive correct count
+  nextReviewDate: string;    // ISO date string
+
+  // Difficulty classification
+  difficulty: 'easy' | 'medium' | 'hard' | 'unclassified';
+}
+
+interface TriadPerformanceStore {
+  performances: Record<string, TriadPerformance>; // keyed by triadId
+  lastUpdated: string;
+}
+```
+
+#### 2. Daily Challenge State
+
+```typescript
+// New: daily-challenge-storage.ts
+interface DailyChallengeState {
+  // Current challenge
+  challengeDate: string;           // "2026-01-21"
+  challengeSeed: number;           // Deterministic randomization
+  challengeType: DailyChallengeType;
+
+  // Progress
+  isCompleted: boolean;
+  completedAt: string | null;
+  score: number | null;
+
+  // Streak
+  dailyChallengeStreak: number;
+  lastCompletedDate: string | null;
+}
+
+type DailyChallengeType =
+  | 'speed-round'      // 5 questions, 8 seconds each
+  | 'category-focus'   // 10 questions from one category
+  | 'hard-mode'        // Only hard-classified triads
+  | 'review-due'       // Triads due for spaced repetition
+  | 'weakness-target'; // Lowest-accuracy category
+```
+
+#### 3. Storage Keys (AsyncStorage)
+
+```typescript
+const STORAGE_KEYS = {
+  // Existing
+  STATS: '@medtriad_stats',
+  HISTORY: '@medtriad_quiz_history',
+  SETTINGS: '@medtriad_settings',
+  TRICKY: '@medtriad_tricky_questions',
+  STUDY_HISTORY: '@medtriad_study_history',
+
+  // New for v3.0
+  TRIAD_PERFORMANCE: '@medtriad_triad_performance',
+  DAILY_CHALLENGE: '@medtriad_daily_challenge',
+};
+```
+
+### Data Migration Strategy
+
+No breaking changes to existing data. New fields are additive:
+1. `TriadPerformance` records created lazily on first answer
+2. `DailyChallengeState` initialized when feature first accessed
+3. Existing `categoryMastery` remains for backward compatibility
+
+## Service Layer Changes
+
+### Existing Services - Modifications Required
+
+#### `question-generator.ts` - MODIFY
+
+**Current:** Random selection with category filtering
+```typescript
+export function generateQuestionSet(count: number): QuizQuestion[]
+export function generateQuestionSetByCategories(count: number, categories: TriadCategory[]): QuizQuestion[]
+```
+
+**New:** Add adaptive selection mode
+```typescript
+// Add new function, don't modify existing
+export function generateAdaptiveQuestionSet(
+  count: number,
+  performanceData: TriadPerformanceStore,
+  options: {
+    targetDifficulty?: 'easy' | 'medium' | 'hard' | 'mixed';
+    prioritizeWeakness?: boolean;
+    includeNewTriads?: boolean; // Unclassified triads
+  }
+): QuizQuestion[]
+
+export function generateSpacedRepetitionSet(
+  performanceData: TriadPerformanceStore,
+  maxCount: number
+): QuizQuestion[]
+
+export function generateDailyChallengeSet(
+  challengeType: DailyChallengeType,
+  seed: number,
+  performanceData: TriadPerformanceStore
+): QuizQuestion[]
+```
+
+#### `scoring.ts` - MINOR MODIFICATION
+
+**Add:** Response time tracking for adaptive difficulty
+```typescript
+// Existing calculateAnswerPoints signature unchanged
+// Add new utility
+export function calculateResponseQuality(
+  isCorrect: boolean,
+  responseTimeMs: number,
+  questionTimeMs: number
+): number // 0-5 scale for SM-2 algorithm
+```
+
+#### `mastery.ts` - NO CHANGES
+
+Tier system is independent of question selection. No modifications needed.
+
+### New Services Required
+
+#### `triad-performance.ts` (NEW)
+
+Core service for tracking per-triad performance.
+
+```typescript
+// Storage operations
+export async function loadTriadPerformance(): Promise<TriadPerformanceStore>
+export async function saveTriadPerformance(store: TriadPerformanceStore): Promise<void>
+
+// Performance tracking
+export async function recordTriadAttempt(
+  triadId: string,
+  category: TriadCategory,
+  isCorrect: boolean,
+  responseTimeMs: number
+): Promise<TriadPerformance>
+
+// Adaptive difficulty
+export function classifyDifficulty(performance: TriadPerformance): 'easy' | 'medium' | 'hard' | 'unclassified'
+export function getTriadsByDifficulty(
+  store: TriadPerformanceStore,
+  difficulty: 'easy' | 'medium' | 'hard'
+): string[] // triadIds
+
+// Queries
+export function getWeakestCategories(store: TriadPerformanceStore, count: number): TriadCategory[]
+export function getTriadsNeedingReview(store: TriadPerformanceStore): string[]
+```
+
+#### `spaced-repetition.ts` (NEW)
+
+SM-2 algorithm implementation.
+
+```typescript
+// Core SM-2 algorithm
+export interface SM2Input {
+  quality: number;      // 0-5 response quality
+  repetitions: number;  // Previous consecutive correct
+  easeFactor: number;   // Previous ease factor (default 2.5)
+  interval: number;     // Previous interval in days
+}
+
+export interface SM2Output {
+  repetitions: number;
+  easeFactor: number;
+  interval: number;
+  nextReviewDate: Date;
+}
+
+export function calculateSM2(input: SM2Input): SM2Output
+
+// Helper functions
+export function isTriadDueForReview(performance: TriadPerformance): boolean
+export function getDueTriadIds(store: TriadPerformanceStore): string[]
+export function getReviewCount(store: TriadPerformanceStore): number
+```
+
+#### `daily-challenge.ts` (NEW)
+
+Daily challenge generation and state management.
+
+```typescript
+// Challenge generation
+export function generateDailySeed(date: Date): number
+export function selectChallengeType(
+  date: Date,
+  performanceData: TriadPerformanceStore
+): DailyChallengeType
+
+// State management
+export async function loadDailyChallengeState(): Promise<DailyChallengeState>
+export async function saveDailyChallengeState(state: DailyChallengeState): Promise<void>
+export async function completeDailyChallenge(score: number): Promise<DailyChallengeState>
+
+// Queries
+export function isTodaysChallengeComplete(): Promise<boolean>
+export function getDailyChallengeStreak(): Promise<number>
+```
+
+## Component Integration
+
+### Existing Components - Modifications
+
+| Component | File | Change | Reason |
+|-----------|------|--------|--------|
+| `QuizScreen` | `app/quiz/index.tsx` | Add response time tracking | Adaptive difficulty needs timing data |
+| `HomeScreen` | `app/(tabs)/index.tsx` | Add daily challenge entry point | Feature discovery |
+| `ActionButtons` | `components/home/ActionButtons.tsx` | Add "Daily Challenge" button | Replace or augment "Challenge" |
+| `HeroCard` | `components/home/HeroCard.tsx` | Show review count badge | Spaced repetition prompting |
+
+### New Components Required
+
+| Component | Purpose | Location |
+|-----------|---------|----------|
+| `DailyChallengeCard` | Shows today's challenge status/type | `components/home/` |
+| `ReviewDueBadge` | "X items due for review" indicator | `components/home/` |
+| `DifficultyIndicator` | Shows question difficulty during quiz | `components/quiz/` |
+| `ReviewPromptBanner` | Suggests review when due items exist | `components/home/` |
+
+### New Screens Required
+
+| Screen | Route | Purpose |
+|--------|-------|---------|
+| `DailyChallengeScreen` | `app/daily-challenge/index.tsx` | Daily challenge quiz |
+| `DailyChallengeResultsScreen` | `app/daily-challenge/results.tsx` | Daily challenge results |
+| `ReviewScreen` | `app/review/index.tsx` | Spaced repetition review session |
+| `ReviewResultsScreen` | `app/review/results.tsx` | Review session results |
+
+### New Hooks Required
+
+| Hook | Purpose |
+|------|---------|
+| `useTriadPerformance` | Load/save triad performance data |
+| `useDailyChallenge` | Daily challenge state and actions |
+| `useSpacedRepetition` | Due review count and review session management |
+| `useAdaptiveDifficulty` | Difficulty-based question selection |
+
+## Data Flow
+
+### Current Quiz Flow
+
+```
+User taps "Start Quiz"
+    |
+    v
+generateQuestionSet(10)  <-- Random selection
+    |
+    v
+useQuizReducer manages state
+    |
+    v
+User answers questions
+    |
+    v
+scoring.ts calculates points
+    |
+    v
+updateAfterQuiz() saves to AsyncStorage
+    |
+    v
+Results screen displays score
+```
+
+### New Adaptive Quiz Flow
+
+```
+User taps "Start Quiz"
+    |
+    v
+loadTriadPerformance()
+    |
+    v
+generateAdaptiveQuestionSet(10, performanceData, options)
+    |                                    |
+    |  <-- Uses difficulty classification
+    |  <-- Prioritizes weak areas
+    |  <-- Includes new triads for classification
+    |
+    v
+useQuizReducer manages state (unchanged)
+    |
+    v
+User answers question
+    |                |
+    |                v
+    |       recordTriadAttempt(triadId, isCorrect, responseTime)
+    |                |
+    |                v
+    |       calculateSM2() updates review schedule
+    |
+    v
+Results + updated difficulty classifications
+```
+
+### Spaced Repetition Flow
+
+```
+App opens / Home screen mounts
+    |
+    v
+loadTriadPerformance()
+    |
+    v
+getDueTriadIds() -> count of due reviews
+    |
+    v
+Display "X items due for review" badge
+    |
+    v
+User taps review badge
+    |
+    v
+generateSpacedRepetitionSet(performanceData, maxCount)
+    |
+    v
+Review session (untimed, no scoring pressure)
+    |
+    v
+Each answer updates SM-2 scheduling
+    |
+    v
+Review complete -> back to home
+```
+
+### Daily Challenge Flow
+
+```
+Home screen mounts
+    |
+    v
+loadDailyChallengeState()
+    |
+    +--> Challenge already completed today
+    |         |
+    |         v
+    |    Show "Completed" badge
+    |
+    +--> Challenge not yet done
+              |
+              v
+         generateDailySeed(today)
+              |
+              v
+         selectChallengeType(today, performanceData)
+              |
+              v
+         Display challenge card with type info
+              |
+              v
+         User taps to start
+              |
+              v
+         generateDailyChallengeSet(type, seed, performanceData)
+              |
+              v
+         Special quiz mode (type-specific rules)
+              |
+              v
+         completeDailyChallenge(score)
+              |
+              v
+         Results + streak update
+```
+
+## Suggested Build Order
+
+### Phase 1: Per-Triad Performance Tracking (Foundation)
+
+**Why first:** All three features depend on knowing per-triad performance history. This is the foundational data layer.
+
+1. Create `triad-performance-storage.ts` with load/save
+2. Create `useTriadPerformance` hook
+3. Modify `QuizScreen` to record response time
+4. Modify `updateAfterQuiz` to call `recordTriadAttempt`
+5. Add difficulty classification algorithm
+
+**Deliverable:** Invisible to user, but all quiz answers now tracked per-triad.
+
+### Phase 2: Adaptive Difficulty
+
+**Why second:** Builds directly on Phase 1 data. Simplest user-facing feature - modifies existing flow rather than adding new screens.
+
+1. Create difficulty classification logic in `triad-performance.ts`
+2. Add `generateAdaptiveQuestionSet` to `question-generator.ts`
+3. Add settings toggle for adaptive mode
+4. Modify quiz start to use adaptive selection when enabled
+5. (Optional) Add difficulty indicator to quiz UI
+
+**Deliverable:** Quizzes feel more appropriately challenging.
+
+### Phase 3: Spaced Repetition
+
+**Why third:** Requires new screens but builds on Phase 1/2 infrastructure.
+
+1. Create `spaced-repetition.ts` with SM-2 algorithm
+2. Integrate SM-2 into `recordTriadAttempt`
+3. Add `ReviewDueBadge` to home screen
+4. Create `app/review/` screens
+5. Create review-specific UI (untimed, no scoring)
+
+**Deliverable:** "Items due for review" badge and dedicated review mode.
+
+### Phase 4: Daily Challenges
+
+**Why last:** Most complex feature. Requires all prior infrastructure plus new game modes.
+
+1. Create `daily-challenge.ts` service
+2. Create `daily-challenge-storage.ts`
+3. Add `DailyChallengeCard` to home screen
+4. Create `app/daily-challenge/` screens
+5. Implement challenge type variants
+6. Add daily challenge streak tracking
+
+**Deliverable:** Full daily challenge system with variety.
+
+## Risk Areas
+
+### High Risk: AsyncStorage Performance
+
+**Concern:** Loading per-triad performance data on every quiz start could be slow with ~100+ triads.
+
+**Mitigation:**
+- Keep performance data in memory after first load
+- Use context provider to share across screens
+- Lazy-write with debouncing (batch updates every 5 seconds)
+- Consider chunked storage if data grows large
+
+### Medium Risk: SM-2 Algorithm Complexity
+
+**Concern:** SM-2 has edge cases (quality 0-2 resets repetitions, ease factor floor of 1.3).
+
+**Mitigation:**
+- Use well-tested implementation from [cnnrhill/sm-2](https://github.com/cnnrhill/sm-2) as reference
+- Write comprehensive unit tests for SM-2 function
+- Default to conservative intervals on edge cases
+
+### Medium Risk: Daily Challenge Determinism
+
+**Concern:** Challenge must be same for all users on same day (for fairness) but also personalized.
+
+**Mitigation:**
+- Use date-based seed for challenge type and triad selection order
+- Personalization only affects which triads from user's "hard" pool
+- If user has no "hard" triads, fall back to random selection with same seed
+
+### Low Risk: Data Migration
+
+**Concern:** Existing users have no per-triad data.
+
+**Mitigation:**
+- All new data is additive
+- Triads start as "unclassified" until attempted
+- Graceful degradation: if no performance data, use random selection
+
+### Low Risk: Quiz Reducer Modifications
+
+**Concern:** `useQuizReducer` is well-tested; changes could introduce bugs.
+
+**Mitigation:**
+- Response time tracking added outside reducer (in QuizScreen)
+- Reducer state unchanged
+- Post-answer recording is a side effect, not state mutation
+
+## Technical Recommendations
+
+### 1. Use Context for Performance Data
+
+```typescript
+// New: TriadPerformanceContext.tsx
+const TriadPerformanceContext = createContext<TriadPerformanceStore | null>(null);
+
+export function TriadPerformanceProvider({ children }) {
+  const [store, setStore] = useState<TriadPerformanceStore | null>(null);
 
   useEffect(() => {
-    hasCompletedOnboarding().then((completed) => {
-      setNeedsOnboarding(!completed);
-      setIsLoading(false);
-    });
+    loadTriadPerformance().then(setStore);
   }, []);
 
-  if (isLoading) {
-    return <SplashScreen />; // Or null with expo-splash-screen
-  }
+  // Debounced save on changes
+  useEffect(() => {
+    if (store) {
+      const timeout = setTimeout(() => saveTriadPerformance(store), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [store]);
 
   return (
-    <ThemeProvider value={LightTheme}>
-      <Stack>
-        {needsOnboarding ? (
-          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-        ) : (
-          <>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="quiz" options={{ ... }} />
-          </>
-        )}
-      </Stack>
-      <StatusBar style="dark" />
-    </ThemeProvider>
+    <TriadPerformanceContext.Provider value={{ store, setStore }}>
+      {children}
+    </TriadPerformanceContext.Provider>
   );
 }
 ```
 
-**Alternative: expo-router redirect pattern**
-
-From [Expo Router authentication docs](https://docs.expo.dev/router/advanced/authentication-rewrites/), can use `<Redirect>` in a nested layout instead of conditional rendering in root:
+### 2. Response Time Tracking Pattern
 
 ```typescript
-// app/(tabs)/_layout.tsx
-export default function TabLayout() {
-  const { needsOnboarding } = useOnboardingState(); // from context
+// In QuizScreen, add ref for timing
+const questionStartTime = useRef<number>(Date.now());
 
-  if (needsOnboarding) {
-    return <Redirect href="/onboarding/welcome" />;
+// Reset on question change
+useEffect(() => {
+  if (status === 'playing') {
+    questionStartTime.current = Date.now();
+  }
+}, [currentIndex, status]);
+
+// Calculate on answer
+const handleAnswerSelect = (option: QuizOption) => {
+  const responseTimeMs = Date.now() - questionStartTime.current;
+  // ... existing logic
+  recordTriadAttempt(
+    currentQuestion.triad.id,
+    currentQuestion.triad.category,
+    option.isCorrect,
+    responseTimeMs
+  );
+};
+```
+
+### 3. SM-2 Quality Score Mapping
+
+```typescript
+// Map quiz performance to SM-2 quality (0-5)
+function calculateQuality(
+  isCorrect: boolean,
+  responseTimeMs: number,
+  questionTimeMs: number
+): number {
+  if (!isCorrect) {
+    // Incorrect: 0-2 based on how close they were
+    // For now, simple: incorrect = 1
+    return 1;
   }
 
-  return <Tabs>...</Tabs>;
+  // Correct: 3-5 based on speed
+  const timeRatio = responseTimeMs / questionTimeMs;
+  if (timeRatio < 0.3) return 5;  // Very fast
+  if (timeRatio < 0.5) return 4;  // Fast
+  return 3;                        // Correct but slow
 }
 ```
-
-**Recommendation:** Use the conditional Stack.Screen approach in root layout. Simpler, avoids flash of wrong screen, matches how the app already handles ThemeProvider wrapping.
-
-**Files to create:**
-- `services/onboarding-storage.ts` - Storage functions
-- `app/(onboarding)/_layout.tsx` - Onboarding stack
-- `app/(onboarding)/welcome.tsx` - Welcome screen
-- `app/(onboarding)/ready.tsx` - Final screen (mark complete + navigate)
-- `components/onboarding/OnboardingPage.tsx` - Shared page component
-
-**Existing code to modify:**
-- `app/_layout.tsx` - Add loading state and conditional routing
-
----
-
-### 2. Level System Integration
-
-**Current state (already implemented):**
-
-The app already has a mastery level system in `services/mastery.ts`:
-- 10 levels (0-10), 10 questions per level = 100 questions to max
-- Level titles: Beginner, Novice, Apprentice, Student, Practitioner, Specialist, Expert, Master, Virtuoso, Legend, Grandmaster
-- `useStats()` hook exposes: `masteryLevel`, `masteryProgress`, `questionsToNextLevel`, `levelTitle`
-
-**v2.0 enhancement: Engaging tier names**
-
-The existing 11-tier system (0-10) is actually fine. "Engaging tier names" means:
-1. Possibly rename some titles to be more thematic
-2. Add visual identity (colors, icons) per tier
-3. Surface level more prominently in UI
-
-**Proposed tier enhancement:**
-
-```typescript
-// services/mastery.ts - EXTEND (don't replace)
-
-export interface LevelTier {
-  level: number;
-  title: string;
-  color: string;        // Tier accent color
-  mascotKey: MascotKey; // Which mascot image to use
-  minQuestions: number;
-}
-
-export const LEVEL_TIERS: LevelTier[] = [
-  { level: 0, title: 'Beginner', color: '#B2BEC3', mascotKey: 'neutral', minQuestions: 0 },
-  { level: 1, title: 'Novice', color: '#74B9FF', mascotKey: 'neutral', minQuestions: 10 },
-  { level: 2, title: 'Apprentice', color: '#55EFC4', mascotKey: 'neutral', minQuestions: 20 },
-  { level: 3, title: 'Student', color: '#81ECEC', mascotKey: 'neutral', minQuestions: 30 },
-  { level: 4, title: 'Practitioner', color: '#FFEAA7', mascotKey: 'happy', minQuestions: 40 },
-  { level: 5, title: 'Specialist', color: '#FDCB6E', mascotKey: 'happy', minQuestions: 50 },
-  { level: 6, title: 'Expert', color: '#E17055', mascotKey: 'happy', minQuestions: 60 },
-  { level: 7, title: 'Master', color: '#D63031', mascotKey: 'master', minQuestions: 70 },
-  { level: 8, title: 'Virtuoso', color: '#A29BFE', mascotKey: 'master', minQuestions: 80 },
-  { level: 9, title: 'Legend', color: '#6C5CE7', mascotKey: 'supermaster', minQuestions: 90 },
-  { level: 10, title: 'Grandmaster', color: '#2D3436', mascotKey: 'supermaster', minQuestions: 100 },
-];
-
-export function getLevelTier(level: number): LevelTier {
-  return LEVEL_TIERS[Math.min(level, MAX_LEVEL)];
-}
-```
-
-**Where levels are displayed:**
-1. **Home screen HeroCard** - Already shows mascot based on `masteryLevel`
-2. **Home screen** - Add level badge/indicator near mascot
-3. **Results screen** - Already shows "+10 questions toward Level X"
-4. **Progress screen** - Show level prominently with progress bar
-5. **Settings screen** - Optionally show current level
-
-**Files to modify:**
-- `services/mastery.ts` - Add `LevelTier` interface and `LEVEL_TIERS` constant
-- `components/home/HeroCard.tsx` - Display level badge with tier color
-- `app/(tabs)/progress.tsx` - Add level section with visual progress
-
----
-
-### 3. Mascot Integration
-
-**Current state (already implemented):**
-
-`TriMascot` component in `components/home/TriMascot.tsx` already:
-- Has 4 mascot images: `tri-neutral.png`, `tri-success.png`, `tri-master.png`, `tri-supermaster.png`
-- Switches based on `masteryLevel` prop (>=7 = master, >=10 = supermaster)
-- Supports `mood` prop for animation variations
-- Has breathing, floating, rise, and glow animations via reanimated
-
-**v2.0 enhancement: More granular mascot evolution**
-
-Currently only 2 level thresholds (7, 10). Can expand to more:
-
-```typescript
-// components/home/TriMascot.tsx - EXTEND
-
-export type MascotKey = 'neutral' | 'happy' | 'master' | 'supermaster';
-
-const MASCOT_IMAGES: Record<MascotKey, any> = {
-  neutral: require('@/assets/images/tri-neutral.png'),
-  happy: require('@/assets/images/tri-success.png'),
-  master: require('@/assets/images/tri-master.png'),
-  supermaster: require('@/assets/images/tri-supermaster.png'),
-};
-
-// Optionally add more images for intermediate levels
-// e.g., tri-apprentice.png, tri-expert.png
-
-function getMascotImage(masteryLevel: number, mood: MascotMood): MascotKey {
-  // Level-based selection (higher priority)
-  if (masteryLevel >= 10) return 'supermaster';
-  if (masteryLevel >= 7) return 'master';
-
-  // Mood-based selection for lower levels
-  if (mood === 'happy' || mood === 'streak') return 'happy';
-
-  return 'neutral';
-}
-```
-
-**Asset strategy:**
-
-For mascot images, use static `require()` (current approach is correct):
-- Static imports are resolved at compile time
-- Images bundled into app binary
-- No network dependency at runtime
-- Better for small set of known assets
-
-Per [Expo Assets documentation](https://docs.expo.dev/develop/user-interface/assets/), this is the recommended approach for app assets.
-
-**Mascot display locations:**
-1. **Home screen HeroCard** - Primary mascot display (already implemented)
-2. **Onboarding screens** - Mascot guides user through onboarding
-3. **Results screen** - Already shows mascot with mood
-4. **Level up celebration** - Show new mascot when tier changes
-
-**Files to modify:**
-- `components/home/TriMascot.tsx` - Add `MascotKey` type, refine level thresholds
-- `constants/theme.ts` - Already has `MascotSizes`, no changes needed
-
-**Assets to potentially add:**
-- `assets/images/tri-apprentice.png` (optional - for intermediate tier)
-- `assets/images/tri-expert.png` (optional - for intermediate tier)
-
-**Recommendation:** Keep current 4 images for v2.0. The existing neutral/happy/master/supermaster progression is sufficient. Creating more mascot art is design work that can be deferred.
-
----
-
-### 4. UI Polish Integration
-
-**Current design system:**
-
-`constants/theme.ts` provides:
-- `Colors.light` - Complete color palette (primary, backgrounds, text hierarchy, semantic colors)
-- `Typography` - Text styles (display, title, heading, body, label, stat, caption, footnote, tiny)
-- `Spacing` - 8px base scale (xs, sm, md, base, lg, xl, xxl, xxxl)
-- `Shadows` - sm, md, lg elevation
-- `Radius` - Border radius scale
-- `MascotSizes` - sm, md, lg, xl
-- `Durations` - Animation timing
-
-**Current screen status:**
-
-| Screen | Uses Design System | Polish Needed |
-|--------|-------------------|---------------|
-| Home | Yes - fully styled | No - reference implementation |
-| Quiz | Partial | Yes - timer, findings card styling |
-| Results | Yes - mostly styled | Minor - consistency check |
-| Library | Partial | Yes - match Home card style |
-| Progress | Partial | Yes - match Home card style |
-| Settings | Partial | Yes - match Home card style |
-
-**Polish approach:**
-
-1. **Card consistency** - All screens should use same card pattern:
-   ```typescript
-   // components/ui/Card.tsx - already exists but underused
-   // Apply: LinearGradient background, Radius.xl, consistent padding
-   ```
-
-2. **Header consistency** - Match HomeHeader pattern:
-   ```typescript
-   // All tab screens should have similar header treatment
-   // Title + optional subtitle with consistent typography
-   ```
-
-3. **Spacing consistency** - Use theme Spacing everywhere:
-   ```typescript
-   // Replace hardcoded padding/margin with Spacing constants
-   paddingHorizontal: Spacing.lg,
-   gap: Spacing.md,
-   ```
-
-4. **Animation consistency** - Use FadeInUp entering animations:
-   ```typescript
-   // Currently used on Home screen, apply to other screens
-   entering={FadeInUp.delay(n * Durations.stagger).duration(Durations.normal).springify()}
-   ```
-
-**Files to modify:**
-- `app/(tabs)/library.tsx` - Apply Home screen styling patterns
-- `app/(tabs)/progress.tsx` - Apply Home screen styling patterns
-- `app/(tabs)/settings.tsx` - Apply Home screen styling patterns
-- `app/quiz/index.tsx` - Polish quiz screen elements
-- `components/library/CategorySection.tsx` - Match card styles
-- `components/progress/StatsCard.tsx` - Match card styles
-- `components/settings/SettingsRow.tsx` - Match row styles
-
----
-
-## Data Flow
-
-### Current Data Flow
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     AsyncStorage                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │ @medtriad_   │  │ @medtriad_   │  │ @medtriad_   │       │
-│  │   stats      │  │   settings   │  │ quiz_history │       │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘       │
-└─────────┼─────────────────┼─────────────────┼───────────────┘
-          │                 │                 │
-          ▼                 ▼                 ▼
-┌─────────────────┐ ┌───────────────┐ ┌───────────────────────┐
-│ stats-storage.ts│ │settings-      │ │ stats-storage.ts      │
-│ loadStats()     │ │storage.ts     │ │ loadQuizHistory()     │
-│ updateAfterQuiz│ │ loadSettings()│ │ saveQuizHistory()     │
-└────────┬────────┘ └───────┬───────┘ └───────────────────────┘
-         │                  │
-         ▼                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    React Hooks                               │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │ useStats()   │  │useSoundEffects│ │ useHaptics() │       │
-│  │ masteryLevel │  │(reads settings)│ │(reads settings)│    │
-│  │ highScore    │  └──────────────┘  └──────────────┘       │
-│  │ dailyStreak  │                                            │
-│  └──────┬───────┘                                            │
-└─────────┼────────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Components                                │
-│  Home → HeroCard → TriMascot (masteryLevel)                 │
-│       → StatsGrid (accuracy, streak, highScore)             │
-│  Results → TriMascot (mood based on accuracy)               │
-│         → Mastery badge (questions to next level)           │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### v2.0 Data Flow Additions
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     AsyncStorage                             │
-│  ┌──────────────┐                                            │
-│  │ @medtriad_   │  <-- NEW KEY                               │
-│  │  onboarding  │                                            │
-│  └──────┬───────┘                                            │
-└─────────┼────────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                 services/onboarding-storage.ts               │
-│  hasCompletedOnboarding() -> boolean                         │
-│  markOnboardingComplete() -> void                            │
-└─────────┬────────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    app/_layout.tsx                           │
-│  [isLoading, needsOnboarding] state                          │
-│  Conditionally renders (onboarding) or (tabs) route group   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**Level system data flow (extends existing):**
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                services/mastery.ts                           │
-│  LEVEL_TIERS[] - NEW constant with tier metadata             │
-│  getLevelTier(level) - NEW function returning tier data      │
-│  (existing functions unchanged)                              │
-└─────────┬────────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                hooks/useStats.ts                             │
-│  masteryLevel (existing)                                     │
-│  levelTier -> getLevelTier(masteryLevel) - NEW derived value │
-│  levelColor, levelTitle (from tier)                          │
-└─────────┬────────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Components                                │
-│  HeroCard -> level badge with tier.color                     │
-│  TriMascot -> mascot based on tier.mascotKey                 │
-│  Progress screen -> level progress visualization             │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Component Boundaries
-
-### New Components
-
-| Component | Responsibility | Location |
-|-----------|---------------|----------|
-| OnboardingPage | Shared layout for onboarding screens | components/onboarding/ |
-| LevelBadge | Displays level with tier color | components/ui/ |
-| LevelProgress | Visual level progress bar | components/home/ or components/progress/ |
-
-### Existing Components to Extend
-
-| Component | Extension | Reason |
-|-----------|-----------|--------|
-| TriMascot | More refined level thresholds | Already has level-based switching |
-| HeroCard | Add LevelBadge | Already receives masteryLevel |
-| useStats | Add levelTier derived value | Centralizes level logic |
-
-### Component Communication
-
-```
-app/_layout.tsx
-    │
-    ├── (onboarding)/ [conditional]
-    │       └── OnboardingPage
-    │               └── TriMascot (neutral mood)
-    │               └── Button (navigation)
-    │
-    └── (tabs)/ [conditional]
-            ├── Home
-            │       └── HomeHeader
-            │       └── HeroCard
-            │               └── TriMascot (level + mood based)
-            │               └── LevelBadge (NEW)
-            │       └── StatsGrid
-            │       └── Button
-            │
-            ├── Library (polish only - no structural changes)
-            ├── Progress (add level section)
-            │       └── LevelProgress (NEW)
-            │       └── StatsCard
-            └── Settings (polish only)
-```
-
----
-
-## Suggested Build Order
-
-Based on dependencies and risk analysis:
-
-### Phase 1: UI Polish Foundation
-
-**Why first:** Establishes consistent patterns before adding new features. Low risk, high visual impact.
-
-1. **Audit theme usage** - Find hardcoded styles
-2. **Polish Library screen** - Apply card patterns, spacing
-3. **Polish Progress screen** - Apply card patterns, add section structure
-4. **Polish Settings screen** - Apply row patterns
-5. **Polish Quiz screen** - Timer, findings card consistency
-
-**Depends on:** Nothing
-**Blocks:** Nothing (can proceed in parallel with onboarding)
-
-### Phase 2: Level System Enhancement
-
-**Why second:** Builds on existing mastery system, needed for mascot evolution.
-
-1. **Extend mastery.ts** - Add LEVEL_TIERS, getLevelTier()
-2. **Extend useStats** - Add levelTier derived value
-3. **Create LevelBadge component** - Visual level indicator
-4. **Add to HeroCard** - Display level badge
-5. **Add to Progress screen** - Level section with progress bar
-
-**Depends on:** Existing mastery system (already working)
-**Blocks:** Mascot evolution (needs tier mapping)
-
-### Phase 3: Mascot Evolution
-
-**Why third:** Depends on level tier system for mapping.
-
-1. **Define mascot-to-tier mapping** - In mastery.ts LEVEL_TIERS
-2. **Refine TriMascot thresholds** - Use tier.mascotKey
-3. **Verify all mascot display locations** - Home, Results, (Onboarding)
-4. **(Optional)** Add intermediate mascot assets if design available
-
-**Depends on:** Level tier system
-**Blocks:** Onboarding (needs mascot for guide)
-
-### Phase 4: Onboarding Flow
-
-**Why last:** Can be added without touching existing screens. Depends on mascot being finalized.
-
-1. **Create onboarding-storage.ts** - First-launch detection
-2. **Create (onboarding) route group** - Layout + screens
-3. **Create OnboardingPage component** - Shared screen layout
-4. **Create welcome.tsx** - "What are triads?"
-5. **Create ready.tsx** - Mark complete + navigate
-6. **Modify app/_layout.tsx** - Conditional routing
-
-**Depends on:** Mascot (for onboarding guide), UI patterns (for consistency)
-**Blocks:** Nothing
-
-### Parallel Work Opportunities
-
-- **UI Polish** can happen in parallel with **Level System**
-- **Onboarding screens** design can happen while Level System is built
-- **Testing** each phase independently before integration
-
----
-
-## Anti-Patterns to Avoid
-
-### 1. Onboarding State in React Context
-
-**Don't:** Create a React Context for onboarding state
-**Do:** Read from AsyncStorage once in root layout, use local state
-
-Why: Onboarding is checked once at app launch. No need for global context. Simpler is better.
-
-### 2. Dynamic require() for Mascot Images
-
-**Don't:** `require(\`@/assets/images/tri-${mascotKey}.png\`)`
-**Do:** Static require with lookup object
-
-```typescript
-// CORRECT
-const MASCOT_IMAGES = {
-  neutral: require('@/assets/images/tri-neutral.png'),
-  // ...
-};
-const image = MASCOT_IMAGES[mascotKey];
-
-// WRONG - dynamic require not optimized
-const image = require(`@/assets/images/tri-${mascotKey}.png`);
-```
-
-Why: Metro bundler optimizes static requires. Dynamic requires may not be bundled correctly.
-
-### 3. Level System State Duplication
-
-**Don't:** Store calculated level in AsyncStorage
-**Do:** Derive level from totalAnswered (current approach)
-
-Why: Level is a derived value. Storing it creates sync issues. Calculate when needed.
-
-### 4. Mixing Styling Approaches
-
-**Don't:** Mix inline styles with theme constants
-**Do:** Use theme constants consistently
-
-```typescript
-// CORRECT
-style={{ paddingHorizontal: Spacing.lg, backgroundColor: colors.background }}
-
-// WRONG - mixing
-style={{ paddingHorizontal: 24, backgroundColor: colors.background }}
-```
-
----
-
-## Summary
-
-### Integration Approach
-
-| Feature | Integration Type | Risk Level |
-|---------|-----------------|------------|
-| Onboarding | New route group + storage service | LOW - isolated from existing code |
-| Level System | Extend existing mastery service | LOW - additive changes only |
-| Mascot Evolution | Extend existing TriMascot | LOW - already has level-based logic |
-| UI Polish | Apply existing theme system | LOW - visual changes only |
-
-### Key Architectural Decisions
-
-1. **Onboarding uses route groups** (expo-router pattern) rather than custom navigation state
-2. **Level tiers defined in mastery.ts** - single source of truth for progression
-3. **Mascot images use static require** - bundled at compile time
-4. **UI polish uses existing theme.ts** - no new design system needed
-
-### Files Summary
-
-**New files (6):**
-- `services/onboarding-storage.ts`
-- `app/(onboarding)/_layout.tsx`
-- `app/(onboarding)/welcome.tsx`
-- `app/(onboarding)/ready.tsx`
-- `components/onboarding/OnboardingPage.tsx`
-- `components/ui/LevelBadge.tsx`
-
-**Modified files (8+):**
-- `app/_layout.tsx` - Onboarding routing
-- `services/mastery.ts` - Level tiers
-- `hooks/useStats.ts` - Level tier derived value
-- `components/home/TriMascot.tsx` - Tier-based mascot
-- `components/home/HeroCard.tsx` - Level badge
-- `app/(tabs)/library.tsx` - UI polish
-- `app/(tabs)/progress.tsx` - UI polish + level section
-- `app/(tabs)/settings.tsx` - UI polish
-
-### Confidence Assessment
-
-| Area | Confidence | Reason |
-|------|------------|--------|
-| Onboarding pattern | HIGH | Official expo-router documentation pattern |
-| Level system | HIGH | Extends existing working code |
-| Mascot integration | HIGH | Already implemented, just refining |
-| UI polish | HIGH | Applying existing design system |
-
----
 
 ## Sources
 
-- [Expo Router Introduction](https://docs.expo.dev/router/introduction/)
-- [Expo Router Authentication Redirects](https://docs.expo.dev/router/advanced/authentication-rewrites/)
-- [Expo Assets Documentation](https://docs.expo.dev/develop/user-interface/assets/)
-- [React Native Reanimated Documentation](https://docs.swmansion.com/react-native-reanimated/)
-- Existing codebase analysis: `services/mastery.ts`, `components/home/TriMascot.tsx`, `hooks/useStats.ts`
+- [SM-2 Algorithm Implementation (GitHub)](https://github.com/cnnrhill/sm-2)
+- [Anki SM-2 Documentation](https://faqs.ankiweb.net/what-spaced-repetition-algorithm)
+- [Adaptive Quiz Difficulty Scaling (QuizCat)](https://www.quizcat.ai/blog/what-is-adaptive-quiz-difficulty-scaling)
+- [Item Response Theory for Adaptive Testing](https://www.cogn-iq.org/learn/theory/item-response-theory/)
+- [Codecademy Smart Practice Algorithm](https://www.codecademy.com/resources/blog/behind-the-build-smart-practice/)
+- [Daily Challenge Implementation Patterns](https://starloopstudios.com/which-mobile-game-features-keep-players-coming-back/)
