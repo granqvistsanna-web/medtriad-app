@@ -48,6 +48,7 @@ const triNeutral = require('@/assets/images/tri-neutral.png');
 const triLvl1 = require('@/assets/images/tri-lvl1.png');
 const triSuccess = require('@/assets/images/tri-success.png');
 const triChill = require('@/assets/images/tri-chill.png');
+const triLvl6 = require('@/assets/images/tri-lvl6.png');
 
 type PageData = {
   id: string;
@@ -97,7 +98,7 @@ const PAGES: PageData[] = [
     id: '6',
     title: 'Ready to\nBegin?',
     subtitle: 'Master all 45 triads and become the Chief!',
-    mascotImage: triChill,
+    mascotImage: triLvl6,
     content: 'ready',
   },
 ];
@@ -117,7 +118,12 @@ function PaginationDots({ scrollX, count, width, currentPage }: PaginationDotsPr
   const colors = Colors.light;
 
   return (
-    <View style={styles.paginationContainer}>
+    <View
+      style={styles.paginationContainer}
+      accessibilityRole="adjustable"
+      accessibilityLabel={`Page ${currentPage + 1} of ${count}`}
+      accessibilityHint="Swipe left or right to navigate between pages"
+    >
       {/* Progress text */}
       <View style={styles.progressTextContainer}>
         <Text variant="caption" color="secondary" style={styles.progressText}>
@@ -126,7 +132,7 @@ function PaginationDots({ scrollX, count, width, currentPage }: PaginationDotsPr
       </View>
 
       {/* Dots */}
-      <View style={styles.dotsRow}>
+      <View style={styles.dotsRow} accessibilityElementsHidden>
         {Array.from({ length: count }).map((_, index) => (
           <PaginationDot key={index} index={index} scrollX={scrollX} width={width} />
         ))}
@@ -193,7 +199,7 @@ function SwipeHint({ visible }: { visible: boolean }) {
         withRepeat(
           withSequence(
             withTiming(0, { duration: 0 }),
-            withTiming(-20, { duration: 600, easing: Easing.inOut(Easing.ease) }),
+            withTiming(20, { duration: 600, easing: Easing.inOut(Easing.ease) }),
             withTiming(0, { duration: 400, easing: Easing.out(Easing.ease) })
           ),
           3,
@@ -213,12 +219,16 @@ function SwipeHint({ visible }: { visible: boolean }) {
   if (!visible) return null;
 
   return (
-    <Animated.View style={[styles.swipeHint, animatedStyle]}>
+    <Animated.View
+      style={[styles.swipeHint, animatedStyle]}
+      accessibilityLabel="Swipe to continue to the next page"
+      accessibilityRole="text"
+    >
       <View style={[styles.swipeHintPill, { backgroundColor: colors.primaryUltraLight }]}>
-        <AltArrowLeft size={16} color={colors.primary} />
         <Text variant="caption" color={colors.primary} style={styles.swipeHintText}>
           Swipe to continue
         </Text>
+        <AltArrowRight size={16} color={colors.primary} />
       </View>
     </Animated.View>
   );
@@ -284,6 +294,8 @@ function NameInput({ value, onChangeText, onSubmit }: NameInputProps) {
           autoCorrect={false}
           returnKeyType="done"
           maxLength={20}
+          accessibilityLabel="Your name (optional)"
+          accessibilityHint="Enter your name for a personalized experience, or leave blank to skip"
         />
       </View>
 
@@ -335,16 +347,27 @@ function TriadDemo() {
 function QuizPreview() {
   const colors = Colors.light;
   const timerWidth = useSharedValue(100);
+  const [countdown, setCountdown] = useState(12);
 
   useEffect(() => {
-    timerWidth.value = withRepeat(
-      withSequence(
-        withTiming(100, { duration: 0 }),
-        withTiming(30, { duration: 3000, easing: Easing.linear })
-      ),
-      -1,
-      false
+    // Animate the progress bar once (100% → 0%)
+    timerWidth.value = withDelay(
+      500, // Small delay before starting
+      withTiming(0, { duration: 3000, easing: Easing.linear })
     );
+
+    // Animate the countdown number (12 → 0) once
+    let currentCount = 12;
+    const countdownInterval = setInterval(() => {
+      currentCount -= 1;
+      if (currentCount >= 0) {
+        setCountdown(currentCount);
+      } else {
+        clearInterval(countdownInterval);
+      }
+    }, 250); // 3000ms / 12 steps = 250ms per step
+
+    return () => clearInterval(countdownInterval);
   }, []);
 
   const timerStyle = useAnimatedStyle(() => ({
@@ -360,7 +383,7 @@ function QuizPreview() {
         <Text style={[styles.quizCounter, { color: colors.textMuted }]}>1 of 10</Text>
         <View style={styles.quizTimer}>
           <ClockCircle size={14} color={colors.primary} />
-          <Text style={[styles.timerText, { color: colors.primary }]}>12s</Text>
+          <Text style={[styles.timerText, { color: colors.primary }]}>{countdown}s</Text>
         </View>
       </View>
 
@@ -579,11 +602,14 @@ export default function OnboardingScreen() {
       <Animated.View
         entering={FadeInUp.delay(index * 50).duration(Durations.normal).springify()}
         style={styles.mascotContainer}
+        accessible={false}
+        importantForAccessibility="no-hide-descendants"
       >
         <Image
           source={item.mascotImage}
           style={item.content === 'ready' ? styles.mascotLarge : styles.mascot}
           contentFit="contain"
+          accessibilityElementsHidden
         />
       </Animated.View>
 
@@ -628,6 +654,9 @@ export default function OnboardingScreen() {
           { top: insets.top + Spacing.sm, right: Spacing.lg },
         ]}
         hitSlop={12}
+        accessibilityRole="button"
+        accessibilityLabel="Skip onboarding"
+        accessibilityHint="Skip the tutorial and go directly to the app"
       >
         <Text variant="label" color="secondary">Skip</Text>
       </Pressable>
@@ -649,6 +678,8 @@ export default function OnboardingScreen() {
           offset: width * index,
           index,
         })}
+        accessibilityRole="adjustable"
+        accessibilityLabel={`Onboarding tutorial, showing page ${currentPage + 1} of ${PAGES.length}`}
       />
 
       {/* Swipe hint - only on first page */}
@@ -676,6 +707,14 @@ export default function OnboardingScreen() {
               { backgroundColor: colors.primary },
               buttonAnimatedStyle,
             ]}
+            accessibilityRole="button"
+            accessibilityLabel={
+              isLastPage
+                ? 'Get started with MedTriads'
+                : isNamePage && !userName.trim()
+                  ? 'Skip name entry and continue'
+                  : `Continue to page ${currentPage + 2}`
+            }
           >
             {isLastPage ? (
               <>
