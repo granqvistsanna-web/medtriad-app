@@ -1,7 +1,7 @@
 import { StyleSheet, View, useWindowDimensions, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { useEffect, useCallback } from 'react';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useEffect, useCallback, useMemo } from 'react';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Text, Button } from '@/components/primitives';
@@ -14,10 +14,10 @@ import { TrickyButton } from '@/components/quiz/TrickyButton';
 import { useStudyReducer } from '@/hooks/use-study-reducer';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useHaptics } from '@/hooks/useHaptics';
-import { generateQuestionSet } from '@/services/question-generator';
+import { generateQuestionSet, generateQuestionSetByCategories } from '@/services/question-generator';
 import { toggleTrickyQuestion, saveStudySession } from '@/services/study-storage';
 
-import { QuizOption } from '@/types';
+import { QuizOption, TriadCategory } from '@/types';
 import { STUDY_QUESTION_COUNT } from '@/types/study-state';
 import { theme, Spacing, Durations } from '@/constants/theme';
 
@@ -31,10 +31,17 @@ import { theme, Spacing, Durations } from '@/constants/theme';
 export default function StudyScreen() {
   const [state, dispatch] = useStudyReducer();
   const router = useRouter();
+  const params = useLocalSearchParams<{ categories?: string }>();
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
   const { playSound } = useSoundEffects();
   const { triggerHaptic } = useHaptics();
+
+  // Parse categories from URL params
+  const selectedCategories = useMemo(() => {
+    if (!params.categories) return [];
+    return params.categories.split(',').filter(Boolean) as TriadCategory[];
+  }, [params.categories]);
 
   const {
     status,
@@ -48,11 +55,14 @@ export default function StudyScreen() {
 
   const currentQuestion = questions[currentIndex];
 
-  // Initialize study session on mount
+  // Initialize study session on mount with category filtering
   useEffect(() => {
-    const generatedQuestions = generateQuestionSet(STUDY_QUESTION_COUNT);
+    const generatedQuestions =
+      selectedCategories.length > 0
+        ? generateQuestionSetByCategories(STUDY_QUESTION_COUNT, selectedCategories)
+        : generateQuestionSet(STUDY_QUESTION_COUNT);
     dispatch({ type: 'START_STUDY', questions: generatedQuestions });
-  }, [dispatch]);
+  }, [dispatch, selectedCategories]);
 
   // Handle answer selection
   const handleAnswerSelect = useCallback(
@@ -160,7 +170,6 @@ export default function StudyScreen() {
         {
           backgroundColor: theme.colors.surface.primary,
           paddingTop: insets.top,
-          paddingBottom: insets.bottom,
           height: windowHeight,
         },
       ]}
@@ -198,36 +207,47 @@ export default function StudyScreen() {
           ))}
         </View>
 
-        {/* Explanation and footer - shown after answering */}
+        {/* Explanation - shown after answering */}
         {showExplanation && (
           <Animated.View
             entering={FadeIn.duration(Durations.normal)}
             style={styles.explanationSection}
           >
             <ExplanationCard triad={currentQuestion.triad} />
-
-            {/* Footer with tricky button and continue */}
-            <View style={styles.footer}>
-              <TrickyButton
-                isMarked={isCurrentQuestionTricky}
-                onToggle={handleToggleTricky}
-              />
-
-              <Button
-                label={
-                  currentIndex >= questions.length - 1
-                    ? 'Finish Study'
-                    : 'Continue'
-                }
-                variant="primary"
-                size="lg"
-                onPress={handleContinue}
-                style={styles.continueButton}
-              />
-            </View>
           </Animated.View>
         )}
       </ScrollView>
+
+      {/* Fixed footer with tricky button and continue - shown after answering */}
+      {showExplanation && (
+        <Animated.View
+          entering={FadeIn.duration(Durations.normal)}
+          style={[
+            styles.fixedFooter,
+            {
+              paddingBottom: Math.max(insets.bottom, Spacing.md),
+              borderTopColor: theme.colors.border.default,
+            },
+          ]}
+        >
+          <TrickyButton
+            isMarked={isCurrentQuestionTricky}
+            onToggle={handleToggleTricky}
+          />
+
+          <Button
+            label={
+              currentIndex >= questions.length - 1
+                ? 'Finish Study'
+                : 'Continue'
+            }
+            variant="primary"
+            size="lg"
+            onPress={handleContinue}
+            style={styles.continueButton}
+          />
+        </Animated.View>
+      )}
     </View>
   );
 }
@@ -243,7 +263,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     gap: Spacing.sm,
-    paddingBottom: Spacing.xl,
+    paddingBottom: 120, // Space for fixed footer
   },
   answersSection: {
     gap: Spacing.md,
@@ -251,13 +271,19 @@ const styles = StyleSheet.create({
   },
   explanationSection: {
     marginTop: Spacing.lg,
-    gap: Spacing.lg,
   },
-  footer: {
+  fixedFooter: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.md,
+    backgroundColor: theme.colors.surface.primary,
+    borderTopWidth: 1,
   },
   continueButton: {
     flex: 1,

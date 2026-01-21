@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
-import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { StatsCard } from '@/components/progress/StatsCard';
 import { QuizHistoryList } from '@/components/progress/QuizHistoryList';
@@ -54,8 +54,8 @@ export default function ProgressScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <Animated.View entering={FadeIn.duration(Durations.normal)}>
-          <Text variant="title" color="primary">Progress</Text>
+        <Animated.View entering={FadeInUp.duration(Durations.normal).springify()}>
+          <Text variant="titleLarge" color="primary">Progress</Text>
         </Animated.View>
 
         {/* Hero Card - matches Home style */}
@@ -178,9 +178,8 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   heroValue: {
-    fontSize: 64,
-    fontWeight: '700',
-    lineHeight: 72,
+    ...theme.typography.display,
+    lineHeight: 72, // Override for tighter hero layout
   },
   heroSubtext: {
     marginBottom: Spacing.lg,

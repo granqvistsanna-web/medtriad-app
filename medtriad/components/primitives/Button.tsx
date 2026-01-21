@@ -19,12 +19,15 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
+  Platform,
   type ViewStyle,
 } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
+  withTiming,
+  interpolateColor,
 } from 'react-native-reanimated';
 import { ComponentType } from 'react';
 import type { SvgProps } from 'react-native-svg';
@@ -148,9 +151,13 @@ export function Button({
 }: ButtonProps) {
   const scale = useSharedValue(1);
   const borderBottom = useSharedValue(4);
+  const hoverProgress = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+    transform: [
+      { scale: scale.value },
+      { translateY: hoverProgress.value * -2 }, // Lift slightly on hover
+    ],
     borderBottomWidth: borderBottom.value,
   }));
 
@@ -166,6 +173,19 @@ export function Button({
     borderBottom.value = withSpring(4, theme.motion.springs.press);
   };
 
+  // Web hover handlers
+  const handleHoverIn = () => {
+    if (!disabled && !loading && Platform.OS === 'web') {
+      hoverProgress.value = withTiming(1, { duration: 150 });
+    }
+  };
+
+  const handleHoverOut = () => {
+    if (Platform.OS === 'web') {
+      hoverProgress.value = withTiming(0, { duration: 150 });
+    }
+  };
+
   const variantStyle = VARIANTS[variant];
   const sizeStyle = SIZES[size];
   const isDisabled = disabled || loading;
@@ -176,6 +196,9 @@ export function Button({
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
+      // @ts-expect-error - onHoverIn/Out are web-only props
+      onHoverIn={handleHoverIn}
+      onHoverOut={handleHoverOut}
       disabled={isDisabled}
       style={[
         styles.button,
@@ -186,6 +209,8 @@ export function Button({
           borderBottomColor: variantStyle.borderBottomColor,
           borderRadius: theme.radius.lg,
           opacity: isDisabled ? 0.5 : 1,
+          // Web-specific cursor style
+          ...(Platform.OS === 'web' && !isDisabled ? { cursor: 'pointer' } : {}),
         },
         variantStyle.borderWidth && {
           borderWidth: variantStyle.borderWidth,

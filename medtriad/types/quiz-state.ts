@@ -1,9 +1,15 @@
 import { QuizQuestion } from './question';
 
 /**
- * Time allowed per question in seconds
+ * Default time allowed per question in seconds
+ * @deprecated Use getTimerForTier() from mastery.ts for tier-based timing
  */
-export const QUESTION_TIME = 12;
+export const QUESTION_TIME = 15;
+
+/**
+ * Default time for backwards compatibility
+ */
+export const DEFAULT_QUESTION_TIME = 15;
 
 /**
  * Number of questions per quiz round
@@ -47,6 +53,9 @@ export interface QuizState {
   /** Seconds remaining for current question */
   timeRemaining: number;
 
+  /** Time allowed per question (tier-based) */
+  questionTime: number;
+
   /** ID of selected answer option, null if none selected */
   selectedOptionId: string | null;
 }
@@ -55,7 +64,7 @@ export interface QuizState {
  * Actions that can be dispatched to the quiz reducer
  */
 export type QuizAction =
-  | { type: 'START_QUIZ'; questions: QuizQuestion[] }
+  | { type: 'START_QUIZ'; questions: QuizQuestion[]; questionTime?: number }
   | { type: 'SELECT_ANSWER'; optionId: string; isCorrect: boolean; timeRemaining: number }
   | { type: 'TICK_TIMER' }
   | { type: 'NEXT_QUESTION' }

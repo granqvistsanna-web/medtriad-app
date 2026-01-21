@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StyleSheet, View, Pressable } from 'react-native';
 import Animated, {
   FadeInUp,
@@ -5,25 +6,14 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
+import { AltArrowRight } from '@solar-icons/react-native/Linear';
 import { theme, Radius, Spacing, Durations, Easings } from '@/constants/theme';
-import { Text } from '@/components/primitives';
+import { Text, Icon } from '@/components/primitives';
 import { TriadCategory } from '@/types/triad';
+import { CATEGORY_COLORS, CATEGORY_LABELS } from '@/constants/tokens/category-colors';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-// Display names for categories - using unified color scheme
-const CATEGORY_NAMES: Record<TriadCategory, string> = {
-  cardiology: 'Cardiology',
-  neurology: 'Neurology',
-  endocrine: 'Endocrine',
-  pulmonary: 'Pulmonary',
-  gastroenterology: 'GI',
-  infectious: 'Infectious',
-  hematology: 'Hematology',
-  rheumatology: 'Rheumatology',
-  renal: 'Renal',
-  obstetrics: 'OB/GYN',
-};
 
 type CategoryCardProps = {
   category: TriadCategory;
@@ -33,9 +23,10 @@ type CategoryCardProps = {
 };
 
 function CategoryCard({ category, masteryPercent, delay, onPress }: CategoryCardProps) {
-  const categoryName = CATEGORY_NAMES[category];
+  const categoryName = CATEGORY_LABELS[category];
+  const colors = CATEGORY_COLORS[category];
   const scale = useSharedValue(1);
-  const borderBottom = useSharedValue(4);
+  const borderBottom = useSharedValue(3);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -44,12 +35,12 @@ function CategoryCard({ category, masteryPercent, delay, onPress }: CategoryCard
 
   const handlePressIn = () => {
     scale.value = withSpring(0.97, Easings.press);
-    borderBottom.value = withSpring(2, Easings.press);
+    borderBottom.value = withSpring(1.5, Easings.press);
   };
 
   const handlePressOut = () => {
     scale.value = withSpring(1, Easings.press);
-    borderBottom.value = withSpring(4, Easings.press);
+    borderBottom.value = withSpring(3, Easings.press);
   };
 
   return (
@@ -61,29 +52,54 @@ function CategoryCard({ category, masteryPercent, delay, onPress }: CategoryCard
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        style={[styles.card, animatedStyle]}
+        style={[
+          styles.card,
+          animatedStyle,
+          {
+            backgroundColor: colors.bg,
+            borderColor: `${colors.text}20`,
+            borderBottomColor: `${colors.text}40`,
+          },
+        ]}
       >
-        <Text variant="caption" color="primary" weight="semibold">
-          {categoryName}
-        </Text>
+        <View style={styles.cardHeader}>
+          <Text variant="caption" weight="semibold" style={{ color: colors.text, flex: 1 }}>
+            {categoryName}
+          </Text>
+          <Icon icon={AltArrowRight} size="sm" color={colors.text} style={{ opacity: 0.35 }} />
+        </View>
 
         {/* Progress bar */}
-        <View style={styles.progressTrack}>
+        <View style={[styles.progressTrack, { backgroundColor: `${colors.text}15` }]}>
           <View
             style={[
               styles.progressFill,
-              { width: `${masteryPercent}%` }
+              { width: `${masteryPercent}%`, backgroundColor: colors.activeBg }
             ]}
           />
         </View>
 
-        <Text variant="footnote" color="secondary" weight="semibold" align="right">
+        <Text variant="footnote" weight="semibold" align="right" style={{ color: colors.text, opacity: 0.7 }}>
           {masteryPercent}%
         </Text>
       </AnimatedPressable>
     </Animated.View>
   );
 }
+
+// All available categories
+const ALL_CATEGORIES: TriadCategory[] = [
+  'cardiology',
+  'neurology',
+  'endocrine',
+  'pulmonary',
+  'gastroenterology',
+  'infectious',
+  'hematology',
+  'rheumatology',
+  'renal',
+  'obstetrics',
+];
 
 type CategoryMasteryProps = {
   categoryMastery: Partial<Record<TriadCategory, number>>;
@@ -96,8 +112,23 @@ export function CategoryMastery({
   delay = 0,
   onCategoryPress,
 }: CategoryMasteryProps) {
-  // Get top 4 categories to display (or all if less than 4)
-  const categories: TriadCategory[] = ['cardiology', 'neurology', 'pulmonary', 'endocrine'];
+  const [expanded, setExpanded] = useState(false);
+
+  // Sort categories by mastery percentage (highest first)
+  const sortedCategories = [...ALL_CATEGORIES].sort((a, b) => {
+    const aPercent = categoryMastery[a] ?? 0;
+    const bPercent = categoryMastery[b] ?? 0;
+    return bPercent - aPercent;
+  });
+
+  // Show top 4 by default, all when expanded
+  const visibleCategories = expanded ? sortedCategories : sortedCategories.slice(0, 4);
+
+  // Create rows of 2 categories each
+  const rows: TriadCategory[][] = [];
+  for (let i = 0; i < visibleCategories.length; i += 2) {
+    rows.push(visibleCategories.slice(i, i + 2));
+  }
 
   return (
     <Animated.View
@@ -114,35 +145,37 @@ export function CategoryMastery({
 
       {/* Category grid */}
       <View style={styles.grid}>
-        <View style={styles.row}>
-          <CategoryCard
-            category={categories[0]}
-            masteryPercent={categoryMastery[categories[0]] ?? 0}
-            delay={delay + Durations.stagger}
-            onPress={() => onCategoryPress?.(categories[0])}
-          />
-          <CategoryCard
-            category={categories[1]}
-            masteryPercent={categoryMastery[categories[1]] ?? 0}
-            delay={delay + Durations.stagger * 2}
-            onPress={() => onCategoryPress?.(categories[1])}
-          />
-        </View>
-        <View style={styles.row}>
-          <CategoryCard
-            category={categories[2]}
-            masteryPercent={categoryMastery[categories[2]] ?? 0}
-            delay={delay + Durations.stagger * 3}
-            onPress={() => onCategoryPress?.(categories[2])}
-          />
-          <CategoryCard
-            category={categories[3]}
-            masteryPercent={categoryMastery[categories[3]] ?? 0}
-            delay={delay + Durations.stagger * 4}
-            onPress={() => onCategoryPress?.(categories[3])}
-          />
-        </View>
+        {rows.map((row, rowIndex) => (
+          <View key={rowIndex} style={styles.row}>
+            {row.map((category, colIndex) => (
+              <CategoryCard
+                key={category}
+                category={category}
+                masteryPercent={categoryMastery[category] ?? 0}
+                delay={expanded ? 0 : delay + Durations.stagger * (rowIndex * 2 + colIndex + 1)}
+                onPress={() => onCategoryPress?.(category)}
+              />
+            ))}
+            {/* Add empty spacer if odd number of items in last row */}
+            {row.length === 1 && <View style={styles.cardWrapper} />}
+          </View>
+        ))}
       </View>
+
+      {/* Show More / Show Less button */}
+      <Pressable
+        style={styles.showMoreButton}
+        onPress={() => setExpanded(!expanded)}
+      >
+        <Text variant="caption" color="secondary" weight="semibold">
+          {expanded ? 'Show Less' : 'Show More'}
+        </Text>
+        <Ionicons
+          name={expanded ? 'chevron-up' : 'chevron-down'}
+          size={16}
+          color={theme.colors.text.secondary}
+        />
+      </Pressable>
     </Animated.View>
   );
 }
@@ -179,20 +212,27 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderBottomWidth: 3,
     justifyContent: 'space-between',
-    backgroundColor: theme.colors.surface.card,
-    borderColor: 'rgba(139, 34, 82, 0.15)',
-    borderBottomColor: 'rgba(139, 34, 82, 0.3)',
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.xs,
   },
   progressTrack: {
     height: 8,
     borderRadius: 4,
     overflow: 'hidden',
     marginVertical: Spacing.xs,
-    backgroundColor: theme.colors.surface.brand,
   },
   progressFill: {
     height: '100%',
     borderRadius: 4,
-    backgroundColor: theme.colors.brand.primary,
+  },
+  showMoreButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.xs,
+    paddingVertical: Spacing.sm,
   },
 });

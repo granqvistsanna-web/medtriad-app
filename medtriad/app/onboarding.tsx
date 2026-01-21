@@ -839,7 +839,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     borderRadius: Radius.lg,
     borderBottomWidth: 4,
-    borderBottomColor: 'rgba(0,0,0,0.15)',
+    borderBottomColor: theme.colors.brand.primaryDark,
   },
 
   // Name input
@@ -922,11 +922,7 @@ const styles = StyleSheet.create({
     maxWidth: 320,
     borderRadius: Radius.lg,
     padding: Spacing.md,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    ...theme.shadows.md,
   },
   quizHeader: {
     flexDirection: 'row',
@@ -1068,11 +1064,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg,
     padding: Spacing.lg,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    ...theme.shadows.md,
   },
   streakMultiplier: {
     fontSize: 52,

@@ -1,17 +1,11 @@
-import { StyleSheet, View, Pressable } from 'react-native';
-import Animated, {
-  FadeInUp,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import { StyleSheet, View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Star, Fire } from '@solar-icons/react-native/Bold';
 import { TriMascot, MascotMood } from './TriMascot';
 import { ProgressRing } from './ProgressRing';
 import { TierDefinition } from '@/services/mastery';
-import { theme, Radius, Spacing, Durations, Easings } from '@/constants/theme';
-import { Text } from '@/components/primitives';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import { theme, Radius, Spacing, Durations } from '@/constants/theme';
+import { Text, Badge } from '@/components/primitives';
 
 type HeroCardProps = {
   isNewUser: boolean;
@@ -25,7 +19,6 @@ type HeroCardProps = {
   totalPoints?: number;
   pointsToNextTier?: number;
   onTierPress?: () => void;
-  onStartQuiz?: () => void;
   showTierUpGlow?: boolean;
 };
 
@@ -40,7 +33,7 @@ function getProgressMessage(
     return { points: '', rest: 'Max level reached!' };
   }
 
-  if (pointsToNextTier < 0 || isNaN(pointsToNextTier)) {
+  if (pointsToNextTier === undefined || pointsToNextTier < 0 || isNaN(pointsToNextTier)) {
     return { points: '', rest: 'Keep going!' };
   }
 
@@ -76,7 +69,6 @@ export function HeroCard({
   totalPoints = 0,
   pointsToNextTier = 0,
   onTierPress,
-  onStartQuiz,
   showTierUpGlow = false,
 }: HeroCardProps) {
   const mascotMood = showTierUpGlow
@@ -85,25 +77,6 @@ export function HeroCard({
 
   const progressMessage = getProgressMessage(nextTier, pointsToNextTier);
 
-  // Button animation
-  const buttonScale = useSharedValue(1);
-  const buttonBorderBottom = useSharedValue(4);
-
-  const buttonAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: buttonScale.value }],
-    borderBottomWidth: buttonBorderBottom.value,
-  }));
-
-  const handlePressIn = () => {
-    buttonScale.value = withSpring(0.98, Easings.press);
-    buttonBorderBottom.value = withSpring(2, Easings.press);
-  };
-
-  const handlePressOut = () => {
-    buttonScale.value = withSpring(1, Easings.press);
-    buttonBorderBottom.value = withSpring(4, Easings.press);
-  };
-
   return (
     <Animated.View
       entering={FadeInUp.delay(delay).duration(Durations.normal).springify()}
@@ -111,7 +84,7 @@ export function HeroCard({
     >
       {/* Mascot with progress ring */}
       <View style={styles.mascotContainer}>
-        <ProgressRing size={140} strokeWidth={8} progress={tierProgress}>
+        <ProgressRing size={140} strokeWidth={10} progress={tierProgress}>
           <TriMascot
             mood={mascotMood}
             size="md"
@@ -126,8 +99,8 @@ export function HeroCard({
         entering={FadeInUp.delay(delay + Durations.stagger).duration(Durations.normal).springify()}
         style={styles.tierContainer}
       >
-        <Text variant="heading" color="primary" weight="bold" style={styles.tierName}>
-          {tier.name} - Lvl {tier.tier}
+        <Text variant="heading" color="primary" weight="extrabold" style={styles.tierName}>
+          {tier.name} • Lvl {tier.tier}
         </Text>
       </Animated.View>
 
@@ -135,29 +108,33 @@ export function HeroCard({
       <Animated.View
         entering={FadeInUp.delay(delay + Durations.stagger * 1.5).duration(Durations.normal).springify()}
       >
-        <Text variant="caption" color="brand" weight="semibold" style={styles.progressMessage}>
+        <Text variant="footnote" color="brand" weight="semibold" style={styles.progressMessage}>
           {progressMessage.points && (
-            <Text variant="caption" color="brand" weight="bold">{progressMessage.points} </Text>
+            <Text variant="footnote" color="brand" weight="bold">{progressMessage.points} </Text>
           )}
           {progressMessage.rest}
         </Text>
       </Animated.View>
 
-      {/* Start Quiz button inside card - keeping custom for shine animation */}
+      {/* XP and Streak badges - centered */}
       <Animated.View
         entering={FadeInUp.delay(delay + Durations.stagger * 2).duration(Durations.normal).springify()}
-        style={styles.buttonContainer}
+        style={styles.badgesContainer}
       >
-        <AnimatedPressable
-          onPress={onStartQuiz}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          style={[styles.startButton, buttonAnimatedStyle]}
-        >
-          <Text variant="label" color="inverse" weight="bold" style={styles.startButtonText}>
-            START QUIZ
-          </Text>
-        </AnimatedPressable>
+        <Badge
+          label={totalPoints.toLocaleString()}
+          icon={Star}
+          variant="gold"
+          size="sm"
+        />
+        {dailyStreak > 0 && (
+          <Badge
+            label={dailyStreak.toString()}
+            icon={Fire}
+            variant="streak"
+            size="sm"
+          />
+        )}
       </Animated.View>
     </Animated.View>
   );
@@ -167,8 +144,8 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     borderRadius: Radius.xl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.lg,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.xl,
     paddingHorizontal: Spacing.xl,
     borderWidth: 2,
     borderColor: theme.colors.border.default,
@@ -177,34 +154,27 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface.card,
   },
   mascotContainer: {
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.lg,
   },
   tierContainer: {
     marginBottom: Spacing.xs,
   },
   tierName: {
-    fontSize: 24,
-    letterSpacing: -0.5,
+    fontSize: 28,
+    letterSpacing: -0.8,
   },
   progressMessage: {
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.sm,
+    opacity: 0.85,
   },
-  buttonContainer: {
-    width: '100%',
-  },
-  startButton: {
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.xl,
-    borderRadius: Radius.lg,
-    borderWidth: 2,
-    borderBottomWidth: 4,
-    alignItems: 'center',
+  badgesContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: theme.colors.brand.primary,
-    borderColor: theme.colors.brand.primary,
-    borderBottomColor: theme.colors.brand.primaryDark,
-  },
-  startButtonText: {
-    letterSpacing: 1,
+    gap: Spacing.sm,
+    backgroundColor: `${theme.colors.border.default}15`,
+    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    borderRadius: Radius.full,
+    marginTop: Spacing.xs,
   },
 });

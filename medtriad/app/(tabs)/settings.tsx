@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Application from 'expo-application';
-import { ShareCircle, TrashBin2, Document } from '@solar-icons/react-native/Bold';
+import { ShareCircle, TrashBin2, Document, BellBing, Smartphone } from '@solar-icons/react-native/Bold';
 import { Text } from '@/components/primitives';
 import { theme, Spacing, Radius, Durations } from '@/constants/theme';
 import { ToggleRow } from '@/components/settings/ToggleRow';
@@ -108,7 +108,7 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Animated.View entering={FadeInUp.duration(Durations.normal).springify()}>
-          <Text variant="title" color="primary" style={styles.title}>Settings</Text>
+          <Text variant="titleLarge" color="primary" style={styles.title}>Settings</Text>
         </Animated.View>
 
         {/* PREFERENCES Section */}
@@ -119,17 +119,19 @@ export default function SettingsScreen() {
             </Text>
             <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.border.default }]} />
           </View>
-          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
+          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default, borderBottomColor: theme.colors.border.strong }]}>
             <ToggleRow
               label="Sound Effects"
               value={settings.soundEnabled}
               onValueChange={handleSoundToggle}
+              icon={BellBing}
             />
             <View style={[styles.separator, { backgroundColor: theme.colors.border.default }]} />
             <ToggleRow
               label="Haptic Feedback"
               value={settings.hapticsEnabled}
               onValueChange={handleHapticsToggle}
+              icon={Smartphone}
             />
           </View>
         </Animated.View>
@@ -142,7 +144,7 @@ export default function SettingsScreen() {
             </Text>
             <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.border.default }]} />
           </View>
-          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
+          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default, borderBottomColor: theme.colors.border.strong }]}>
             <SettingsRow
               label="Share App"
               onPress={handleShare}
@@ -166,7 +168,7 @@ export default function SettingsScreen() {
             </Text>
             <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.border.default }]} />
           </View>
-          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
+          <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default, borderBottomColor: theme.colors.border.strong }]}>
             <View style={styles.aboutRow}>
               <Text variant="body" color="primary">Version</Text>
               <Text variant="caption" color="secondary">
@@ -221,11 +223,13 @@ const styles = StyleSheet.create({
   },
   sectionHeaderLine: {
     flex: 1,
-    height: 1,
+    height: 2,
+    opacity: 0.6,
   },
   section: {
     borderRadius: Radius.md,
-    borderWidth: 1,
+    borderWidth: 2,
+    borderBottomWidth: 4,
     overflow: 'hidden',
   },
   separator: {

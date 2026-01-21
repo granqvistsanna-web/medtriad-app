@@ -1,4 +1,4 @@
-import { Alert, Pressable, StyleSheet, Platform } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import Animated, {
   useAnimatedStyle,
@@ -11,7 +11,11 @@ import { theme, Easings } from '@/constants/theme';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export function CancelButton() {
+interface CancelButtonProps {
+  onPress?: () => void;
+}
+
+export function CancelButton({ onPress }: CancelButtonProps) {
   const router = useRouter();
   const scale = useSharedValue(1);
 
@@ -28,23 +32,10 @@ export function CancelButton() {
   };
 
   const handlePress = () => {
-    if (Platform.OS === 'web') {
-      if (window.confirm('Quit Quiz?\n\nYour progress will be lost.')) {
-        router.replace('/(tabs)');
-      }
+    if (onPress) {
+      onPress();
     } else {
-      Alert.alert(
-        'Quit Quiz?',
-        'Your progress will be lost.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Quit',
-            style: 'destructive',
-            onPress: () => router.replace('/(tabs)'),
-          },
-        ]
-      );
+      router.replace('/(tabs)');
     }
   };
 

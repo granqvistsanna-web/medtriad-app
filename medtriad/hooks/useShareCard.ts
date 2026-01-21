@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 
@@ -27,15 +27,37 @@ export function useShareCard(): {
   const [isSharing, setIsSharing] = useState(false);
 
   const share = useCallback(async (dialogTitle?: string) => {
-    // Guard: no ref or already sharing
-    if (!cardRef.current || isSharing) {
+    // Guard: already sharing
+    if (isSharing) {
       return;
     }
 
     setIsSharing(true);
 
     try {
-      // Capture the view as a PNG image
+      // Web: use Web Share API with text (react-native-view-shot doesn't work on web)
+      if (Platform.OS === 'web') {
+        if (navigator.share) {
+          await navigator.share({
+            title: dialogTitle || 'MedTriads',
+            text: 'Challenge me on MedTriads! Can you beat my score?',
+            url: 'https://medtriads.app',
+          });
+        } else {
+          // Fallback: copy to clipboard
+          await navigator.clipboard.writeText(
+            'Challenge me on MedTriads! Can you beat my score? https://medtriads.app'
+          );
+          alert('Link copied to clipboard!');
+        }
+        return;
+      }
+
+      // Native: capture view as image and share
+      if (!cardRef.current) {
+        return;
+      }
+
       const uri = await captureRef(cardRef, {
         format: 'png',
         quality: 1,
@@ -52,9 +74,13 @@ export function useShareCard(): {
       // Open native share sheet
       await Sharing.shareAsync(uri, {
         mimeType: 'image/png',
-        dialogTitle, // Android only - shows in share dialog header
+        dialogTitle,
       });
     } catch (error) {
+      // User cancelled share - not an error
+      if (error instanceof Error && error.name === 'AbortError') {
+        return;
+      }
       console.error('Share failed:', error);
     } finally {
       setIsSharing(false);

@@ -1,51 +1,86 @@
 /**
  * Mastery System
  *
- * PRIMARY: 6-tier game-based progression system
- * Tiers are earned by completing games (not questions):
- * - Student: 0 games
- * - Intern: 10 games
- * - Resident: 25 games
- * - Doctor: 50 games
- * - Specialist: 100 games
- * - Chief: 200 games
+ * PRIMARY: 6-tier points-based progression system
+ * Tiers are earned by accumulating points (rewards skill, not just participation):
+ * - Student: 0 points (Tier 1)
+ * - Intern: 300 points (Tier 2)
+ * - Resident: 1,000 points (Tier 3)
+ * - Doctor: 2,500 points (Tier 4)
+ * - Specialist: 5,000 points (Tier 5)
+ * - Chief: 10,000 points (Tier 6)
+ *
+ * DIFFICULTY SCALING: Higher tiers have less time per question
+ * - Student/Intern (Tier 1-2): 15 seconds
+ * - Resident/Doctor (Tier 3-4): 12 seconds
+ * - Specialist (Tier 5): 10 seconds
+ * - Chief (Tier 6): 8 seconds
  *
  * Tier functions:
- * - getTierForGames(gamesPlayed) - Get current tier
+ * - getTierForPoints(totalPoints) - Get current tier
  * - getNextTier(tierNumber) - Get next tier or null at max
- * - getProgressToNextTier(gamesPlayed) - Progress 0-1 toward next
+ * - getProgressToNextTier(totalPoints) - Progress 0-1 toward next
+ * - getPointsToNextTier(totalPoints) - Points remaining to level up
+ * - getTimerForTier(tierNumber) - Get timer duration for tier
  *
- * LEGACY: Question-based system kept for Home screen (Phase 12 will migrate)
- * Functions marked @deprecated - use tier functions for new code
+ * LEGACY: Game-based functions kept for backward compatibility
  */
 
 // ============================================
-// NEW TIER SYSTEM (Game-based)
+// POINTS-BASED TIER SYSTEM
 // ============================================
 
 export interface TierDefinition {
   tier: number;
   name: string;
-  gamesRequired: number;
+  pointsRequired: number;
+  /** @deprecated Use pointsRequired instead */
+  gamesRequired?: number;
 }
 
 export const TIERS: TierDefinition[] = [
-  { tier: 1, name: 'Student', gamesRequired: 0 },
-  { tier: 2, name: 'Intern', gamesRequired: 10 },
-  { tier: 3, name: 'Resident', gamesRequired: 25 },
-  { tier: 4, name: 'Doctor', gamesRequired: 50 },
-  { tier: 5, name: 'Specialist', gamesRequired: 100 },
-  { tier: 6, name: 'Chief', gamesRequired: 200 },
+  { tier: 1, name: 'Student', pointsRequired: 0 },
+  { tier: 2, name: 'Intern', pointsRequired: 300 },
+  { tier: 3, name: 'Resident', pointsRequired: 1000 },
+  { tier: 4, name: 'Doctor', pointsRequired: 2500 },
+  { tier: 5, name: 'Specialist', pointsRequired: 5000 },
+  { tier: 6, name: 'Chief', pointsRequired: 10000 },
 ];
 
 /**
- * Get the current tier based on games played
- * Finds the highest tier where gamesRequired <= gamesPlayed
+ * Timer duration per tier (in seconds)
+ * Higher tiers have less time, increasing difficulty
+ * - Tiers 1-2 (learning): 15 seconds - forgiving for beginners
+ * - Tiers 3-4 (competent): 12 seconds - moderate challenge
+ * - Tier 5 (advanced): 10 seconds - increased pressure
+ * - Tier 6 (mastery): 8 seconds - genuine difficulty
  */
-export function getTierForGames(gamesPlayed: number): TierDefinition {
+export const TIER_TIMERS: Record<number, number> = {
+  1: 15, // Student
+  2: 15, // Intern
+  3: 12, // Resident
+  4: 12, // Doctor
+  5: 10, // Specialist
+  6: 8,  // Chief
+};
+
+/**
+ * Get timer duration for a given tier
+ * @param tierNumber - 1-indexed tier number (1=Student, 6=Chief)
+ * @returns Timer duration in seconds
+ */
+export function getTimerForTier(tierNumber: number): number {
+  return TIER_TIMERS[tierNumber] ?? 15;
+}
+
+/**
+ * Get the current tier based on total points
+ * Finds the highest tier where pointsRequired <= totalPoints
+ */
+export function getTierForPoints(totalPoints: number): TierDefinition {
   // Iterate from highest tier to lowest
   for (let i = TIERS.length - 1; i >= 0; i--) {
-    if (gamesPlayed >= TIERS[i].gamesRequired) {
+    if (totalPoints >= TIERS[i].pointsRequired) {
       return TIERS[i];
     }
   }
@@ -53,12 +88,23 @@ export function getTierForGames(gamesPlayed: number): TierDefinition {
 }
 
 /**
+ * @deprecated Use getTierForPoints instead
+ */
+export function getTierForGames(gamesPlayed: number): TierDefinition {
+  // Legacy fallback - estimate ~100 points per game
+  return getTierForPoints(gamesPlayed * 100);
+}
+
+/**
  * Get the next tier after the current one
- * @param currentTierNumber - 1-indexed tier number
+ * @param currentTierNumber - 1-indexed tier number (1=Student, 2=Intern, etc.)
  * @returns Next tier or null if at max
+ *
+ * Since tiers are 1-indexed and array is 0-indexed, tier N is at TIERS[N-1].
+ * So the NEXT tier (N+1) is at TIERS[N], which equals currentTierNumber.
  */
 export function getNextTier(currentTierNumber: number): TierDefinition | null {
-  const nextIndex = currentTierNumber; // tier is 1-indexed, array is 0-indexed
+  const nextIndex = currentTierNumber; // tier N's next is at index N (since tier 1 is at index 0)
   return nextIndex < TIERS.length ? TIERS[nextIndex] : null;
 }
 
@@ -67,37 +113,51 @@ export function getNextTier(currentTierNumber: number): TierDefinition | null {
  * Returns 1 if at max tier (Chief)
  *
  * Examples:
- * - 0 games = Student, progress 0
- * - 5 games = Student, progress 0.5 (halfway to Intern at 10)
- * - 10 games = Intern, progress 0 (just reached Intern)
- * - 199 games = Specialist, progress 0.99
- * - 200 games = Chief, progress 1 (max tier, bar stays full)
+ * - 0 points = Student, progress 0
+ * - 500 points = Student, progress 0.5 (halfway to Intern at 1000)
+ * - 1000 points = Intern, progress 0 (just reached Intern)
+ * - 29999 points = Specialist, progress 0.99
+ * - 30000 points = Chief, progress 1 (max tier, bar stays full)
  */
-export function getProgressToNextTier(gamesPlayed: number): number {
-  const currentTier = getTierForGames(gamesPlayed);
+export function getProgressToNextTier(totalPoints: number): number {
+  const currentTier = getTierForPoints(totalPoints);
   const nextTier = getNextTier(currentTier.tier);
 
   // At max tier, progress is always 1 (bar stays full)
   if (!nextTier) return 1;
 
-  const gamesInCurrentTier = gamesPlayed - currentTier.gamesRequired;
-  const gamesNeededForNext = nextTier.gamesRequired - currentTier.gamesRequired;
+  const pointsInCurrentTier = totalPoints - currentTier.pointsRequired;
+  const pointsNeededForNext = nextTier.pointsRequired - currentTier.pointsRequired;
 
-  return gamesInCurrentTier / gamesNeededForNext;
+  return pointsInCurrentTier / pointsNeededForNext;
 }
 
 /**
- * Check if completing the next game will trigger a tier-up
- * Call BEFORE incrementing gamesPlayed to avoid race condition
- * @param gamesPlayedBefore - Current gamesPlayed count (before this game)
+ * Get points remaining to reach next tier
+ * Returns 0 if at max tier
+ */
+export function getPointsToNextTier(totalPoints: number): number {
+  const currentTier = getTierForPoints(totalPoints);
+  const nextTier = getNextTier(currentTier.tier);
+
+  if (!nextTier) return 0;
+
+  return nextTier.pointsRequired - totalPoints;
+}
+
+/**
+ * Check if adding points will trigger a tier-up
+ * @param currentPoints - Current total points (before this quiz)
+ * @param pointsToAdd - Points earned this quiz
  * @returns Object with willTierUp flag and newTier if applicable
  */
 export function checkTierUp(
-  gamesPlayedBefore: number
+  currentPoints: number,
+  pointsToAdd: number = 0
 ): { willTierUp: boolean; newTier: TierDefinition | null } {
-  const gamesPlayedAfter = gamesPlayedBefore + 1;
-  const tierBefore = getTierForGames(gamesPlayedBefore);
-  const tierAfter = getTierForGames(gamesPlayedAfter);
+  const pointsAfter = currentPoints + pointsToAdd;
+  const tierBefore = getTierForPoints(currentPoints);
+  const tierAfter = getTierForPoints(pointsAfter);
 
   return {
     willTierUp: tierAfter.tier > tierBefore.tier,

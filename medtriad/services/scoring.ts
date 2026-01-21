@@ -1,4 +1,4 @@
-import { QUESTION_TIME } from '@/types/quiz-state';
+import { DEFAULT_QUESTION_TIME } from '@/types/quiz-state';
 
 /**
  * Scoring constants for quiz game mechanics
@@ -14,8 +14,8 @@ export const SCORING = {
   COMBO_THRESHOLD: 3,
   /** Maximum combo multiplier tier (1x, 2x, 3x) */
   MAX_COMBO_TIER: 3,
-  /** Total time per question (matches QUESTION_TIME) */
-  TOTAL_TIME: QUESTION_TIME,
+  /** Default total time per question (use state.questionTime for tier-based timing) */
+  TOTAL_TIME: DEFAULT_QUESTION_TIME,
 } as const;
 
 /**

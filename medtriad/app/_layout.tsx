@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, Redirect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
@@ -88,15 +88,9 @@ export default function RootLayout() {
     <ErrorBoundary>
       <ThemeProvider value={LightTheme}>
         <Stack>
-          {/* Onboarding for new users only */}
-          <Stack.Protected guard={isNewUser}>
-            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-          </Stack.Protected>
-
-          {/* Main app for returning users */}
-          <Stack.Protected guard={!isNewUser}>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack.Protected>
+          {/* Conditional routing based on user state */}
+          <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
           {/* Always available routes */}
           <Stack.Screen
@@ -111,7 +105,17 @@ export default function RootLayout() {
               gestureEnabled: false,
             }}
           />
+          <Stack.Screen
+            name="challenge"
+            options={{
+              presentation: 'modal',
+              headerShown: false,
+              gestureEnabled: true,
+            }}
+          />
         </Stack>
+        {/* Redirect new users to onboarding */}
+        {isNewUser && <Redirect href="/onboarding" />}
         <StatusBar style="dark" />
       </ThemeProvider>
     </ErrorBoundary>

@@ -7,8 +7,7 @@ import Animated, {
   withSequence,
   FadeInUp,
 } from 'react-native-reanimated';
-import { AltArrowRight } from '@solar-icons/react-native/Bold';
-import { Text, Icon } from '@/components/primitives';
+import { Text } from '@/components/primitives';
 import { theme, Radius, Spacing, Durations, Easings, Shadows } from '@/constants/theme';
 
 type AnswerState = 'default' | 'correct' | 'incorrect' | 'revealed' | 'faded';
@@ -20,6 +19,8 @@ type AnswerCardProps = {
   disabled?: boolean;
   style?: ViewStyle;
   delay?: number;
+  /** Letter label (A, B, C, D) shown on the left */
+  letter?: string;
 };
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -31,6 +32,7 @@ export function AnswerCard({
   disabled,
   style,
   delay = 0,
+  letter,
 }: AnswerCardProps) {
   const scale = useSharedValue(1);
   const shakeX = useSharedValue(0);
@@ -106,7 +108,7 @@ export function AnswerCard({
       case 'faded':
         return theme.colors.border.default;
       default:
-        return theme.colors.surface.brand; // Wine-toned border
+        return theme.colors.border.default; // Neutral gray border for contrast with FindingsCard
     }
   };
 
@@ -122,7 +124,7 @@ export function AnswerCard({
       case 'faded':
         return theme.colors.border.strong;
       default:
-        return theme.colors.brand.primary; // Wine bottom border for depth
+        return theme.colors.border.strong; // Neutral darker border for depth
     }
   };
 
@@ -141,6 +143,14 @@ export function AnswerCard({
     }
   };
 
+  const getAccessibilityLabel = () => {
+    const prefix = letter ? `Option ${letter}, ` : '';
+    const stateLabel = state === 'correct' ? ', correct answer' :
+                       state === 'incorrect' ? ', incorrect' :
+                       state === 'revealed' ? ', correct answer revealed' : '';
+    return `${prefix}${condition}${stateLabel}`;
+  };
+
   return (
     <AnimatedPressable
       onPress={onPress}
@@ -148,6 +158,12 @@ export function AnswerCard({
       onPressOut={handlePressOut}
       disabled={disabled || state !== 'default'}
       entering={FadeInUp.delay(delay).duration(Durations.normal).springify()}
+      accessibilityRole="button"
+      accessibilityLabel={getAccessibilityLabel()}
+      accessibilityState={{
+        disabled: disabled || state !== 'default',
+        selected: state === 'correct' || state === 'incorrect',
+      }}
       style={[
         styles.card,
         Shadows.light.sm,
@@ -162,6 +178,11 @@ export function AnswerCard({
         style,
       ]}
     >
+      {letter && (
+        <View style={[styles.letterBadge, { backgroundColor: theme.colors.brand.primary }]}>
+          <Text variant="footnote" color="inverse" weight="bold">{letter}</Text>
+        </View>
+      )}
       <Text
         variant="label"
         color={getTextColor()}
@@ -171,11 +192,6 @@ export function AnswerCard({
       >
         {condition}
       </Text>
-      {state === 'default' && (
-        <View style={styles.chevronContainer}>
-          <Icon icon={AltArrowRight} size="sm" color={theme.colors.text.muted} />
-        </View>
-      )}
     </AnimatedPressable>
   );
 }
@@ -185,19 +201,21 @@ const styles = StyleSheet.create({
     height: 58,
     borderRadius: Radius.md,
     paddingHorizontal: Spacing.base,
-    paddingLeft: Spacing.base,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: Spacing.md,
     // Duolingo-style hard border
     borderBottomWidth: 4,
+  },
+  letterBadge: {
+    width: 28,
+    height: 28,
+    borderRadius: Radius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     textAlign: 'left',
     flex: 1,
-  },
-  chevronContainer: {
-    marginLeft: Spacing.sm,
-    opacity: 0.5,
   },
 });

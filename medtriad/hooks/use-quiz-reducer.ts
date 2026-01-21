@@ -2,12 +2,11 @@ import { useReducer } from 'react';
 import {
   QuizState,
   QuizAction,
-  QUESTION_TIME,
+  DEFAULT_QUESTION_TIME,
 } from '@/types/quiz-state';
 import {
   calculateAnswerPoints,
   getComboTier,
-  SCORING,
 } from '@/services/scoring';
 
 /**
@@ -21,7 +20,8 @@ const initialState: QuizState = {
   consecutiveCorrect: 0,
   combo: 1,
   lastPointsEarned: 0,
-  timeRemaining: QUESTION_TIME,
+  timeRemaining: DEFAULT_QUESTION_TIME,
+  questionTime: DEFAULT_QUESTION_TIME,
   selectedOptionId: null,
 };
 
@@ -37,27 +37,32 @@ const initialState: QuizState = {
  */
 function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
-    case 'START_QUIZ':
+    case 'START_QUIZ': {
+      const questionTime = action.questionTime ?? DEFAULT_QUESTION_TIME;
       return {
         ...initialState,
         status: 'playing',
         questions: action.questions,
-        timeRemaining: QUESTION_TIME,
+        timeRemaining: questionTime,
+        questionTime: questionTime,
       };
+    }
 
     case 'SELECT_ANSWER': {
       // Only allow selection when playing
       if (state.status !== 'playing') return state;
 
       if (action.isCorrect) {
-        // Calculate points with current combo tier
-        const comboTier = getComboTier(state.consecutiveCorrect);
+        // Calculate new streak FIRST, then use it for combo tier
+        // This ensures the multiplier shown matches the multiplier applied
+        const newConsecutiveCorrect = state.consecutiveCorrect + 1;
+        const comboTier = getComboTier(newConsecutiveCorrect);
+        // Use the tier-based questionTime for speed bonus calculation
         const points = calculateAnswerPoints(
           action.timeRemaining,
-          SCORING.TOTAL_TIME,
+          state.questionTime,
           comboTier
         );
-        const newConsecutiveCorrect = state.consecutiveCorrect + 1;
 
         return {
           ...state,
@@ -65,7 +70,7 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
           selectedOptionId: action.optionId,
           score: state.score + points.total,
           consecutiveCorrect: newConsecutiveCorrect,
-          combo: getComboTier(newConsecutiveCorrect),
+          combo: comboTier,
           lastPointsEarned: points.total,
         };
       } else {
@@ -85,13 +90,14 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
       // Only tick when playing
       if (state.status !== 'playing') return state;
 
-      const newTime = state.timeRemaining - 1;
+      const newTime = Math.max(0, state.timeRemaining - 1);
       if (newTime <= 0) {
         // Time expired - treat as incorrect answer
         return {
           ...state,
           status: 'answered',
           timeRemaining: 0,
+          selectedOptionId: null, // Clear selection on timeout
           consecutiveCorrect: 0,
           combo: 1,
           lastPointsEarned: 0,
@@ -112,12 +118,12 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
           status: 'completed',
         };
       }
-      // Move to next question
+      // Move to next question, using the tier-based questionTime
       return {
         ...state,
         status: 'playing',
         currentIndex: nextIndex,
-        timeRemaining: QUESTION_TIME,
+        timeRemaining: state.questionTime,
         selectedOptionId: null,
         lastPointsEarned: 0,
       };

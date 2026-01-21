@@ -32,7 +32,7 @@ export const theme = {
   colors: {
     // Surface colors - backgrounds and containers
     surface: {
-      primary: palette.neutral[0],       // White - main background
+      primary: '#FCFAFA',                // Warm off-white - main background (premium feel)
       secondary: palette.neutral[50],    // Light gray - secondary background
       card: palette.neutral[0],          // White - card background
       brand: palette.wine[100],          // Light wine - brand background
@@ -178,7 +178,7 @@ const legacyColors = {
   primaryUltraLight: palette.wine[50],
 
   // Backgrounds
-  background: palette.neutral[0],
+  background: '#FCFAFA',  // Warm off-white for premium feel
   backgroundSecondary: palette.neutral[50],
   backgroundCard: palette.neutral[0],
 

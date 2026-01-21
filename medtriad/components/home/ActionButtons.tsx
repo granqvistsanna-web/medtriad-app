@@ -19,7 +19,7 @@ type ActionButtonProps = {
 
 function ActionButton({ icon, label, onPress }: ActionButtonProps) {
   const scale = useSharedValue(1);
-  const borderBottom = useSharedValue(4);
+  const borderBottom = useSharedValue(2);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -28,12 +28,12 @@ function ActionButton({ icon, label, onPress }: ActionButtonProps) {
 
   const handlePressIn = () => {
     scale.value = withSpring(0.97, { damping: 15, stiffness: 400 });
-    borderBottom.value = withSpring(2, { damping: 15, stiffness: 400 });
+    borderBottom.value = withSpring(1, { damping: 15, stiffness: 400 });
   };
 
   const handlePressOut = () => {
     scale.value = withSpring(1, { damping: 15, stiffness: 400 });
-    borderBottom.value = withSpring(4, { damping: 15, stiffness: 400 });
+    borderBottom.value = withSpring(2, { damping: 15, stiffness: 400 });
   };
 
   return (
@@ -100,11 +100,12 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.md,
     borderRadius: Radius.lg,
-    borderWidth: 1.5,
-    borderBottomWidth: 3,
+    borderWidth: 1,
+    borderBottomWidth: 2,
     backgroundColor: theme.colors.surface.card,
     borderColor: theme.colors.border.default,
     borderBottomColor: theme.colors.border.strong,
+    opacity: 0.9,
   },
   actionLabel: {
     fontSize: 13,

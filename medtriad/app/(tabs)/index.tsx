@@ -1,15 +1,23 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { SafeAreaView, StyleSheet, View, ActivityIndicator, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, View, ActivityIndicator, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import Animated, {
+  FadeInUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroCard } from '@/components/home/HeroCard';
 import { ActionButtons } from '@/components/home/ActionButtons';
 import { CategoryMastery } from '@/components/home/CategoryMastery';
 import { useStats } from '@/hooks/useStats';
-import { theme, Spacing, Durations } from '@/constants/theme';
+import { theme, Spacing, Radius, Durations, Easings } from '@/constants/theme';
+import { Text } from '@/components/primitives';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -76,6 +84,15 @@ export default function HomeScreen() {
     };
   }, [pendingTierUp, showTierUpGlow]);
 
+  // Button animation for Start Quiz - must be before conditional return
+  const buttonScale = useSharedValue(1);
+  const buttonBorderBottom = useSharedValue(4);
+
+  const buttonAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: buttonScale.value }],
+    borderBottomWidth: buttonBorderBottom.value,
+  }));
+
   // Show loading state
   if (loading) {
     return (
@@ -95,6 +112,16 @@ export default function HomeScreen() {
     router.push('/challenge');
   };
 
+  const handlePressIn = () => {
+    buttonScale.value = withSpring(0.98, Easings.press);
+    buttonBorderBottom.value = withSpring(2, Easings.press);
+  };
+
+  const handlePressOut = () => {
+    buttonScale.value = withSpring(1, Easings.press);
+    buttonBorderBottom.value = withSpring(4, Easings.press);
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.surface.primary }]}>
       <ScrollView
@@ -102,15 +129,13 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header with greeting and gamification badges */}
+        {/* Header with greeting */}
         <HomeHeader
           delay={0}
-          totalPoints={totalPoints}
-          dailyStreak={dailyStreak}
           userName={userName}
         />
 
-        {/* Hero card with mascot, tier info, and start button */}
+        {/* Hero card with mascot, tier info, and badges */}
         <HeroCard
           isNewUser={isNewUser}
           accuracy={accuracy}
@@ -123,13 +148,28 @@ export default function HomeScreen() {
           totalPoints={totalPoints}
           pointsToNextTier={pointsToNextTier}
           onTierPress={() => router.push('/(tabs)/progress')}
-          onStartQuiz={handleStartQuiz}
           showTierUpGlow={showTierUpGlow}
         />
 
+        {/* Start Quiz button - below hero card */}
+        <Animated.View
+          entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
+        >
+          <AnimatedPressable
+            onPress={handleStartQuiz}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            style={[styles.startButton, buttonAnimatedStyle]}
+          >
+            <Text variant="label" color="inverse" weight="bold" style={styles.startButtonText}>
+              START QUIZ
+            </Text>
+          </AnimatedPressable>
+        </Animated.View>
+
         {/* Action buttons - Study and Challenge */}
         <ActionButtons
-          onStudy={() => router.push('/quiz/study')}
+          onStudy={() => router.push('/quiz/study-filter')}
           onChallenge={handleChallenge}
           delay={Durations.stagger * 2.5}
         />
@@ -141,6 +181,12 @@ export default function HomeScreen() {
             neurology: getCategoryPercent('neurology'),
             pulmonary: getCategoryPercent('pulmonary'),
             endocrine: getCategoryPercent('endocrine'),
+            gastroenterology: getCategoryPercent('gastroenterology'),
+            infectious: getCategoryPercent('infectious'),
+            hematology: getCategoryPercent('hematology'),
+            rheumatology: getCategoryPercent('rheumatology'),
+            renal: getCategoryPercent('renal'),
+            obstetrics: getCategoryPercent('obstetrics'),
           }}
           onCategoryPress={(category) => router.push('/(tabs)/progress')}
           delay={Durations.stagger * 3}
@@ -167,5 +213,23 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.md,
     paddingBottom: Spacing.xxl,
     gap: Spacing.lg,
+  },
+  startButton: {
+    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.xl,
+    borderRadius: Radius.lg,
+    borderWidth: 2,
+    borderBottomWidth: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.brand.primary,
+    borderColor: theme.colors.brand.primary,
+    borderBottomColor: theme.colors.brand.primaryDark,
+    ...theme.shadows.md,
+    shadowColor: theme.colors.brand.primary,
+    shadowOpacity: 0.25,
+  },
+  startButtonText: {
+    letterSpacing: 1.5,
   },
 });

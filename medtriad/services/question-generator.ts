@@ -1,4 +1,4 @@
-import { Triad, QuizOption, QuizQuestion } from '@/types';
+import { Triad, QuizOption, QuizQuestion, TriadCategory } from '@/types';
 import { getAllTriads } from '@/services/triads';
 import { shuffle } from '@/utils/shuffle';
 
@@ -98,6 +98,32 @@ export function generateQuestionSet(count: number): QuizQuestion[] {
   const allTriads = getAllTriads();
   const shuffledTriads = shuffle([...allTriads]);
   const selectedTriads = shuffledTriads.slice(0, Math.min(count, allTriads.length));
+
+  return selectedTriads.map(triad => generateQuestion(triad));
+}
+
+/**
+ * Generate a set of quiz questions filtered by categories
+ * @param count Number of questions to generate
+ * @param categories Array of categories to include (if empty, includes all)
+ */
+export function generateQuestionSetByCategories(
+  count: number,
+  categories: TriadCategory[]
+): QuizQuestion[] {
+  const allTriads = getAllTriads();
+
+  // Filter triads by selected categories (if any selected)
+  const filteredTriads =
+    categories.length === 0
+      ? allTriads
+      : allTriads.filter(triad => categories.includes(triad.category));
+
+  const shuffledTriads = shuffle([...filteredTriads]);
+  const selectedTriads = shuffledTriads.slice(
+    0,
+    Math.min(count, filteredTriads.length)
+  );
 
   return selectedTriads.map(triad => generateQuestion(triad));
 }

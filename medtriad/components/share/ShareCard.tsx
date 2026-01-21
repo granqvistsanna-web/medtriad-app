@@ -1,8 +1,16 @@
 import { StyleSheet, View, Image } from 'react-native';
 import { Text } from '@/components/primitives';
-import { theme, Spacing, Radius } from '@/constants/theme';
+import { theme, Spacing, Radius, Shadows } from '@/constants/theme';
 
 const triShare = require('@/assets/images/tri-share.png');
+
+// Share card colors - neutral frame with wine accent for brand touch
+const shareCardColors = {
+  border: theme.colors.border.default,       // Neutral gray border (#E5E5E5)
+  borderBottom: theme.colors.brand.primary,  // Wine for 3D depth brand accent (#8B2252)
+  background: theme.colors.surface.card,     // Pure white
+  brandBar: theme.colors.surface.brand,      // Light wine background
+};
 
 type ShareCardProps = {
   score: number;
@@ -39,31 +47,20 @@ function getChallengeMessage(correctCount: number, total: number, userName?: str
 }
 
 /**
- * Get headline for high score sharing - competitive and score-aware
+ * Get headline for high score sharing - direct invitation
  */
 function getHighScoreHeadline(score: number, userName?: string | null): string {
-  if (userName) {
-    if (score >= 10000) return `${userName}'s Record`;
-    if (score >= 5000) return `${userName}'s Score`;
-    return `${userName}'s Score`;
-  }
-
-  if (score >= 10000) return 'Triads Master';
-  if (score >= 5000) return 'Triads Expert';
-  if (score >= 1000) return 'Know Your Triads?';
-  return 'Know Your Triads?';
+  return 'Medical triads quiz';
 }
 
 /**
- * Get challenge message for high score sharing
+ * Get challenge message for high score sharing - personalized call to action
  */
 function getHighScoreMessage(score: number, userName?: string | null): string {
-  const challengeIntro = userName ? '' : '';
-
-  if (score >= 10000) return 'Think you can beat this?';
-  if (score >= 5000) return 'Can you top my score?';
-  if (score >= 1000) return 'Beat my high score!';
-  return 'Can you beat my score?';
+  if (userName) {
+    return `Take the quiz and try to beat ${userName}'s highscore`;
+  }
+  return 'Take the quiz and try to beat this highscore';
 }
 
 /**
@@ -105,6 +102,9 @@ export function ShareCard({ score, correctCount, totalQuestions, variant = 'shar
       <Text variant="display" color={theme.colors.brand.primary} style={styles.score}>
         {score.toLocaleString()}
       </Text>
+      <Text variant="label" color="secondary" style={styles.pointsLabel}>
+        points
+      </Text>
 
       {/* Challenge Message - prominent call to action */}
       {challengeMessage && (
@@ -121,7 +121,7 @@ export function ShareCard({ score, correctCount, totalQuestions, variant = 'shar
       )}
 
       {/* Branding Bar */}
-      <View style={[styles.brandingBar, { backgroundColor: theme.colors.surface.brand }]}>
+      <View style={styles.brandingBar}>
         <Text variant="label" color={theme.colors.brand.primary} weight="semibold">
           MedTriads
         </Text>
@@ -134,34 +134,47 @@ const styles = StyleSheet.create({
   card: {
     width: 360,
     height: 450,
-    backgroundColor: theme.colors.surface.primary,
+    backgroundColor: shareCardColors.background,
     borderRadius: Radius.lg,
+    // Neutral border with wine bottom accent for brand touch
+    borderWidth: 2,
+    borderColor: shareCardColors.border,
+    borderBottomWidth: 4,
+    borderBottomColor: shareCardColors.borderBottom,
     alignItems: 'center',
     paddingTop: Spacing.xl,
     paddingHorizontal: Spacing.lg,
-    overflow: 'hidden',
+    overflow: 'hidden', // Clip branding bar to rounded corners
+    // Subtle shadow for lifted card appearance
+    ...Shadows.light.md,
   },
   headline: {
     textAlign: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.md,
   },
   mascotContainer: {
-    width: 140,
-    height: 140,
+    width: 120,
+    height: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.md,
   },
   mascot: {
-    width: 140,
-    height: 140,
+    width: 120,
+    height: 120,
   },
   score: {
     fontSize: 64,
     lineHeight: 72,
     letterSpacing: -2,
     textAlign: 'center',
-    marginBottom: Spacing.sm,
+  },
+  pointsLabel: {
+    textAlign: 'center',
+    marginTop: -Spacing.xs,
+    marginBottom: Spacing.md,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   challengeMessage: {
     textAlign: 'center',
@@ -177,6 +190,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingVertical: Spacing.md,
+    paddingBottom: Spacing.lg, // Extra padding to account for bottom border
     alignItems: 'center',
+    backgroundColor: shareCardColors.brandBar,
+    // Subtle top separator
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.brand.accent,
   },
 });

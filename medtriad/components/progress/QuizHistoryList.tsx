@@ -1,6 +1,7 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { QuizHistoryEntry } from '@/services/stats-storage';
-import { Colors, Typography, Spacing } from '@/constants/theme';
+import { theme, Spacing } from '@/constants/theme';
+import { Text } from '@/components/primitives';
 
 interface QuizHistoryListProps {
   history: QuizHistoryEntry[];
@@ -12,94 +13,67 @@ function formatDate(isoDate: string): string {
 }
 
 export function QuizHistoryList({ history }: QuizHistoryListProps) {
-  const colors = Colors.light;
-
   if (history.length === 0) {
     return (
-      <View style={styles.container}>
-        <View style={styles.headerRow}>
-          <Text style={[styles.headerText, { color: colors.textMuted }]}>RECENT QUIZZES</Text>
-          <View style={[styles.headerLine, { backgroundColor: colors.border }]} />
-        </View>
-        <Text style={[styles.emptyText, { color: colors.textMuted }]}>
-          No quizzes yet
+      <View style={styles.emptyContainer}>
+        <Text variant="caption" color="muted" align="center">
+          No quiz history yet
         </Text>
       </View>
     );
   }
 
+  // Only show last 5 entries for minimal design
+  const recentHistory = history.slice(0, 5);
+
   return (
     <View style={styles.container}>
-      <View style={styles.headerRow}>
-        <Text style={[styles.headerText, { color: colors.textMuted }]}>RECENT QUIZZES</Text>
-        <View style={[styles.headerLine, { backgroundColor: colors.border }]} />
-      </View>
-      <FlatList
-        data={history}
-        keyExtractor={(item, index) => `${item.date}-${index}`}
-        scrollEnabled={false}
-        renderItem={({ item }) => (
-          <View style={[styles.row, { borderBottomColor: colors.border }]}>
-            <View style={styles.leftContent}>
-              <Text style={[styles.date, { color: colors.text }]}>
-                {formatDate(item.date)}
-              </Text>
-              <Text style={[styles.accuracy, { color: colors.textMuted }]}>
-                {item.correct}/{item.total} correct
-              </Text>
-            </View>
-            <Text style={[styles.score, { color: colors.primary }]}>
-              {item.score.toLocaleString()}
+      <Text variant="tiny" color="muted" style={styles.header}>
+        RECENT ACTIVITY
+      </Text>
+      {recentHistory.map((item, index) => (
+        <View
+          key={`${item.date}-${item.score}-${item.correct}`}
+          style={[
+            styles.row,
+            index < recentHistory.length - 1 && {
+              borderBottomWidth: 1,
+              borderBottomColor: theme.colors.border.default,
+            },
+          ]}
+        >
+          <View>
+            <Text variant="body" color="primary" weight="medium">
+              {formatDate(item.date)}
+            </Text>
+            <Text variant="caption" color="muted">
+              {item.correct}/{item.total} correct
             </Text>
           </View>
-        )}
-      />
+          <Text variant="body" color="brand" weight="semibold">
+            {item.score.toLocaleString()}
+          </Text>
+        </View>
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    width: '100%',
+    gap: Spacing.xs,
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    marginBottom: Spacing.md,
+  header: {
+    letterSpacing: 1.5,
+    marginBottom: Spacing.sm,
   },
-  headerText: {
-    ...Typography.tiny,
-    letterSpacing: 1,
-  },
-  headerLine: {
-    flex: 1,
-    height: 1,
-  },
-  emptyText: {
-    ...Typography.caption,
-    textAlign: 'center',
-    paddingVertical: Spacing.lg,
+  emptyContainer: {
+    paddingVertical: Spacing.xl,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-  },
-  leftContent: {
-    gap: Spacing.xs,
-  },
-  date: {
-    ...Typography.body,
-    fontWeight: '500',
-  },
-  accuracy: {
-    ...Typography.footnote,
-  },
-  score: {
-    ...Typography.stat,
   },
 });

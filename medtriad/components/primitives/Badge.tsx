@@ -89,17 +89,17 @@ const VARIANTS: Record<BadgeVariant, {
     textColor: theme.colors.text.brand,
     iconColor: theme.colors.brand.primary,
   },
-  // Gold variant for achievements/stars
+  // Gold variant for achievements/stars - soft teal style
   gold: {
-    backgroundColor: theme.colors.gold.light,
+    backgroundColor: theme.colors.gold.lighter,
     borderColor: theme.colors.gold.main,
     borderBottomColor: theme.colors.gold.dark,
     textColor: theme.colors.gold.text,
     iconColor: theme.colors.gold.main,
   },
-  // Streak variant for fire/streak badges
+  // Streak variant for fire/streak badges - soft pink style
   streak: {
-    backgroundColor: theme.colors.streak.light,
+    backgroundColor: theme.colors.streak.lighter,
     borderColor: theme.colors.streak.main,
     borderBottomColor: theme.colors.streak.dark,
     textColor: theme.colors.streak.text,
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: theme.radius.md,
+    borderRadius: theme.radius.sm, // 8px rounded corners
     borderWidth: 2,
-    borderBottomWidth: 3, // Duolingo-style 3D depth
+    borderBottomWidth: 4, // 3D depth effect
   },
 });

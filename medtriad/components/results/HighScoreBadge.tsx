@@ -4,6 +4,9 @@ import { Star } from '@solar-icons/react-native/Bold';
 import { Text, Icon } from '@/components/primitives';
 import { theme, Spacing, Radius, Shadows } from '@/constants/theme';
 
+// Warm gold color for celebratory star
+const GOLD_STAR = '#FFD54F';
+
 export function HighScoreBadge() {
   return (
     <Animated.View
@@ -11,12 +14,14 @@ export function HighScoreBadge() {
       style={[
         styles.badge,
         {
-          backgroundColor: theme.colors.text.primary,
+          backgroundColor: theme.colors.brand.primary,
+          borderColor: theme.colors.brand.primaryDark,
+          borderBottomColor: theme.colors.brand.primaryDarker,
           ...Shadows.light.md,
         },
       ]}
     >
-      <Icon icon={Star} size="sm" color={theme.colors.gold.main} />
+      <Icon icon={Star} size="sm" color={GOLD_STAR} />
       <Text variant="label" color="inverse">New High Score!</Text>
     </Animated.View>
   );
@@ -29,6 +34,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
     borderRadius: Radius.full,
-    gap: Spacing.sm,
+    borderWidth: 2,
+    borderBottomWidth: 4,
+    gap: Spacing.xs,
   },
 });

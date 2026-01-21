@@ -106,7 +106,7 @@ export function DevSection({ onRefresh }: DevSectionProps) {
         </Text>
         <View style={[styles.sectionHeaderLine, { backgroundColor: theme.colors.danger.main }]} />
       </View>
-      <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default }]}>
+      <View style={[styles.section, { backgroundColor: theme.colors.surface.card, borderColor: theme.colors.border.default, borderBottomColor: theme.colors.border.strong }]}>
         <SettingsRow
           label="Reset Onboarding"
           onPress={handleResetOnboarding}
@@ -149,11 +149,13 @@ const styles = StyleSheet.create({
   },
   sectionHeaderLine: {
     flex: 1,
-    height: 1,
+    height: 2,
+    opacity: 0.6,
   },
   section: {
     borderRadius: Radius.md,
-    borderWidth: 1,
+    borderWidth: 2,
+    borderBottomWidth: 4,
     overflow: 'hidden',
   },
   separator: {

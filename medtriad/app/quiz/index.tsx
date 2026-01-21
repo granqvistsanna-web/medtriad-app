@@ -17,12 +17,12 @@ import { useCountdownTimer } from '@/hooks/use-countdown-timer';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useHaptics } from '@/hooks/useHaptics';
 import { generateQuestionSet } from '@/services/question-generator';
-import { isPerfectRound, getComboTier } from '@/services/scoring';
-import { checkTierUp } from '@/services/mastery';
+import { isPerfectRound, getComboTier, SCORING } from '@/services/scoring';
+import { checkTierUp, getTierForPoints, getTimerForTier } from '@/services/mastery';
 import { useStats } from '@/hooks/useStats';
 
 import { QuizOption, TriadCategory } from '@/types';
-import { QUESTION_COUNT, QUESTION_TIME } from '@/types/quiz-state';
+import { QUESTION_COUNT } from '@/types/quiz-state';
 import { CategoryMasteryData } from '@/services/stats-storage';
 import { theme, Typography, Spacing, Radius, Durations } from '@/constants/theme';
 import { MascotMood } from '@/components/home/TriMascot';
@@ -53,6 +53,7 @@ export default function QuizScreen() {
     consecutiveCorrect,
     lastPointsEarned,
     timeRemaining,
+    questionTime,
     selectedOptionId,
   } = state;
 
@@ -60,9 +61,18 @@ export default function QuizScreen() {
 
   // Initialize quiz on mount
   useEffect(() => {
+    // Reset tracking refs in case component instance is reused
+    correctCountRef.current = 0;
+    maxComboRef.current = 1;
+    categoryResultsRef.current = {} as Record<TriadCategory, CategoryMasteryData>;
+
+    // Get tier-based timer duration (higher tiers = less time)
+    const currentTier = getTierForPoints(stats?.totalPoints ?? 0);
+    const questionTime = getTimerForTier(currentTier.tier);
+
     const generatedQuestions = generateQuestionSet(QUESTION_COUNT);
-    dispatch({ type: 'START_QUIZ', questions: generatedQuestions });
-  }, [dispatch]);
+    dispatch({ type: 'START_QUIZ', questions: generatedQuestions, questionTime });
+  }, [dispatch, stats?.totalPoints]);
 
   // Timer tick handler
   const handleTick = useCallback(() => {
@@ -72,17 +82,9 @@ export default function QuizScreen() {
   // Run countdown timer when playing
   useCountdownTimer(status === 'playing', handleTick);
 
-  // Handle timeout - no haptic, visual feedback only
-  useEffect(() => {
-    if (status === 'playing' && timeRemaining === 0) {
-      dispatch({
-        type: 'SELECT_ANSWER',
-        optionId: '',
-        isCorrect: false,
-        timeRemaining: 0,
-      });
-    }
-  }, [status, timeRemaining, dispatch]);
+  // Note: Timeout is handled by the reducer in TICK_TIMER action.
+  // When timeRemaining reaches 0, reducer transitions to 'answered' status.
+  // No additional effect needed here.
 
   // Auto-advance after answer
   useEffect(() => {
@@ -94,25 +96,26 @@ export default function QuizScreen() {
           // Check for new high score BEFORE saving stats
           const isNewHighScore = await checkHighScore(score);
 
+          // Check for perfect round and calculate final score with bonus
+          const perfect = isPerfectRound(correctCountRef.current, QUESTION_COUNT);
+          const finalScore = perfect ? score + SCORING.PERFECT_ROUND_BONUS : score;
+
           // Check for tier-up BEFORE recording quiz result
-          // stats?.gamesPlayed is the current count, quiz will increment it
-          const { willTierUp, newTier } = checkTierUp(stats?.gamesPlayed ?? 0);
+          // Compare current totalPoints + this quiz's score against tier thresholds
+          const { willTierUp, newTier } = checkTierUp(stats?.totalPoints ?? 0, finalScore);
 
           // Save stats (this increments gamesPlayed and sets pendingTierUp)
           await recordQuizResult(
             correctCountRef.current,
             QUESTION_COUNT,
             maxComboRef.current,
-            score,
+            finalScore,
             categoryResultsRef.current
           );
-
-          // Navigate to results with tier-up info
-          const perfect = isPerfectRound(correctCountRef.current, QUESTION_COUNT);
           router.replace({
             pathname: '/quiz/results',
             params: {
-              score: score.toString(),
+              score: finalScore.toString(),
               correctCount: correctCountRef.current.toString(),
               bestStreak: maxComboRef.current.toString(),
               isNewHighScore: isNewHighScore ? 'true' : 'false',
@@ -154,7 +157,7 @@ export default function QuizScreen() {
     }, ANSWER_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [status, currentIndex, questions.length, dispatch, router, score, recordQuizResult, checkHighScore, stats?.gamesPlayed]);
+  }, [status, currentIndex, questions.length, dispatch, router, score, recordQuizResult, checkHighScore, stats?.totalPoints]);
 
   // Handle answer selection - single Light haptic on tap (consistent, understated)
   const handleAnswerSelect = async (option: QuizOption) => {
@@ -219,8 +222,17 @@ export default function QuizScreen() {
     return 'neutral';
   };
 
-  // Loading state
+  // Loading/error state - show nothing briefly while questions load
+  // If questions array is populated but currentIndex is out of bounds, it's a bug
   if (!currentQuestion) {
+    // Quiz hasn't started yet (questions not loaded) - brief flash, no UI needed
+    if (questions.length === 0) {
+      return null;
+    }
+    // Questions exist but currentQuestion is undefined - shouldn't happen
+    // Log error and redirect to home to prevent stuck state
+    console.error('Quiz error: currentIndex out of bounds', { currentIndex, questionsLength: questions.length });
+    router.replace('/(tabs)');
     return null;
   }
 
@@ -270,10 +282,10 @@ export default function QuizScreen() {
 
       {/* Main content */}
       <View style={styles.main}>
-        {/* Timer row with mascot */}
+        {/* Timer row with mascot - uses tier-based questionTime */}
         <TimerBar
           seconds={timeRemaining}
-          totalSeconds={QUESTION_TIME}
+          totalSeconds={questionTime}
           mascotMood={getMascotMood()}
         />
 

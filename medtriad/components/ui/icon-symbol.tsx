@@ -32,6 +32,21 @@ const MAPPING = {
   'trash': 'delete',
   'percent': 'percent',
   'gamecontroller.fill': 'sports-esports',
+  // Homepage stats icons
+  'brain': 'psychology',
+  'timer': 'timer',
+  'square.grid.2x2': 'grid-view',
+  'play.fill': 'play-arrow',
+  'bolt.fill': 'bolt',
+  'questionmark.circle.fill': 'help',
+  'arrow.right': 'arrow-forward',
+  'xmark': 'close',
+  // Duolingo-style flat icons for stats
+  'target': 'gps-fixed',           // Accuracy - bullseye/target
+  'star.fill': 'star',             // High score
+  'doc.text.fill': 'assignment',   // Answered/questions
+  'diamond.fill': 'diamond',       // XP/gems (fallback to star-rate)
+  'sparkles': 'auto-awesome',      // Sparkle effect
 } as IconMapping;
 
 /**
