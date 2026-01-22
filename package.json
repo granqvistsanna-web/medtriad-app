@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@types/seedrandom": "^3.0.8",
+    "seedrandom": "^3.0.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
