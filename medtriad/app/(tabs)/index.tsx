@@ -11,6 +11,7 @@ import Animated, {
 
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroCard } from '@/components/home/HeroCard';
+import { ReviewDueBadge } from '@/components/home/ReviewDueBadge';
 import { ActionButtons } from '@/components/home/ActionButtons';
 import { CategoryMastery } from '@/components/home/CategoryMastery';
 import { useStats } from '@/hooks/useStats';
@@ -38,6 +39,7 @@ export default function HomeScreen() {
     getCategoryPercent,
     refresh,
     userName,
+    dueCount,
   } = useStats();
 
   // Refresh stats when screen gains focus (after quiz completion)
@@ -151,6 +153,18 @@ export default function HomeScreen() {
           showTierUpGlow={showTierUpGlow}
         />
 
+        {/* Review due badge - appears when triads are due */}
+        {dueCount > 0 && (
+          <Animated.View
+            entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
+          >
+            <ReviewDueBadge
+              dueCount={dueCount}
+              onPress={() => router.push('/quiz/review')}
+            />
+          </Animated.View>
+        )}
+
         {/* Start Quiz button - below hero card */}
         <Animated.View
           entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
@@ -167,10 +181,12 @@ export default function HomeScreen() {
           </AnimatedPressable>
         </Animated.View>
 
-        {/* Action buttons - Study and Challenge */}
+        {/* Action buttons - Study, Challenge, and Review */}
         <ActionButtons
           onStudy={() => router.push('/quiz/study-filter')}
           onChallenge={handleChallenge}
+          onReview={() => router.push('/quiz/review')}
+          dueCount={dueCount}
           delay={Durations.stagger * 2.5}
         />
 

@@ -22,6 +22,7 @@ import {
   getNextTier,
   getPointsToNextTier,
 } from '@/services/mastery';
+import { getDueTriadCount } from '@/services/spaced-repetition';
 
 export interface StatsData {
   stats: StoredStats | null;
@@ -60,12 +61,15 @@ export interface StatsData {
   getCategoryPercent: (category: TriadCategory) => number;
   // User personalization
   userName: string | null;
+  // Spaced repetition
+  dueCount: number;
 }
 
 export function useStats(): StatsData {
   const [stats, setStats] = useState<StoredStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [dueCount, setDueCount] = useState(0);
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
@@ -73,10 +77,15 @@ export function useStats(): StatsData {
     try {
       const loaded = await loadStats();
       setStats(loaded);
+
+      // Fetch due triads count
+      const count = await getDueTriadCount();
+      setDueCount(count);
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Failed to load stats');
       console.error('Failed to load stats:', error);
       setError(error);
+      setDueCount(0);
     } finally {
       setLoading(false);
     }
@@ -178,5 +187,7 @@ export function useStats(): StatsData {
     getCategoryPercent,
     // User personalization
     userName,
+    // Spaced repetition
+    dueCount,
   };
 }
