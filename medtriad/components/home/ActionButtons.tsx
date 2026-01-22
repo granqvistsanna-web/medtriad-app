@@ -5,7 +5,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Book, Bolt, Refresh } from '@solar-icons/react-native/Bold';
+import { Book, ShareCircle, Refresh } from '@solar-icons/react-native/Bold';
 import { theme, Radius, Spacing, Durations } from '@/constants/theme';
 import { Text, Icon } from '@/components/primitives';
 
@@ -79,7 +79,7 @@ function ActionButton({ icon, label, onPress, disabled = false, badge }: ActionB
 
 type ActionButtonsProps = {
   onStudy: () => void;
-  onChallenge: () => void;
+  onShare: () => void;
   onReview: () => void;
   dueCount: number;
   delay?: number;
@@ -87,7 +87,7 @@ type ActionButtonsProps = {
 
 export function ActionButtons({
   onStudy,
-  onChallenge,
+  onShare,
   onReview,
   dueCount,
   delay = 0,
@@ -104,9 +104,9 @@ export function ActionButtons({
           onPress={onStudy}
         />
         <ActionButton
-          icon={Bolt}
-          label="CHALLENGE"
-          onPress={onChallenge}
+          icon={ShareCircle}
+          label="SHARE"
+          onPress={onShare}
         />
       </View>
       <View style={styles.actionRow}>

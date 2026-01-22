@@ -23,6 +23,8 @@ import {
   getPointsToNextTier,
 } from '@/services/mastery';
 import { getDueTriadCount } from '@/services/spaced-repetition';
+import { getDailyChallengeState } from '@/services/daily-challenge';
+import { DailyChallengeState } from '@/types/daily-challenge';
 
 export interface StatsData {
   stats: StoredStats | null;
@@ -63,6 +65,10 @@ export interface StatsData {
   userName: string | null;
   // Spaced repetition
   dueCount: number;
+  // Daily challenge
+  dailyChallengeState: DailyChallengeState | null;
+  dailyChallengeLoading: boolean;
+  refreshDailyChallenge: () => Promise<void>;
 }
 
 export function useStats(): StatsData {
@@ -70,6 +76,8 @@ export function useStats(): StatsData {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [dueCount, setDueCount] = useState(0);
+  const [dailyChallengeState, setDailyChallengeState] = useState<DailyChallengeState | null>(null);
+  const [dailyChallengeLoading, setDailyChallengeLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
@@ -91,9 +99,23 @@ export function useStats(): StatsData {
     }
   }, []);
 
+  const fetchDailyChallenge = useCallback(async () => {
+    setDailyChallengeLoading(true);
+    try {
+      const state = await getDailyChallengeState();
+      setDailyChallengeState(state);
+    } catch (err) {
+      console.error('Failed to load daily challenge state:', err);
+      setDailyChallengeState(null);
+    } finally {
+      setDailyChallengeLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchStats();
-  }, [fetchStats]);
+    fetchDailyChallenge();
+  }, [fetchStats, fetchDailyChallenge]);
 
   const recordQuizResult = useCallback(
     async (
@@ -189,5 +211,9 @@ export function useStats(): StatsData {
     userName,
     // Spaced repetition
     dueCount,
+    // Daily challenge
+    dailyChallengeState,
+    dailyChallengeLoading,
+    refreshDailyChallenge: fetchDailyChallenge,
   };
 }

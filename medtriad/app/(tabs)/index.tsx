@@ -11,6 +11,7 @@ import Animated, {
 
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroCard } from '@/components/home/HeroCard';
+import { DailyChallengeCard } from '@/components/home/DailyChallengeCard';
 import { ReviewDueBadge } from '@/components/home/ReviewDueBadge';
 import { ActionButtons } from '@/components/home/ActionButtons';
 import { CategoryMastery } from '@/components/home/CategoryMastery';
@@ -40,6 +41,8 @@ export default function HomeScreen() {
     refresh,
     userName,
     dueCount,
+    dailyChallengeState,
+    dailyChallengeLoading,
   } = useStats();
 
   // Refresh stats when screen gains focus (after quiz completion)
@@ -110,8 +113,12 @@ export default function HomeScreen() {
     router.push('/quiz');
   };
 
-  const handleChallenge = () => {
+  const handleShare = () => {
     router.push('/challenge');
+  };
+
+  const handleDailyChallenge = () => {
+    router.push('/daily-challenge');
   };
 
   const handlePressIn = () => {
@@ -153,6 +160,17 @@ export default function HomeScreen() {
           showTierUpGlow={showTierUpGlow}
         />
 
+        {/* Daily Challenge Card - prominent position */}
+        {!dailyChallengeLoading && dailyChallengeState && (
+          <DailyChallengeCard
+            challengeType={dailyChallengeState.challengeConfig.type}
+            displayName={dailyChallengeState.challengeConfig.displayName}
+            completed={dailyChallengeState.completedToday}
+            onPress={handleDailyChallenge}
+            delay={Durations.stagger * 1.5}
+          />
+        )}
+
         {/* Review due badge - appears when triads are due */}
         {dueCount > 0 && (
           <Animated.View
@@ -181,10 +199,10 @@ export default function HomeScreen() {
           </AnimatedPressable>
         </Animated.View>
 
-        {/* Action buttons - Study, Challenge, and Review */}
+        {/* Action buttons - Study, Share, and Review */}
         <ActionButtons
           onStudy={() => router.push('/quiz/study-filter')}
-          onChallenge={handleChallenge}
+          onShare={handleShare}
           onReview={() => router.push('/quiz/review')}
           dueCount={dueCount}
           delay={Durations.stagger * 2.5}
