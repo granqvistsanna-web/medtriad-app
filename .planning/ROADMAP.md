@@ -90,6 +90,13 @@ Plans:
 
 **Research flags:** SM-2 edge cases, quality score mapping, review session UX
 
+**Plans:** 4 plans
+Plans:
+- [ ] 29-01-PLAN.md — SM-2 algorithm service and type extensions (TDD)
+- [ ] 29-02-PLAN.md — Review Mode UI (screen, reducer, results)
+- [ ] 29-03-PLAN.md — Home screen integration (badge, action button)
+- [ ] 29-04-PLAN.md — Quiz/Study Mode SM-2 initialization and verification
+
 ---
 
 ### Phase 30: Daily Challenges
