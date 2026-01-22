@@ -64,6 +64,14 @@ export async function recordTriadAnswer(
     const oldCount = existing.responseCount;
     const newAvg = ((oldAvg * oldCount) + responseTimeMs) / (oldCount + 1);
 
+    // Initialize SM-2 fields for new entries or entries without scheduling
+    const needsScheduleInit = !record[triadId] || existing.nextReviewDate === undefined || existing.nextReviewDate === null;
+
+    // Calculate tomorrow for initial review
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowISO = tomorrow.toISOString();
+
     // Create updated performance
     const updated: TriadPerformance = {
       correctCount,
@@ -71,10 +79,11 @@ export async function recordTriadAnswer(
       lastSeenAt: new Date().toISOString(),
       avgResponseTimeMs: newAvg,
       responseCount: oldCount + 1,
-      interval: existing.interval,
-      repetition: existing.repetition,
-      efactor: existing.efactor,
-      nextReviewDate: existing.nextReviewDate,
+      // SM-2 fields: initialize if needed, otherwise preserve
+      interval: needsScheduleInit ? 1 : existing.interval,
+      repetition: needsScheduleInit ? 0 : existing.repetition,
+      efactor: needsScheduleInit ? 2.5 : existing.efactor,
+      nextReviewDate: needsScheduleInit ? tomorrowISO : existing.nextReviewDate,
     };
 
     // Save updated record
