@@ -112,18 +112,19 @@ export async function saveStats(stats: StoredStats): Promise<void> {
  */
 export function calculateStreak(
   currentStreak: number,
-  lastPlayedDate: string | null
-): { newStreak: number; isNewDay: boolean } {
+  lastPlayedDate: string | null,
+  streakFreezeCount?: number
+): { newStreak: number; isNewDay: boolean; usedStreakFreeze: boolean } {
   const today = new Date().toDateString(); // "Sat Jan 18 2026"
 
   if (lastPlayedDate === null) {
     // First time playing
-    return { newStreak: 1, isNewDay: true };
+    return { newStreak: 1, isNewDay: true, usedStreakFreeze: false };
   }
 
   if (lastPlayedDate === today) {
     // Already played today - streak unchanged
-    return { newStreak: currentStreak, isNewDay: false };
+    return { newStreak: currentStreak, isNewDay: false, usedStreakFreeze: false };
   }
 
   // Check if last played was yesterday
@@ -133,11 +134,17 @@ export function calculateStreak(
 
   if (lastPlayedDate === yesterdayString) {
     // Consecutive day - increment streak
-    return { newStreak: currentStreak + 1, isNewDay: true };
+    return { newStreak: currentStreak + 1, isNewDay: true, usedStreakFreeze: false };
+  }
+
+  // Streak would be broken - check for streak freeze
+  if (streakFreezeCount && streakFreezeCount > 0) {
+    // Use streak freeze to preserve streak
+    return { newStreak: currentStreak, isNewDay: true, usedStreakFreeze: true };
   }
 
   // Streak broken - reset to 1
-  return { newStreak: 1, isNewDay: true };
+  return { newStreak: 1, isNewDay: true, usedStreakFreeze: false };
 }
 
 /**
@@ -170,11 +177,21 @@ export async function updateAfterQuiz(
   // Check for tier-up using points BEFORE adding new score
   const { willTierUp, newTier } = checkTierUp(currentStats.totalPoints, score);
 
-  // Calculate streak
-  const { newStreak } = calculateStreak(
+  // Calculate streak (pass streak freeze count for automatic usage)
+  const { newStreak, usedStreakFreeze } = calculateStreak(
     currentStats.dailyStreak,
-    currentStats.lastPlayedDate
+    currentStats.lastPlayedDate,
+    currentStats.streakFreezeCount
   );
+
+  // Consume streak freeze if used
+  const newStreakFreezeCount = usedStreakFreeze
+    ? Math.max(0, currentStats.streakFreezeCount - 1)
+    : currentStats.streakFreezeCount;
+
+  if (usedStreakFreeze) {
+    console.log('Streak freeze used to preserve streak');
+  }
 
   // Merge category results if provided
   const mergedCategoryMastery = categoryResults
@@ -213,11 +230,11 @@ export async function updateAfterQuiz(
     // User personalization (preserve from current)
     userName: currentStats.userName,
     hasCompletedOnboarding: currentStats.hasCompletedOnboarding,
-    // Daily challenge tracking (preserve from current)
+    // Daily challenge tracking (preserve from current, except streak freeze which may be consumed)
     dailyChallengeCompletedDate: currentStats.dailyChallengeCompletedDate,
     dailyChallengesCompletedThisWeek: currentStats.dailyChallengesCompletedThisWeek,
     weekStartDate: currentStats.weekStartDate,
-    streakFreezeCount: currentStats.streakFreezeCount,
+    streakFreezeCount: newStreakFreezeCount,
     streakFreezeLastEarnedWeek: currentStats.streakFreezeLastEarnedWeek,
   };
 
@@ -311,6 +328,14 @@ export async function completeOnboarding(): Promise<void> {
 export async function hasCompletedOnboarding(): Promise<boolean> {
   const stats = await loadStats();
   return stats.hasCompletedOnboarding;
+}
+
+/**
+ * Get streak freeze count
+ */
+export async function getStreakFreezeCount(): Promise<number> {
+  const stats = await loadStats();
+  return stats.streakFreezeCount;
 }
 
 /**

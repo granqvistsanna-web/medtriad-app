@@ -174,10 +174,20 @@ export async function completeDailyChallenge(): Promise<{
   // Update completion date
   stats.dailyChallengeCompletedDate = today;
 
-  // Calculate streak (using existing logic)
-  const { newStreak } = calculateStreak(stats.dailyStreak, stats.lastPlayedDate);
+  // Calculate streak (using existing logic, pass streak freeze for auto-use)
+  const { newStreak, usedStreakFreeze } = calculateStreak(
+    stats.dailyStreak,
+    stats.lastPlayedDate,
+    stats.streakFreezeCount
+  );
   stats.dailyStreak = newStreak;
   stats.lastPlayedDate = new Date().toDateString();
+
+  // Consume streak freeze if used
+  if (usedStreakFreeze) {
+    stats.streakFreezeCount = Math.max(0, stats.streakFreezeCount - 1);
+    console.log('Streak freeze used to preserve streak');
+  }
 
   // Check if week changed
   const currentWeekStart = getWeekStartDate(new Date());
