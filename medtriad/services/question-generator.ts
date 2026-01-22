@@ -1,6 +1,7 @@
 import { Triad, QuizOption, QuizQuestion, TriadCategory } from '@/types';
 import { getAllTriads } from '@/services/triads';
 import { shuffle } from '@/utils/shuffle';
+import { selectAdaptiveTriads } from '@/services/adaptive-selection';
 
 /**
  * Format findings array into display string
@@ -125,5 +126,19 @@ export function generateQuestionSetByCategories(
     Math.min(count, filteredTriads.length)
   );
 
+  return selectedTriads.map(triad => generateQuestion(triad));
+}
+
+/**
+ * Generate a set of quiz questions using adaptive selection
+ * Prioritizes weak categories, tricky items, and difficulty based on tier
+ * @param count Number of questions to generate
+ * @param userTier User's current tier (1-6)
+ */
+export async function generateAdaptiveQuestionSet(
+  count: number,
+  userTier: number
+): Promise<QuizQuestion[]> {
+  const selectedTriads = await selectAdaptiveTriads(count, userTier);
   return selectedTriads.map(triad => generateQuestion(triad));
 }
