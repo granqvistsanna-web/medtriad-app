@@ -9,16 +9,16 @@ See: .planning/PROJECT.md (updated 2026-01-21)
 
 ## Current Position
 
-Phase: 27 - Data Foundation
-Plan: 1 of 1
-Status: Phase complete
-Last activity: 2026-01-21 — Completed 27-01-PLAN.md
+Phase: 28 - Adaptive Difficulty
+Plan: 1 of 2
+Status: In progress
+Last activity: 2026-01-22 — Completed 28-01-PLAN.md
 
 ### Progress
 
 ```
 Phase 27: Data Foundation     [█] Complete (1/1 plans)
-Phase 28: Adaptive Difficulty [ ] Ready
+Phase 28: Adaptive Difficulty [░█] In progress (1/2 plans)
 Phase 29: Spaced Repetition   [ ] Ready
 Phase 30: Daily Challenges    [ ] Ready
 Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
@@ -51,13 +51,13 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 
 **v3.0 Progress:**
 - Phases: 1/5 complete
-- Plans: 1 complete
-- Requirements: 3/26 complete
+- Plans: 2 complete
+- Requirements: 7/26 complete
 
 **Cumulative:**
 - Total phases: 27 complete, 4 planned
-- Total plans: 66 complete
-- Total lines: ~124,000 TypeScript
+- Total plans: 67 complete
+- Total lines: ~124,500 TypeScript
 
 ## Accumulated Context
 
@@ -69,6 +69,9 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 | Study mode records 0ms response time | 27-01 | Untimed mode - 0ms clearly distinguishes from timed answers |
 | Timeout = full questionTime as response | 27-01 | Represents slowest possible response, useful for difficulty |
 | Fire-and-forget storage pattern | 27-01 | Non-critical data shouldn't block quiz flow on failures |
+| Multiplicative weight stacking | 28-01 | Weak 2x + tricky 3x = 6x creates stronger prioritization |
+| Tier 1-2 no difficulty adjustment | 28-01 | Beginners get even distribution - avoids overwhelming |
+| Jest for testing infrastructure | 28-01 | Needed test infrastructure for this phase and future phases |
 
 See also: PROJECT.md Key Decisions table for architectural decisions.
 
@@ -91,9 +94,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-21 20:32:20 UTC
-Stopped at: Completed 27-01-PLAN.md
+Last session: 2026-01-22 06:46:00 UTC
+Stopped at: Completed 28-01-PLAN.md
 Resume file: None
 
 ---
-*Updated: 2026-01-21 — Completed Phase 27-01 (Data Foundation)*
+*Updated: 2026-01-22 — Completed Phase 28-01 (Adaptive Selection Service)*
