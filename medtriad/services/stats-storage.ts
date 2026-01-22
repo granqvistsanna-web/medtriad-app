@@ -25,6 +25,12 @@ export interface StoredStats {
   // User personalization
   userName: string | null;
   hasCompletedOnboarding: boolean;
+  // Daily challenge tracking
+  dailyChallengeCompletedDate: string | null; // ISO date-only: "2026-01-22"
+  dailyChallengesCompletedThisWeek: number; // 0-7, resets each week
+  weekStartDate: string | null; // ISO date of current week's Monday
+  streakFreezeCount: number; // 0 or 1
+  streakFreezeLastEarnedWeek: string | null; // ISO week: "2026-W04"
 }
 
 export interface QuizHistoryEntry {
@@ -66,6 +72,11 @@ const DEFAULT_STATS: StoredStats = {
   categoryMastery: DEFAULT_CATEGORY_MASTERY,
   userName: null,
   hasCompletedOnboarding: false,
+  dailyChallengeCompletedDate: null,
+  dailyChallengesCompletedThisWeek: 0,
+  weekStartDate: null,
+  streakFreezeCount: 0,
+  streakFreezeLastEarnedWeek: null,
 };
 
 /**
@@ -202,6 +213,12 @@ export async function updateAfterQuiz(
     // User personalization (preserve from current)
     userName: currentStats.userName,
     hasCompletedOnboarding: currentStats.hasCompletedOnboarding,
+    // Daily challenge tracking (preserve from current)
+    dailyChallengeCompletedDate: currentStats.dailyChallengeCompletedDate,
+    dailyChallengesCompletedThisWeek: currentStats.dailyChallengesCompletedThisWeek,
+    weekStartDate: currentStats.weekStartDate,
+    streakFreezeCount: currentStats.streakFreezeCount,
+    streakFreezeLastEarnedWeek: currentStats.streakFreezeLastEarnedWeek,
   };
 
   await saveStats(updatedStats);
@@ -294,6 +311,30 @@ export async function completeOnboarding(): Promise<void> {
 export async function hasCompletedOnboarding(): Promise<boolean> {
   const stats = await loadStats();
   return stats.hasCompletedOnboarding;
+}
+
+/**
+ * Get ISO week string for a date (e.g., "2026-W04")
+ * Uses ISO 8601 week date system where week starts on Monday
+ */
+export function getISOWeek(date: Date): string {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+}
+
+/**
+ * Get the Monday date for a given date's week (ISO date string)
+ */
+export function getWeekStartDate(date: Date): string {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+  const monday = new Date(d.setDate(diff));
+  return monday.toISOString().split('T')[0];
 }
 
 export { DEFAULT_CATEGORY_MASTERY };
