@@ -16,7 +16,7 @@ import { useQuizReducer } from '@/hooks/use-quiz-reducer';
 import { useCountdownTimer } from '@/hooks/use-countdown-timer';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { useHaptics } from '@/hooks/useHaptics';
-import { generateQuestionSet } from '@/services/question-generator';
+import { generateQuestionSet, generateAdaptiveQuestionSet } from '@/services/question-generator';
 import { isPerfectRound, getComboTier, SCORING } from '@/services/scoring';
 import { checkTierUp, getTierForPoints, getTimerForTier } from '@/services/mastery';
 import { useStats } from '@/hooks/useStats';
@@ -71,8 +71,17 @@ export default function QuizScreen() {
     const currentTier = getTierForPoints(stats?.totalPoints ?? 0);
     const questionTime = getTimerForTier(currentTier.tier);
 
-    const generatedQuestions = generateQuestionSet(QUESTION_COUNT);
-    dispatch({ type: 'START_QUIZ', questions: generatedQuestions, questionTime });
+    // Use adaptive selection for quiz questions
+    generateAdaptiveQuestionSet(QUESTION_COUNT, currentTier.tier)
+      .then((generatedQuestions) => {
+        dispatch({ type: 'START_QUIZ', questions: generatedQuestions, questionTime });
+      })
+      .catch((error) => {
+        console.error('Failed to generate adaptive questions, falling back to random:', error);
+        // Fallback to random selection if adaptive fails
+        const fallbackQuestions = generateQuestionSet(QUESTION_COUNT);
+        dispatch({ type: 'START_QUIZ', questions: fallbackQuestions, questionTime });
+      });
   }, [dispatch, stats?.totalPoints]);
 
   // Timer tick handler
