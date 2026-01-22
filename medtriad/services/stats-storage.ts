@@ -80,6 +80,17 @@ const DEFAULT_STATS: StoredStats = {
 };
 
 /**
+ * Convert Date to ISO date string (YYYY-MM-DD) in local timezone
+ * This is locale-safe and ensures consistent date comparison
+ */
+function toISODateString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
  * Load stats from AsyncStorage
  */
 export async function loadStats(): Promise<StoredStats> {
@@ -108,14 +119,14 @@ export async function saveStats(stats: StoredStats): Promise<void> {
 
 /**
  * Calculate new streak based on last played date
- * Uses local date strings to handle timezones correctly
+ * Uses ISO date format (YYYY-MM-DD) for locale-safe comparison
  */
 export function calculateStreak(
   currentStreak: number,
   lastPlayedDate: string | null,
   streakFreezeCount?: number
 ): { newStreak: number; isNewDay: boolean; usedStreakFreeze: boolean } {
-  const today = new Date().toDateString(); // "Sat Jan 18 2026"
+  const today = toISODateString(new Date()); // "2026-01-22"
 
   if (lastPlayedDate === null) {
     // First time playing
@@ -130,7 +141,7 @@ export function calculateStreak(
   // Check if last played was yesterday
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayString = yesterday.toDateString();
+  const yesterdayString = toISODateString(yesterday);
 
   if (lastPlayedDate === yesterdayString) {
     // Consecutive day - increment streak
@@ -218,7 +229,7 @@ export async function updateAfterQuiz(
     lastPlayedAt: new Date().toISOString(),
     highScore: Math.max(currentStats.highScore, score),
     dailyStreak: newStreak,
-    lastPlayedDate: new Date().toDateString(),
+    lastPlayedDate: toISODateString(new Date()),
     // Accumulate total points for tier progression
     totalPoints: currentStats.totalPoints + score,
     // Set pendingTierUp if tier-up occurred, otherwise preserve existing

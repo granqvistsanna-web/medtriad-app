@@ -5,46 +5,27 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Bolt, Book, Target, CheckCircle, AltArrowRight } from '@solar-icons/react-native/Bold';
-import { DailyChallengeType } from '@/types/daily-challenge';
+import { CheckCircle, AltArrowRight } from '@solar-icons/react-native/Bold';
 import { theme, Radius, Spacing, Durations, Easings } from '@/constants/theme';
 import { Text, Icon } from '@/components/primitives';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type DailyChallengeCardProps = {
-  challengeType: DailyChallengeType;
   displayName: string;
   completed: boolean;
   onPress: () => void;
   delay?: number;
 };
 
-/**
- * Get icon component based on challenge type
- */
-function getChallengeIcon(type: DailyChallengeType) {
-  switch (type) {
-    case 'speed':
-      return Bolt;
-    case 'category':
-      return Book;
-    case 'full':
-      return Target;
-    default:
-      return Target;
-  }
-}
-
 export function DailyChallengeCard({
-  challengeType,
   displayName,
   completed,
   onPress,
   delay = 0,
 }: DailyChallengeCardProps) {
   const scale = useSharedValue(1);
-  const borderBottom = useSharedValue(4);
+  const borderBottom = useSharedValue(3);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -54,16 +35,14 @@ export function DailyChallengeCard({
   const handlePressIn = () => {
     if (completed) return;
     scale.value = withSpring(0.98, Easings.press);
-    borderBottom.value = withSpring(2, Easings.press);
+    borderBottom.value = withSpring(1.5, Easings.press);
   };
 
   const handlePressOut = () => {
     if (completed) return;
     scale.value = withSpring(1, Easings.press);
-    borderBottom.value = withSpring(4, Easings.press);
+    borderBottom.value = withSpring(3, Easings.press);
   };
-
-  const ChallengeIcon = getChallengeIcon(challengeType);
 
   return (
     <Animated.View
@@ -81,22 +60,11 @@ export function DailyChallengeCard({
         accessibilityLabel={`Daily Challenge: ${displayName}, ${completed ? 'Completed' : 'Tap to play'}`}
         accessibilityRole="button"
       >
-        {/* Left: Icon */}
-        <View style={styles.iconContainer}>
-          <View style={[styles.iconCircle, completed && styles.iconCircleCompleted]}>
-            <Icon
-              icon={ChallengeIcon}
-              size="md"
-              color={completed ? theme.colors.text.muted : theme.colors.brand.primary}
-            />
-          </View>
-        </View>
-
-        {/* Center: Labels */}
+        {/* Labels - tighter spacing without icon */}
         <View style={styles.contentContainer}>
           <Text
             variant="tiny"
-            color={completed ? 'muted' : 'brand'}
+            color={completed ? 'muted' : 'teal'}
             weight="extrabold"
             style={styles.label}
           >
@@ -135,8 +103,8 @@ export function DailyChallengeCard({
           ) : (
             <Icon
               icon={AltArrowRight}
-              size="md"
-              color={theme.colors.brand.primary}
+              size="sm"
+              color={theme.colors.teal.main}
             />
           )}
         </View>
@@ -150,49 +118,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     borderRadius: Radius.lg,
-    borderWidth: 2,
-    borderBottomWidth: 4,
-    backgroundColor: `${theme.colors.brand.primary}10`,
-    borderColor: theme.colors.brand.primary,
-    borderBottomColor: theme.colors.brand.primaryDark,
-    ...theme.shadows.md,
-    shadowColor: theme.colors.brand.primary,
-    shadowOpacity: 0.15,
+    borderWidth: 1.5,
+    borderBottomWidth: 3,
+    backgroundColor: `${theme.colors.teal.main}08`,
+    borderColor: `${theme.colors.teal.main}60`,
+    borderBottomColor: `${theme.colors.teal.dark}70`,
+    ...theme.shadows.sm,
+    shadowColor: theme.colors.teal.main,
+    shadowOpacity: 0.1,
   },
   cardCompleted: {
-    opacity: 0.7,
-    backgroundColor: theme.colors.surface.card,
-    borderColor: theme.colors.border.default,
-    borderBottomColor: theme.colors.border.strong,
-    shadowOpacity: 0.05,
-  },
-  iconContainer: {
-    marginRight: Spacing.md,
-  },
-  iconCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: Radius.full,
-    backgroundColor: `${theme.colors.brand.primary}15`,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconCircleCompleted: {
-    backgroundColor: theme.colors.surface.secondary,
+    backgroundColor: `${theme.colors.success.main}08`,
+    borderColor: `${theme.colors.success.main}40`,
+    borderBottomColor: `${theme.colors.success.main}60`,
+    shadowColor: theme.colors.success.main,
+    shadowOpacity: 0.15,
   },
   contentContainer: {
     flex: 1,
-    gap: Spacing.xs,
+    gap: 2,
   },
   label: {
-    fontSize: 11,
-    letterSpacing: 1.2,
+    fontSize: 10,
+    letterSpacing: 1,
   },
   displayName: {
-    fontSize: 16,
-    letterSpacing: -0.3,
+    fontSize: 14,
+    letterSpacing: -0.2,
   },
   statusContainer: {
     marginLeft: Spacing.sm,

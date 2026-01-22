@@ -183,58 +183,6 @@ function PaginationDot({ index, scrollX, width }: { index: number; scrollX: Shar
 }
 
 // =============================================================================
-// SWIPE HINT - Animated hand gesture
-// =============================================================================
-
-function SwipeHint({ visible }: { visible: boolean }) {
-  const colors = Colors.light;
-  const translateX = useSharedValue(0);
-  const opacity = useSharedValue(visible ? 1 : 0);
-
-  useEffect(() => {
-    if (visible) {
-      opacity.value = withDelay(1500, withTiming(1, { duration: 400 }));
-      translateX.value = withDelay(
-        1800,
-        withRepeat(
-          withSequence(
-            withTiming(0, { duration: 0 }),
-            withTiming(20, { duration: 600, easing: Easing.inOut(Easing.ease) }),
-            withTiming(0, { duration: 400, easing: Easing.out(Easing.ease) })
-          ),
-          3,
-          false
-        )
-      );
-    } else {
-      opacity.value = withTiming(0, { duration: 200 });
-    }
-  }, [visible]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ translateX: translateX.value }],
-  }));
-
-  if (!visible) return null;
-
-  return (
-    <Animated.View
-      style={[styles.swipeHint, animatedStyle]}
-      accessibilityLabel="Swipe to continue to the next page"
-      accessibilityRole="text"
-    >
-      <View style={[styles.swipeHintPill, { backgroundColor: colors.primaryUltraLight }]}>
-        <Text variant="caption" color={colors.primary} style={styles.swipeHintText}>
-          Swipe to continue
-        </Text>
-        <AltArrowRight size={16} color={colors.primary} />
-      </View>
-    </Animated.View>
-  );
-}
-
-// =============================================================================
 // NAME INPUT COMPONENT
 // =============================================================================
 
@@ -532,15 +480,10 @@ export default function OnboardingScreen() {
   const scrollX = useSharedValue(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [userName, setUserName] = useState('');
-  const [showSwipeHint, setShowSwipeHint] = useState(true);
 
   const updateCurrentPage = useCallback((page: number) => {
     setCurrentPage(page);
-    // Hide swipe hint after first swipe
-    if (page > 0 && showSwipeHint) {
-      setShowSwipeHint(false);
-    }
-  }, [showSwipeHint]);
+  }, []);
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -682,8 +625,6 @@ export default function OnboardingScreen() {
         accessibilityLabel={`Onboarding tutorial, showing page ${currentPage + 1} of ${PAGES.length}`}
       />
 
-      {/* Swipe hint - only on first page */}
-      <SwipeHint visible={showSwipeHint && currentPage === 0} />
 
       {/* Bottom section */}
       <Animated.View
@@ -807,26 +748,6 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     marginHorizontal: 4,
-  },
-
-  // Swipe hint
-  swipeHint: {
-    position: 'absolute',
-    bottom: 180,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  swipeHintPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    paddingVertical: Spacing.xs,
-    paddingHorizontal: Spacing.md,
-    borderRadius: Radius.full,
-  },
-  swipeHintText: {
-    fontWeight: '500',
   },
 
   // Primary button

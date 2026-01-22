@@ -38,6 +38,9 @@ export function HomeHeader({ delay = 0, userName }: HomeHeaderProps) {
     <Animated.View
       entering={FadeInUp.delay(delay).duration(Durations.normal).springify()}
       style={styles.container}
+      accessible={true}
+      accessibilityRole="header"
+      accessibilityLabel={greeting}
     >
       <Text variant="titleLarge" color="primary" numberOfLines={2}>
         {greeting}
@@ -48,6 +51,6 @@ export function HomeHeader({ delay = 0, userName }: HomeHeaderProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: Spacing.sm,
+    paddingTop: Spacing.sm,
   },
 });

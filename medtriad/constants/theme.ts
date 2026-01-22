@@ -47,6 +47,8 @@ export const theme = {
       muted: palette.neutral[700],       // Light gray - muted text
       inverse: palette.neutral[0],       // White - text on dark bg
       brand: palette.wine[700],          // Dark wine - brand accent text
+      teal: palette.teal[700],           // Teal accent text
+      success: palette.success[700],     // Success/green text
     },
 
     // Brand colors - primary identity
@@ -114,6 +116,15 @@ export const theme = {
       dark: palette.blue[600],
       light: palette.blue[100],
       text: palette.blue[700],
+    },
+
+    // Teal colors (daily challenge, highlights)
+    teal: {
+      main: palette.teal[500],
+      dark: palette.teal[600],
+      light: palette.teal[100],
+      lighter: palette.teal[50],
+      text: palette.teal[700],
     },
 
     // Purple colors
@@ -225,6 +236,12 @@ const legacyColors = {
   blue: palette.blue[500],
   blueDark: palette.blue[600],
   blueText: palette.blue[700],
+
+  // Teal
+  teal: palette.teal[500],
+  tealDark: palette.teal[600],
+  tealLight: palette.teal[100],
+  tealText: palette.teal[700],
 
   // Timer
   timerNormal: palette.timer.normal,

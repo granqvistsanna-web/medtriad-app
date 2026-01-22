@@ -71,12 +71,21 @@ export const palette = {
     700: '#8B3A62',  // Plum text
   },
 
-  // Teal family (info/category) - muted, sophisticated
+  // Blue family (info/category) - muted, sophisticated
   blue: {
     100: '#E8F4F3',  // Light teal background
     500: '#5BA9A2',  // Main muted teal
     600: '#4A908A',  // Dark teal (depth)
     700: '#2D5F5B',  // Teal text
+  },
+
+  // Teal family (daily challenge, highlights) - vibrant but muted
+  teal: {
+    50: '#E5F7F6',   // Ultra light teal for backgrounds
+    100: '#C7EFEC',  // Light teal background
+    500: '#2E9A8E',  // Main teal (vibrant but sophisticated)
+    600: '#257D73',  // Dark teal (depth/shadow)
+    700: '#1D6259',  // Darkest teal for text
   },
 
   // Purple/lavender family

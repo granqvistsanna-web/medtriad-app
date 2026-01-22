@@ -41,6 +41,23 @@ const TIER_IMAGES: Record<number, ReturnType<typeof require>> = {
   6: require('@/assets/images/tri-lvl6.png'),
 };
 
+/**
+ * Get accessibility description for the mascot based on mood and tier
+ */
+function getMascotAccessibilityLabel(mood: MascotMood, tier?: number): string {
+  const tierName = tier ? `level ${tier}` : '';
+  const moodDescriptions: Record<MascotMood, string> = {
+    neutral: 'Tri, the MedTriad mascot',
+    happy: 'Tri looking happy and encouraging',
+    reassuring: 'Tri offering reassurance',
+    streak: 'Tri celebrating your streak',
+    tierUp: 'Tri celebrating your level up',
+  };
+
+  const baseDesc = moodDescriptions[mood] || moodDescriptions.neutral;
+  return tierName ? `${baseDesc}, ${tierName}` : baseDesc;
+}
+
 export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, masteryLevel = 0, tier, context }: TriMascotProps) {
   const colors = Colors.light;
   const pixelSize = MascotSizes[size];
@@ -159,8 +176,15 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
     return { opacity: 0 };
   });
 
+  const accessibilityLabel = getMascotAccessibilityLabel(mood, tier);
+
   return (
-    <View style={[styles.container, { width: pixelSize, height: pixelSize }]}>
+    <View
+      style={[styles.container, { width: pixelSize, height: pixelSize }]}
+      accessible={true}
+      accessibilityRole="image"
+      accessibilityLabel={accessibilityLabel}
+    >
       {/* Glow effect for streak mood */}
       <Animated.View
         style={[
@@ -185,6 +209,7 @@ export function TriMascot({ mood = 'neutral', size = 'lg', animate = true, maste
           }}
           contentFit="contain"
           cachePolicy="memory-disk"
+          accessibilityIgnoresInvertColors={true}
         />
       </Animated.View>
     </View>

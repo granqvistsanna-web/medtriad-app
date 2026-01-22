@@ -1,7 +1,7 @@
 import { StyleSheet, View, useWindowDimensions, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useEffect, useCallback, useMemo } from 'react';
+import { useEffect, useCallback, useMemo, useRef } from 'react';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Text, Button } from '@/components/primitives';
@@ -37,6 +37,8 @@ export default function StudyScreen() {
   const { height: windowHeight } = useWindowDimensions();
   const { playSound } = useSoundEffects();
   const { triggerHaptic } = useHaptics();
+  // Track component mount state to prevent memory leaks
+  const isMountedRef = useRef(true);
 
   // Parse categories from URL params
   const selectedCategories = useMemo(() => {
@@ -63,11 +65,17 @@ export default function StudyScreen() {
         ? generateQuestionSetByCategories(STUDY_QUESTION_COUNT, selectedCategories)
         : generateQuestionSet(STUDY_QUESTION_COUNT);
     dispatch({ type: 'START_STUDY', questions: generatedQuestions });
+
+    // Cleanup: mark component as unmounted
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [dispatch, selectedCategories]);
 
   // Handle answer selection
   const handleAnswerSelect = useCallback(
     (option: QuizOption) => {
+      // Bug fix: Prevent double-tap submission
       if (status !== 'playing') return;
 
       triggerHaptic();

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { SafeAreaView, StyleSheet, View, ActivityIndicator, ScrollView, Pressable } from 'react-native';
+import { SafeAreaView, StyleSheet, View, ActivityIndicator, ScrollView, Pressable, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import Animated, {
@@ -12,7 +12,6 @@ import Animated, {
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { HeroCard } from '@/components/home/HeroCard';
 import { DailyChallengeCard } from '@/components/home/DailyChallengeCard';
-import { ReviewDueBadge } from '@/components/home/ReviewDueBadge';
 import { ActionButtons } from '@/components/home/ActionButtons';
 import { CategoryMastery } from '@/components/home/CategoryMastery';
 import { useStats } from '@/hooks/useStats';
@@ -40,7 +39,6 @@ export default function HomeScreen() {
     getCategoryPercent,
     refresh,
     userName,
-    dueCount,
     dailyChallengeState,
     dailyChallengeLoading,
   } = useStats();
@@ -56,6 +54,15 @@ export default function HomeScreen() {
   const [showTierUpGlow, setShowTierUpGlow] = useState(false);
   const tierUpTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const clearPendingTierUpRef = useRef(clearPendingTierUp);
+
+  // Pull-to-refresh state
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refresh();
+    setRefreshing(false);
+  }, [refresh]);
 
   // Keep ref in sync with latest callback
   useEffect(() => {
@@ -91,7 +98,7 @@ export default function HomeScreen() {
 
   // Button animation for Start Quiz - must be before conditional return
   const buttonScale = useSharedValue(1);
-  const buttonBorderBottom = useSharedValue(4);
+  const buttonBorderBottom = useSharedValue(5);
 
   const buttonAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: buttonScale.value }],
@@ -128,7 +135,7 @@ export default function HomeScreen() {
 
   const handlePressOut = () => {
     buttonScale.value = withSpring(1, Easings.press);
-    buttonBorderBottom.value = withSpring(4, Easings.press);
+    buttonBorderBottom.value = withSpring(5, Easings.press);
   };
 
   return (
@@ -137,6 +144,14 @@ export default function HomeScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.colors.brand.primary}
+            colors={[theme.colors.brand.primary]}
+          />
+        }
       >
         {/* Header with greeting */}
         <HomeHeader
@@ -158,29 +173,29 @@ export default function HomeScreen() {
           pointsToNextTier={pointsToNextTier}
           onTierPress={() => router.push('/(tabs)/progress')}
           showTierUpGlow={showTierUpGlow}
+          onXPPress={() => router.push('/(tabs)/progress')}
+          onStreakPress={() => router.push('/(tabs)/progress')}
         />
 
         {/* Daily Challenge Card - prominent position */}
-        {!dailyChallengeLoading && dailyChallengeState && (
+        {dailyChallengeLoading ? (
+          <Animated.View
+            entering={FadeInUp.delay(Durations.stagger * 1.5).duration(Durations.normal).springify()}
+            style={styles.skeletonCard}
+          >
+            <View style={styles.skeletonContent}>
+              <View style={styles.skeletonLabel} />
+              <View style={styles.skeletonTitle} />
+            </View>
+            <View style={styles.skeletonIcon} />
+          </Animated.View>
+        ) : dailyChallengeState && (
           <DailyChallengeCard
-            challengeType={dailyChallengeState.challengeConfig.type}
             displayName={dailyChallengeState.challengeConfig.displayName}
             completed={dailyChallengeState.completedToday}
             onPress={handleDailyChallenge}
             delay={Durations.stagger * 1.5}
           />
-        )}
-
-        {/* Review due badge - appears when triads are due */}
-        {dueCount > 0 && (
-          <Animated.View
-            entering={FadeInUp.delay(Durations.stagger * 2).duration(Durations.normal).springify()}
-          >
-            <ReviewDueBadge
-              dueCount={dueCount}
-              onPress={() => router.push('/quiz/review')}
-            />
-          </Animated.View>
         )}
 
         {/* Start Quiz button - below hero card */}
@@ -199,12 +214,10 @@ export default function HomeScreen() {
           </AnimatedPressable>
         </Animated.View>
 
-        {/* Action buttons - Study, Share, and Review */}
+        {/* Action buttons - Study and Share */}
         <ActionButtons
           onStudy={() => router.push('/quiz/study-filter')}
           onShare={handleShare}
-          onReview={() => router.push('/quiz/review')}
-          dueCount={dueCount}
           delay={Durations.stagger * 2.5}
         />
 
@@ -249,21 +262,56 @@ const styles = StyleSheet.create({
     gap: Spacing.lg,
   },
   startButton: {
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.xl,
     paddingHorizontal: Spacing.xl,
     borderRadius: Radius.lg,
     borderWidth: 2,
-    borderBottomWidth: 4,
+    borderBottomWidth: 5,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.colors.brand.primary,
     borderColor: theme.colors.brand.primary,
     borderBottomColor: theme.colors.brand.primaryDark,
-    ...theme.shadows.md,
+    ...theme.shadows.lg,
     shadowColor: theme.colors.brand.primary,
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.3,
   },
   startButtonText: {
     letterSpacing: 1.5,
+  },
+  skeletonCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    borderRadius: Radius.lg,
+    borderWidth: 1.5,
+    borderBottomWidth: 3,
+    backgroundColor: theme.colors.surface.card,
+    borderColor: theme.colors.border.default,
+    borderBottomColor: theme.colors.border.strong,
+  },
+  skeletonContent: {
+    flex: 1,
+    gap: 6,
+  },
+  skeletonLabel: {
+    height: 10,
+    width: 100,
+    borderRadius: 5,
+    backgroundColor: `${theme.colors.text.secondary}15`,
+  },
+  skeletonTitle: {
+    height: 14,
+    width: 160,
+    borderRadius: 7,
+    backgroundColor: `${theme.colors.text.secondary}15`,
+  },
+  skeletonIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: Radius.full,
+    backgroundColor: `${theme.colors.text.secondary}15`,
+    marginLeft: Spacing.sm,
   },
 });

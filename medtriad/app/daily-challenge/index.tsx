@@ -42,6 +42,8 @@ export default function DailyChallengeScreen() {
   // Track results for passing to results screen
   const correctCountRef = useRef(0);
   const categoryResultsRef = useRef<Record<TriadCategory, CategoryMasteryData>>({} as Record<TriadCategory, CategoryMasteryData>);
+  // Track component mount state to prevent memory leaks
+  const isMountedRef = useRef(true);
 
   const {
     status,
@@ -78,6 +80,11 @@ export default function DailyChallengeScreen() {
       questions,
       questionTime: config.questionTime,
     });
+
+    // Cleanup: mark component as unmounted
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [dispatch, loading, config, questions, status, challengeState?.completedToday]);
 
   // Timer tick handler
@@ -104,6 +111,9 @@ export default function DailyChallengeScreen() {
     }
 
     const timeout = setTimeout(() => {
+      // Prevent navigation after unmount (e.g., user cancelled quiz)
+      if (!isMountedRef.current) return;
+
       if (currentIndex >= quizQuestions.length - 1) {
         // Quiz complete - navigate to daily challenge results
         router.replace({
@@ -126,6 +136,9 @@ export default function DailyChallengeScreen() {
 
   // Handle answer selection
   const handleAnswerSelect = async (option: QuizOption) => {
+    // Bug fix: Prevent double-tap submission
+    if (status !== 'playing') return;
+
     triggerHaptic();
 
     dispatch({

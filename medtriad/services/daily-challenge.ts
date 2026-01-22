@@ -7,6 +7,17 @@ import { getAllTriads } from './triads';
 import { generateQuestion } from './question-generator';
 
 /**
+ * Convert Date to ISO date string (YYYY-MM-DD) in local timezone
+ * This is locale-safe and ensures consistent date comparison
+ */
+function toISODateString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
  * Get today's date as a seed string (YYYY-MM-DD format)
  */
 export function getDateSeed(date?: Date): string {
@@ -181,7 +192,7 @@ export async function completeDailyChallenge(): Promise<{
     stats.streakFreezeCount
   );
   stats.dailyStreak = newStreak;
-  stats.lastPlayedDate = new Date().toDateString();
+  stats.lastPlayedDate = toISODateString(new Date());
 
   // Consume streak freeze if used
   if (usedStreakFreeze) {
@@ -243,10 +254,10 @@ export async function useStreakFreeze(): Promise<boolean> {
   }
 
   // Check if streak would be lost
-  const today = new Date().toDateString();
+  const today = toISODateString(new Date());
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayString = yesterday.toDateString();
+  const yesterdayString = toISODateString(yesterday);
 
   // If last played was today or yesterday, streak is safe
   if (stats.lastPlayedDate === today || stats.lastPlayedDate === yesterdayString) {
@@ -272,10 +283,10 @@ export async function canUseStreakFreeze(): Promise<boolean> {
   }
 
   // Check if streak would be lost
-  const today = new Date().toDateString();
+  const today = toISODateString(new Date());
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayString = yesterday.toDateString();
+  const yesterdayString = toISODateString(yesterday);
 
   // If last played was today or yesterday, streak is safe
   if (stats.lastPlayedDate === today || stats.lastPlayedDate === yesterdayString) {

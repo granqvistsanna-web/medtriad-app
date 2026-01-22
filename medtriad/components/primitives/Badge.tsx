@@ -23,7 +23,7 @@ import { Text } from './Text';
 import { Icon, type IconSize } from './Icon';
 
 // Badge variants for different contexts
-export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'brand' | 'gold' | 'streak';
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'brand' | 'gold' | 'streak' | 'muted';
 
 // Solar Icon component type
 type SolarIconProps = SvgProps & {
@@ -104,6 +104,14 @@ const VARIANTS: Record<BadgeVariant, {
     borderBottomColor: theme.colors.streak.dark,
     textColor: theme.colors.streak.text,
     iconColor: theme.colors.streak.main,
+  },
+  // Muted variant for inactive/zero states
+  muted: {
+    backgroundColor: theme.colors.surface.secondary,
+    borderColor: theme.colors.border.default,
+    borderBottomColor: theme.colors.border.strong,
+    textColor: theme.colors.text.muted,
+    iconColor: theme.colors.text.muted,
   },
 };
 

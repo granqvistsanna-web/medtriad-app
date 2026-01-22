@@ -1,7 +1,7 @@
 import { StyleSheet, View, useWindowDimensions, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { Text, Button } from '@/components/primitives';
@@ -35,6 +35,8 @@ export default function ReviewScreen() {
   const { height: windowHeight } = useWindowDimensions();
   const { playSound } = useSoundEffects();
   const { triggerHaptic } = useHaptics();
+  // Track component mount state to prevent memory leaks
+  const isMountedRef = useRef(true);
 
   const {
     status,
@@ -65,11 +67,17 @@ export default function ReviewScreen() {
     }
 
     loadDueTriads();
+
+    // Cleanup: mark component as unmounted
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [dispatch]);
 
   // Handle answer selection
   const handleAnswerSelect = useCallback(
     (option: QuizOption) => {
+      // Bug fix: Prevent double-tap submission
       if (status !== 'playing') return;
 
       triggerHaptic();

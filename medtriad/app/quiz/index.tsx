@@ -36,7 +36,7 @@ export default function QuizScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
-  const { stats, recordQuizResult, checkHighScore } = useStats();
+  const { stats, recordQuizResult, checkHighScore, loading: statsLoading } = useStats();
   const { playSound } = useSoundEffects();
   const { triggerHaptic } = useHaptics();
 
@@ -44,6 +44,8 @@ export default function QuizScreen() {
   const correctCountRef = useRef(0);
   const maxComboRef = useRef(1);
   const categoryResultsRef = useRef<Record<TriadCategory, CategoryMasteryData>>({} as Record<TriadCategory, CategoryMasteryData>);
+  // Track component mount state to prevent memory leaks
+  const isMountedRef = useRef(true);
 
   const {
     status,
@@ -62,6 +64,9 @@ export default function QuizScreen() {
 
   // Initialize quiz on mount
   useEffect(() => {
+    // Wait for stats to finish loading before starting quiz
+    if (statsLoading) return;
+
     // Reset tracking refs in case component instance is reused
     correctCountRef.current = 0;
     maxComboRef.current = 1;
@@ -82,7 +87,12 @@ export default function QuizScreen() {
         const fallbackQuestions = generateQuestionSet(QUESTION_COUNT);
         dispatch({ type: 'START_QUIZ', questions: fallbackQuestions, questionTime });
       });
-  }, [dispatch, stats?.totalPoints]);
+
+    // Cleanup: mark component as unmounted
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [dispatch, stats?.totalPoints, statsLoading]);
 
   // Timer tick handler
   const handleTick = useCallback(() => {
@@ -112,6 +122,9 @@ export default function QuizScreen() {
     }
 
     const timeout = setTimeout(async () => {
+      // Prevent navigation after unmount (e.g., user cancelled quiz)
+      if (!isMountedRef.current) return;
+
       if (currentIndex >= questions.length - 1) {
         try {
           // Check for new high score BEFORE saving stats
@@ -182,6 +195,9 @@ export default function QuizScreen() {
 
   // Handle answer selection - single Light haptic on tap (consistent, understated)
   const handleAnswerSelect = async (option: QuizOption) => {
+    // Bug fix: Prevent double-tap submission
+    if (status !== 'playing') return;
+
     triggerHaptic();
 
     dispatch({
@@ -250,7 +266,11 @@ export default function QuizScreen() {
     return 'neutral';
   };
 
-  // Loading/error state - show nothing briefly while questions load
+  // Loading state - show nothing while stats or questions are loading
+  if (statsLoading) {
+    return null;
+  }
+
   // If questions array is populated but currentIndex is out of bounds, it's a bug
   if (!currentQuestion) {
     // Quiz hasn't started yet (questions not loaded) - brief flash, no UI needed

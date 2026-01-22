@@ -1,11 +1,18 @@
-import { StyleSheet, View } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import { StyleSheet, View, Pressable } from 'react-native';
+import Animated, {
+  FadeInUp,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring
+} from 'react-native-reanimated';
 import { Star, Fire } from '@solar-icons/react-native/Bold';
 import { TriMascot, MascotMood } from './TriMascot';
 import { ProgressRing } from './ProgressRing';
 import { TierDefinition } from '@/services/mastery';
-import { theme, Radius, Spacing, Durations } from '@/constants/theme';
+import { theme, Radius, Spacing, Durations, Easings } from '@/constants/theme';
 import { Text, Badge } from '@/components/primitives';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type HeroCardProps = {
   isNewUser: boolean;
@@ -20,6 +27,8 @@ type HeroCardProps = {
   pointsToNextTier?: number;
   onTierPress?: () => void;
   showTierUpGlow?: boolean;
+  onXPPress?: () => void;
+  onStreakPress?: () => void;
 };
 
 /**
@@ -39,7 +48,7 @@ function getProgressMessage(
 
   return {
     points: `${pointsToNextTier.toLocaleString()} pts`,
-    rest: `to ${nextTier.name} - Lvl ${nextTier.tier}`,
+    rest: `to ${nextTier.name} • Lvl ${nextTier.tier}`,
   };
 }
 
@@ -70,12 +79,42 @@ export function HeroCard({
   pointsToNextTier = 0,
   onTierPress,
   showTierUpGlow = false,
+  onXPPress,
+  onStreakPress,
 }: HeroCardProps) {
   const mascotMood = showTierUpGlow
     ? 'tierUp'
     : getMascotMood(isNewUser, accuracy, dailyStreak);
 
   const progressMessage = getProgressMessage(nextTier, pointsToNextTier);
+
+  // Animation for XP badge press
+  const xpScale = useSharedValue(1);
+  const xpAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: xpScale.value }],
+  }));
+
+  // Animation for Streak badge press
+  const streakScale = useSharedValue(1);
+  const streakAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: streakScale.value }],
+  }));
+
+  const handleXPPressIn = () => {
+    xpScale.value = withSpring(0.95, Easings.press);
+  };
+
+  const handleXPPressOut = () => {
+    xpScale.value = withSpring(1, Easings.press);
+  };
+
+  const handleStreakPressIn = () => {
+    streakScale.value = withSpring(0.95, Easings.press);
+  };
+
+  const handleStreakPressOut = () => {
+    streakScale.value = withSpring(1, Easings.press);
+  };
 
   return (
     <Animated.View
@@ -104,13 +143,13 @@ export function HeroCard({
         </Text>
       </Animated.View>
 
-      {/* Progress message */}
+      {/* Progress message - subtle hint */}
       <Animated.View
         entering={FadeInUp.delay(delay + Durations.stagger * 1.5).duration(Durations.normal).springify()}
       >
-        <Text variant="footnote" color="brand" weight="semibold" style={styles.progressMessage}>
+        <Text variant="footnote" color="secondary" weight="regular" style={styles.progressMessage}>
           {progressMessage.points && (
-            <Text variant="footnote" color="brand" weight="bold">{progressMessage.points} </Text>
+            <Text variant="footnote" color="secondary" weight="regular">{progressMessage.points} </Text>
           )}
           {progressMessage.rest}
         </Text>
@@ -121,20 +160,40 @@ export function HeroCard({
         entering={FadeInUp.delay(delay + Durations.stagger * 2).duration(Durations.normal).springify()}
         style={styles.badgesContainer}
       >
-        <Badge
-          label={totalPoints.toLocaleString()}
-          icon={Star}
-          variant="gold"
-          size="sm"
-        />
-        {dailyStreak > 0 && (
+        <AnimatedPressable
+          onPress={onXPPress}
+          onPressIn={handleXPPressIn}
+          onPressOut={handleXPPressOut}
+          style={xpAnimatedStyle}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={`${totalPoints.toLocaleString()} points`}
+          accessibilityHint="Tap to view progress details"
+        >
+          <Badge
+            label={totalPoints.toLocaleString()}
+            icon={Star}
+            variant="gold"
+            size="md"
+          />
+        </AnimatedPressable>
+        <AnimatedPressable
+          onPress={onStreakPress}
+          onPressIn={handleStreakPressIn}
+          onPressOut={handleStreakPressOut}
+          style={streakAnimatedStyle}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={`${dailyStreak} day streak`}
+          accessibilityHint="Tap to view streak details"
+        >
           <Badge
             label={dailyStreak.toString()}
             icon={Fire}
             variant="streak"
-            size="sm"
+            size="md"
           />
-        )}
+        </AnimatedPressable>
       </Animated.View>
     </Animated.View>
   );
@@ -144,9 +203,9 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     borderRadius: Radius.xl,
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.xl,
-    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
     borderWidth: 2,
     borderColor: theme.colors.border.default,
     borderBottomWidth: 4,
@@ -154,27 +213,27 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface.card,
   },
   mascotContainer: {
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   tierContainer: {
-    marginBottom: Spacing.xs,
+    marginBottom: 2,
   },
   tierName: {
-    fontSize: 28,
-    letterSpacing: -0.8,
+    fontSize: 26,
+    letterSpacing: -0.6,
   },
   progressMessage: {
-    marginBottom: Spacing.sm,
-    opacity: 0.85,
+    marginTop: Spacing.xs,
+    marginBottom: Spacing.xs,
   },
   badgesContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: Spacing.sm,
-    backgroundColor: `${theme.colors.border.default}15`,
-    paddingVertical: Spacing.xs,
-    paddingHorizontal: Spacing.md,
+    gap: Spacing.md,
+    backgroundColor: `${theme.colors.border.default}18`,
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
     borderRadius: Radius.full,
-    marginTop: Spacing.xs,
+    marginTop: Spacing.sm,
   },
 });

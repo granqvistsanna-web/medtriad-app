@@ -113,6 +113,14 @@ export default function RootLayout() {
               gestureEnabled: true,
             }}
           />
+          <Stack.Screen
+            name="daily-challenge"
+            options={{
+              presentation: 'fullScreenModal',
+              headerShown: false,
+              gestureEnabled: false,
+            }}
+          />
         </Stack>
         {/* Redirect new users to onboarding */}
         {isNewUser && <Redirect href="/onboarding" />}

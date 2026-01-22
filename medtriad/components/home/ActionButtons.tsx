@@ -5,7 +5,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Book, ShareCircle, Refresh } from '@solar-icons/react-native/Bold';
+import { Book, ShareCircle } from '@solar-icons/react-native/Bold';
 import { theme, Radius, Spacing, Durations } from '@/constants/theme';
 import { Text, Icon } from '@/components/primitives';
 
@@ -40,6 +40,10 @@ function ActionButton({ icon, label, onPress, disabled = false, badge }: ActionB
     borderBottom.value = withSpring(2, { damping: 15, stiffness: 400 });
   };
 
+  const accessibilityLabel = badge && badge > 0
+    ? `${label}, ${badge} items due`
+    : label;
+
   return (
     <AnimatedPressable
       onPress={disabled ? undefined : onPress}
@@ -50,6 +54,10 @@ function ActionButton({ icon, label, onPress, disabled = false, badge }: ActionB
         animatedStyle,
         disabled && styles.actionButtonDisabled,
       ]}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ disabled }}
     >
       <View style={styles.buttonContent}>
         <Icon
@@ -67,7 +75,10 @@ function ActionButton({ icon, label, onPress, disabled = false, badge }: ActionB
         </Text>
       </View>
       {badge !== undefined && badge > 0 && (
-        <View style={styles.badge}>
+        <View
+          style={styles.badge}
+          accessibilityElementsHidden={true}
+        >
           <Text variant="tiny" color="inverse" weight="bold">
             {badge}
           </Text>
@@ -80,16 +91,12 @@ function ActionButton({ icon, label, onPress, disabled = false, badge }: ActionB
 type ActionButtonsProps = {
   onStudy: () => void;
   onShare: () => void;
-  onReview: () => void;
-  dueCount: number;
   delay?: number;
 };
 
 export function ActionButtons({
   onStudy,
   onShare,
-  onReview,
-  dueCount,
   delay = 0,
 }: ActionButtonsProps) {
   return (
@@ -107,15 +114,6 @@ export function ActionButtons({
           icon={ShareCircle}
           label="SHARE"
           onPress={onShare}
-        />
-      </View>
-      <View style={styles.actionRow}>
-        <ActionButton
-          icon={Refresh}
-          label="REVIEW"
-          onPress={onReview}
-          disabled={dueCount === 0}
-          badge={dueCount}
         />
       </View>
     </Animated.View>
