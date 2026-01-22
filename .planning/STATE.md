@@ -9,17 +9,17 @@ See: .planning/PROJECT.md (updated 2026-01-21)
 
 ## Current Position
 
-Phase: 28 - Adaptive Difficulty
-Plan: 2 of 2
+Phase: 29 - Spaced Repetition
+Plan: 1 of 1
 Status: Phase complete
-Last activity: 2026-01-22 — Completed 28-02-PLAN.md
+Last activity: 2026-01-22 — Completed 29-01-PLAN.md
 
 ### Progress
 
 ```
 Phase 27: Data Foundation     [█] Complete (1/1 plans)
 Phase 28: Adaptive Difficulty [██] Complete (2/2 plans)
-Phase 29: Spaced Repetition   [ ] Ready
+Phase 29: Spaced Repetition   [█] Complete (1/1 plans)
 Phase 30: Daily Challenges    [ ] Ready
 Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 ```
@@ -50,14 +50,14 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 - Requirements: 37 total, 37 complete
 
 **v3.0 Progress:**
-- Phases: 2/5 complete
-- Plans: 4 complete
-- Requirements: 11/26 complete
+- Phases: 3/5 complete
+- Plans: 5 complete
+- Requirements: 14/26 complete
 
 **Cumulative:**
-- Total phases: 28 complete, 3 planned
-- Total plans: 69 complete
-- Total lines: ~124,600 TypeScript
+- Total phases: 29 complete, 2 planned
+- Total plans: 70 complete
+- Total lines: ~125,100 TypeScript
 
 ## Accumulated Context
 
@@ -73,6 +73,9 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 | Tier 1-2 no difficulty adjustment | 28-01 | Beginners get even distribution - avoids overwhelming |
 | Jest for testing infrastructure | 28-01 | Needed test infrastructure for this phase and future phases |
 | Async with sync fallback for quiz init | 28-02 | Quiz always starts even if adaptive selection fails |
+| Binary quality mapping (correct=4, incorrect=1) | 29-01 | Simpler than 0-5 scale for binary quiz results |
+| 14-day max review interval | 29-01 | Prevents content exhaustion with 45-item dataset |
+| Tricky multiplier only when interval > 1 | 29-01 | First review always gets interval=1, can't go lower |
 
 See also: PROJECT.md Key Decisions table for architectural decisions.
 
@@ -95,9 +98,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-22 06:55:00 UTC
-Stopped at: Completed 28-02-PLAN.md
+Last session: 2026-01-22 07:19:47 UTC
+Stopped at: Completed 29-01-PLAN.md
 Resume file: None
 
 ---
-*Updated: 2026-01-22 — Completed Phase 28 (Adaptive Difficulty)*
+*Updated: 2026-01-22 — Completed Phase 29 (Spaced Repetition)*
