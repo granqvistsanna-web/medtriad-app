@@ -60,8 +60,8 @@ Plans:
 
 **Plans:** 2 plans
 Plans:
-- [ ] 28-01-PLAN.md — Core adaptive selection service (difficulty classification, category weakness, weighted selection)
-- [ ] 28-02-PLAN.md — Quiz integration and verification
+- [x] 28-01-PLAN.md — Core adaptive selection service (difficulty classification, category weakness, weighted selection)
+- [x] 28-02-PLAN.md — Quiz integration and verification
 
 ---
 
@@ -147,7 +147,7 @@ Plans:
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
 | 27 | Data Foundation | DATA-01, DATA-02, DATA-03 | Complete |
-| 28 | Adaptive Difficulty | ADPT-01, ADPT-02, ADPT-03, ADPT-04, ADPT-05 | Pending |
+| 28 | Adaptive Difficulty | ADPT-01, ADPT-02, ADPT-03, ADPT-04, ADPT-05 | Complete |
 | 29 | Spaced Repetition | SR-01, SR-02, SR-03, SR-04, SR-05, SR-06, SR-07 | Pending |
 | 30 | Daily Challenges | DAILY-01, DAILY-02, DAILY-03, DAILY-04, DAILY-05, DAILY-06, DAILY-07 | Pending |
 | 31 | Tech Debt Cleanup | DEBT-01, DEBT-02, DEBT-03, DEBT-04 | Pending |

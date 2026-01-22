@@ -15,11 +15,11 @@ Requirements for v3.0 Engagement & Polish milestone. Each maps to roadmap phases
 
 ### Adaptive Difficulty
 
-- [ ] **ADPT-01**: Quiz mode prioritizes questions from user's weak categories
-- [ ] **ADPT-02**: Quiz mode weights "tricky-marked" questions higher for selection
-- [ ] **ADPT-03**: App classifies each triad as easy/medium/hard based on user's historical performance
-- [ ] **ADPT-04**: Quiz difficulty adapts based on user's tier (higher tiers see harder questions)
-- [ ] **ADPT-05**: Difficulty classification requires minimum 3 attempts before categorizing
+- [x] **ADPT-01**: Quiz mode prioritizes questions from user's weak categories
+- [x] **ADPT-02**: Quiz mode weights "tricky-marked" questions higher for selection
+- [x] **ADPT-03**: App classifies each triad as easy/medium/hard based on user's historical performance
+- [x] **ADPT-04**: Quiz difficulty adapts based on user's tier (higher tiers see harder questions)
+- [x] **ADPT-05**: Difficulty classification requires minimum 3 attempts before categorizing
 
 ### Spaced Repetition
 
@@ -86,11 +86,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-01 | Phase 27 | Complete |
 | DATA-02 | Phase 27 | Complete |
 | DATA-03 | Phase 27 | Complete |
-| ADPT-01 | Phase 28 | Pending |
-| ADPT-02 | Phase 28 | Pending |
-| ADPT-03 | Phase 28 | Pending |
-| ADPT-04 | Phase 28 | Pending |
-| ADPT-05 | Phase 28 | Pending |
+| ADPT-01 | Phase 28 | Complete |
+| ADPT-02 | Phase 28 | Complete |
+| ADPT-03 | Phase 28 | Complete |
+| ADPT-04 | Phase 28 | Complete |
+| ADPT-05 | Phase 28 | Complete |
 | SR-01 | Phase 29 | Pending |
 | SR-02 | Phase 29 | Pending |
 | SR-03 | Phase 29 | Pending |
