@@ -92,10 +92,10 @@ Plans:
 
 **Plans:** 4 plans
 Plans:
-- [ ] 29-01-PLAN.md — SM-2 algorithm service and type extensions (TDD)
-- [ ] 29-02-PLAN.md — Review Mode UI (screen, reducer, results)
-- [ ] 29-03-PLAN.md — Home screen integration (badge, action button)
-- [ ] 29-04-PLAN.md — Quiz/Study Mode SM-2 initialization and verification
+- [x] 29-01-PLAN.md — SM-2 algorithm service and type extensions (TDD)
+- [x] 29-02-PLAN.md — Review Mode UI (screen, reducer, results)
+- [x] 29-03-PLAN.md — Home screen integration (badge, action button)
+- [x] 29-04-PLAN.md — Quiz/Study Mode SM-2 initialization and verification
 
 ---
 
@@ -124,6 +124,12 @@ Plans:
 7. Two users opening the app on the same day see the same challenge questions
 
 **Research flags:** None - Streak mechanics well-documented from Duolingo studies
+
+**Plans:** 3 plans
+Plans:
+- [ ] 30-01-PLAN.md — Types, daily challenge service (seeded selection, completion tracking, streak freeze)
+- [ ] 30-02-PLAN.md — Daily Challenge UI (quiz screen, results with streak celebrations)
+- [ ] 30-03-PLAN.md — Home screen integration (challenge card, ActionButtons update)
 
 ---
 
@@ -155,7 +161,7 @@ Plans:
 |-------|------|--------------|--------|
 | 27 | Data Foundation | DATA-01, DATA-02, DATA-03 | Complete |
 | 28 | Adaptive Difficulty | ADPT-01, ADPT-02, ADPT-03, ADPT-04, ADPT-05 | Complete |
-| 29 | Spaced Repetition | SR-01, SR-02, SR-03, SR-04, SR-05, SR-06, SR-07 | Pending |
+| 29 | Spaced Repetition | SR-01, SR-02, SR-03, SR-04, SR-05, SR-06, SR-07 | Complete |
 | 30 | Daily Challenges | DAILY-01, DAILY-02, DAILY-03, DAILY-04, DAILY-05, DAILY-06, DAILY-07 | Pending |
 | 31 | Tech Debt Cleanup | DEBT-01, DEBT-02, DEBT-03, DEBT-04 | Pending |
 
