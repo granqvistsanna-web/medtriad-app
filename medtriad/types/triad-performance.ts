@@ -16,6 +16,18 @@ export interface TriadPerformance {
 
   /** Number of responses used to calculate avgResponseTimeMs */
   responseCount: number;
+
+  /** Days between reviews (SM-2 interval) */
+  interval: number;
+
+  /** Count of consecutive correct reviews (SM-2 repetition) */
+  repetition: number;
+
+  /** Ease factor for interval calculation (min 1.3, default 2.5) */
+  efactor: number;
+
+  /** ISO date string of next scheduled review date, null if never reviewed */
+  nextReviewDate: string | null;
 }
 
 /**

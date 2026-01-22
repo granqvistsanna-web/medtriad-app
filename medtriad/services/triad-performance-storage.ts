@@ -49,6 +49,10 @@ export async function recordTriadAnswer(
       lastSeenAt: '',
       avgResponseTimeMs: 0,
       responseCount: 0,
+      interval: 0,
+      repetition: 0,
+      efactor: 2.5,
+      nextReviewDate: null,
     };
 
     // Update counts
@@ -67,6 +71,10 @@ export async function recordTriadAnswer(
       lastSeenAt: new Date().toISOString(),
       avgResponseTimeMs: newAvg,
       responseCount: oldCount + 1,
+      interval: existing.interval,
+      repetition: existing.repetition,
+      efactor: existing.efactor,
+      nextReviewDate: existing.nextReviewDate,
     };
 
     // Save updated record

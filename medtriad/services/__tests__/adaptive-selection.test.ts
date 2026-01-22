@@ -19,6 +19,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 1000,
         responseCount: 2,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('new');
     });
@@ -30,6 +34,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 800,
         responseCount: 2,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('new');
     });
@@ -41,6 +49,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 0,
         responseCount: 0,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('new');
     });
@@ -54,6 +66,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 1200,
         responseCount: 10,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('easy');
     });
@@ -66,6 +82,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 1100,
         responseCount: 20,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('easy');
     });
@@ -77,6 +97,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 900,
         responseCount: 5,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('easy');
     });
@@ -90,6 +114,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 1500,
         responseCount: 10,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('medium');
     });
@@ -103,6 +131,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 1400,
         responseCount: 100,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('medium');
     });
@@ -115,6 +147,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 1100,
         responseCount: 100,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('medium');
     });
@@ -128,6 +164,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 2000,
         responseCount: 10,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('hard');
     });
@@ -139,6 +179,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 1800,
         responseCount: 10,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('hard');
     });
@@ -150,6 +194,10 @@ describe('classifyDifficulty', () => {
         lastSeenAt: '2026-01-21T00:00:00Z',
         avgResponseTimeMs: 2500,
         responseCount: 5,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        nextReviewDate: null,
       };
       expect(classifyDifficulty(performance)).toBe('hard');
     });
@@ -170,6 +218,10 @@ describe('calculateTriadWeight', () => {
     lastSeenAt: '2026-01-21T00:00:00Z',
     avgResponseTimeMs: 1000,
     responseCount: correct + incorrect,
+    interval: 0,
+    repetition: 0,
+    efactor: 2.5,
+    nextReviewDate: null,
   });
 
   describe('base weight', () => {
