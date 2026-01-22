@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-01-21)
 ## Current Position
 
 Phase: 29 - Spaced Repetition
-Plan: 3 of 4
-Status: In progress
-Last activity: 2026-01-22 — Completed 29-03-PLAN.md (Home Screen Integration)
+Plan: 4 of 4
+Status: Phase complete
+Last activity: 2026-01-22 — Completed 29-04-PLAN.md (Quiz Integration)
 
 ### Progress
 
 ```
 Phase 27: Data Foundation     [█] Complete (1/1 plans)
 Phase 28: Adaptive Difficulty [██] Complete (2/2 plans)
-Phase 29: Spaced Repetition   [███░] In progress (3/4 plans)
+Phase 29: Spaced Repetition   [████] Complete (4/4 plans)
 Phase 30: Daily Challenges    [ ] Ready
 Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 ```
@@ -50,14 +50,14 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 - Requirements: 37 total, 37 complete
 
 **v3.0 Progress:**
-- Phases: 2/5 complete (27, 28)
-- Plans: 7 complete (27-01, 28-01, 28-02, 29-01, 29-02, 29-03, partial 29)
-- Requirements: 20/26 complete
+- Phases: 3/5 complete (27, 28, 29)
+- Plans: 8 complete (27-01, 28-01, 28-02, 29-01, 29-02, 29-03, 29-04)
+- Requirements: 24/26 complete
 
 **Cumulative:**
-- Total phases: 28 complete, 3 in progress (29, 30, 31)
-- Total plans: 72 complete
-- Total lines: ~125,900 TypeScript
+- Total phases: 29 complete, 2 in progress (30, 31)
+- Total plans: 73 complete
+- Total lines: ~126,000 TypeScript
 
 ## Accumulated Context
 
@@ -81,6 +81,9 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 | Show disabled Review button when dueCount is 0 | 29-03 | Keeps feature discoverable even when no triads are due |
 | Two entry points to Review Mode | 29-03 | Badge for prominence + button for discoverability |
 | Review button in separate row | 29-03 | Three buttons in one row would be cramped |
+| Quiz/Study Mode sets nextReviewDate to tomorrow | 29-04 | Bootstrap triads into review cycle after initial exposure |
+| Subsequent Quiz/Study answers preserve SM-2 schedule | 29-04 | Quiz Mode is for practice, Review Mode manages progression |
+| Only Review Mode runs SM-2 algorithm | 29-04 | Clear separation: initialization vs progression logic |
 
 See also: PROJECT.md Key Decisions table for architectural decisions.
 
@@ -103,9 +106,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-22 07:27:48 UTC
-Stopped at: Completed 29-03-PLAN.md
+Last session: 2026-01-22 07:52:09 UTC
+Stopped at: Completed 29-04-PLAN.md
 Resume file: None
 
 ---
-*Updated: 2026-01-22 — Completed 29-03 (Home Screen Review Integration)*
+*Updated: 2026-01-22 — Completed Phase 29 (Spaced Repetition)*
