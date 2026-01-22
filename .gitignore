@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Test/review artifacts
+review-*.png
+review-*.js
+review-*.json
+review-*.html
+review-*.txt
+test-*.js
+design-review-*.js
+capture-*.js
+screenshot-*.png
+.playwright-mcp/
+
+# macOS
+.DS_Store

@@ -41,3 +41,15 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Test/review artifacts
+review-*.png
+review-*.js
+review-*.json
+review-*.html
+review-*.txt
+test-*.js
+design-review-*.js
+capture-*.js
+screenshot-*.png
+.playwright-mcp/

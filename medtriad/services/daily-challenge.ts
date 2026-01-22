@@ -197,7 +197,6 @@ export async function completeDailyChallenge(): Promise<{
   // Consume streak freeze if used
   if (usedStreakFreeze) {
     stats.streakFreezeCount = Math.max(0, stats.streakFreezeCount - 1);
-    console.log('Streak freeze used to preserve streak');
   }
 
   // Check if week changed

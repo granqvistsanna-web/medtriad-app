@@ -200,9 +200,6 @@ export async function updateAfterQuiz(
     ? Math.max(0, currentStats.streakFreezeCount - 1)
     : currentStats.streakFreezeCount;
 
-  if (usedStreakFreeze) {
-    console.log('Streak freeze used to preserve streak');
-  }
 
   // Merge category results if provided
   const mergedCategoryMastery = categoryResults
