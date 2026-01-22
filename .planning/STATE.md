@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-01-21)
 ## Current Position
 
 Phase: 29 - Spaced Repetition
-Plan: 2 of 4
+Plan: 3 of 4
 Status: In progress
-Last activity: 2026-01-22 — Completed 29-02-PLAN.md
+Last activity: 2026-01-22 — Completed 29-03-PLAN.md (Home Screen Integration)
 
 ### Progress
 
 ```
 Phase 27: Data Foundation     [█] Complete (1/1 plans)
 Phase 28: Adaptive Difficulty [██] Complete (2/2 plans)
-Phase 29: Spaced Repetition   [██░░] In progress (2/4 plans)
+Phase 29: Spaced Repetition   [███░] In progress (3/4 plans)
 Phase 30: Daily Challenges    [ ] Ready
 Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 ```
@@ -51,13 +51,13 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 
 **v3.0 Progress:**
 - Phases: 2/5 complete (27, 28)
-- Plans: 6 complete (27-01, 28-01, 28-02, 29-01, 29-02, partial 29)
-- Requirements: 17/26 complete
+- Plans: 7 complete (27-01, 28-01, 28-02, 29-01, 29-02, 29-03, partial 29)
+- Requirements: 20/26 complete
 
 **Cumulative:**
 - Total phases: 28 complete, 3 in progress (29, 30, 31)
-- Total plans: 71 complete
-- Total lines: ~125,800 TypeScript
+- Total plans: 72 complete
+- Total lines: ~125,900 TypeScript
 
 ## Accumulated Context
 
@@ -78,6 +78,9 @@ Phase 31: Tech Debt Cleanup   [ ] Blocked (needs 27-30)
 | Tricky multiplier only when interval > 1 | 29-01 | First review always gets interval=1, can't go lower |
 | Variable question count in Review Mode | 29-02 | Based on due triads count, not fixed like Study Mode's 10 |
 | "All Caught Up!" empty state | 29-02 | Shows when no triads are due for review |
+| Show disabled Review button when dueCount is 0 | 29-03 | Keeps feature discoverable even when no triads are due |
+| Two entry points to Review Mode | 29-03 | Badge for prominence + button for discoverability |
+| Review button in separate row | 29-03 | Three buttons in one row would be cramped |
 
 See also: PROJECT.md Key Decisions table for architectural decisions.
 
@@ -100,9 +103,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-22 07:26:51 UTC
-Stopped at: Completed 29-02-PLAN.md
+Last session: 2026-01-22 07:27:48 UTC
+Stopped at: Completed 29-03-PLAN.md
 Resume file: None
 
 ---
-*Updated: 2026-01-22 — Completed 29-02 (Review Mode UI)*
+*Updated: 2026-01-22 — Completed 29-03 (Home Screen Review Integration)*
